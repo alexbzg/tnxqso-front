@@ -26,7 +26,8 @@
 
 <script>
 import _ from 'underscore'
-import axios from 'axios'
+import request from '../request'
+import storage from '../storage'
 import VueRecaptcha from 'vue-recaptcha'
 export default {
   name: 'login',
@@ -48,7 +49,7 @@ export default {
           return
         }
       }
-      axios.post('/uswgi/login',
+      request.post('login',
         { login: this.login,
           password: this.password,
           newUser: this.newUser,
@@ -59,24 +60,18 @@ export default {
           console.log(response.statusText)
           console.log(response.headers)
           console.log(response.config)
+          storage.save( 'user', response.data, 'local' )
         })
         .catch(function (error) {
-          if (error.response) {
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            console.log(error.response.data)
-            console.log(error.response.status)
-            console.log(error.response.headers)
-          } else if (error.request) {
-            // The request was made but no response was received
-            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-            // http.ClientRequest in node.js
-            console.log(error.request)
+          var msg = ''
+          console.log(error)
+          if (error.status === 400) {
+            msg = error.message
           } else {
-            // Something happened in setting up the request that triggered an Error
-            console.log('Error', error.message)
+            msg = 'Login failed because of server error. Please try again later.'
           }
-          console.log(error.config)
+          alert(msg)
+          this.resetRecaptcha()
         })
     }, 300, true),
     onVerify: function (response) {

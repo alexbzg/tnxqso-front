@@ -15,7 +15,12 @@
                     <router-link to="/contacts" tag="div" id="tab_contacts" class="tab">Contacts</router-link>
                 </td>
                 <td id="login">
-                    <router-link to="/login" tag="div" id="tab_login" class="tab">Login/Register</router-link>
+                    <router-link to="/login" tag="div" id="tab_login" class="tab" v-if="!loggedIn">
+                        Login/Register
+                    </router-link>
+                    <router-link to="/Profile" tag="div" id="tab_login" class="tab" v-else>
+                        Profile
+                    </router-link>
                 </td>
             </tr>
         </table>
@@ -25,7 +30,12 @@
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+  computed: {
+    loggedIn: function () {
+      return this.$root.$data.user.loggedIn
+    }
+  }
 }
 </script>
 

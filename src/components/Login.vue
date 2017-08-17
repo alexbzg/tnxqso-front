@@ -26,11 +26,17 @@
 
 <script>
 import _ from 'underscore'
-import request from '../request'
-import storage from '../storage'
 import VueRecaptcha from 'vue-recaptcha'
+import router from './../router'
 export default {
   name: 'login',
+  beforeRouteEnter ( to, from, next ) {
+    next( vm => {
+      if ( vm.$root.$data.user.loggedIn ) {
+        router.push( '/profile' )
+      }
+    } )
+  },
   data () {
     return {
       newUser: false,
@@ -49,19 +55,13 @@ export default {
           return
         }
       }
-      request.post('login',
+      this.$root.$data.user.login(
         { login: this.login,
           password: this.password,
           newUser: this.newUser,
-          recaptcha: this.recaptcha })
-        .then(function (response) {
-          console.log(response.data)
-          console.log(response.status)
-          console.log(response.statusText)
-          console.log(response.headers)
-          console.log(response.config)
-          storage.save( 'user', response.data, 'local' )
-        })
+          recaptcha: this.recaptcha },
+        this.remember
+      )
         .catch(function (error) {
           var msg = ''
           console.log(error)

@@ -9,6 +9,16 @@ function fromStorage () {
   if ( !_user ) {
     _user = {}
   }
+  userInit()
+}
+
+function userInit () {
+  if ( !_user.settings ) {
+    _user.settings = {}
+  }
+  if ( !_user.settings.enable ) {
+    _user.settings.enable = {}
+  }
 }
 
 function toStorage () {
@@ -28,6 +38,7 @@ export default {
         toStorage()
         user.loggedIn = true
         router.push( '/profile' )
+        userInit()
       })
   },
 
@@ -39,6 +50,15 @@ export default {
     _user = {}
     this.loggedIn = false
     router.push( '/login' )
+  },
+
+  settings () {
+    return JSON.parse( JSON.stringify( _user.settings ) )
+  },
+
+  saveSettings ( settings ) {
+    _user.settings = JSON.parse( JSON.stringify( settings ) )
+    toStorage()
   }
 
 }

@@ -10,27 +10,27 @@
         <div id="station_setup">
             <div class="station_setup_block">
                 <img class="icon_info" src="/images/icon_info.png" title="Info">
-                <input type="checkbox" id="checkbox_publish" v-model="settings.publish"/> 
+                <input type="checkbox" id="checkbox_publish" v-model="publish"/> 
                 Publish on TNXQSO.com main page <br/>
-                Station's callsign: <input type="text" id="station_callsign" v-model="settings.stationCallsign"/> 
+                Station's callsign: <input type="text" id="station_callsign" v-model="stationCallsign"/> 
                 <span id="stations_link">
                     Station's link: <a href="#" target="_blank" rel="noopener">{{stationLink}}</a>
                 </span><br/>
-                Station's title: <input type="text" id="station_name" v-model="settings.stationTitle"/><br/>
+                Station's title: <input type="text" id="station_name" v-model="stationTitle"/><br/>
             </div>
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/images/icon_info.png" title="Info">
                 <input type="checkbox" id="checkbox_info" checked /> Station's info
                 <div class="block_settings">
-                    <textarea v-model="settings.stationInfo"></textarea>
+                    <textarea v-model="stationInfo"></textarea>
                 </div>
             </div>
             
             <div class="station_setup_block">
                 <img class="icon_info" src="/images/icon_info.png" title="Info">
-                <input type="checkbox" id="checkbox_news" v-model="settings.enable.news" /> News
-                <div class="block_settings" v-if="settings.enable.news">
+                <input type="checkbox" id="checkbox_news" v-model="enableNews" /> News
+                <div class="block_settings" v-if="enableNews">
                     <input type="button" id="button_clear_news" class="btn" value="Clear news"
                         @click="clearNews()"/><br/>
                     <vue-editor v-model="newsItem"></vue-editor><br/>
@@ -41,8 +41,8 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/images/icon_info.png" title="Info">
-                <input type="checkbox" id="checkbox_log" v-model="settings.enable.log" /> Online log
-                <div class="block_settings" v-if="settings.enable.log">
+                <input type="checkbox" id="checkbox_log" v-model="enableLog" /> Online log
+                <div class="block_settings" v-if="enableLog">
                     View:<br/>
                     <input type="checkbox" id="checkbox_log_rda" v-model="settings.log.columns.rda" /> RDA<br/>
                     <input type="checkbox" id="checkbox_log_rafa" v-model="settings.log.columns.rafa" /> RAFA<br/>
@@ -95,15 +95,15 @@
                 <input type="checkbox" id="checkbox_instagram" v-model="settings.enable.instagram" /> 
                 Instagram<br/>
                 <div class="block_settings" v-if="settings.enable.istagram">
-                    Instagram ID: <input type="text" id="setup_instagram" v-model="sttings.instagramID"/>
+                    Instagram ID: <input type="text" id="setup_instagram" v-model="settings.instagramID"/>
                 </div>
             </div>
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/images/icon_info.png" title="Info">
-                <input type="checkbox" id="checkbox_support_us" v-model="settings.enabled.donate" /> 
+                <input type="checkbox" id="checkbox_support_us" v-model="settings.enable.donate" /> 
                 Support us<br/>
-                <div class="block_settings" v-if="settings.enabled.donate">
+                <div class="block_settings" v-if="settings.enable.donate">
                     <textarea v-model="settings.donate.text"></textarea><br/><br/>
                     Code from payment system:<br/> 
                     <textarea v-model="settings.donate.code"></textarea>
@@ -138,15 +138,48 @@ export default {
     } )
   },
   data () {
+    var user = this.$root.$data.user
+    var settings = user.settings()
     return {
-      settings: JSON.parse( JSON.stringify( this.$root.$data.user.settings ) ),
-      newsItem: ''
+      newsItem: '',
+      enableNews: settings.enable.news,
+      enableLog: settings.enable.log,
+      enableCluster: settings.enable.cluster,
+      enableChat: settings.enable.chat,
+      enableDonate: settings.enable.donate,
+      enableMap: settings.enable.map,
+      stationCallsign: settings.stationCallsign,
+      stationTitle: settings.stationTitle,
+      stationInfo: settings.stationInfo,
+      publish: settings.publish
+
+    }
+  },
+  computed: {
+    stationLink: function () {
+      return this.stationCallsign
+        ? ( 'http://tnxqso.com/' +
+          this.stationCallsign.replace( /\//, '-' ).toLowerCase() )
+        : null
     }
   },
   methods: {
     logout () {
       this.$root.$data.user.logout()
+    },
+    saveSttingss () {
+    },
+    clearChat () {
+    },
+    clearLog () {
+    },
+    clearTrack () {
+    },
+    uploadTrack () {
+    },
+    postNewsItem () {
     }
+
   }
 }
 </script>

@@ -8,26 +8,25 @@
         </div>
 
         <div id="station_setup">
-            <!--
             <div class="station_setup_block">
                 <img class="icon_info" src="/images/icon_info.png" title="Info">
-                <input type="checkbox" id="checkbox_publish" v-model="publish"/> 
+                <input type="checkbox" id="checkbox_publish" v-model="settings.publish"/> 
                 Publish on TNXQSO.com main page <br/>
-                Station's callsign: <input type="text" id="station_callsign" v-model="stationCallsign"/> 
+                Station's callsign: <input type="text" id="station_callsign" v-model="settings.station.callsign"/> 
                 <span id="stations_link">
                     Station's link: <a href="#" target="_blank" rel="noopener">{{stationLink}}</a>
                 </span><br/>
-                Station's title: <input type="text" id="station_name" v-model="stationTitle"/><br/>
+                Station's title: <input type="text" id="station_name" v-model="settings.station.title"/><br/>
             </div>
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/images/icon_info.png" title="Info">
-                <input type="checkbox" id="checkbox_info" checked /> Station's info
-                <div class="block_settings">
-                    <textarea v-model="stationInfo"></textarea>
+                <input type="checkbox" id="checkbox_info" v-model="settings.station.infoEnable" /> Station's info
+                <div class="block_settings" v-if="settings.station.infoEnable">
+                    <textarea v-model="settings.station.info"></textarea>
                 </div>
             </div>
-            -->
+            
             <div class="station_setup_block">
                 <img class="icon_info" src="/images/icon_info.png" title="Info">
                 <input type="checkbox" id="checkbox_news" v-model="settings.enable.news" /> News
@@ -141,23 +140,10 @@ export default {
   },
   data () {
     let user = this.$root.$data.user
-    let settings = user.settings()
     return {
+      user: user,
       settings: user.settings(),
-      newsItem: '',
-      enableNews: settings.enable.news,
-      enableLog: settings.enable.log,
-      enableCluster: settings.enable.cluster,
-      enableChat: settings.enable.chat,
-      enableDonate: settings.enable.donate,
-      enableMap: settings.enable.map,
-      stationCallsign: settings.station.callsign,
-      stationTitle: settings.station.title,
-      stationInfo: settings.station.info,
-      publish: settings.publish,
-      logColumnsRDA: settings.log.columns.RDA,
-      logColumnsRAFA: settings.log.columns.RAFA
-
+      newsItem: ''
     }
   },
 
@@ -170,17 +156,18 @@ export default {
 
   computed: {
     stationLink: function () {
-      return this.stationCallsign
+      return this.settings.station.callsign
         ? ( 'http://tnxqso.com/' +
-          this.stationCallsign.replace( /\//, '-' ).toLowerCase() )
+          this.settings.station.callsign.replace( /\//, '-' ).toLowerCase() )
         : null
     }
   },
   methods: {
     logout () {
-      this.$root.$data.user.logout()
+      this.user.logout()
     },
-    saveSttingss () {
+    saveSettingss () {
+      this.user.saveSettings()
     },
     clearChat () {
     },

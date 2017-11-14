@@ -19,6 +19,9 @@ function userInit () {
   if ( !_user.settings.enable ) {
     _user.settings.enable = {}
   }
+  if ( !_user.settings.station ) {
+    _user.settings.station = {}
+  }
 }
 
 function toStorage () {

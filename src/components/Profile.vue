@@ -21,8 +21,8 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/images/icon_info.png" title="Info">
-                <input type="checkbox" id="checkbox_info" v-model="settings.station.infoEnable" /> Station's info
-                <div class="block_settings" v-if="settings.station.infoEnable">
+                <input type="checkbox" id="checkbox_info" v-model="settings.enable.stationInfo" /> Station's info
+                <div class="block_settings" v-if="settings.enable.stationInfo">
                     <textarea v-model="settings.station.info"></textarea>
                 </div>
             </div>
@@ -38,32 +38,33 @@
                         @click="postNewsItem()"/><br/>
                 </div>
             </div>
-            <!--
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/images/icon_info.png" title="Info">
-                <input type="checkbox" id="checkbox_log" v-model="enableLog" /> Online log
-                <div class="block_settings" v-if="enableLog">
+                <input type="checkbox" id="checkbox_log" v-model="settings.enable.log" /> Online log
+                <div class="block_settings" v-if="settings.enable.log">
                     View:<br/>
-                    <input type="checkbox" id="checkbox_log_rda" v-model="logColumnsRDA" /> RDA<br/>
-                    <input type="checkbox" id="checkbox_log_rafa" v-model="logColumnsRAFA" /> RAFA<br/>
-                    <input type="checkbox" id="checkbox_log_wff" v-model="logColumnsWFF" /> WFF<br/>
-                    <input type="checkbox" id="checkbox_log_loc" v-model="logColumnsLoc" /> Locator<br/>
+                    <input type="checkbox" id="checkbox_log_rda" v-model="settings.log.columns.RDA" /> RDA<br/>
+                    <input type="checkbox" id="checkbox_log_rafa" v-model="settings.log.columns.RAFA" /> RAFA<br/>
+                    <input type="checkbox" id="checkbox_log_wff" v-model="settings.log.columns.WFF" /> WFF<br/>
+                    <input type="checkbox" id="checkbox_log_loc" v-model="settings.log.columns.loc" /> Locator<br/>
                     <template v-for="n in 2">
                         <input type="checkbox" :id="'checkbox_log_user' + n"  
-                            v-model="logEnableUserColumns[n-1]" /> 
+                            v-model="settings.log.userColumns[n-1].enabled" /> 
                         User field #{{n}} <input type="text" :id="'user_field' + n" 
-                            v-model="logUserColumns[n-1]" v-if="log.columns.user[n-1]"/><br/>
+                            v-model="settings.log.userColumns[n-1].column" 
+                            v-if="settings.log.userColumns[n-1].enabled"/><br/>
                     </template>
                     <input type="button" id="button_clear_log" class="btn" value="Clear online log" 
                         @click="clearLog()"/><br/>
                 </div>
             </div>
 
+
             <div class="station_setup_block">
                 <img class="icon_info" src="/images/icon_info.png" title="Info">
-                <input type="checkbox" id="checkbox_map" v-model="enableMap" /> Map
-                <div class="block_settings" v-if="enableMap">
+                <input type="checkbox" id="checkbox_map" v-model="settings.enable.map" /> Map
+                <div class="block_settings" v-if="settings.enable.map">
                     <input type="button" id="button_upload_track" class="btn" 
                         value="Upload KMZ-file with track" @click="uploadTrack()"/> &nbsp; 
                     <input type="button" id="button_clear_track" class="btn" value="Clear track"
@@ -73,48 +74,50 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/images/icon_info.png" title="Info">
-                <input type="checkbox" id="checkbox_cluster" v-model="enableCluster" /> ADXcluster
-                <div class="block_settings" v-if="enableCluster">
+                <input type="checkbox" id="checkbox_cluster" v-model="settings.enable.cluster" /> ADXcluster
+                <div class="block_settings" v-if="settings.enable.cluster">
                 Callsigns to track ( separeted by spaces or commas): 
-                <input type="text" id="setup_cluster" v-model="clusterCallsigns"/>
+                <input type="text" id="setup_cluster" v-model="clusterCallsigns" 
+                    @change="clusterCallsignsChange"/>
                 </div>
 
             </div>
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/images/icon_info.png" title="Info">
-                <input type="checkbox" id="checkbox_chat" v-model="enableChat" /> Chat<br/>
-                <div class="block_settings" v-if="enableChat">
+                <input type="checkbox" id="checkbox_chat" v-model="settings.enable.chat" /> Chat<br/>
+                <div class="block_settings" v-if="settings.enable.chat">
                     <input type="button" id="button_clear_chat" class="btn" value="Clear chat"
                         @click="clearChat()"/><br/>
                     Admin "RED" callsigns: <br/>
-                    <input type="text" id="admin_calls" v-model="chatAdmins"/>
+                    <input type="text" id="admin_calls" v-model="chatAdmins" 
+                        @chamge="chatAdminsChange()" />
                 </div>
             </div>
 
+
             <div class="station_setup_block">
                 <img class="icon_info" src="/images/icon_info.png" title="Info">
-                <input type="checkbox" id="checkbox_instagram" v-model="enableInstagram" /> 
+                <input type="checkbox" id="checkbox_instagram" v-model="settings.enable.instagram" /> 
                 Instagram<br/>
-                <div class="block_settings" v-if="enableInstagram">
-                    Instagram ID: <input type="text" id="setup_instagram" v-model="instagramID"/>
+                <div class="block_settings" v-if="settings.enable.instagram">
+                    Instagram ID: <input type="text" id="setup_instagram" v-model="settings.instagramID"/>
                 </div>
             </div>
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/images/icon_info.png" title="Info">
-                <input type="checkbox" id="checkbox_support_us" v-model="enableDonate" /> 
+                <input type="checkbox" id="checkbox_support_us" v-model="settings.enable.donate" /> 
                 Support us<br/>
-                <div class="block_settings" v-if="enableDonate">
-                    <textarea v-model="donateText"></textarea><br/><br/>
+                <div class="block_settings" v-if="settings.enable.donate">
+                    <textarea v-model="settings.donate.text"></textarea><br/><br/>
                     Code from payment system:<br/> 
-                    <textarea v-model="donateCode"></textarea>
+                    <textarea v-model="settings.donate.code"></textarea>
                 </div>
             </div>
             <br/><br/> 
             <input type="button" id="button_save_all" class="btn" value="Save all info"
                 @click="saveSettings()"/>
-            -->
             
         </div>
 
@@ -143,7 +146,9 @@ export default {
     return {
       user: user,
       settings: user.settings(),
-      newsItem: ''
+      newsItem: '',
+      clusterCallsigns: '',
+      chatAdmins: ''
     }
   },
 
@@ -178,8 +183,11 @@ export default {
     uploadTrack () {
     },
     postNewsItem () {
+    },
+    clusterCallsignsChange () {
+    },
+    chatAdminsChange () {
     }
-
   }
 }
 </script>

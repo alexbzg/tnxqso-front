@@ -91,7 +91,7 @@
                         @click="clearChat()"/><br/>
                     Admin "RED" callsigns: <br/>
                     <input type="text" id="admin_calls" v-model="chatAdmins" 
-                        @chamge="chatAdminsChange()" />
+                        @change="chatAdminsChange" />
                 </div>
             </div>
 
@@ -129,6 +129,7 @@
 <script>
 import router from './../router'
 import {VueEditor} from 'vue2-editor'
+import {parseCallsigns} from './../utils'
 export default {
   name: 'profile',
   components: {
@@ -143,12 +144,13 @@ export default {
   },
   data () {
     let user = this.$root.$data.user
+    let settings = user.settings()
     return {
       user: user,
-      settings: user.settings(),
+      settings: settings,
       newsItem: '',
-      clusterCallsigns: '',
-      chatAdmins: ''
+      clusterCallsigns: settings.clusterCallsigns.join(' '),
+      chatAdmins: settings.chatAdmins.join(' ')
     }
   },
 
@@ -171,8 +173,8 @@ export default {
     logout () {
       this.user.logout()
     },
-    saveSettingss () {
-      this.user.saveSettings()
+    saveSettings () {
+      this.user.saveSettings(this.settings)
     },
     clearChat () {
     },
@@ -185,8 +187,10 @@ export default {
     postNewsItem () {
     },
     clusterCallsignsChange () {
+      this.settings.clusterCallsigns = parseCallsigns(this.clusterCallsigns)
     },
     chatAdminsChange () {
+      this.settings.chatAdmins = parseCallsigns(this.chatAdmins)
     }
   }
 }

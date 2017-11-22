@@ -9,7 +9,7 @@
 
         <div id="station_setup">
             <div class="station_setup_block">
-                <img class="icon_info" src="/images/icon_info.png" title="Info">
+                <img class="icon_info" src="/static/images/icon_info.png" title="Info">
                 <input type="checkbox" id="checkbox_publish" v-model="settings.publish"/> 
                 Publish on TNXQSO.com main page <br/>
                 Station's callsign: <input type="text" id="station_callsign" v-model="settings.station.callsign"/> 
@@ -20,7 +20,7 @@
             </div>
 
             <div class="station_setup_block">
-                <img class="icon_info" src="/images/icon_info.png" title="Info">
+                <img class="icon_info" src="/static/images/icon_info.png" title="Info">
                 <input type="checkbox" id="checkbox_info" v-model="settings.enable.stationInfo" /> Station's info
                 <div class="block_settings" v-if="settings.enable.stationInfo">
                     <textarea v-model="settings.station.info"></textarea>
@@ -28,7 +28,7 @@
             </div>
             
             <div class="station_setup_block">
-                <img class="icon_info" src="/images/icon_info.png" title="Info">
+                <img class="icon_info" src="/static/images/icon_info.png" title="Info">
                 <input type="checkbox" id="checkbox_news" v-model="settings.enable.news" /> News
                 <div class="block_settings" v-if="settings.enable.news">
                     <input type="button" id="button_clear_news" class="btn" value="Clear news"
@@ -40,7 +40,7 @@
             </div>
 
             <div class="station_setup_block">
-                <img class="icon_info" src="/images/icon_info.png" title="Info">
+                <img class="icon_info" src="/static/images/icon_info.png" title="Info">
                 <input type="checkbox" id="checkbox_log" v-model="settings.enable.log" /> Online log
                 <div class="block_settings" v-if="settings.enable.log">
                     View:<br/>
@@ -62,7 +62,7 @@
 
 
             <div class="station_setup_block">
-                <img class="icon_info" src="/images/icon_info.png" title="Info">
+                <img class="icon_info" src="/static/images/icon_info.png" title="Info">
                 <input type="checkbox" id="checkbox_map" v-model="settings.enable.map" /> Map
                 <div class="block_settings" v-if="settings.enable.map">
                     <input type="button" id="button_upload_track" class="btn" 
@@ -73,7 +73,7 @@
             </div>
 
             <div class="station_setup_block">
-                <img class="icon_info" src="/images/icon_info.png" title="Info">
+                <img class="icon_info" src="/static/images/icon_info.png" title="Info">
                 <input type="checkbox" id="checkbox_cluster" v-model="settings.enable.cluster" /> ADXcluster
                 <div class="block_settings" v-if="settings.enable.cluster">
                 Callsigns to track ( separeted by spaces or commas): 
@@ -84,7 +84,7 @@
             </div>
 
             <div class="station_setup_block">
-                <img class="icon_info" src="/images/icon_info.png" title="Info">
+                <img class="icon_info" src="/static/images/icon_info.png" title="Info">
                 <input type="checkbox" id="checkbox_chat" v-model="settings.enable.chat" /> Chat<br/>
                 <div class="block_settings" v-if="settings.enable.chat">
                     <input type="button" id="button_clear_chat" class="btn" value="Clear chat"
@@ -97,7 +97,7 @@
 
 
             <div class="station_setup_block">
-                <img class="icon_info" src="/images/icon_info.png" title="Info">
+                <img class="icon_info" src="/static/images/icon_info.png" title="Info">
                 <input type="checkbox" id="checkbox_instagram" v-model="settings.enable.instagram" /> 
                 Instagram<br/>
                 <div class="block_settings" v-if="settings.enable.instagram">
@@ -106,7 +106,7 @@
             </div>
 
             <div class="station_setup_block">
-                <img class="icon_info" src="/images/icon_info.png" title="Info">
+                <img class="icon_info" src="/static/images/icon_info.png" title="Info">
                 <input type="checkbox" id="checkbox_support_us" v-model="settings.enable.donate" /> 
                 Support us<br/>
                 <div class="block_settings" v-if="settings.enable.donate">

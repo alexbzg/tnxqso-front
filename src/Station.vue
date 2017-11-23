@@ -1,12 +1,47 @@
 <template>
     <div id="app">
-        <span>Station</span>
+     <table class="tabs">
+        <tr>
+            <td id="station_title">
+                <h1>R7AB/М</h1>
+                Радиоэкспедиция по Ростовской области и республике Калмыкия (12 - 20 июля 2017)
+            </td>
+        <td rowspan="2" id="status">
+            <div id="status_block_top" class="status_online">
+                Station <b>ONLINE</b>
+            </div>
+            <table id="status_block_info"><tr>
+                <td id="current_loc">
+                    <span>15 jul 2017 18:23z</span><br/>RDA&nbsp;<b>KR-27</b><br/>RAFA&nbsp;<b>XRKF</b><br/><b>LN06LC</b>
+                </td>
+            </tr></table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div id="tab_info" class="tab">Info</div>
+            <div id="tab_news" class="tab">News</div>
+            <div id="tab_log" class="tab active_tab">Online log</div>
+            <div id="tab_map" class="tab">Map</div>
+            <div id="tab_adxc" class="tab">ADXcluster</div>
+            <div id="tab_chat" class="tab updated_tab">Chat</div>
+            <div id="tab_instagram" class="tab">Instagram</div>
+            <div id="tab_donate" class="tab">Support us</div>
+        </td>
+    </tr></table>
+    <router-view></router-view>
     </div>
+
 </template>
 
 <script>
+import stationSettings from './station-settings-service'
+
 export default {
-  name: 'station'
+  name: 'station',
+  data: {
+    stationSettings: stationSettings
+  }
 }
 </script>
 

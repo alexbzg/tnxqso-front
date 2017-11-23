@@ -2,15 +2,13 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import Station from './Station'
-// import router from './router'
-import user from './user'
+import router from './station-router'
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  // router,
+  router,
   data: {
-    user: user
   },
   template: '<Station/>',
   components: { Station }

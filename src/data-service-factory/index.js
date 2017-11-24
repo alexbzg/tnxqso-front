@@ -25,8 +25,8 @@ export default function () {
       .then(loadComplete)
 
     function loadComplete (response) {
-      if (s.lastModified !== response.headers('last-modified')) {
-        s.lastModified = response.headers('last-modified')
+      if (s.lastModified !== response.headers['last-modified']) {
+        s.lastModified = response.headers['last-modified']
         s.data = response.data
         s.processData()
         bus.$emit(s.eventName)

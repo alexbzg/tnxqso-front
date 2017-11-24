@@ -35,6 +35,9 @@ export default {
   },
 
   get (URL) {
+    if (!URL.startsWith('/')) {
+      URL = window.location.pathname + '/' + URL
+    }
     return axios.get(URL)
       .catch(this.onError)
   }

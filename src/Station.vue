@@ -3,8 +3,8 @@
      <table class="tabs">
         <tr>
             <td id="station_title">
-                <h1>R7AB/М</h1>
-                Радиоэкспедиция по Ростовской области и республике Калмыкия (12 - 20 июля 2017)
+                <h1>{{stationCS}}</h1>
+                {{stationTitle}}
             </td>
         <td rowspan="2" id="status">
             <div id="status_block_top" class="status_online">
@@ -19,14 +19,22 @@
     </tr>
     <tr>
         <td>
-            <div id="tab_info" class="tab">Info</div>
-            <div id="tab_news" class="tab">News</div>
-            <div id="tab_log" class="tab active_tab">Online log</div>
-            <div id="tab_map" class="tab">Map</div>
-            <div id="tab_adxc" class="tab">ADXcluster</div>
-            <div id="tab_chat" class="tab updated_tab">Chat</div>
-            <div id="tab_instagram" class="tab">Instagram</div>
-            <div id="tab_donate" class="tab">Support us</div>
+            <router-link to="/info" tag="div" id="tab_info" class="tab" 
+                active-class="active_tab" v-if="enable.stationInfo">Info</router-link>
+            <router-link to="/news" tag="div" id="tab_news" class="tab" 
+                active-class="active_tab" v-if="enable.news">News</router-link>
+            <router-link to="/log" tag="div" id="tab_log" class="tab" 
+                active-class="active_tab" v-if="enable.log">Online log</router-link>
+            <router-link to="/map" tag="div" id="tab_map" class="tab" 
+                active-class="active_tab" v-if="enable.map">Map</router-link>
+            <router-link to="/cluster" tag="div" id="tab_adxc" class="tab" 
+                active-class="active_tab" v-if="enable.cluster">ADXcluster</router-link>
+            <router-link to="/chat" tag="div" id="tab_chat" class="tab" 
+                active-class="active_tab" v-if="enable.chat">Chat</router-link>
+            <router-link to="/instagram" tag="div" id="tab_instagram" class="tab" 
+                active-class="active_tab" v-if="enable.instagram">Instagram</router-link>
+            <router-link to="/donate" tag="div" id="tab_donate" class="tab" 
+                active-class="active_tab" v-if="enable.donate">Support us</router-link>
         </td>
     </tr></table>
     <router-view></router-view>
@@ -39,8 +47,27 @@ import stationSettings from './station-settings-service'
 
 export default {
   name: 'station',
-  data: {
-    stationSettings: stationSettings
+  data () {
+    return {
+//      stationSettings: stationSettings,
+      activeTab: 'log',
+      enable: {},
+      stationCS: null,
+      stationTitle: null,
+      stationInfo: null
+    }
+  },
+  mounted: function () {
+    var vm = this
+    stationSettings.load()
+      .then( function () {
+        vm.stationCS = stationSettings.data.station.callsign
+        vm.stationTitle = stationSettings.data.station.title
+        vm.enable = stationSettings.data.enable
+        if ( stationSettings.data.enable.stationInfo ) {
+          vm.stationInfo = stationSettings.data.station.info
+        }
+      })
   }
 }
 </script>

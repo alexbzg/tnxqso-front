@@ -27,8 +27,9 @@
                 active-class="active_tab" v-if="enable.log">Online log</router-link>
             <router-link to="/map" tag="div" id="tab_map" class="tab" 
                 active-class="active_tab" v-if="enable.map">Map</router-link>
-            <router-link to="/cluster" tag="div" id="tab_adxc" class="tab" 
-                active-class="active_tab" v-if="enable.cluster">ADXcluster</router-link>
+            <router-link to="/adxcluster" tag="div" id="tab_adxc" class="tab" 
+                active-class="active_tab" v-if="enable.cluster" 
+                :class="{updated_tab: tabsUnread.cluster }">ADXcluster</router-link>
             <router-link to="/chat" tag="div" id="tab_chat" class="tab" 
                 active-class="active_tab" v-if="enable.chat">Chat</router-link>
             <router-link to="/instagram" tag="div" id="tab_instagram" class="tab" 
@@ -44,13 +45,33 @@
 
 <script>
 import stationSettings from './station-settings-service'
+import clusterService from './cluster-service'
+import storage from './storage'
+
+const tabsReadStorageKey = 'stationTabsRead'
+let tabs = {
+  cluster: { service: clusterService, interval: 60000 }
+}
 
 export default {
   name: 'station',
   data () {
+    let tabsRead = storage.load( tabsReadStorageKey, 'local' )
+    if (!tabsRead) {
+      tabsRead = {}
+    }
+    const tabsUnread = {}
+    for (const id in tabs) {
+      tabs[id].updated = null
+      tabsUnread[id] = false
+      if ( id in tabsRead ) {
+        tabs[id].read = tabsRead[id]
+      }
+    }
     return {
-//      stationSettings: stationSettings,
-      activeTab: 'log',
+      tabs: tabs,
+      tabsRead: tabsRead,
+      tabsUnread: tabsUnread,
       enable: {},
       stationCS: null,
       stationTitle: null,
@@ -58,7 +79,7 @@ export default {
     }
   },
   mounted: function () {
-    var vm = this
+    const vm = this
     stationSettings.load()
       .then( function () {
         vm.stationCS = stationSettings.data.station.callsign
@@ -68,6 +89,33 @@ export default {
           vm.stationInfo = stationSettings.data.station.info
         }
       })
+    for (const id in vm.tabs) {
+      const tab = vm.tabs[id]
+      tab.service.load()
+      tab.intervalId = setInterval( tab.service.load, tab.interval )
+      tab.service.onUpdate( function () {
+        tab.updated = tab.service.lastModified
+        vm.tabUnread( id )
+      })
+    }
+  },
+  beforeDestroy () {
+    for (const id in this.tabs) {
+      clearInterval( this.tabs[id].intervalId )
+    }
+  },
+  methods: {
+    tabRead: function ( id ) {
+      const tab = this.tabs[id]
+      tab.read = tab.updated
+      this.tabsRead[id] = tab.read
+      this.tabUnread( id )
+      storage.save( tabsReadStorageKey, this.tabsRead, 'local' )
+    },
+    tabUnread: function ( id ) {
+      const tab = this.tabs[id]
+      this.tabsUnread[id] = tab.updated ? tab.updated !== tab.read : false
+    }
   }
 }
 </script>

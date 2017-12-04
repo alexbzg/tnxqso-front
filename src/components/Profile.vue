@@ -143,8 +143,8 @@ export default {
     } )
   },
   data () {
-    let user = this.$root.$data.user
-    let settings = user.settings()
+    const user = this.$root.$data.user
+    const settings = user.settings()
     return {
       user: user,
       settings: settings,
@@ -185,6 +185,11 @@ export default {
     uploadTrack () {
     },
     postNewsItem () {
+      const vm = this
+      this.user.serverPost( 'news', { item: this.newsItem } )
+        .then( function () {
+          vm.newsItem = ''
+        })
     },
     clusterCallsignsChange () {
       this.settings.clusterCallsigns = parseCallsigns(this.clusterCallsigns)

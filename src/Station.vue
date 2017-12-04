@@ -107,10 +107,12 @@ export default {
   methods: {
     tabRead: function ( id ) {
       const tab = this.tabs[id]
-      tab.read = tab.updated
-      this.tabsRead[id] = tab.read
-      this.tabUnread( id )
-      storage.save( tabsReadStorageKey, this.tabsRead, 'local' )
+      if ( tab.updated && tab.read !== tab.updated ) {
+        tab.read = tab.updated
+        this.tabsRead[id] = tab.read
+        this.tabUnread( id )
+        storage.save( tabsReadStorageKey, this.tabsRead, 'local' )
+      }
     },
     tabUnread: function ( id ) {
       const tab = this.tabs[id]

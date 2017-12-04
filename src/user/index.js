@@ -59,11 +59,12 @@ export default {
     return JSON.parse( JSON.stringify( _user.settings ) )
   },
 
-  saveSettings ( settings ) {
-    _user.settings = JSON.parse( JSON.stringify( settings ) )
-    toStorage()
-    var u = this
-    request.post( 'userSettings', _user )
+  serverPost ( path, data ) {
+    const u = this
+    if ( !data.token ) {
+      data.token = _user.token
+    }
+    return request.post( path, data )
       .catch(function (error) {
         var msg = ''
         console.log(error)
@@ -77,7 +78,14 @@ export default {
           msg = 'Server error. Please try again later.'
         }
         alert(msg)
+        throw error
       })
+  },
+
+  saveSettings ( settings ) {
+    _user.settings = JSON.parse( JSON.stringify( settings ) )
+    toStorage()
+    this.serverPost( 'userSettings', _user )
   }
 
 }

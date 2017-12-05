@@ -184,9 +184,14 @@ export default {
     },
     uploadTrack () {
     },
+    clearNews () {
+      if (window.confirm( 'Do you really want to delete all news items?') ) {
+        this.user.serverPost( 'news', { clear: 1 } )
+      }
+    },
     postNewsItem () {
       const vm = this
-      this.user.serverPost( 'news', { item: this.newsItem } )
+      this.user.serverPost( 'news', { add: this.newsItem } )
         .then( function () {
           vm.newsItem = ''
         })

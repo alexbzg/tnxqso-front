@@ -22,7 +22,8 @@
             <router-link to="/info" tag="div" id="tab_info" class="tab" 
                 active-class="active_tab" v-if="enable.stationInfo">Info</router-link>
             <router-link to="/news" tag="div" id="tab_news" class="tab" 
-                active-class="active_tab" v-if="enable.news">News</router-link>
+                active-class="active_tab" v-if="enable.news"
+                 :class="{updated_tab: tabsUnread.news }">News</router-link>
             <router-link to="/log" tag="div" id="tab_log" class="tab" 
                 active-class="active_tab" v-if="enable.log">Online log</router-link>
             <router-link to="/map" tag="div" id="tab_map" class="tab" 
@@ -46,11 +47,13 @@
 <script>
 import stationSettings from './station-settings-service'
 import clusterService from './cluster-service'
+import newsService from './news-service'
 import storage from './storage'
 
 const tabsReadStorageKey = 'stationTabsRead'
-let tabs = {
-  cluster: { service: clusterService, interval: 60000 }
+const tabs = {
+  cluster: { service: clusterService, interval: 60000 },
+  news: { service: newsService, interval: 60000 }
 }
 
 export default {

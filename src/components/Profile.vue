@@ -65,8 +65,8 @@
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info">
                 <input type="checkbox" id="checkbox_map" v-model="settings.enable.map" /> Map
                 <div class="block_settings" v-if="settings.enable.map">
-                    <input type="button" id="button_upload_track" class="btn" 
-                        value="Upload KMZ-file with track" @click="uploadTrack()"/> &nbsp; 
+                    <input type="file" id="fileTrack" style="display:none" @change="uploadTrack">
+                    <label class="btn" for="fileTrack">Upload XML-file with track</label> &nbsp; 
                     <input type="button" id="button_clear_track" class="btn" value="Clear track"
                         @click="clearTrack()"/><br/>
                 </div>
@@ -181,8 +181,20 @@ export default {
     clearLog () {
     },
     clearTrack () {
+      if (window.confirm( 'Do you really want to clear track?') ) {
+        this.user.serverPost( 'track', { clear: 1 } )
+      }
     },
-    uploadTrack () {
+    uploadTrack (e) {
+      const files = e.target.files || e.dataTransfer.files
+      if (!files.length) { return }
+      const reader = new FileReader()
+      const vm = this
+
+      reader.onload = function (e) {
+        vm.user.serverPost( 'track', { file: e.target.result } )
+      }
+      reader.readAsDataURL(files[0])
     },
     clearNews () {
       if (window.confirm( 'Do you really want to delete all news items?') ) {

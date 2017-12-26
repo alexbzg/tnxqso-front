@@ -48,12 +48,14 @@
 import stationSettings from './station-settings-service'
 import clusterService from './cluster-service'
 import newsService from './news-service'
+import chatService from './chat-service'
 import storage from './storage'
 
 const tabsReadStorageKey = 'stationTabsRead'
 const tabs = {
   cluster: { service: clusterService, interval: 60000 },
-  news: { service: newsService, interval: 60000 }
+  news: { service: newsService, interval: 60000 },
+  chat: { service: chatService, interval: 5000 }
 }
 
 export default {
@@ -78,7 +80,8 @@ export default {
       enable: {},
       stationCS: null,
       stationTitle: null,
-      stationInfo: null
+      stationInfo: null,
+      stationSettings: null
     }
   },
   mounted: function () {
@@ -88,6 +91,7 @@ export default {
         vm.stationCS = stationSettings.data.station.callsign
         vm.stationTitle = stationSettings.data.station.title
         vm.enable = stationSettings.data.enable
+        vm.stationSettings = stationSettings.data
         if ( stationSettings.data.enable.stationInfo ) {
           vm.stationInfo = stationSettings.data.station.info
         }

@@ -5,6 +5,7 @@ import StationCluster from '../components/StationCluster'
 import StationNews from '../components/StationNews'
 import StationInfo from '../components/StationInfo'
 import StationMap from '../components/StationMap'
+import StationChat from '../components/StationChat'
 
 Vue.use(Router)
 
@@ -29,6 +30,12 @@ export default new Router({
       path: '/map',
       name: 'StationMap',
       component: StationMap
+    },
+    {
+      path: '/chat',
+      name: 'StationChat',
+      component: StationChat
     }
+
   ]
 })

@@ -47,6 +47,8 @@ export default {
 
   loggedIn: Boolean( _user.token ),
 
+  callsign: _user.callsign,
+
   logout () {
     storage.remove( 'user', 'local' )
     storage.remove( 'user', 'session' )
@@ -68,7 +70,7 @@ export default {
       .catch(function (error) {
         var msg = ''
         console.log(error)
-        if (error.status === 400) {
+        if (error.status === 400 || error.status === 403 ) {
           if ( error.message === 'Login expired' || error.message === 'Not logged in' ) {
             u.logout()
             return

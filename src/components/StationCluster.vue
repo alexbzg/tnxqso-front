@@ -21,8 +21,7 @@ export default {
   name: 'StationCluster',
   data () {
     return {
-      tabId: 'cluster',
-      data: {}
+      tabId: 'cluster'
     }
   }
 }

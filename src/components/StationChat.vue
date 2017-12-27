@@ -4,7 +4,7 @@
             <tbody>
                 <tr>
                     <td>
-                        <input type="text" id="your_call" v-model="chatUserField">
+                        <input type="text" id="your_call" v-model="chatUserField" @change="chatUserFieldChanged">
                     </td>
                     <td>
                         <input type="text" id="message_text" v-model="messageText">
@@ -30,6 +30,18 @@
             </div>
 
         </div>
+        <table id="chat_window">
+            <tr v-for="msg in service.data" :class="{admin: msg.admin}"> 
+                <td class="call">
+                    <span class="call">{{msg.user}}</span><br/>
+                    <span class="date_time">{{msg.date}} {{msg.time}}</span>
+                </td>
+                <td class="message">
+                    {{msg.text}}
+                </td>
+            </tr>
+        </table>
+       
     </div>
 </template>
 
@@ -48,12 +60,16 @@ export default {
       tabId: 'chat',
       chatUser: chatUser,
       chatUserField: chatUser,
-      messageText: null,
-      data: {}
+      messageText: null
     }
   },
   methods: {
     buttonClick () {
+      if (this.adminCS( this.chatUserField ) &&
+        this.chatUserField !== user.callsign ) {
+        window.alert( 'You must be logged in as ' + this.chatUserField )
+        return
+      }
       if (this.chatUserField !== this.chatUser) {
         this.chatUser = this.chatUserField
         storage.save( chatUserStorageKey, this.chatUser, 'local' )
@@ -65,13 +81,25 @@ export default {
             'text': this.messageText,
             'station': this.stationSettings.station.callsign
           } )
-        .then( function () { vm.messageText = null } )
+        .then( function () {
+          vm.messageText = null
+          vm.service.load()
+        } )
+      }
+    },
+    adminCS (cs) {
+      return cs === this.stationSettings.admin ||
+        this.stationSettings.chatAdmins.indexOf( cs ) !== -1
+    },
+    chatUserFieldChanged () {
+      if (this.chatUserField && this.chatUserField !== this.chatUserField.toUpperCase()) {
+        this.chatUserField = this.chatUserField.toUpperCase()
       }
     }
   },
   computed: {
     isAdmin: function () {
-      return user.callsign && this.stationSettings.chatAdmins.find( user.callsign )
+      return user.callsign && this.adminCS( user.callsign )
     },
     buttonVisible: function () {
       return (this.chatUserField && this.chatUserField !== this.chatUser) ||

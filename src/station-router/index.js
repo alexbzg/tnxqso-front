@@ -34,7 +34,8 @@ export default new Router({
     {
       path: '/chat',
       name: 'StationChat',
-      component: StationChat
+      component: StationChat,
+      props: true
     }
 
   ]

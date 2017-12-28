@@ -39,7 +39,7 @@
                 active-class="active_tab" v-if="enable.donate">Support us</router-link>
         </td>
     </tr></table>
-    <router-view></router-view>
+    <router-view :station-settings="stationSettings" :user="user" :chatUser="chatUser"></router-view>
     </div>
 
 </template>
@@ -49,8 +49,9 @@ import stationSettings from './station-settings-service'
 import clusterService from './cluster-service'
 import newsService from './news-service'
 import chatService from './chat-service'
+import user from './user'
 import storage from './storage'
-
+const chatUserStorageKey = 'chatUser'
 const tabsReadStorageKey = 'stationTabsRead'
 const tabs = {
   cluster: { service: clusterService, interval: 60000 },
@@ -77,6 +78,8 @@ export default {
       tabs: tabs,
       tabsRead: tabsRead,
       tabsUnread: tabsUnread,
+      chatUser: storage.load( chatUserStorageKey, 'local' ) || user.callsign,
+      user: user,
       enable: {},
       stationCS: null,
       stationTitle: null,
@@ -112,18 +115,25 @@ export default {
     }
   },
   methods: {
-    tabRead: function ( id ) {
+    tabRead ( id ) {
       const tab = this.tabs[id]
       if ( tab.updated && tab.read !== tab.updated ) {
         tab.read = tab.updated
         this.tabsRead[id] = tab.read
         this.tabUnread( id )
         storage.save( tabsReadStorageKey, this.tabsRead, 'local' )
+        this.postUserActivity( id )
       }
     },
-    tabUnread: function ( id ) {
+    tabUnread ( id ) {
       const tab = this.tabs[id]
       this.tabsUnread[id] = tab.updated ? tab.updated !== tab.read : false
+    },
+    postUserActivity ( tab, typing ) {
+      user.serverPost( 'activeUser',
+        { 'station': this.stationSettings.station.callsign,
+          'tab': tab,
+          'typing': Boolean( typing ) } )
     }
   }
 }

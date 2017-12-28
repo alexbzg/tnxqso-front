@@ -47,36 +47,30 @@
 
 <script>
 import tabMixin from '../station-tab-mixin'
-import user from '../user'
-import storage from '../storage'
-const chatUserStorageKey = 'chatUser'
 export default {
   mixins: [tabMixin],
   name: 'StationChat',
+  props: ['stationSettings', 'user', 'chatUser'],
   data () {
-    const chatUser = storage.load( chatUserStorageKey, 'local' ) || user.callsign
     return {
-      stationSettings: this.$parent.stationSettings,
       tabId: 'chat',
-      chatUser: chatUser,
-      chatUserField: chatUser,
+      chatUserField: this.chatUser,
       messageText: null
     }
   },
   methods: {
     buttonClick () {
-      if (this.adminCS( this.chatUserField ) &&
-        this.chatUserField !== user.callsign ) {
+      if (this.adminCS( this.userField ) &&
+        this.chatUserField !== this.user.callsign ) {
         window.alert( 'You must be logged in as ' + this.chatUserField )
         return
       }
       if (this.chatUserField !== this.chatUser) {
-        this.chatUser = this.chatUserField
-        storage.save( chatUserStorageKey, this.chatUser, 'local' )
+        this.$parent.setChatUser( this.chatUserField )
       }
       if (this.messageText) {
         const vm = this
-        user.serverPost( 'chat',
+        this.user.serverPost( 'chat',
           { 'from': this.chatUser,
             'text': this.messageText,
             'station': this.stationSettings.station.callsign
@@ -99,7 +93,7 @@ export default {
   },
   computed: {
     isAdmin: function () {
-      return user.callsign && this.adminCS( user.callsign )
+      return this.user.callsign && this.adminCS( this.user.callsign )
     },
     buttonVisible: function () {
       return (this.chatUserField && this.chatUserField !== this.chatUser) ||
@@ -108,7 +102,6 @@ export default {
     buttonCaption: function () {
       return this.messageText ? 'Post message' : 'Change callsign'
     }
-
   }
 }
 </script>

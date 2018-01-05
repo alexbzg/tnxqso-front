@@ -3,15 +3,12 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import user from './user'
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
-  data: {
-    user: user
-  },
+  data: {},
   template: '<App/>',
   components: { App }
 })

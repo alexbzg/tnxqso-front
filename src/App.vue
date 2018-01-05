@@ -24,16 +24,22 @@
                 </td>
             </tr>
         </table>
-        <router-view></router-view>
+        <router-view :user="user"></router-view>
     </div>
 </template>
 
 <script>
+import user from './user'
 export default {
   name: 'app',
+  data () {
+    return {
+      user: user
+    }
+  },
   computed: {
     loggedIn: function () {
-      return this.$root.$data.user.loggedIn
+      return this.user.loggedIn
     }
   }
 }

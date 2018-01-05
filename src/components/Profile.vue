@@ -132,21 +132,20 @@ import {VueEditor} from 'vue2-editor'
 import {parseCallsigns} from './../utils'
 export default {
   name: 'profile',
+  props: ['user'],
   components: {
     VueEditor
   },
   beforeRouteEnter ( to, from, next ) {
     next( vm => {
-      if ( !vm.$root.$data.user.loggedIn ) {
+      if ( !vm.user.loggedIn ) {
         router.push( '/login' )
       }
     } )
   },
   data () {
-    const user = this.$root.$data.user
-    const settings = user.settings()
+    const settings = this.user.settings()
     return {
-      user: user,
       settings: settings,
       newsItem: '',
       clusterCallsigns: settings.clusterCallsigns.join(' '),

@@ -30,9 +30,10 @@ import VueRecaptcha from 'vue-recaptcha'
 import router from './../router'
 export default {
   name: 'login',
+  props: ['user'],
   beforeRouteEnter ( to, from, next ) {
     next( vm => {
-      if ( vm.$root.$data.user.loggedIn ) {
+      if ( vm.user.loggedIn ) {
         router.push( '/profile' )
       }
     } )
@@ -55,7 +56,7 @@ export default {
           return
         }
       }
-      this.$root.$data.user.login(
+      this.user.login(
         { login: this.login,
           password: this.password,
           newUser: this.newUser,
@@ -81,7 +82,7 @@ export default {
       this.recaptcha = null
     },
     resetRecaptcha () {
-      this.$refs.recaptcha.reset() // Direct call reset method
+      this.$refs.invisibleRecaptcha.reset() // Direct call reset method
     }
   },
   components: { VueRecaptcha }

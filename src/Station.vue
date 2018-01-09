@@ -122,18 +122,21 @@ export default {
         this.tabsRead[id] = tab.read
         this.tabUnread( id )
         storage.save( tabsReadStorageKey, this.tabsRead, 'local' )
-        this.postUserActivity( id )
       }
+      this.postUserActivity( id )
     },
     tabUnread ( id ) {
       const tab = this.tabs[id]
       this.tabsUnread[id] = tab.updated ? tab.updated !== tab.read : false
     },
     postUserActivity ( tab, typing ) {
-      user.serverPost( 'activeUser',
-        { 'station': this.stationSettings.station.callsign,
-          'tab': tab,
-          'typing': Boolean( typing ) } )
+      if (this.chatUser) {
+        user.serverPost( 'activeUsers',
+          { 'station': this.stationSettings.station.callsign,
+            'tab': tab,
+            'user': this.chatUser,
+            'typing': Boolean( typing ) } )
+      }
     }
   }
 }

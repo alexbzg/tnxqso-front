@@ -7,7 +7,7 @@
                         <input type="text" id="your_call" v-model="chatUserField" @change="chatUserFieldChanged">
                     </td>
                     <td>
-                        <input type="text" id="message_text" v-model="messageText">
+                        <input type="text" id="message_text" v-model="messageText" @keyup="onTyping">
                     </td>
                     <td>
                         <button @click="buttonClick()" v-if="buttonVisible">{{buttonCaption}}</button>
@@ -22,11 +22,17 @@
         <div id="chat_info">
             <div class="chat_info_title">Chat page</div>
             <div class="chat_info_users1">
-                <!-- ngRepeat: user in vm.users()| filter: {'tab': 'chat'} -->
+                <span v-for="(user, cs) in activeUsers" v-if="user.chat"
+                    :class="{'admin': user.admin, 'typing':user.typing}">
+                    {{cs}}
+                </span>
             </div>
             <div class="chat_info_title">Other pages</div>
             <div class="chat_info_users2">
-                <!-- ngRepeat: user in vm.users() | filter: {'tab': '!chat'} <span ng-repeat="user in vm.users() | filter: {'tab': '!chat'}" class="ng-binding ng-scope">R7CL<br></span><!-- end ngRepeat: user in vm.users() | filter: {'tab': '!chat'} <span ng-repeat="user in vm.users() | filter: {'tab': '!chat'}" class="ng-binding ng-scope">TEST<br></span><!-- end ngRepeat: user in vm.users() | filter: {'tab': '!chat'} -->
+                <span v-for="(user, cs) in activeUsers" v-if="!user.chat"
+                    :class="{'admin': user.admin, 'typing':user.typing}">
+                    {{cs}}
+                </span>
             </div>
 
         </div>
@@ -46,7 +52,10 @@
 </template>
 
 <script>
+import _ from 'underscore'
 import tabMixin from '../station-tab-mixin'
+import activeUsersService from '../active-users-service'
+const typingInt = 5 * 60 * 1000
 export default {
   mixins: [tabMixin],
   name: 'StationChat',
@@ -55,8 +64,16 @@ export default {
     return {
       tabId: 'chat',
       chatUserField: this.chatUser,
-      messageText: null
+      messageText: null,
+      activeUsers: {},
+      typingTs: null
     }
+  },
+  mounted () {
+    this.activeUsersInterval = setInterval( this.updateActiveUsers, 1000 )
+  },
+  beforeDestroy () {
+    clearInterval( this.activeUsersInterval )
   },
   methods: {
     buttonClick () {
@@ -81,6 +98,20 @@ export default {
         } )
       }
     },
+    updateActiveUsers () {
+      const vm = this
+      activeUsersService.load()
+        .then( function () {
+          const ts = Date.now() / 1000
+          const data = activeUsersService.data
+          for (const cs in data) {
+            if ( data[cs].typing && ts - data[cs].ts > typingInt ) {
+              data[cs].typing = false
+            }
+          }
+          vm.activeUsers = data
+        })
+    },
     adminCS (cs) {
       return cs === this.stationSettings.admin ||
         this.stationSettings.chatAdmins.indexOf( cs ) !== -1
@@ -89,7 +120,10 @@ export default {
       if (this.chatUserField && this.chatUserField !== this.chatUserField.toUpperCase()) {
         this.chatUserField = this.chatUserField.toUpperCase()
       }
-    }
+    },
+    onTyping: _.debounce( function () {
+      this.$parent.postUserActivity( true )
+    }, 5000, { 'leading': true, 'trailing': false } )
   },
   computed: {
     isAdmin: function () {
@@ -102,7 +136,14 @@ export default {
     buttonCaption: function () {
       return this.messageText ? 'Post message' : 'Change callsign'
     }
+  },
+  watch: {
+    activeUsers: {
+      handler: function () {},
+      deep: true
+    }
   }
+
 }
 </script>
 

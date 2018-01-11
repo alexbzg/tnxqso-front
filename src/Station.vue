@@ -80,6 +80,7 @@ export default {
       tabsUnread: tabsUnread,
       chatUser: storage.load( chatUserStorageKey, 'local' ) || user.callsign,
       user: user,
+      activeTab: null,
       enable: {},
       stationCS: null,
       stationTitle: null,
@@ -87,7 +88,7 @@ export default {
       stationSettings: null
     }
   },
-  mounted: function () {
+  mounted () {
     const vm = this
     stationSettings.load()
       .then( function () {
@@ -98,6 +99,7 @@ export default {
         if ( stationSettings.data.enable.stationInfo ) {
           vm.stationInfo = stationSettings.data.station.info
         }
+        vm.postUserActivity()
       })
     for (const id in vm.tabs) {
       const tab = vm.tabs[id]
@@ -123,17 +125,18 @@ export default {
         this.tabUnread( id )
         storage.save( tabsReadStorageKey, this.tabsRead, 'local' )
       }
-      this.postUserActivity( id )
+      this.activeTab = id
+      this.postUserActivity()
     },
     tabUnread ( id ) {
       const tab = this.tabs[id]
       this.tabsUnread[id] = tab.updated ? tab.updated !== tab.read : false
     },
-    postUserActivity ( tab, typing ) {
-      if (this.chatUser) {
+    postUserActivity ( typing ) {
+      if (this.chatUser && this.stationSettings) {
         user.serverPost( 'activeUsers',
           { 'station': this.stationSettings.station.callsign,
-            'tab': tab,
+            'chat': this.activeTab === 'chat',
             'user': this.chatUser,
             'typing': Boolean( typing ) } )
       }

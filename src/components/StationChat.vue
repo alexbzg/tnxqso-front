@@ -55,7 +55,7 @@
 import _ from 'underscore'
 import tabMixin from '../station-tab-mixin'
 import activeUsersService from '../active-users-service'
-const typingInt = 5 * 60 * 1000
+const typingInt = 5 * 60
 export default {
   mixins: [tabMixin],
   name: 'StationChat',

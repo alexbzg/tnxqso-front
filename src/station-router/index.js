@@ -29,7 +29,8 @@ export default new Router({
     {
       path: '/map',
       name: 'StationMap',
-      component: StationMap
+      component: StationMap,
+      props: true
     },
     {
       path: '/chat',

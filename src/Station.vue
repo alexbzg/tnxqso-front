@@ -7,12 +7,16 @@
                 {{stationTitle}}
             </td>
         <td rowspan="2" id="status">
-            <div id="status_block_top" class="status_online">
-                Station <b>ONLINE</b>
+            <div id="status_block_top" 
+                :class="{status_online: statusData.online, status_offline: !statusData.online}">
+                Station <b>{{statusData.online ? 'ONLINE': 'OFFLINE'}}</b>
             </div>
             <table id="status_block_info"><tr>
                 <td id="current_loc">
-                    <span>15 jul 2017 18:23z</span><br/>RDA&nbsp;<b>KR-27</b><br/>RAFA&nbsp;<b>XRKF</b><br/><b>LN06LC</b>
+                    <span>{{statusData.date}}  {{statusData.year}} {{statusData.time}}</span><br/>
+                    <template v-if="statusData.rda">RDA&nbsp;<b>{{statusData.rda}}</b><br/></template>
+                    <template v-if="statusData.rafa">RAFA&nbsp;<b>{{statusData.rafa}}</b><br/></template>
+                    <template v-if="statusData.loc"><b>{{statusData.loc}}</b></template>
                 </td>
             </tr></table>
         </td>
@@ -39,7 +43,8 @@
                 active-class="active_tab" v-if="enable.donate">Support us</router-link>
         </td>
     </tr></table>
-    <router-view :station-settings="stationSettings" :user="user" :chatUser="chatUser"></router-view>
+    <router-view :station-settings="stationSettings" :user="user" :chatUser="chatUser"
+        :status-service="statusService"></router-view>
     </div>
 
 </template>
@@ -49,6 +54,7 @@ import stationSettings from './station-settings-service'
 import clusterService from './cluster-service'
 import newsService from './news-service'
 import chatService from './chat-service'
+import statusService from './status-service'
 import user from './user'
 import storage from './storage'
 const chatUserStorageKey = 'chatUser'
@@ -58,6 +64,9 @@ const tabs = {
   news: { service: newsService, interval: 60000 },
   chat: { service: chatService, interval: 5000 }
 }
+const onlineInt = 1000
+const userActivityPostInt = 60 * 1000
+const statusUpdateInt = 60 * 1000
 
 export default {
   name: 'station',
@@ -85,7 +94,9 @@ export default {
       stationCS: null,
       stationTitle: null,
       stationInfo: null,
-      stationSettings: null
+      stationSettings: null,
+      statusService: statusService,
+      statusData: {}
     }
   },
   mounted () {
@@ -101,6 +112,14 @@ export default {
         }
         vm.postUserActivity()
       })
+    statusService.onUpdate( function () {
+      vm.statusData = statusService.data
+      const ts = Date.now() / 1000
+      vm.statusData.online = ts - vm.statusData.ts < onlineInt
+    })
+    statusService.load()
+    vm.statusUpdateInd = setInterval( statusService.load, statusUpdateInt )
+    vm.userActivityPostIntId = setInterval( vm.postUserActivity, userActivityPostInt )
     for (const id in vm.tabs) {
       const tab = vm.tabs[id]
       tab.service.load()
@@ -115,6 +134,8 @@ export default {
     for (const id in this.tabs) {
       clearInterval( this.tabs[id].intervalId )
     }
+    clearInterval( this.userActivityPostIntId )
+    clearInterval( this.statusUpdateIntId )
   },
   methods: {
     tabRead ( id ) {

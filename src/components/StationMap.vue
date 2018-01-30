@@ -12,16 +12,16 @@
 <script>
 import trackService from '../track-service'
 import { yandexMap, ymapMarker } from 'vue-yandex-maps'
-// import { loadScript } from '../utils'
-
-// const ymapURL = 'https://api-maps.yandex.ru/2.1/??load=package.geoXml&lang=ru_RU'
+const currentMarkerOptions = { preset: 'islands#dotIcon', iconColor: '#ff0000' }
 
 export default {
   name: 'StationMap',
+  props: ['statusService'],
   components: { yandexMap, ymapMarker },
   data () {
     return {
       tabId: 'news',
+      currentLocation: null,
       data: {}
     }
   },
@@ -32,13 +32,15 @@ export default {
         vm.trackVersion = trackService.data.version
         vm.showTrack()
       })
+    this.statusService.onUpdate( this.updateLocation )
   },
   methods: {
-    mapInit: function (map) {
+    mapInit (map) {
       this.map = map
       this.showTrack()
+      this.updateLocation()
     },
-    showTrack: function () {
+    showTrack () {
       const vm = this
       if (vm.map && vm.trackVersion) {
         const l = window.location
@@ -52,6 +54,28 @@ export default {
             console.log('Ошибка: ' )
             console.log( err )
           })
+      }
+    },
+    updateLocation () {
+      if (this.statusService.data.location && this.map) {
+        const dt = this.statusService.data
+        let balloon = dt.date + ' ' + dt.time
+        if ( dt.speed ) {
+          balloon += '<br/> speed: ' + dt.speed.toFixed( 1 ) + ' km/h'
+        }
+        if (this.currentMarker) {
+          this.currentMarker.geometry.setCoordinates( dt.location )
+          this.currentMarker.properties.set( {balloonContent: balloon} )
+        } else {
+          this.currentMarker = new global.ymaps.Placemark( dt.location,
+            { balloonContent: balloon },
+            currentMarkerOptions )
+          this.map.geoObjects.add( this.currentMarker )
+        }
+        this.map.setCenter( dt.location )
+      } else if (this.map && this.currentMarker) {
+        this.map.geoObjects.remove( this.curretnMarker )
+        this.currentMarker = null
       }
     }
   }

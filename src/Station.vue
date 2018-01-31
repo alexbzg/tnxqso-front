@@ -55,6 +55,7 @@ import clusterService from './cluster-service'
 import newsService from './news-service'
 import chatService from './chat-service'
 import statusService from './status-service'
+import logService from './log-service'
 import user from './user'
 import storage from './storage'
 const chatUserStorageKey = 'chatUser'
@@ -62,6 +63,7 @@ const tabsReadStorageKey = 'stationTabsRead'
 const tabs = {
   cluster: { service: clusterService, interval: 60000 },
   news: { service: newsService, interval: 60000 },
+  log: { service: logService, interval: 60000 },
   chat: { service: chatService, interval: 5000 }
 }
 const onlineInt = 1000

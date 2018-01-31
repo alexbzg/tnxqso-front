@@ -6,6 +6,7 @@ import StationNews from '../components/StationNews'
 import StationInfo from '../components/StationInfo'
 import StationMap from '../components/StationMap'
 import StationChat from '../components/StationChat'
+import StationLog from '../components/StationLog'
 
 Vue.use(Router)
 
@@ -20,6 +21,11 @@ export default new Router({
       path: '/news',
       name: 'StationNews',
       component: StationNews
+    },
+    {
+      path: '/log',
+      name: 'StationLog',
+      component: StationLog
     },
     {
       path: '/info',

@@ -37,7 +37,7 @@
 
         </div>
         <table id="chat_window">
-            <tr v-for="msg in service.data" :class="{admin: msg.admin}"> 
+            <tr v-for="msg in data" :class="{admin: msg.admin, new_msg: msg.new}"> 
                 <td class="call">
                     <span class="call">{{msg.user}}</span><br/>
                     <span class="date_time">{{msg.date}} {{msg.time}}</span>

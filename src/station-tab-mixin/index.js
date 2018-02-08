@@ -1,5 +1,10 @@
 export default {
-  created: function () {
+  data () {
+    return {
+      data: []
+    }
+  },
+  created () {
     this.service = this.$parent.$data.tabs[this.tabId].service
     this.service.onUpdate( this.serviceUpdate )
     this.tsRead = null
@@ -8,6 +13,7 @@ export default {
     next( vm => {
       vm.tabRead()
       vm.active = true
+      vm.scheduleRemoveNew()
     } )
   },
   beforeRouteLeave ( to, from, next ) {
@@ -15,30 +21,44 @@ export default {
     next()
   },
   methods: {
-    mixinServiceUpdate: function () {
+    mixinServiceUpdate () {
+      this.data = this.service.data
       if ( this.active ) {
         this.tabRead()
+        this.scheduleRemoveNew()
       }
-      const data = this.service.data
-      const dataLength = data.length
+      const dataLength = this.data.length
       if (dataLength > 0 ) {
         if (this.tsRead) {
           for (let c = 0; c < dataLength; c++) {
-            if (data[c].ts > this.tsRead) {
-              data[c].new = true
+            if (this.data[c].ts > this.tsRead) {
+              this.$set( this.data, c, { ...this.data[c], new: true } )
             } else {
               break
             }
           }
         }
-        this.tsRead = data[0].ts
+        this.tsRead = this.data[0].ts
       }
     },
-    serviceUpdate: function () {
+    serviceUpdate () {
       this.mixinServiceUpdate()
     },
-    tabRead: function () {
+    tabRead () {
       this.$parent.tabRead( this.tabId )
+    },
+    scheduleRemoveNew () {
+      if ( this.data && this.data.length > 0 ) {
+        const ts = this.data[0].ts
+        setTimeout( () => {
+          const dataLength = this.data.length
+          for ( let c = 0; c < dataLength && this.data[c].new; c++ ) {
+            if ( this.data[c].ts <= ts ) {
+              this.$set( this.data, c, { ...this.data[c], new: false } )
+            }
+          }
+        }, 60 * 1000 )
+      }
     }
   }
 }

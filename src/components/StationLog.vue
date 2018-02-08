@@ -15,7 +15,7 @@
                 <td class="locator head">Locator</td>
             </tr>
             <template v-if="service.data">
-                <tr v-for="spot in service.data.slice( 0, 50 )" :class="{new_qso:spot.new}">
+                <tr v-for="spot in data.slice( 0, 50 )" :class="{new_qso:spot.new}">
                     <td class="mycall">{{spot.myCS}}</td>
                     <td class="date">{{spot.date}}</td>
                     <td class="time">{{spot.time}}</td>

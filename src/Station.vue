@@ -66,7 +66,7 @@ const tabs = {
   log: { service: logService, interval: 60000 },
   chat: { service: chatService, interval: 5000 }
 }
-const onlineInt = 1000
+const onlineInt = 300
 const userActivityPostInt = 60 * 1000
 const statusUpdateInt = 60 * 1000
 
@@ -116,12 +116,12 @@ export default {
       })
     statusService.onUpdate( function () {
       vm.statusData = statusService.data
-      const ts = Date.now() / 1000
-      vm.statusData.online = ts - vm.statusData.ts < onlineInt
+      vm.updateOnline()
     })
     statusService.load()
     vm.statusUpdateInd = setInterval( statusService.load, statusUpdateInt )
     vm.userActivityPostIntId = setInterval( vm.postUserActivity, userActivityPostInt )
+    vm.updateOnlineIntId = setInterval( vm.updateOnline, 1000 )
     for (const id in vm.tabs) {
       const tab = vm.tabs[id]
       tab.service.load()
@@ -138,6 +138,7 @@ export default {
     }
     clearInterval( this.userActivityPostIntId )
     clearInterval( this.statusUpdateIntId )
+    clearInterval( this.updateOnlineIntId )
   },
   methods: {
     tabRead ( id ) {
@@ -162,6 +163,12 @@ export default {
             'chat': this.activeTab === 'chat',
             'user': this.chatUser,
             'typing': Boolean( typing ) } )
+      }
+    },
+    updateOnline () {
+      const online = ( ( Date.now() / 1000 ) - this.statusData.ts ) < onlineInt
+      if ( online !== this.statusData.online ) {
+        this.$set( this.statusData, 'online', online )
       }
     }
   }

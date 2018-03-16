@@ -42,8 +42,11 @@
                     <span class="call">{{msg.user}}</span><br/>
                     <span class="date_time">{{msg.date}} {{msg.time}}</span>
                 </td>
-                <td class="message">
+                <td class="message" @mouseover="msgMouseOver(true,$event)" 
+                    @mouseout="msgMouseOver(false,$event)">
                     {{msg.text}}
+                    <img class="delete_btn" src="/static/images/delete.png" 
+                        @click="deleteMsg( msg.ts )"/>
                 </td>
             </tr>
         </table>
@@ -87,16 +90,16 @@ export default {
       }
       if (this.messageText) {
         const vm = this
-        this.user.serverPost( 'chat',
-          { 'from': this.chatUser,
-            'text': this.messageText,
-            'station': this.stationSettings.station.callsign
-          } )
-        .then( function () {
-          vm.messageText = null
-          vm.service.load()
-        } )
+        this.serverPost( { 'from': this.chatUser,
+          'text': this.messageText } )
+          .then( function () { vm.messageText = null } )
       }
+    },
+    serverPost (data) {
+      const vm = this
+      data.station = this.stationSettings.station.callsign
+      return this.user.serverPost( 'chat', data )
+        .then( function () { vm.service.load() } )
     },
     updateActiveUsers () {
       const vm = this
@@ -123,7 +126,21 @@ export default {
     },
     onTyping: _.debounce( function () {
       this.$parent.postUserActivity( true )
-    }, 5000, { 'leading': true, 'trailing': false } )
+    }, 5000, { 'leading': true, 'trailing': false } ),
+    msgMouseOver ( state, e ) {
+      if (this.isAdmin) {
+        if (state) {
+          e.currentTarget.classList.add( 'can_delete' )
+        } else {
+          e.currentTarget.classList.remove( 'can_delete' )
+        }
+      }
+    },
+    deleteMsg (ts) {
+      if (window.confirm('Do you really want to delete this message?')) {
+        this.serverPost( { 'delete': ts } )
+      }
+    }
   },
   computed: {
     isAdmin: function () {

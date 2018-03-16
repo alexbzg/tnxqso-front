@@ -854,5 +854,14 @@ input#admin_calls { width: 670px; }
     font-weight: bold;
 }
 
+.delete_btn {
+    width: 20px;
+    height: 20px;
+    display: none;
+}
+
+.can_delete img{
+    display: inline;
+}
 
 </style>

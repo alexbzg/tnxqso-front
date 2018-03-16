@@ -20,7 +20,8 @@ export default new Router({
     {
       path: '/news',
       name: 'StationNews',
-      component: StationNews
+      component: StationNews,
+      props: true
     },
     {
       path: '/log',

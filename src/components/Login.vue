@@ -17,7 +17,7 @@
         </form>
         <input type="button" id="button_login" class="btn" value="Login" @click="onSubmit" v-else/>
         <br/><br/>
-        <input type="button" id="button_register" class="btn" value="Register new user"
+        <input type="button" id="button_register" class="btn" value="Register new admin"
             @click="newUser = !newUser" v-bind:class="{btn2: !newUser}"/>
         <input type="button" id="button_recovery" class="btn btn2" value="Password recovery"/>
 

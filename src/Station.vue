@@ -43,8 +43,10 @@
                 active-class="active_tab" v-if="enable.donate">Support us</router-link>
         </td>
     </tr></table>
-    <router-view :station-settings="stationSettings" :user="user" :chatUser="chatUser"
-        :status-service="statusService"></router-view>
+        <div class="list">
+            <router-view :station-settings="stationSettings" :user="user" :chatUser="chatUser"
+            :status-service="statusService"></router-view>
+        </div>
     </div>
 
 </template>
@@ -372,7 +374,7 @@ table.tabs td#login{
 
 .list{
     width: 1200px;
-    padding: 10px 0 300px 0;
+    padding: 10px 0 10px 0;
     margin: 0px auto;
     background-color: #fff;
     border-left: 1px solid #ccc;

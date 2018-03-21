@@ -3,20 +3,20 @@
         <table class="tabs index_tabs">
             <tr>
                 <td colspan="2" id="logo">
-                    <img src="/static/images/tnxqso_logo.png" border="0" title="QSOonline.com">
+                    <img src="/static/images/tnxqso_logo.png" border="0" title="tnxqso.com">
                 </td>        
             </tr>
             <tr>
                 <td>
-                    <router-link to="/about" tag="div" id="tab_about" class="tab">About</router-link>
                     <router-link to="/stations" tag="div" id="tab_stations" class="tab">
                         Active stations
                     </router-link>
+                    <router-link to="/about" tag="div" id="tab_about" class="tab">Help</router-link>
                     <router-link to="/contacts" tag="div" id="tab_contacts" class="tab">Contacts</router-link>
                 </td>
                 <td id="login">
                     <router-link to="/login" tag="div" id="tab_login" class="tab" v-if="!loggedIn">
-                        Login/Register
+                        For administrators
                     </router-link>
                     <router-link to="/Profile" tag="div" id="tab_login" class="tab" v-else>
                         Profile
@@ -24,7 +24,9 @@
                 </td>
             </tr>
         </table>
-        <router-view :user="user"></router-view>
+        <div class="list index_list">
+            <router-view :user="user"></router-view>
+        </div>
     </div>
 </template>
 
@@ -199,7 +201,7 @@ table.tabs td#login{
 
 
 
-/* =============================   T A B S  ==================================== */
+/* =============================   T A B  ==================================== */
 .tab{
     display: inline-block;   
     padding: 7px 20px 7px 20px;
@@ -220,7 +222,7 @@ table.tabs td#login{
     background: #f5f5f5  url("/static/images/tabs_background.jpg") bottom right no-repeat;
     padding-right: 35px;
 }
-.active_tab{
+.router-link-active{
     background: #fff;
     font-weight: bold;
     border-bottom: 1px solid #fff;
@@ -242,7 +244,7 @@ table.tabs td#login{
 
 .list{
     width: 1200px;
-    padding: 10px 0 300px 0;
+    padding: 10px 0 10px 0;
     margin: 0px auto;
     background-color: #fff;
     border-left: 1px solid #ccc;
@@ -665,6 +667,8 @@ table#chat_window td.message{
 }
 #button_register{
     float: left;
+    background-color: #ea9901;
+    border-color: #c97b04;
 }
 #button_recovery{
     float: right;
@@ -678,7 +682,7 @@ table#chat_window td.message{
 
 #station_menu{
     text-align: right;
-    padding: 0 20px;
+    padding: 0 20px 20px 20px;
 }
 #station_menu a{
     text-decoration: underline;
@@ -703,8 +707,8 @@ table#chat_window td.message{
 }
 .station_setup_block{
     padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
+    margin: 20px 0;
+    border: 1px solid #ccc;
 }
 .block_settings{
     padding-left: 20px;

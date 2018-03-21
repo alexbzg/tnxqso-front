@@ -5,7 +5,7 @@
             <div class="date" :class="{new: item.new}">{{item.time}}</div>
             <div class="info" v-html="item.text" :class="{new: item.new}"></div>               
             <img class="delete_btn" src="/static/images/delete.png" 
-                @click="deleteItem( item.ts )"/>
+                title="Delete this entry" @click="deleteItem( item.ts )"/>
         </div>
     </div>
 </template>

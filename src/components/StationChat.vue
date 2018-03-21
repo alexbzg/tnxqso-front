@@ -46,7 +46,7 @@
                     @mouseout="msgMouseOver(false,$event)">
                     {{msg.text}}
                     <img class="delete_btn" src="/static/images/delete.png" 
-                        @click="deleteMsg( msg.ts )"/>
+                        title="Delete this message" @click="deleteMsg( msg.ts )"/>
                 </td>
             </tr>
         </table>

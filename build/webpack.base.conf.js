@@ -2,7 +2,6 @@ var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
-var HtmlWebpackPlugin = require('html-webpack-plugin')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -13,20 +12,6 @@ module.exports = {
     app: './src/main.js',
     station: './src/station.js'
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: './src/html/index.html',
-      //inject: false,
-      chunks: ['app'],
-      filename: 'index.html'
-    }),
-    new HtmlWebpackPlugin({
-      template: './src/html/station.html',
-      //inject: false,
-      chunks: ['station'],
-      filename: 'station.html'
-    })
-  ],
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',

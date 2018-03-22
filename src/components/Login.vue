@@ -5,20 +5,22 @@
         Password <span>(min. 8 symbols)</span><br/>
         <input type="password" id="password_input" v-model="password"/><br/>
         <input type="checkbox" id="login_remember" v-model="remember"/> Remember me<br/>
-        <form @submit.prevent="onSubmit" v-if="newUser">
-            <vue-recaptcha
+        <!--form @submit.prevent="onSubmit" v-if="newUser"-->
+            <vue-recaptcha v-if="newUser"
                 ref="invisibleRecaptcha"
                 @verify="onVerify"
                 @expired="onExpired"
                 size="invisible"
                 :sitekey="sitekey">
             </vue-recaptcha>
-            <input type="submit" id="button_login" class="btn" value="Register"/>
-        </form>
-        <input type="button" id="button_login" class="btn" value="Login" @click="onSubmit" v-else/>
+            <!--input type="submit" id="button_login" class="btn" value="Register"/-->
+        <!--/form-->
+        <input type="button" id="button_login" class="btn" 
+            :value="newUser ? 'Register': 'Login'" @click="onSubmit"/>
         <br/><br/>
-        <input type="button" id="button_register" class="btn" value="Register new admin"
-            @click="newUser = !newUser" v-bind:class="{btn2: !newUser}"/>
+        <input type="button" id="button_register" class="btn" 
+            :value="newUser ? 'Login' : 'Register new admin'"
+            @click="newUser = !newUser" :class="{btn2: !newUser}"/>
         <input type="button" id="button_recovery" class="btn btn2" value="Password recovery"/>
 
     </div>
@@ -50,12 +52,13 @@ export default {
   },
   methods: {
     onSubmit: _.debounce(function (e) {
-      if (this.newUser) {
+      if (this.newUser && !this.recaptcha) {
         this.$refs.invisibleRecaptcha.execute()
-        if (!this.recaptcha) {
-          return
-        }
+        return
       }
+      this.doLogin()
+    }, 300, true),
+    doLogin () {
       this.user.login(
         { login: this.login,
           password: this.password,
@@ -74,11 +77,12 @@ export default {
           alert(msg)
           this.resetRecaptcha()
         })
-    }, 300, true),
-    onVerify: function (response) {
-      this.recaptcha = response
     },
-    onExpired: function () {
+    onVerify (response) {
+      this.recaptcha = response
+      this.doLogin()
+    },
+    onExpired () {
       this.recaptcha = null
     },
     resetRecaptcha () {

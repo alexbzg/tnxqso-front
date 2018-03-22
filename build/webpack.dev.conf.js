@@ -24,7 +24,17 @@ module.exports = merge(baseWebpackConfig, {
     // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    // https://github.com/ampedandwired/html-webpack-plugin
+    new HtmlWebpackPlugin({
+      template: './src/html/index.html',
+      chunks: ['app'],
+      filename: 'index.html'
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/html/station.html',
+      chunks: ['station'],
+      filename: 'station.html'
+    }),
+   // https://github.com/ampedandwired/html-webpack-plugin
 /*    new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'index.html',

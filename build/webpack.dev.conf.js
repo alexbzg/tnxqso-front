@@ -5,6 +5,9 @@ var merge = require('webpack-merge')
 var baseWebpackConfig = require('./webpack.base.conf')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
+var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
+
 
 // add hot-reload related code to entry chunks
 Object.keys(baseWebpackConfig.entry).forEach(function (name) {
@@ -34,7 +37,17 @@ module.exports = merge(baseWebpackConfig, {
       chunks: ['station'],
       filename: 'station.html'
     }),
-   // https://github.com/ampedandwired/html-webpack-plugin
+    // extract css into its own file
+    new ExtractTextPlugin({
+      filename: utils.assetsPath('css/[name].[contenthash].css')
+    }),
+    // Compress extracted CSS. We are using this plugin so that possible
+    // duplicated CSS from different components can be deduped.
+    new OptimizeCSSPlugin({
+      cssProcessorOptions: {
+        safe: true
+      }}),
+  // https://github.com/ampedandwired/html-webpack-plugin
 /*    new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'index.html',

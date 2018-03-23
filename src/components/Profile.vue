@@ -11,25 +11,25 @@
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info">
                 <input type="checkbox" id="checkbox_publish" v-model="settings.publish"/> 
-                Publish on TNXQSO.com main page <br/>
+                <b>Publish</b> this station's info on TNXQSO.com main page <br/>
                 Station's callsign: <input type="text" id="station_callsign" v-model="settings.station.callsign"/> 
                 <span id="stations_link">
-                    Station's link: <a href="#" target="_blank" rel="noopener">{{stationLink}}</a>
+                    Station's link: <a :href="stationLink" target="_blank" rel="noopener">{{stationLink}}</a>
                 </span><br/>
                 Station's title: <input type="text" id="station_name" v-model="settings.station.title"/><br/>
             </div>
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info">
-                <input type="checkbox" id="checkbox_info" v-model="settings.enable.stationInfo" /> Station's info
+                <input type="checkbox" id="checkbox_info" v-model="settings.enable.stationInfo" /> Show the <b>Info</b> tab on the station's page<br/><br/>
                 <div class="block_settings" v-if="settings.enable.stationInfo">
-                    <textarea v-model="settings.station.info"></textarea>
+                    <vue-editor v-model="settings.station.info"></vue-editor><br/>
                 </div>
             </div>
             
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info">
-                <input type="checkbox" id="checkbox_news" v-model="settings.enable.news" /> News
+                <input type="checkbox" id="checkbox_news" v-model="settings.enable.news" /> Show the <b>News</b> tab on the station's page
                 <div class="block_settings" v-if="settings.enable.news">
                     <input type="button" id="button_clear_news" class="btn" value="Clear news"
                         @click="clearNews()"/><br/>
@@ -41,7 +41,7 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info">
-                <input type="checkbox" id="checkbox_log" v-model="settings.enable.log" /> Online log
+                <input type="checkbox" id="checkbox_log" v-model="settings.enable.log" /> Show the <b>Online log</b> tab on the station's page 
                 <div class="block_settings" v-if="settings.enable.log">
                     View:<br/>
                     <input type="checkbox" id="checkbox_log_rda" v-model="settings.log.columns.RDA" /> RDA<br/>
@@ -63,7 +63,7 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info">
-                <input type="checkbox" id="checkbox_map" v-model="settings.enable.map" /> Map
+                <input type="checkbox" id="checkbox_map" v-model="settings.enable.map" /> Show the <b>Map</b> tab on the station's page
                 <div class="block_settings" v-if="settings.enable.map">
                     <input type="file" id="fileTrack" style="display:none" @change="uploadTrack">
                     <label class="btn" for="fileTrack">Upload XML-file with track</label> &nbsp; 
@@ -74,7 +74,7 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info">
-                <input type="checkbox" id="checkbox_cluster" v-model="settings.enable.cluster" /> ADXcluster
+                <input type="checkbox" id="checkbox_cluster" v-model="settings.enable.cluster" /> Show the <b>ADXcluster</b> tab on the station's page 
                 <div class="block_settings" v-if="settings.enable.cluster">
                 Callsigns to track ( separeted by spaces or commas): 
                 <input type="text" id="setup_cluster" v-model="clusterCallsigns" 
@@ -85,7 +85,7 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info">
-                <input type="checkbox" id="checkbox_chat" v-model="settings.enable.chat" /> Chat<br/>
+                <input type="checkbox" id="checkbox_chat" v-model="settings.enable.chat" /> Show the <b>Chat</b> tab on the station's page<br/>
                 <div class="block_settings" v-if="settings.enable.chat">
                     <input type="button" id="button_clear_chat" class="btn" value="Clear chat"
                         @click="clearChat()"/><br/>
@@ -98,8 +98,7 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info">
-                <input type="checkbox" id="checkbox_instagram" v-model="settings.enable.instagram" /> 
-                Instagram<br/>
+                <input type="checkbox" id="checkbox_instagram" v-model="settings.enable.instagram" /> Show the <b>Instagram</b> tab on the station's page<br/>
                 <div class="block_settings" v-if="settings.enable.instagram">
                     Instagram ID: <input type="text" id="setup_instagram" v-model="settings.instagramID"/>
                 </div>
@@ -107,8 +106,7 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info">
-                <input type="checkbox" id="checkbox_support_us" v-model="settings.enable.donate" /> 
-                Support us<br/>
+                <input type="checkbox" id="checkbox_support_us" v-model="settings.enable.donate" /> Show <b>Support us</b> tab on the station's page<br/>
                 <div class="block_settings" v-if="settings.enable.donate">
                     <textarea v-model="settings.donate.text"></textarea><br/><br/>
                     Code from payment system:<br/> 

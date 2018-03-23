@@ -1,5 +1,8 @@
 <template>
     <div id="login_register">
+      <div id="register_text">
+        <b>Внимание!</b><br/>Для обычного пользования сервисами TNXQSO.com <b>регистрация не нужна</b>.<br/>Регистрация и этот раздел преназначены <u>только</u> для администраторов станций<br/><span>(для организации трансляции online-журнала и управления информационными службами экспедиции/станции).</span>
+      </div>
         Login <span>(admin's callsign)</span><br/>
         <input type="text" id="login_input" v-model="login"/><br/>
         Password <span>(min. 8 symbols)</span><br/>
@@ -16,6 +19,7 @@
             <!--input type="submit" id="button_login" class="btn" value="Register"/-->
         <!--/form-->
         <input type="button" id="button_login" class="btn" 
+            :class="{btn2: newUser}"
             :value="newUser ? 'Register': 'Login'" @click="onSubmit"/>
         <br/><br/>
         <input type="button" id="button_register" class="btn" 
@@ -59,6 +63,7 @@ export default {
       this.doLogin()
     }, 300, true),
     doLogin () {
+      const vm = this
       this.user.login(
         { login: this.login,
           password: this.password,
@@ -75,7 +80,7 @@ export default {
             msg = 'Login failed because of server error. Please try again later.'
           }
           alert(msg)
-          this.resetRecaptcha()
+          vm.resetRecaptcha()
         })
     },
     onVerify (response) {

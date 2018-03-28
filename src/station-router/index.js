@@ -7,10 +7,11 @@ import StationInfo from '../components/StationInfo'
 import StationMap from '../components/StationMap'
 import StationChat from '../components/StationChat'
 import StationLog from '../components/StationLog'
+import StationInstagram from '../components/StationInstagram'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/adxcluster',
@@ -44,7 +45,16 @@ export default new Router({
       name: 'StationChat',
       component: StationChat,
       props: true
+    },
+    {
+      path: '/instagram',
+      name: 'StationInstagram',
+      component: StationInstagram,
+      props: true
     }
-
   ]
 })
+
+router.replace( { path: '/log', redirect: '/' } )
+
+export default router

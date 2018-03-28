@@ -6,7 +6,7 @@ import Profile from './../components/Profile'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/about',
@@ -27,3 +27,7 @@ export default new Router({
     }
   ]
 })
+
+router.replace({ path: '/stations', redirect: '/' })
+
+export default router

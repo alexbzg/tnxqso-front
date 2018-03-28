@@ -1,7 +1,7 @@
 <template>
     <div>
          <div id="station_menu">
-            <input type="button" id="button_clear_all" class="btn" value="Clear all info"/>
+            <input type="button" id="button_clear_all" class="btn" value="Clear all info" @click="clearAll()"/>
             <input type="button" id="button_change_email" class="btn" value="Change email"/>
             <input type="button" id="button_change_email" class="btn" value="Change password"/>
             <input type="button" id="button_change_email" class="btn" value="Logout" @click="logout()"/>
@@ -11,19 +11,30 @@
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info">
                 <input type="checkbox" id="checkbox_publish" v-model="settings.publish"/> 
-                <b>Publish</b> this station's info on TNXQSO.com main page <br/>
+                <b>Publish</b> this station's info on the TNXQSO.com main page <br/>
                 Station's callsign: <input type="text" id="station_callsign" v-model="settings.station.callsign"/> 
                 <span id="stations_link">
                     Station's link: <a :href="stationLink" target="_blank" rel="noopener">{{stationLink}}</a>
                 </span><br/>
                 Station's title: <input type="text" id="station_name" v-model="settings.station.title"/><br/>
+                Activity period: 
+                    <date-picker v-model="settings.station.activityPeriod" 
+                        range lang="en"></date-picker>
+                Keep station archive: 
+                    <select v-model="settings.station.keepArchive">
+                        <option value="false">Don't keep</option>
+                        <option value="1 week">One week</option>
+                        <option value="1 month">One month</option>
+                        <option value="6 month">Six monthes</option>
+                        <option value="1 year">One year</option>
+                    </select>
             </div>
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info">
                 <input type="checkbox" id="checkbox_info" v-model="settings.enable.stationInfo" /> Show the <b>Info</b> tab on the station's page<br/><br/>
                 <div class="block_settings" v-if="settings.enable.stationInfo">
-                    <vue-editor v-model="settings.station.info"></vue-editor><br/>
+                    <vue-editor v-model="settings.station.info" :editorToolbar="editorToolbar"></vue-editor><br/>
                 </div>
             </div>
             
@@ -33,7 +44,7 @@
                 <div class="block_settings" v-if="settings.enable.news">
                     <input type="button" id="button_clear_news" class="btn" value="Clear news"
                         @click="clearNews()"/><br/>
-                    <vue-editor v-model="newsItem"></vue-editor><br/>
+                    <vue-editor v-model="newsItem" :editorToolbar="editorToolbar"></vue-editor><br/>
                     <input type="button" id="button_post_news" class="btn" value="Post news"
                         @click="postNewsItem()"/><br/>
                 </div>
@@ -108,7 +119,8 @@
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info">
                 <input type="checkbox" id="checkbox_support_us" v-model="settings.enable.donate" /> Show <b>Support us</b> tab on the station's page<br/>
                 <div class="block_settings" v-if="settings.enable.donate">
-                    <textarea v-model="settings.donate.text"></textarea><br/><br/>
+                    <vue-editor v-model="settings.donate.text" :editorToolbar="editorToolbar"></vue-editor>
+                    <br/><br/>
                     Code from payment system:<br/> 
                     <textarea v-model="settings.donate.code"></textarea>
                 </div>
@@ -127,12 +139,14 @@
 <script>
 import router from './../router'
 import {VueEditor} from 'vue2-editor'
+import DatePicker from 'vue2-datepicker'
 import {parseCallsigns} from './../utils'
+import request from './../request'
 export default {
   name: 'profile',
   props: ['user'],
   components: {
-    VueEditor
+    VueEditor, DatePicker
   },
   beforeRouteEnter ( to, from, next ) {
     next( vm => {
@@ -147,7 +161,16 @@ export default {
       settings: settings,
       newsItem: '',
       clusterCallsigns: settings.clusterCallsigns.join(' '),
-      chatAdmins: settings.chatAdmins.join(' ')
+      chatAdmins: settings.chatAdmins.join(' '),
+      editorToolbar: [ [ 'bold', 'italic', 'underline' ],
+        [ 'image' ],
+        [ { 'indent': '-1' }, { 'indent': '+1' } ],
+        [ { 'header': [ 1, 2, 3, 4, 5, 6, false ] } ],
+        [ { 'color': [] }, { 'background': [] } ],
+        [ { 'font': [] } ],
+        [ { 'align': [] } ],
+        [ 'clean' ]
+      ]
     }
   },
 
@@ -174,8 +197,14 @@ export default {
       this.user.saveSettings(this.settings)
     },
     clearChat () {
+      if (window.confirm( 'Do you really want to delete all chat messages?') ) {
+        this.user.serverPost( 'chat', { clear: 1 } )
+      }
     },
     clearLog () {
+      if (window.confirm( 'Do you really want to delete all log entries?') ) {
+        this.user.serverPost( 'log', { clear: 1 } )
+      }
     },
     clearTrack () {
       if (window.confirm( 'Do you really want to clear track?') ) {
@@ -194,7 +223,7 @@ export default {
       reader.readAsDataURL(files[0])
     },
     clearNews () {
-      if (window.confirm( 'Do you really want to delete all news items?') ) {
+      if (window.confirm( 'Do you really want to delete all news entries?') ) {
         this.user.serverPost( 'news', { clear: 1 } )
       }
     },
@@ -210,6 +239,18 @@ export default {
     },
     chatAdminsChange () {
       this.settings.chatAdmins = parseCallsigns(this.chatAdmins)
+    },
+    clearAll () {
+      if (window.confirm( 'Do you really want to reset all station settings?') ) {
+        const vm = this
+        request.get( '/static/js/defaultUserSettings.json' )
+          .then( function (response) {
+            console.log( response.data )
+            vm.settings = response.data
+            vm.chatAdmins = ''
+            vm.clusterCallsigns = ''
+          })
+      }
     }
   }
 }

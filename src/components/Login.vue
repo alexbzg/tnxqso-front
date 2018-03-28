@@ -1,7 +1,7 @@
 <template>
     <div id="login_register">
       <div id="register_text">
-        <b>Внимание!</b><br/>Для обычного пользования сервисами TNXQSO.com <b>регистрация не нужна</b>.<br/>Регистрация и этот раздел преназначены <u>только</u> для администраторов станций<br/><span>(для организации трансляции online-журнала и управления информационными службами экспедиции/станции).</span>
+        <b>Только для администраторов экспедиций/станций!</b><br/>Для обычного пользования сервисами TNXQSO.com <u>регистрация не нужна</u>.<br/>Регистрация и этот раздел предназначены для организации трансляции online-журнала<br/>и управления информационными службами своей экспедиции/станции.<br/><br/><b>For administrators of the expeditions/stations only!</b><br/>For usual use of the TNXQSO.com services <u>registration isn't necessary</u>.<br/>Registration and this section are intended for the online-log's organization<br/>and for management of information services of own dxpedition/station.
       </div>
         Login <span>(admin's callsign)</span><br/>
         <input type="text" id="login_input" v-model="login"/><br/>
@@ -25,7 +25,7 @@
         <input type="button" id="button_register" class="btn" 
             :value="newUser ? 'Login' : 'Register new admin'"
             @click="newUser = !newUser" :class="{btn2: !newUser}"/>
-        <input type="button" id="button_recovery" class="btn btn2" value="Password recovery"/>
+        <input type="button" id="button_recovery" class="btn btn3" value="Password recovery"/>
 
     </div>
 </template>

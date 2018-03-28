@@ -10,7 +10,7 @@ body, html{
     text-align: center;
     position: relative;
 }
-input, button, textarea{
+input, button, textarea, select{
     font-family: 'Open Sans', sans-serif;
     font-size: 16px;
     padding: 5px;
@@ -27,6 +27,10 @@ input, button, textarea{
     cursor: pointer;
 }
 .btn2{
+    background-color: #aa001e;
+    border: 1px solid #630717;
+}
+.btn3{
     background-color: #ddd;
     color: #333;
     border: 1px solid #ccc;
@@ -605,6 +609,7 @@ table#chat_window td.message{
 /* ===========================   L O G I N   /    R E G I S T E R  ==================================*/
 #login_register{
     padding: 0px 20px 100px 20px;
+    line-height: 1.2em;
 }
 #login_register span{
     font-size: 12px;
@@ -629,12 +634,19 @@ table#chat_window td.message{
 
 #register_text{
     padding: 0 0 30px 0;
-    color: #900;
+    color: #aa001e;
 }
-#register_text span{
-    font-size: 12px;
-    color: #900;
-}
+
+
+
+
+
+
+
+
+
+
+
 
 /* ===========================   S E T U P  ==================================*/
 
@@ -667,6 +679,7 @@ table#chat_window td.message{
     padding: 10px;
     margin: 20px 0;
     border: 1px solid #ccc;
+    background-color: #f7f7f7;
 }
 .block_settings{
     padding-left: 20px;
@@ -686,5 +699,7 @@ input#admin_calls { width: 670px; }
     font-weight: bold;
 }
 
-
+.quillWrapper{
+    background-color: #fff;
+}
 

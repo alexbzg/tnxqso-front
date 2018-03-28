@@ -11,7 +11,7 @@
                 :class="{status_online: statusData.online, status_offline: !statusData.online}">
                 Station <b>{{statusData.online ? 'ONLINE': 'OFFLINE'}}</b>
             </div>
-            <table id="status_block_info"><tr>
+            <table id="status_block_info" v-if="statusData.online"><tr>
                 <td id="current_loc">
                     <span>{{statusData.date}}  {{statusData.year}} {{statusData.time}}</span><br/>
                     <template v-if="statusData.rda">RDA&nbsp;<b>{{statusData.rda}}</b><br/></template>
@@ -24,23 +24,23 @@
     <tr>
         <td>
             <router-link to="/info" tag="div" id="tab_info" class="tab" 
-                active-class="active_tab" v-if="enable.stationInfo">Info</router-link>
+                v-if="enable.stationInfo">Info</router-link>
             <router-link to="/news" tag="div" id="tab_news" class="tab" 
-                active-class="active_tab" v-if="enable.news"
+                v-if="enable.news"
                  :class="{updated_tab: tabsUnread.news }">News</router-link>
             <router-link to="/log" tag="div" id="tab_log" class="tab" 
-                active-class="active_tab" v-if="enable.log">Online log</router-link>
+                v-if="enable.log">Online log</router-link>
             <router-link to="/map" tag="div" id="tab_map" class="tab" 
-                active-class="active_tab" v-if="enable.map">Map</router-link>
+                v-if="enable.map">Map</router-link>
             <router-link to="/adxcluster" tag="div" id="tab_adxc" class="tab" 
-                active-class="active_tab" v-if="enable.cluster" 
+                v-if="enable.cluster" 
                 :class="{updated_tab: tabsUnread.cluster }">ADXcluster</router-link>
             <router-link to="/chat" tag="div" id="tab_chat" class="tab" 
-                active-class="active_tab" v-if="enable.chat">Chat</router-link>
+                v-if="enable.chat">Chat</router-link>
             <router-link to="/instagram" tag="div" id="tab_instagram" class="tab" 
-                active-class="active_tab" v-if="enable.instagram">Instagram</router-link>
+                v-if="enable.instagram">Instagram</router-link>
             <router-link to="/donate" tag="div" id="tab_donate" class="tab" 
-                active-class="active_tab" v-if="enable.donate">Support us</router-link>
+                v-if="enable.donate">Support us</router-link>
         </td>
     </tr></table>
         <div class="list">
@@ -58,6 +58,7 @@ import clusterService from './cluster-service'
 import newsService from './news-service'
 import chatService from './chat-service'
 import statusService from './status-service'
+import instService from './inst-service'
 import logService from './log-service'
 import user from './user'
 import storage from './storage'
@@ -68,7 +69,8 @@ const tabs = {
   cluster: { service: clusterService, interval: 60000 },
   news: { service: newsService, interval: 60000 },
   log: { service: logService, interval: 60000 },
-  chat: { service: chatService, interval: 5000 }
+  chat: { service: chatService, interval: 5000 },
+  inst: { service: instService, interval: 60000 * 5 }
 }
 const onlineInt = 300
 const userActivityPostInt = 60 * 1000

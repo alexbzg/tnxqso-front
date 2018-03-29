@@ -1,11 +1,13 @@
 <template>
     <div id="active_stations">
-        <div v-for="station in stations" v-if="station.publish || user.siteAdmin">
+        <div v-for="station in stations" v-if="station.publish || siteAdmin">
             <a :href="'/' + station.station.callsign.replace( /\//, '-' ).toLowerCase()">{{station.station.callsign}}</a>
             {{station.station.title}}<br/>
-            Publish
-            <input type="checkbox" v-if="user.siteAdmin" v-model="station.publish"
-                @change="publishChange( station )"/>
+            <template v-if="siteAdmin">
+                Publish
+                <input type="checkbox" v-model="station.publish"
+                    @change="publishChange( station )"/>
+            </template>
         </div>
     </div>
 </template>
@@ -18,6 +20,12 @@ export default {
   data () {
     return {
       stations: []
+
+    }
+  },
+  computed: {
+    siteAdmin () {
+      return this.user.siteAdmin
     }
   },
   mounted () {

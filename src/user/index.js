@@ -39,26 +39,26 @@ export default {
         _user = response.data
         _user.remember = remember
         toStorage()
-        user.loggedIn = true
-        router.push( '/profile' )
         userInit()
+        user.update()
+        router.push( '/profile' )
       })
   },
 
-  loggedIn: Boolean( _user.token ),
-
-  callsign: _user.callsign,
-
-  stationCallsign: _user.settings.station.callsign !== ''
-      ? _user.settings.station.callsign : false,
-
-  siteAdmin: Boolean( _user.siteAdmin ),
+  update () {
+    this.loggedIn = Boolean( _user.token )
+    this.callsign = _user.callsign
+    this.stationCallsign = _user.settings.station.callsign !== ''
+      ? _user.settings.station.callsign : false
+    this.siteAdmin = Boolean( _user.siteAdmin )
+  },
 
   logout () {
     storage.remove( 'user', 'local' )
     storage.remove( 'user', 'session' )
     _user = {}
-    this.loggedIn = false
+    userInit()
+    this.update()
     router.push( '/login' )
   },
 
@@ -93,6 +93,7 @@ export default {
     _user.settings = JSON.parse( JSON.stringify( settings ) )
     toStorage()
     this.serverPost( 'userSettings', _user )
+    this.update()
   }
 
 }

@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import About from './../components/About'
 import Login from './../components/Login'
 import Profile from './../components/Profile'
+import ActiveStations from './../components/ActiveStations'
 
 Vue.use(Router)
 
@@ -23,6 +24,12 @@ const router = new Router({
       path: '/profile',
       name: 'Profile',
       component: Profile,
+      props: true
+    },
+    {
+      path: '/stations',
+      name: 'Stations',
+      component: ActiveStations,
       props: true
     }
   ]

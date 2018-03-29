@@ -64,7 +64,7 @@ import user from './user'
 import storage from './storage'
 
 const chatUserStorageKey = 'chatUser'
-const tabsReadStorageKey = 'stationTabsRead'
+const tabsReadStoragePfx = 'stationTabsRead_'
 const tabs = {
   cluster: { service: clusterService, interval: 60000 },
   news: { service: newsService, interval: 60000 },
@@ -79,21 +79,10 @@ const statusUpdateInt = 60 * 1000
 export default {
   name: 'station',
   data () {
-    let tabsRead = storage.load( tabsReadStorageKey, 'local' )
-    if (!tabsRead) {
-      tabsRead = {}
-    }
     const tabsUnread = {}
-    for (const id in tabs) {
-      tabs[id].updated = null
-      tabsUnread[id] = false
-      if ( id in tabsRead ) {
-        tabs[id].read = tabsRead[id]
-      }
-    }
     return {
       tabs: tabs,
-      tabsRead: tabsRead,
+      tabsRead: {},
       tabsUnread: tabsUnread,
       chatUser: storage.load( chatUserStorageKey, 'local' ) || user.callsign,
       user: user,
@@ -117,6 +106,19 @@ export default {
         vm.stationSettings = stationSettings.data
         if ( stationSettings.data.enable.stationInfo ) {
           vm.stationInfo = stationSettings.data.station.info
+        }
+        const tabsRead = storage.load( tabsReadStoragePfx + vm.stationCS, 'local' )
+        if (!tabsRead || typeof tabsRead !== 'object') {
+          vm.tabsRead = {}
+        } else {
+          vm.tabsRead = tabsRead
+        }
+        for (const id in tabs) {
+          vm.tabs[id].updated = null
+          vm.tabsUnread[id] = false
+          if ( id in vm.tabsRead ) {
+            tabs[id].read = tabsRead[id]
+          }
         }
         vm.postUserActivity()
       })
@@ -153,7 +155,7 @@ export default {
         tab.read = tab.updated
         this.tabsRead[id] = tab.read
         this.tabUnread( id )
-        storage.save( tabsReadStorageKey, this.tabsRead, 'local' )
+        storage.save( tabsReadStoragePfx + this.stationCS, this.tabsRead, 'local' )
       }
       this.activeTab = id
       this.postUserActivity()

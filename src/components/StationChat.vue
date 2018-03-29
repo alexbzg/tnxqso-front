@@ -144,7 +144,8 @@ export default {
   },
   computed: {
     isAdmin: function () {
-      return this.user.callsign && this.adminCS( this.user.callsign )
+      return ( this.user.callsign && this.adminCS( this.user.callsign ) ) ||
+        this.user.siteAdmin
     },
     buttonVisible: function () {
       return (this.chatUserField && this.chatUserField !== this.chatUser) ||

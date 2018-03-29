@@ -23,7 +23,7 @@ export default {
   },
   methods: {
     itemMouseOver ( state, e ) {
-      if ( this.user.callsign === this.stationSettings.admin ) {
+      if ( this.user.callsign === this.stationSettings.admin || this.user.siteAdmin ) {
         if (state) {
           e.currentTarget.classList.add( 'can_delete' )
         } else {
@@ -32,10 +32,11 @@ export default {
       }
     },
     deleteItem ( ts ) {
-      if (window.confirm('Do you really want to delete this news item?')) {
+      if (window.confirm('Do you really want to delete this news entry?')) {
         const vm = this
-        return this.user.serverPost( 'news', { 'delete': ts } )
-            .then( function () { vm.service.load() } )
+        return this.user.serverPost( 'news',
+          { 'station': this.stationSettings.station.callsign, 'delete': ts } )
+          .then( function () { vm.service.load() } )
       }
     }
   }

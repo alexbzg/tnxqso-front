@@ -49,6 +49,11 @@ export default {
 
   callsign: _user.callsign,
 
+  stationCallsign: _user.settings.station.callsign !== ''
+      ? _user.settings.station.callsign : false,
+
+  siteAdmin: Boolean( _user.siteAdmin ),
+
   logout () {
     storage.remove( 'user', 'local' )
     storage.remove( 'user', 'session' )

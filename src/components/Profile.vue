@@ -34,7 +34,8 @@
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info">
                 <input type="checkbox" id="checkbox_info" v-model="settings.enable.stationInfo" /> Show the <b>Info</b> tab on the station's page<br/><br/>
                 <div class="block_settings" v-if="settings.enable.stationInfo">
-                    <vue-editor v-model="settings.station.info" :editorToolbar="editorToolbar"></vue-editor><br/>
+                    <vue-editor id="editor_info" v-model="settings.station.info" 
+                        :editorToolbar="editorToolbar"></vue-editor><br/>
                 </div>
             </div>
             
@@ -43,9 +44,12 @@
                 <input type="checkbox" id="checkbox_news" v-model="settings.enable.news" /> Show the <b>News</b> tab on the station's page
                 <div class="block_settings" v-if="settings.enable.news">
                     <input type="button" id="button_clear_news" class="btn" value="Clear news"
+                         :disabled="!user.stationCallsign"
                         @click="clearNews()"/><br/>
-                    <vue-editor v-model="newsItem" :editorToolbar="editorToolbar"></vue-editor><br/>
+                    <vue-editor id="editor_news" 
+                        v-model="newsItem" :editorToolbar="editorToolbar"></vue-editor><br/>
                     <input type="button" id="button_post_news" class="btn" value="Post news"
+                        :disabled="!user.stationCallsign"
                         @click="postNewsItem()"/><br/>
                 </div>
             </div>
@@ -67,6 +71,7 @@
                             v-if="settings.log.userColumns[n-1].enabled"/><br/>
                     </template>
                     <input type="button" id="button_clear_log" class="btn" value="Clear online log" 
+                        :disabled="!user.stationCallsign"
                         @click="clearLog()"/><br/>
                 </div>
             </div>
@@ -79,6 +84,7 @@
                     <input type="file" id="fileTrack" style="display:none" @change="uploadTrack">
                     <label class="btn" for="fileTrack">Upload XML-file with track</label> &nbsp; 
                     <input type="button" id="button_clear_track" class="btn" value="Clear track"
+                        :disabled="!user.stationCallsign"
                         @click="clearTrack()"/><br/>
                 </div>
             </div>
@@ -119,7 +125,8 @@
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info">
                 <input type="checkbox" id="checkbox_support_us" v-model="settings.enable.donate" /> Show <b>Support us</b> tab on the station's page<br/>
                 <div class="block_settings" v-if="settings.enable.donate">
-                    <vue-editor v-model="settings.donate.text" :editorToolbar="editorToolbar"></vue-editor>
+                    <vue-editor id="editor_donate" v-model="settings.donate.text" 
+                        :editorToolbar="editorToolbar"></vue-editor>
                     <br/><br/>
                     Code from payment system:<br/> 
                     <textarea v-model="settings.donate.code"></textarea>
@@ -198,7 +205,7 @@ export default {
     },
     clearChat () {
       if (window.confirm( 'Do you really want to delete all chat messages?') ) {
-        this.user.serverPost( 'chat', { clear: 1 } )
+        this.user.serverPost( 'chat', { station: this.user.stationCallsign, clear: 1 } )
       }
     },
     clearLog () {
@@ -224,12 +231,12 @@ export default {
     },
     clearNews () {
       if (window.confirm( 'Do you really want to delete all news entries?') ) {
-        this.user.serverPost( 'news', { clear: 1 } )
+        this.user.serverPost( 'news', { station: this.user.stationCallsign, clear: 1 } )
       }
     },
     postNewsItem () {
       const vm = this
-      this.user.serverPost( 'news', { add: this.newsItem } )
+      vm.user.serverPost( 'news', { station: this.user.stationCallsign, add: vm.newsItem } )
         .then( function () {
           vm.newsItem = ''
         })

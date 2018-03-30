@@ -3,29 +3,32 @@
       <div id="register_text">
         <b>Только для администраторов экспедиций/станций!</b><br/>Для обычного пользования сервисами TNXQSO.com <u>регистрация не нужна</u>.<br/>Регистрация и этот раздел предназначены для организации трансляции online-журнала<br/>и управления информационными службами своей экспедиции/станции.<br/><br/><b>For administrators of the expeditions/stations only!</b><br/>For usual use of the TNXQSO.com services <u>registration isn't necessary</u>.<br/>Registration and this section are intended for the online-log's organization<br/>and for management of information services of own dxpedition/station.
       </div>
+        <vue-recaptcha v-if="newUser || passwordRecovery"
+            ref="invisibleRecaptcha"
+            @verify="onVerify"
+            @expired="onExpired"
+            size="invisible"
+            :sitekey="sitekey">
+        </vue-recaptcha>
         Login <span>(admin's callsign)</span><br/>
         <input type="text" id="login_input" v-model="login"/><br/>
-        Password <span>(min. 8 symbols)</span><br/>
-        <input type="password" id="password_input" v-model="password"/><br/>
-        <input type="checkbox" id="login_remember" v-model="remember"/> Remember me<br/>
-        <!--form @submit.prevent="onSubmit" v-if="newUser"-->
-            <vue-recaptcha v-if="newUser"
-                ref="invisibleRecaptcha"
-                @verify="onVerify"
-                @expired="onExpired"
-                size="invisible"
-                :sitekey="sitekey">
-            </vue-recaptcha>
-            <!--input type="submit" id="button_login" class="btn" value="Register"/-->
-        <!--/form-->
+        <template v-if="!passwordRecovery">
+            Password <span>(min. 8 symbols)</span><br/>
+            <input type="password" id="password_input" v-model="password"/><br/>
+            <input type="checkbox" id="login_remember" v-model="remember"/> Remember me<br/>
+        </template>
         <input type="button" id="button_login" class="btn" 
             :class="{btn2: newUser}"
-            :value="newUser ? 'Register': 'Login'" @click="onSubmit"/>
-        <br/><br/>
+            :value="passwordRecovery ? 'Send Request' : (newUser ? 'Register': 'Login')" 
+            @click="onSubmit"/>
+        <br/><br/>        
         <input type="button" id="button_register" class="btn" 
+            v-if="!passwordRecovery"
             :value="newUser ? 'Login' : 'Register new admin'"
             @click="newUser = !newUser" :class="{btn2: !newUser}"/>
-        <input type="button" id="button_recovery" class="btn btn3" value="Password recovery"/>
+        <input type="button" id="button_recovery" class="btn btn3" 
+            :value="!passwordRecovery ? 'Password recovery' : 'Login'"
+            @click="passwordRecovery = !passwordRecovery"/>
 
     </div>
 </template>
@@ -47,6 +50,7 @@ export default {
   data () {
     return {
       newUser: false,
+      passwordRecovery: false,
       remember: false,
       login: null,
       password: null,
@@ -56,11 +60,15 @@ export default {
   },
   methods: {
     onSubmit: _.debounce(function (e) {
-      if (this.newUser && !this.recaptcha) {
+      if ((this.newUser || this.passwordRecovery) && !this.recaptcha) {
         this.$refs.invisibleRecaptcha.execute()
         return
       }
-      this.doLogin()
+      if (this.passwordRecovery) {
+        this.passwordRecoveryRequest()
+      } else {
+        this.doLogin()
+      }
     }, 300, true),
     doLogin () {
       const vm = this
@@ -83,15 +91,32 @@ export default {
           vm.resetRecaptcha()
         })
     },
+    passwordRecoveryRequest () {
+      const vm = this
+      this.user.serverPost( 'passwordRecoveryRequest',
+        { login: this.login,
+          recaptcha: this.recaptcha } )
+        .then( function () {
+          alert( 'Your request was accepted. Please check your email.' )
+        })
+        .catch( function () {
+          vm.resetRecaptcha()
+        })
+    },
     onVerify (response) {
       this.recaptcha = response
-      this.doLogin()
+      if (this.passwordRecovery) {
+        this.passwordRecoveryRequest()
+      } else {
+        this.doLogin()
+      }
     },
     onExpired () {
       this.recaptcha = null
     },
     resetRecaptcha () {
       this.$refs.invisibleRecaptcha.reset() // Direct call reset method
+      this.recaptcha = null
     }
   },
   components: { VueRecaptcha }

@@ -19,14 +19,14 @@ export default {
   props: ['user'],
   data () {
     return {
-      stations: []
-
+      stations: [],
+      siteAdmin: this.user.siteAdmin
     }
   },
   computed: {
-    siteAdmin () {
+/*    siteAdmin () {
       return this.user.siteAdmin
-    }
+    } */
   },
   mounted () {
     const vm = this

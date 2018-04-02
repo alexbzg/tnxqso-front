@@ -51,6 +51,7 @@ export default {
     this.stationCallsign = _user.settings.station.callsign !== ''
       ? _user.settings.station.callsign : false
     this.siteAdmin = Boolean( _user.siteAdmin )
+    this.email = _user.email
   },
 
   logout () {

@@ -13,6 +13,9 @@ Vue.use(Router)
 
 const router = new Router({
   routes: [
+    { path: '/',
+      redirect: '/log'
+    },
     {
       path: '/adxcluster',
       name: 'StationCluster',
@@ -51,10 +54,11 @@ const router = new Router({
       name: 'StationInstagram',
       component: StationInstagram,
       props: true
+    },
+    { path: '*',
+      redirect: '/log'
     }
   ]
 })
-
-router.replace( { path: '/log', redirect: '/' } )
 
 export default router

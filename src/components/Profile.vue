@@ -2,8 +2,9 @@
     <div>
          <div id="station_menu">
             <input type="button" id="button_clear_all" class="btn" value="Clear all info" @click="clearAll()"/>
-            <input type="button" id="button_change_email" class="btn" value="Change email"/>
-            <input type="button" id="button_change_email" class="btn" value="Change password"/>
+            <router-link to="/changePassword" tag="input" type="button" id="button_change_email" 
+                class="btn" value="Change email/password"/>
+            <!--input type="button" id="button_change_email" class="btn" value="Change password"/-->
             <input type="button" id="button_change_email" class="btn" value="Logout" @click="logout()"/>
         </div>
 

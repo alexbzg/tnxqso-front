@@ -4,11 +4,21 @@ import About from './../components/About'
 import Login from './../components/Login'
 import Profile from './../components/Profile'
 import ActiveStations from './../components/ActiveStations'
+import ChangePassword from '../components/ChangePassword'
 
 Vue.use(Router)
 
 const router = new Router({
   routes: [
+    { path: '/',
+      redirect: '/stations'
+    },
+    {
+      path: '/stations',
+      name: 'Stations',
+      component: ActiveStations,
+      props: true
+    },
     {
       path: '/about',
       name: 'About',
@@ -27,14 +37,15 @@ const router = new Router({
       props: true
     },
     {
-      path: '/stations',
-      name: 'Stations',
-      component: ActiveStations,
+      path: '/changePassword',
+      name: 'ChangePassword',
+      component: ChangePassword,
       props: true
+    },
+    { path: '*',
+      redirect: '/stations'
     }
   ]
 })
-
-router.replace({ path: '/stations', redirect: '/' })
 
 export default router

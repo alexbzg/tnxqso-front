@@ -20,6 +20,7 @@
         <input type="button" id="button_login" class="btn" 
             :class="{btn2: newUser}"
             :value="passwordRecovery ? 'Send Request' : (newUser ? 'Register': 'Login')" 
+            :disabled="disableSubmit"
             @click="onSubmit"/>
         <br/><br/>        
         <input type="button" id="button_register" class="btn" 
@@ -98,6 +99,8 @@ export default {
           recaptcha: this.recaptcha } )
         .then( function () {
           alert( 'Your request was accepted. Please check your email.' )
+          vm.passwordRecovery = false
+          vm.resetRecaptcha()
         })
         .catch( function () {
           vm.resetRecaptcha()
@@ -119,7 +122,13 @@ export default {
       this.recaptcha = null
     }
   },
-  components: { VueRecaptcha }
+  components: { VueRecaptcha },
+  computed: {
+    disableSubmit () {
+      return !(this.login && this.login.length > 2 &&
+        (this.passwordRecovery || ( this.password && this.password.length > 7 ) ))
+    }
+  }
 }
 </script>
 

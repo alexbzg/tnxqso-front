@@ -4,6 +4,11 @@ function parseCallsigns (callsignsStr) {
   })
 }
 
+function validateEmail (email) {
+  var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  return re.test(String(email).toLowerCase())
+}
+
 function loadScript (url) {
   if (Array.isArray(url)) {
     let self = this
@@ -33,4 +38,4 @@ function loadScript (url) {
   })
 }
 
-export { parseCallsigns, loadScript }
+export { parseCallsigns, loadScript, validateEmail }

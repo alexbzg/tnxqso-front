@@ -7,16 +7,17 @@
         Password <span>(min. 8 symbols)</span><br/>
         <input type="password" id="password_input" v-model="password"/><br/>
         <input type="button" id="button_submit" class="btn" 
+            :disabled="disableSubmit"
             value="Save" @click="submit"/>
         <input type="button" id="button_cancel" class="btn" v-if="loggedIn"
             value="Cancel" @click="cancel"/>
-
     </div>
 </template>
 
 <script>
 import _ from 'underscore'
 import router from './../router'
+import {validateEmail} from '../utils'
 export default {
   name: 'changePassword',
   props: ['user'],
@@ -60,6 +61,25 @@ export default {
     }),
     cancel () {
       router.push( '/profile' )
+    }
+  },
+  computed: {
+    disableSubmit () {
+      if (this.token) {
+        return !this.password || this.password.length < 8
+      } else {
+        if (this.email !== this.user.email) {
+          if (!validateEmail(this.email)) {
+            return true
+          }
+        }
+        if (this.password) {
+          if (this.password.length < 8) {
+            return true
+          }
+        }
+        return (this.email === this.user.email && !this.password)
+      }
     }
   }
 }

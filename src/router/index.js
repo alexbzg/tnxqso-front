@@ -5,6 +5,7 @@ import Login from './../components/Login'
 import Profile from './../components/Profile'
 import ActiveStations from './../components/ActiveStations'
 import ChangePassword from '../components/ChangePassword'
+import Contact from '../components/Contact'
 
 Vue.use(Router)
 
@@ -40,6 +41,12 @@ const router = new Router({
       path: '/changePassword',
       name: 'ChangePassword',
       component: ChangePassword,
+      props: true
+    },
+    {
+      path: '/contact',
+      name: 'Contact',
+      component: Contact,
       props: true
     },
     { path: '*',

@@ -22,8 +22,8 @@
                     <router-link to="/profile" tag="div" id="tab_login" class="tab" v-else>
                         Profile
                     </router-link>
-                    <router-link to="/contacts" tag="div" id="tab_contacts" class="tab">
-                        Contacts
+                    <router-link to="/contact" tag="div" id="tab_contacts" class="tab">
+                        Contact
                     </router-link>
                 </td>
             </tr>

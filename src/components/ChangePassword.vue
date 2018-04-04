@@ -58,7 +58,7 @@ export default {
             router.push( '/login' )
           }
         })
-    }),
+    }, 300, true),
     cancel () {
       router.push( '/profile' )
     }

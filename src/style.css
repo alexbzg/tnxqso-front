@@ -642,7 +642,19 @@ table#chat_window td.message{
 
 
 
+/* ===========================   S T A T I O N S  ==================================*/
+#active_stations{
+    margin: 30px 0 50px 0;
+    text-align: left;
+    padding-left: 50px;
+}
 
+#active_stations a{
+    text-decoration: underline;
+}
+#active_stations span.callsign{
+    font-weight: bold;
+}
 
 
 
@@ -702,4 +714,30 @@ input#admin_calls { width: 670px; }
 .quillWrapper{
     background-color: #fff;
 }
+#editor_info, #editor_news, #editor_donate{
+    height: 100px;
+}
+
+
+
+/* ===========================   C O N T A C T  ==================================*/
+#contact input#email{
+    width: 80%;}
+
+#contact textarea{
+    width: 80%;
+    height: 100px;
+}
+#contact input#button_submit{
+    width: 50%;
+    margin: 0 0 50px 0; 
+}
+
+
+
+
+
+
+
+
 

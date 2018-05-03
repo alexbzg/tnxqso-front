@@ -1,6 +1,7 @@
 import storage from '../storage'
 import request from '../request'
 import router from '../router'
+import Vue from 'vue'
 
 var _user = {}
 
@@ -46,12 +47,12 @@ export default {
   },
 
   update () {
-    this.loggedIn = Boolean( _user.token )
-    this.callsign = _user.callsign
-    this.stationCallsign = _user.settings.station.callsign !== ''
-      ? _user.settings.station.callsign : false
-    this.siteAdmin = Boolean( _user.siteAdmin )
-    this.email = _user.email
+    Vue.set( this, 'loggedIn', Boolean( _user.token ) )
+    Vue.set( this, 'callsign', _user.callsign )
+    Vue.set( this, 'stationCallsign', _user.settings.station.callsign !== ''
+      ? _user.settings.station.callsign : false )
+    Vue.set( this, 'siteAdmin', Boolean( _user.siteAdmin ) )
+    Vue.set( this, 'email', _user.email )
   },
 
   logout () {

@@ -41,14 +41,14 @@ export default {
   name: 'app',
   data () {
     return {
-      user: user,
-      loggedIn: user.loggedIn
+      user: user
+//      loggedIn: user.loggedIn
     }
   },
   computed: {
-/*  loggedIn: function () {
+    loggedIn: function () {
       return this.user.loggedIn
-    } */
+    }
   }
 }
 </script>

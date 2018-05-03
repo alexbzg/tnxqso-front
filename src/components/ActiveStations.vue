@@ -1,8 +1,13 @@
 <template>
     <div id="active_stations">
         <div v-for="station in stations" v-if="station.publish || siteAdmin">
-            <a :href="'/' + station.station.callsign.replace( /\//, '-' ).toLowerCase()">{{station.station.callsign}}</a>
-            {{station.station.title}}<br/>
+            <a :href="'/' + station.station.callsign.replace( /\//, '-' ).toLowerCase()"><span class="callsign">{{station.station.callsign.toUpperCase()}}</span>
+                <span class="title">{{station.station.title}}</span>
+                <span class="period" v-if="station.station.activityPeriod">
+                    ({{formatDate(station.station.activityPeriod[0])}} &mdash; 
+                    {{formatDate(station.station.activityPeriod[1])}})
+                </span>
+            </a>
             <template v-if="siteAdmin">
                 Publish
                 <input type="checkbox" v-model="station.publish"
@@ -14,6 +19,8 @@
 
 <script>
 import request from './../request'
+import * as moment from 'moment'
+
 export default {
   name: 'activeStations',
   props: ['user'],
@@ -48,7 +55,11 @@ export default {
   methods: {
     publishChange (station) {
       this.user.serverPost( 'publish', { station: station.station.callsign, publish: station.publish } )
+    },
+    formatDate (dt) {
+      return moment(dt).format( 'DD MMM YYYY' ).toLowerCase()
     }
+
   }
 
 }

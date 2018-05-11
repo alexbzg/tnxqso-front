@@ -220,25 +220,6 @@ table.tabs td#login{
 
 
 
-.index_station{
-    font-size: 14px;
-    line-height: 30px;
-    padding: 0 50px;
-    margin-bottom: 50px;
-}
-.index_station img{
-    float: left;
-    margin-right: 20px;
-    height: 150px;
-}
-.index_station span.callsign{
-    font-size: 36px;
-    font-weight: bold;
-    padding-right: 10px;
-    text-decoration: underline;
-    color: #449;
-}
-
 
 
 
@@ -644,18 +625,31 @@ table#chat_window td.message{
 
 /* ===========================   S T A T I O N S  ==================================*/
 #active_stations{
-    margin: 30px 0 50px 0;
+    margin: 30px 0 100px 0;
     text-align: left;
-    padding-left: 50px;
+    line-height: 2em;
+    padding-left: 100px;
 }
 
 #active_stations a{
+    text-decoration: none;
+}
+#active_stations a:hover{
     text-decoration: underline;
+    color: #009;
 }
 #active_stations span.callsign{
+    font-size: 16px;
     font-weight: bold;
+    text-decoration: underline;
 }
-
+#active_stations span.title{
+    padding: 0 30px 0 30px;
+}
+#active_stations span.period{
+    font-size: 12px;
+    color: #777;
+}
 
 
 

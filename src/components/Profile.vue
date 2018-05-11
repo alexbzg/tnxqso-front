@@ -19,7 +19,7 @@
                 </span><br/>
                 Station's title: <input type="text" id="station_name" v-model="settings.station.title"/><br/>
                 Activity period: 
-                    <date-picker v-model="settings.station.activityPeriod" custom-formatter="formatDate"
+                    <date-picker v-model="settings.station.activityPeriod" format="dd.MM.yyyy"
                         range confirm lang="en"></date-picker>
                 Keep station archive: 
                     <select v-model="settings.station.keepArchive">
@@ -150,7 +150,6 @@ import {VueEditor} from 'vue2-editor'
 import DatePicker from 'vue2-datepicker'
 import {parseCallsigns} from './../utils'
 import request from './../request'
-import * as moment from 'moment'
 export default {
   name: 'profile',
   props: ['user'],
@@ -266,9 +265,6 @@ export default {
             vm.clusterCallsigns = ''
           })
       }
-    },
-    formatDate (dt) {
-      return moment(dt).format( 'DD MMM YYYY' ).toLowerCase()
     }
   }
 }

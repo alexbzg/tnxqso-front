@@ -1,18 +1,13 @@
 <template>
     <div id="instagram">
-        <a v-for="image in data" :href="'https://www.instagram.com/p/' + image.id"
-            target="_blank" rel="noopener">
-            <img :src="image.thumb"/>
-        </a>
+        <iframe :src="'https://auen.ru/instablock.php?u=' + stationSettings.instagramID + '&count=8&w=200&fw=850&fh=550&il=0&tb=R7AB&cb=0&st=1&tl= &cl=2'" style="width:850px;height:550px;border:solid 1px #ccc;"></iframe>
     </div>
 </template>
 
 <script>
-import tabMixin from '../station-tab-mixin'
-
 export default {
   name: 'StationInstagram',
-  mixins: [tabMixin],
+  props: ['stationSettings'],
   data () {
     return {
       tabId: 'inst'

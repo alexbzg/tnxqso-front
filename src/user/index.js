@@ -5,14 +5,6 @@ import Vue from 'vue'
 
 var _user = {}
 
-function fromStorage () {
-  _user = storage.load( 'user' )
-  if ( !_user ) {
-    _user = {}
-  }
-  userInit()
-}
-
 function userInit () {
   if ( !_user.settings ) {
     _user.settings = {}
@@ -29,12 +21,10 @@ function toStorage () {
   storage.save( 'user', _user, _user.remember ? 'local' : 'session' )
 }
 
-fromStorage()
-
-export default {
+const u = {
 
   login ( data, remember ) {
-    var user = this
+    let user = this
     return request.post( 'login', data )
       .then( function ( response ) {
         _user = response.data
@@ -99,3 +89,16 @@ export default {
   }
 
 }
+
+function fromStorage () {
+  _user = storage.load( 'user' )
+  if ( !_user ) {
+    _user = {}
+  }
+  userInit()
+  u.update()
+}
+
+fromStorage()
+
+export default u

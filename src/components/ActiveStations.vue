@@ -42,7 +42,7 @@ export default {
         const publishData = response.data
         for ( const station in publishData ) {
           if ( publishData[station]['user'] ) {
-            request.get( '/static/stations/' + station + '/settings.json' )
+            request.get( '/static/stations/' + station.replace( /\//, '-' ).toLowerCase() + '/settings.json' )
               .then( function ( response ) {
                 const settings = response.data
                 settings.publish = publishData[station]['admin']

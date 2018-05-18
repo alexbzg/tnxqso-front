@@ -46,7 +46,6 @@ export default {
         const l = window.location
         const trackURL = l.protocol + '//' + l.host + '/static/stations' + l.pathname + '/track.xml?version=' +
           vm.trackVersion
-        console.log( trackURL )
         global.ymaps.geoXml.load(trackURL)
           .then( function (res) {
             vm.map.geoObjects.add(res.geoObjects)

@@ -4,7 +4,11 @@
         <tr>
             <td id="station_title">
                 <h1>{{stationCS}}</h1>
-                {{stationTitle}}
+                {{stationTitle}} 
+                <span class="period">
+                    ({{formatDate(stationSettings.station.activityPeriod[0])}} &mdash; 
+                    {{formatDate(stationSettings.station.activityPeriod[1])}})
+                </span>
             </td>
         <td rowspan="2" id="status">
             <div id="status_block_top" 
@@ -52,13 +56,14 @@
 </template>
 
 <script>
+import * as moment from 'moment'
+
 import './style.css'
 import stationSettings from './station-settings-service'
 import clusterService from './cluster-service'
 import newsService from './news-service'
 import chatService from './chat-service'
 import statusService from './status-service'
-import instService from './inst-service'
 import logService from './log-service'
 import user from './user'
 import storage from './storage'
@@ -69,8 +74,7 @@ const tabs = {
   cluster: { service: clusterService, interval: 60000 },
   news: { service: newsService, interval: 60000 },
   log: { service: logService, interval: 60000 },
-  chat: { service: chatService, interval: 5000 },
-  inst: { service: instService, interval: 60000 * 5 }
+  chat: { service: chatService, interval: 5000 }
 }
 const onlineInt = 300
 const userActivityPostInt = 60 * 1000
@@ -173,11 +177,21 @@ export default {
             'typing': Boolean( typing ) } )
       }
     },
+    setChatUser ( chatUser ) {
+      if (this.chatUser !== chatUser) {
+        this.chatUser = chatUser
+        storage.save( chatUserStorageKey, chatUser, 'local' )
+        this.postUserActivity()
+      }
+    },
     updateOnline () {
       const online = ( ( Date.now() / 1000 ) - this.statusData.ts ) < onlineInt
       if ( online !== this.statusData.online ) {
         this.$set( this.statusData, 'online', online )
       }
+    },
+    formatDate (dt) {
+      return moment(dt).format( 'DD MMM YYYY' ).toLowerCase()
     }
   }
 }

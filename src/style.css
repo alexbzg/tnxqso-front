@@ -199,7 +199,7 @@ table.tabs td#login{
 
 .list{
     width: 1200px;
-    padding: 10px 0 10px 0;
+    padding: 10px 0 200px 0;
     margin: 0px auto;
     background-color: #fff;
     border-left: 1px solid #ccc;
@@ -711,6 +711,54 @@ input#admin_calls { width: 670px; }
 #editor_info, #editor_news, #editor_donate{
     height: 100px;
 }
+
+
+input#button_save_all{
+    position: fixed;
+    top: 90px;
+    right: 10px;
+    background-color: #4c637d;
+    color: #fdff00;
+}
+
+
+table#info_popup{
+    position: fixed;
+    z-index: 100px;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background: url('/static/images/background_black_50.png') top left;
+    top: 0;
+    left: 0;
+}
+table#info_popup td{
+    text-align: center;
+    vertical-align: middle;
+}
+table#info_popup_close{
+    position: fixed;
+    z-index: 101px;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+#info_popup_text{
+    width: 70%;
+    background-color: #fff;
+    box-shadow: 3px 3px 6px rgba(0,0,0,0.3); /* Параметры тени */
+    margin: 0 auto;
+    padding: 50px;
+    border: 1px solid #ccc;
+}
+
+
+
 
 
 

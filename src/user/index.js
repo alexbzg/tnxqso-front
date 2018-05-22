@@ -82,10 +82,16 @@ const u = {
   },
 
   saveSettings ( settings ) {
-    _user.settings = JSON.parse( JSON.stringify( settings ) )
+    const data = JSON.parse( JSON.stringify( _user ) )
+    const u = this
+    data.settings = JSON.parse( JSON.stringify( settings ) )
     toStorage()
-    this.serverPost( 'userSettings', _user )
-    this.update()
+    return this.serverPost( 'userSettings', _user )
+      .then( function () {
+        _user.settings = data.settings
+        toStorage()
+        u.update()
+      })
   }
 
 }

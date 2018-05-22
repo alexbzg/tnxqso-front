@@ -10,7 +10,8 @@
 
         <div id="station_setup">
             <div class="station_setup_block">
-                <img class="icon_info" src="/static/images/icon_info.png" title="Info">
+                <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
+                    @click="infoPopup='<b>Station\'s link</b> - это прямая ссылка на страницу вашей экспедиции/станции.<br/>Для распространения в соц.сетях/форумах/кластерах удобно использовать именное её.<br/><br/>При указании <b>Activity period</b> во время этого периода ссылка на станцию будет находится в разделе Active stations на главной странице.'">
                 <input type="checkbox" id="checkbox_publish" v-model="settings.publish"/> 
                 <b>Publish</b> this station's info on the TNXQSO.com main page <br/>
                 Station's callsign: <input type="text" id="station_callsign" v-model="settings.station.callsign"/> 
@@ -23,7 +24,6 @@
                         range confirm lang="en"></date-picker>
                 Keep station archive: 
                     <select v-model="settings.station.keepArchive">
-                        <option value="false">Don't keep</option>
                         <option value="1 week">One week</option>
                         <option value="1 month">One month</option>
                         <option value="6 month">Six monthes</option>
@@ -32,7 +32,8 @@
             </div>
 
             <div class="station_setup_block">
-                <img class="icon_info" src="/static/images/icon_info.png" title="Info">
+                <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
+                    @click="infoPopup='Во вкладке <b>INFO</b> уместно разместить текст с описанием экспедиции/станции.'">
                 <input type="checkbox" id="checkbox_info" v-model="settings.enable.stationInfo" /> Show the <b>Info</b> tab on the station's page<br/><br/>
                 <div class="block_settings" v-if="settings.enable.stationInfo">
                     <vue-editor id="editor_info" v-model="settings.station.info" 
@@ -41,7 +42,8 @@
             </div>
             
             <div class="station_setup_block">
-                <img class="icon_info" src="/static/images/icon_info.png" title="Info">
+                <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
+                    @click="infoPopup='Вкладка <b>NEWS</b> - добавление на сайт оперативных сообщений о работе экспедиции/станции.'">
                 <input type="checkbox" id="checkbox_news" v-model="settings.enable.news" /> Show the <b>News</b> tab on the station's page
                 <div class="block_settings" v-if="settings.enable.news">
                     <input type="button" id="button_clear_news" class="btn" value="Clear news"
@@ -56,7 +58,9 @@
             </div>
 
             <div class="station_setup_block">
-                <img class="icon_info" src="/static/images/icon_info.png" title="Info">
+                <a href="/static/html/log.html" target="_blank" rel="noopener">
+                    <img class="icon_info" src="/static/images/icon_info.png" title="Info">
+                </a>
                 <input type="checkbox" id="checkbox_log" v-model="settings.enable.log" /> Show the <b>Online log</b> tab on the station's page 
                 <div class="block_settings" v-if="settings.enable.log">
                     View:<br/>
@@ -79,11 +83,13 @@
 
 
             <div class="station_setup_block">
-                <img class="icon_info" src="/static/images/icon_info.png" title="Info">
+                <a href="/static/html/map.html" target="_blank" rel="noopener">
+                    <img class="icon_info" src="/static/images/icon_info.png" title="Info">
+                </a>
                 <input type="checkbox" id="checkbox_map" v-model="settings.enable.map" /> Show the <b>Map</b> tab on the station's page
                 <div class="block_settings" v-if="settings.enable.map">
                     <input type="file" id="fileTrack" style="display:none" @change="uploadTrack">
-                    <label class="btn" for="fileTrack">Upload XML-file with track</label> &nbsp; 
+                    <label class="btn" for="fileTrack">Upload KML or GPX file with route</label> &nbsp; 
                     <input type="button" id="button_clear_track" class="btn" value="Clear track"
                         :disabled="!user.stationCallsign"
                         @click="clearTrack()"/><br/>
@@ -91,7 +97,8 @@
             </div>
 
             <div class="station_setup_block">
-                <img class="icon_info" src="/static/images/icon_info.png" title="Info">
+                <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
+                    @click="infoPopup='Позывные, указанные в этом разделе, будут транслироваться на вкладке <b>ADXCLUSTER</b>.<br/>Указывать можно как конкретный позывной (R7AB или R7AB/M), так и группу позывных, используя &laquo;звездочку&raquo; (*/P - все позывные /P).'">
                 <input type="checkbox" id="checkbox_cluster" v-model="settings.enable.cluster" /> Show the <b>ADXcluster</b> tab on the station's page 
                 <div class="block_settings" v-if="settings.enable.cluster">
                 Callsigns to track ( separeted by spaces or commas): 
@@ -102,12 +109,13 @@
             </div>
 
             <div class="station_setup_block">
-                <img class="icon_info" src="/static/images/icon_info.png" title="Info">
+                <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
+                    @click="infoPopup='Вкладка <b>CHAT</b>. Позывные, указанные в этом разделе, будут выделяться цветом на странице чата.<br/>Удалять избранные сообщения чата может только администратор станции непосредственно на странице чата.'">
                 <input type="checkbox" id="checkbox_chat" v-model="settings.enable.chat" /> Show the <b>Chat</b> tab on the station's page<br/>
                 <div class="block_settings" v-if="settings.enable.chat">
                     <input type="button" id="button_clear_chat" class="btn" value="Clear chat"
                         @click="clearChat()"/><br/>
-                    Admin "RED" callsigns: <br/>
+                    Admin callsigns: <br/>
                     <input type="text" id="admin_calls" v-model="chatAdmins" 
                         @change="chatAdminsChange" />
                 </div>
@@ -115,7 +123,8 @@
 
 
             <div class="station_setup_block">
-                <img class="icon_info" src="/static/images/icon_info.png" title="Info">
+                <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
+                    @click="infoPopup='Вкладка <b>INSTAGRAM</b> - трансляция фото/видео выбранного аккаунта Instargam на страницу вашей станции.'">
                 <input type="checkbox" id="checkbox_instagram" v-model="settings.enable.instagram" /> Show the <b>Instagram</b> tab on the station's page<br/>
                 <div class="block_settings" v-if="settings.enable.instagram">
                     Instagram ID: <input type="text" id="setup_instagram" v-model="settings.instagramID"/>
@@ -123,7 +132,8 @@
             </div>
 
             <div class="station_setup_block">
-                <img class="icon_info" src="/static/images/icon_info.png" title="Info">
+                <img class="icon_info" src="/static/images/icon_info.png" title="Info"
+                    @click="infoPopup='Вкладка <b>SUPPORT US</b> предназначена для размещения текста, предлагающего сделать пожертвование экспедиции/станции (в первом окне) и кода платежных систем (во втором окне).'">
                 <input type="checkbox" id="checkbox_support_us" v-model="settings.enable.donate" /> Show <b>Support us</b> tab on the station's page<br/>
                 <div class="block_settings" v-if="settings.enable.donate">
                     <vue-editor id="editor_donate" v-model="settings.donate.text" 
@@ -138,6 +148,15 @@
                 @click="saveSettings()"/>
             
         </div>
+
+        <table id="info_popup" v-if="infoPopup">
+            <tr>
+                <td>
+                    <table id="info_popup_close"  @click="infoPopup = null"><tr><td></td></tr></table>
+                    <div id="info_popup_text" v-html="infoPopup"></div>
+                </td>
+            </tr>
+        </table>
 
 
     </div>
@@ -175,6 +194,7 @@ export default {
       newsItem: '',
       clusterCallsigns: settings.clusterCallsigns.join(' '),
       chatAdmins: settings.chatAdmins.join(' '),
+      infoPopup: null,
       editorToolbar: [ [ 'bold', 'italic', 'underline' ],
         [ 'image' ],
         [ { 'indent': '-1' }, { 'indent': '+1' } ],
@@ -209,6 +229,9 @@ export default {
     saveSettings () {
       this.settings.station.callsign = this.settings.station.callsign.toUpperCase()
       this.user.saveSettings(this.settings)
+        .then( function () {
+          window.alert( 'Your settings were saved.' )
+        })
     },
     clearChat () {
       if (window.confirm( 'Do you really want to delete all chat messages?') ) {

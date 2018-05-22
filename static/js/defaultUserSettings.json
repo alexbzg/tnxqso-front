@@ -5,7 +5,7 @@
         "title": "",
         "info": "",
         "activityPeriod": [],
-        "keepArchive": false
+        "keepArchive": '1 week'
     },
     "enable": {
         "news": true,

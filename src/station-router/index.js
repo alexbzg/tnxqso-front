@@ -8,6 +8,7 @@ import StationMap from '../components/StationMap'
 import StationChat from '../components/StationChat'
 import StationLog from '../components/StationLog'
 import StationInstagram from '../components/StationInstagram'
+import StationDonate from '../components/StationDonate'
 
 Vue.use(Router)
 
@@ -35,7 +36,8 @@ const router = new Router({
     {
       path: '/info',
       name: 'StationInfo',
-      component: StationInfo
+      component: StationInfo,
+      props: true
     },
     {
       path: '/map',
@@ -53,6 +55,12 @@ const router = new Router({
       path: '/instagram',
       name: 'StationInstagram',
       component: StationInstagram,
+      props: true
+    },
+    {
+      path: '/donate',
+      name: 'StationDonate',
+      component: StationDonate,
       props: true
     },
     { path: '*',

@@ -86,7 +86,7 @@ const u = {
     const u = this
     data.settings = JSON.parse( JSON.stringify( settings ) )
     toStorage()
-    return this.serverPost( 'userSettings', _user )
+    return this.serverPost( 'userSettings', data )
       .then( function () {
         _user.settings = data.settings
         toStorage()

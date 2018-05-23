@@ -126,6 +126,9 @@ export default {
         }
         vm.postUserActivity()
       })
+      .catch( function () {
+        window.location.href = '/'
+      })
     statusService.onUpdate( function () {
       vm.statusData = statusService.data
       vm.updateOnline()

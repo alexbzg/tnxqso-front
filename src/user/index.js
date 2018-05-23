@@ -101,6 +101,15 @@ function fromStorage () {
   if ( !_user ) {
     _user = {}
   }
+  if ( _user.token ) {
+    u.serverPost( 'userData', {} )
+      .then( function ( response ) {
+        response.data.token = _user.token
+        response.data.remember = _user.remember
+        _user = response.data
+        toStorage()
+      })
+  }
   userInit()
   u.update()
 }

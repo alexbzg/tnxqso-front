@@ -11,7 +11,7 @@
         <div id="station_setup">
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='<b>Station\'s link</b> - это прямая ссылка на страницу вашей экспедиции/станции.<br/>Для распространения в соц.сетях/форумах/кластерах удобно использовать именное её.<br/><br/>При указании <b>Activity period</b> во время этого периода ссылка на станцию будет находится в разделе Active stations на главной странице.'">
+                    @click="infoPopup='<b>Publish...</b> - поставьте отметку, если хотите, чтобы ссылка на вашу станцию появилась на главной странице сайта.<br/>Помимо вашей отметки для публикации на главной странице сайта <u>необходима отметка администратора сайта</u>.<br/><br/><b>Station\'s link - это прямая ссылка на страницу вашей экспедиции/станции</b>.<br/>Для распространения в соц.сетях/форумах/кластерах удобно использовать именное её.<br/><br/>При указании <b>Activity period</b> во время этого периода ссылка на станцию будет находится в разделе Active stations на главной странице.'">
                 <input type="checkbox" id="checkbox_publish" v-model="settings.publish"/> 
                 <b>Publish</b> this station's info on the TNXQSO.com main page <br/>
                 Station's callsign: <input type="text" id="station_callsign" v-model="settings.station.callsign"/> 
@@ -228,6 +228,13 @@ export default {
     },
     saveSettings () {
       this.settings.station.callsign = this.settings.station.callsign.toUpperCase()
+      if (this.user.stationCallsign &&
+        this.user.stationCallsign !== this.settings.station.callsign) {
+        if ( !window.confirm( 'The station callsign change will clear all of the station archive. ' +
+          'No recovery will be possible. Do you really want to continue?' ) ) {
+          return
+        }
+      }
       this.user.saveSettings(this.settings)
         .then( function () {
           window.alert( 'Your settings were saved.' )
@@ -244,7 +251,7 @@ export default {
       }
     },
     clearTrack () {
-      if (window.confirm( 'Do you really want to clear track?') ) {
+      if (window.confirm( 'Do you really want to clear route?') ) {
         this.user.serverPost( 'track', { clear: 1 } )
       }
     },

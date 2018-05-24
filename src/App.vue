@@ -1,11 +1,7 @@
 <template>
     <div id="app">
+        <a href="/"><img id="logo" src="/static/images/tnxqso_logo.png" border="0" title="TNXQSO.com"></a>
         <table class="tabs index_tabs">
-<!--            <tr>
-                <td colspan="2" id="logo">
-                    <img src="/static/images/tnxqso_logo.png" border="0" title="tnxqso.com">
-                </td>        
-            </tr>  -->
             <tr>
                 <td>
                     <router-link to="/stations" tag="div" id="tab_stations" class="tab">

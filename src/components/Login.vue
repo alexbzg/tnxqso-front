@@ -12,6 +12,10 @@
         </vue-recaptcha>
         Login <span>(admin's callsign)</span><br/>
         <input type="text" id="login_input" v-model="login"/><br/>
+        <template v-if="newUser">
+            E-mail<br/>
+            <input type="text" id="email_input" v-model="email"/><br/>
+        </template>
         <template v-if="!passwordRecovery">
             Password <span>(min. 8 symbols)</span><br/>
             <input type="password" id="password_input" v-model="password"/><br/>
@@ -37,7 +41,8 @@
 <script>
 import _ from 'underscore'
 import VueRecaptcha from 'vue-recaptcha'
-import router from './../router'
+import router from '../router'
+import {validateEmail} from '../utils'
 export default {
   name: 'login',
   props: ['user'],
@@ -55,6 +60,7 @@ export default {
       remember: false,
       login: null,
       password: null,
+      email: null,
       sitekey: '6Ld4TywUAAAAAJRaC7z5GNrmn70QLwABtgkavjyY',
       recaptcha: null
     }
@@ -77,6 +83,7 @@ export default {
         { login: this.login,
           password: this.password,
           newUser: this.newUser,
+          email: this.email,
           recaptcha: this.recaptcha },
         this.remember
       )
@@ -126,7 +133,8 @@ export default {
   computed: {
     disableSubmit () {
       return !(this.login && this.login.length > 2 &&
-        (this.passwordRecovery || ( this.password && this.password.length > 7 ) ))
+        (this.passwordRecovery || ( this.password && this.password.length > 7 ) ) &&
+        (this.newUser || validateEmail( this.email )))
     }
   }
 }

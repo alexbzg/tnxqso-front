@@ -1,18 +1,16 @@
 <template>
     <div id="active_stations">
         <div v-for="station in stations" v-if="station.publish || siteAdmin">
+            <input type="checkbox" v-model="station.publish"
+                @change="publishChange( station )" v-if="siteAdmin"/>
             <a :href="'/' + station.station.callsign.replace( /\//, '-' ).toLowerCase()"><span class="callsign">{{station.station.callsign.toUpperCase()}}</span>
                 <span class="title">{{station.station.title}}</span>
-                <span class="period" v-if="station.station.activityPeriod">
+                <span class="period" 
+                    v-if="station.station.activityPeriod && station.station.activityPeriod.length == 2">
                     ({{formatDate(station.station.activityPeriod[0])}} &mdash; 
                     {{formatDate(station.station.activityPeriod[1])}})
                 </span>
             </a>
-            <template v-if="siteAdmin">
-                Publish
-                <input type="checkbox" v-model="station.publish"
-                    @change="publishChange( station )"/>
-            </template>
         </div>
     </div>
 </template>

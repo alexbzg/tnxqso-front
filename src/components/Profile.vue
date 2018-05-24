@@ -11,7 +11,7 @@
         <div id="station_setup">
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='<b>Publish...</b> - поставьте отметку, если хотите, чтобы ссылка на вашу станцию появилась на главной странице сайта.<br/>Помимо вашей отметки для публикации на главной странице сайта <u>необходима отметка администратора сайта</u>.<br/><br/><b>Station\'s link - это прямая ссылка на страницу вашей экспедиции/станции</b>.<br/>Для распространения в соц.сетях/форумах/кластерах удобно использовать именное её.<br/><br/>При указании <b>Activity period</b> во время этого периода ссылка на станцию будет находится в разделе Active stations на главной странице.'">
+                    @click="infoPopup='<b>Publish...</b> - поставьте отметку, если хотите, чтобы ссылка на вашу станцию появилась в списке станций на главной странице.<br/>Помимо вашей отметки для публикации на главной странице сайта <u>необходима отметка администратора сайта</u>.<br/><br/><b>Station\'s link - это прямая ссылка на страницу вашей экспедиции/станции</b>.<br/>Для распространения в соц.сетях/форумах/кластерах удобно использовать именное её.<br/><br/>При указании <b>Activity period</b> во время этого периода ссылка на станцию будет находится в разделе Active stations на главной странице.'">
                 <input type="checkbox" id="checkbox_publish" v-model="settings.publish"/> 
                 <b>Publish</b> this station's info on the TNXQSO.com main page <br/>
                 Station's callsign: <input type="text" id="station_callsign" v-model="settings.station.callsign"/> 

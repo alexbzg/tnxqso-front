@@ -1,11 +1,13 @@
 <template>
     <div id="app">
+    <a href="/"><img id="logo" src="/static/images/tnxqso_logo.png" border="0" title="TNXQSO.com"></a>
      <table class="tabs">
         <tr>
             <td id="station_title">
                 <h1>{{stationCS}}</h1>
                 {{stationTitle}} 
-                <span class="period">
+                <span class="period" v-if="stationSettings.station.activityPeriod && 
+                    stationSettings.station.activityPeriod.length == 2">
                     ({{formatDate(stationSettings.station.activityPeriod[0])}} &mdash; 
                     {{formatDate(stationSettings.station.activityPeriod[1])}})
                 </span>

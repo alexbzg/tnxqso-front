@@ -11,7 +11,7 @@
         <div id="station_setup">
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='<b>Publish...</b> - поставьте отметку, если хотите, чтобы ссылка на вашу станцию появилась в списке станций на главной странице.<br/>Помимо вашей отметки для публикации на главной странице сайта <u>необходима отметка администратора сайта</u>.<br/><br/><b>Station\'s link - это прямая ссылка на страницу вашей экспедиции/станции</b>.<br/>Для распространения в соц.сетях/форумах/кластерах удобно использовать именное её.<br/><br/>При указании <b>Activity period</b> во время этого периода ссылка на станцию будет находится в разделе Active stations на главной странице.'">
+                    @click="infoPopup='<b>Publish...</b> - Поставьте отметку для публикации вашей экспедиции в списке станций на главной странице. <br/>Отметку ставьте после того, как ваша страница по <b>Station\'s link</b> полностью готова.<br/><br/><b>Station\'s link - это прямая ссылка на страницу вашей экспедиции/станции</b>.<br/>Для распространения в соц.сетях/форумах/кластерах удобно использовать именное её.'">
                 <input type="checkbox" id="checkbox_publish" v-model="settings.publish"/> 
                 <b>Publish</b> this station's info on the TNXQSO.com main page <br/>
                 Station's callsign: <input type="text" id="station_callsign" v-model="settings.station.callsign"/> 
@@ -60,7 +60,13 @@
             <div class="station_setup_block">
                 <a href="/static/html/log.html" target="_blank" rel="noopener">
                     <img class="icon_info" src="/static/images/icon_info.png" title="Info">
+                    <u>The scheme of your weblog's broadcasting.<br/>Схема организации web-трансляции вашего лога.</u>
                 </a>
+            </div>
+
+            <div class="station_setup_block">
+                <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
+                    @click="infoPopup='Отметьте те колонки лога, которые будут транслироваться на сайт.'">
                 <input type="checkbox" id="checkbox_log" v-model="settings.enable.log" /> Show the <b>Online log</b> tab on the station's page 
                 <div class="block_settings" v-if="settings.enable.log">
                     View:<br/>
@@ -225,6 +231,7 @@ export default {
   methods: {
     logout () {
       this.user.logout()
+      this.$router.push( '/login' )
     },
     saveSettings () {
       this.settings.station.callsign = this.settings.station.callsign.toUpperCase()

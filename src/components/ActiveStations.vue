@@ -1,30 +1,32 @@
 <template>
-    <div id="active_stations">
-        <div v-for="station in stations" v-if="station.publish || siteAdmin">
-            <input type="checkbox" v-model="station.publish"
-                @change="publishChange( station )" v-if="siteAdmin"/>
-            <a :href="'/' + station.station.callsign.replace( /\//, '-' ).toLowerCase()"><span class="callsign">{{station.station.callsign.toUpperCase()}}</span>
-                <span class="title">{{station.station.title}}</span>
-                <span class="period" 
-                    v-if="station.station.activityPeriod && station.station.activityPeriod.length == 2">
-                    ({{formatDate(station.station.activityPeriod[0])}} &mdash; 
-                    {{formatDate(station.station.activityPeriod[1])}})
-                </span>
-            </a>
+    <div>
+        <div id="active_stations">
+            <active-stations-entry v-for="station in activeStations" :station="station" :site-admin="siteAdmin"
+                @publish-change="publishChange(station)">
+            </active-stations-entry>
+        </div>
+        <div id="arch_stations">
+            <active-stations-entry v-for="station in archStations" :station="station" :site-admin="siteAdmin"
+                @publish-change="publishChange(station)">
+            </active-stations-entry>
         </div>
     </div>
 </template>
 
 <script>
-import request from './../request'
+import request from '../request'
 import * as moment from 'moment'
+
+import ActiveStationsEntry from './ActiveStationsEntry'
 
 export default {
   name: 'activeStations',
   props: ['user'],
+  components: { ActiveStationsEntry },
   data () {
     return {
-      stations: [],
+      activeStations: [],
+      archStations: [],
       siteAdmin: this.user.siteAdmin
     }
   },
@@ -38,13 +40,19 @@ export default {
     request.get( '/static/js/publish.json' )
       .then( function ( response ) {
         const publishData = response.data
+        const current = moment()
         for ( const station in publishData ) {
           if ( publishData[station]['user'] ) {
             request.get( '/static/stations/' + station.replace( /\//, '-' ).toLowerCase() + '/settings.json' )
               .then( function ( response ) {
                 const settings = response.data
                 settings.publish = publishData[station]['admin']
-                vm.stations.push( settings )
+                if ( settings.station.period && settings.station.period.length === 2 &&
+                  settings.station.period[0] < current && settings.station.period[1] > current ) {
+                  vm.activeStations.push( settings )
+                } else {
+                  vm.archStations.push( settings )
+                }
               })
           }
         }

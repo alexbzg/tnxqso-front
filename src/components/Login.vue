@@ -87,6 +87,9 @@ export default {
           recaptcha: this.recaptcha },
         this.remember
       )
+        .then( function () {
+          vm.$router.push( '/profile' )
+        })
         .catch(function (error) {
           var msg = ''
           console.log(error)
@@ -134,7 +137,7 @@ export default {
     disableSubmit () {
       return !(this.login && this.login.length > 2 &&
         (this.passwordRecovery || ( this.password && this.password.length > 7 ) ) &&
-        (this.newUser || validateEmail( this.email )))
+        (!this.newUser || validateEmail( this.email )))
     }
   }
 }

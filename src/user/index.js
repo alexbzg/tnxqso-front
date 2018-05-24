@@ -1,6 +1,5 @@
 import storage from '../storage'
 import request from '../request'
-import router from '../router'
 import Vue from 'vue'
 
 var _user = {}
@@ -32,7 +31,6 @@ const u = {
         toStorage()
         userInit()
         user.update()
-        router.push( '/profile' )
       })
   },
 
@@ -51,7 +49,6 @@ const u = {
     _user = {}
     userInit()
     this.update()
-    router.push( '/login' )
   },
 
   settings () {

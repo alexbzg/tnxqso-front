@@ -215,6 +215,7 @@ table.tabs td#login{
     border-bottom: 1px solid #ccc;
     margin-bottom: 50px;
     box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+    text-align: center; 
 }
 .list a {
     color: #333;
@@ -223,10 +224,56 @@ table.tabs td#login{
 
 .index_list{
     width: 800px;
-    padding: 50px 0; 
+    padding-top: 30px; 
+    padding-bottom: 0px; 
     line-height: 2em;
 }
+.index_list a{
+    text-decoration: none;
+}
+.index_list a:hover{
+    text-decoration: underline;
+    color: #009;
+}
+.index_list span.callsign{
+    font-size: 20px;
+    font-weight: bold;
+    padding-left: 5px;
+    text-decoration: underline;
+}
+.index_list span.title{
+    padding: 0 30px 0 30px;
+}
+.index_list span.period{
+    font-size: 12px;
+    color: #777;
+}
+.index_list input{
+    margin: 0 0px 0 15px;
+}
 
+
+
+
+/* ===========================   S T A T I O N S  ==================================*/
+.stations_list{
+    width: 750px;
+    margin: 0px auto 70px auto;
+    padding: 0;
+    text-align: left;  
+    border-top: 1px solid #eee;
+}
+.stations_block{
+    width: 100px;
+    height: 18px;
+    padding: 0;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 12px;
+    background-color: #eee;
+    color: #777;
+    line-height: 18px;
+}
 
 
 
@@ -632,42 +679,6 @@ table#chat_window td.message{
 
 
 
-/* ===========================   S T A T I O N S  ==================================*/
-#active_stations{
-    margin: 30px 0 100px 0;
-    text-align: left; 
-    padding-left: 100px;
-}
-#arch_stations{
-    margin: 30px 0 100px 0;
-    text-align: left;  
-    padding-left: 100px;
-}
-
-.index_list a{
-    text-decoration: none;
-}
-.index_list a:hover{
-    text-decoration: underline;
-    color: #009;
-}
-.index_list span.callsign{
-    font-size: 20px;
-    font-weight: bold;
-    text-decoration: underline;
-}
-.index_list span.title{
-    padding: 0 30px 0 30px;
-}
-.index_list span.period{
-    font-size: 12px;
-    color: #777;
-}
-.index_list input{
-    margin-right: 5px;
-}
-
-
 
 
 /* ===========================   S E T U P  ==================================*/
@@ -731,10 +742,10 @@ input#admin_calls { width: 670px; }
 
 input#button_save_all{
     position: fixed;
-    top: 90px;
-    right: 10px;
-    background-color: #4c637d;
-    color: #fdff00;
+    top: 75px;
+    right: 15px;
+    background-color: #008000;
+    color: #fff;
 }
 
 

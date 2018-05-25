@@ -1,13 +1,17 @@
 <template>
     <div>
-        <div id="active_stations">
-            <active-stations-entry v-for="station in activeStations" :station="station" :site-admin="siteAdmin"
-                @publish-change="publishChange(station)">
+        <div id="active_stations" class="stations_list">
+            <div class="stations_block">Active now</div>
+            <active-stations-entry v-for="(station, index) in activeStations" 
+                :station="station" :site-admin="siteAdmin"
+                @publish-change="publishChange(station)" :key="index">
             </active-stations-entry>
         </div>
-        <div id="arch_stations">
-            <active-stations-entry v-for="station in archStations" :station="station" :site-admin="siteAdmin"
-                @publish-change="publishChange(station)">
+        <div id="arch_stations" class="stations_list">
+            <div class="stations_block">Inactive</div>
+            <active-stations-entry v-for="(station, index) in archStations" 
+                :station="station" :site-admin="siteAdmin"
+                @publish-change="publishChange(station)" :key="index">
             </active-stations-entry>
         </div>
     </div>
@@ -47,12 +51,15 @@ export default {
               .then( function ( response ) {
                 const settings = response.data
                 settings.publish = publishData[station]['admin']
-                if ( settings.station.period && settings.station.period.length === 2 &&
-                  settings.station.period[0] < current && settings.station.period[1] > current ) {
+                const period = settings.station.activityPeriod
+                if ( period && period.length === 2 && moment(period[0]) < current &&
+                  moment(period[1]) > current ) {
                   vm.activeStations.push( settings )
                 } else {
                   vm.archStations.push( settings )
                 }
+                vm.activeStations = vm.activeStations.sort( vm.sortStations )
+                vm.archStations = vm.archStations.sort( vm.sortStations )
               })
           }
         }
@@ -62,10 +69,15 @@ export default {
     publishChange (station) {
       this.user.serverPost( 'publish', { station: station.station.callsign, publish: station.publish } )
     },
-    formatDate (dt) {
-      return moment(dt).format( 'DD MMM YYYY' ).toLowerCase()
+    sortStations (a, b) {
+      if (a.station.callsign.toLowerCase() < b.station.callsign.toLowerCase()) {
+        return -1
+      }
+      if (a.station.callsign.toLowerCase() > b.station.callsign.toLowerCase()) {
+        return 1
+      }
+      return 0
     }
-
   }
 
 }

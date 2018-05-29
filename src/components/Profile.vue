@@ -95,7 +95,7 @@
                 <input type="checkbox" id="checkbox_map" v-model="settings.enable.map" /> Show the <b>Map</b> tab on the station's page
                 <div class="block_settings" v-if="settings.enable.map">
                     <input type="file" id="fileTrack" style="display:none" @change="uploadTrack">
-                    <label class="btn" for="fileTrack">Upload KML or GPX file with route</label> &nbsp; 
+                    <label class="btn" for="fileTrack">Upload KML/KMZ/GPX file with route</label> &nbsp; 
                     <input type="button" id="button_clear_track" class="btn" value="Clear track"
                         :disabled="!user.stationCallsign"
                         @click="clearTrack()"/><br/>
@@ -222,8 +222,9 @@ export default {
 
   computed: {
     stationLink: function () {
+      const l = window.location
       return this.settings.station.callsign
-        ? ( 'http://tnxqso.com/' +
+        ? ( l.protocol + '//' + l.host + '/' +
           this.settings.station.callsign.replace( /\//, '-' ).toLowerCase() )
         : null
     }
@@ -266,12 +267,22 @@ export default {
     },
     uploadTrack (e) {
       const files = e.target.files || e.dataTransfer.files
+      const el = e.target
       if (!files.length) { return }
       const reader = new FileReader()
       const vm = this
 
       reader.onload = function (e) {
-        vm.user.serverPost( 'track', { file: e.target.result } )
+        vm.user.serverPost( 'track',
+          { file: e.target.result,
+            name: files[0].name
+          } )
+            .then( function () {
+              window.alert( 'Your route file was uploaded successfully.' )
+            })
+            .finally( function () {
+              el.value = ''
+            })
       }
       reader.readAsDataURL(files[0])
     },

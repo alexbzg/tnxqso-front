@@ -30,6 +30,7 @@ export default {
     trackService.load()
       .then( function () {
         vm.trackVersion = trackService.data.version
+        vm.trackFile = trackService.data.file
         vm.showTrack()
       })
     this.statusService.onUpdate( this.updateLocation )
@@ -44,8 +45,8 @@ export default {
       const vm = this
       if (vm.map && vm.trackVersion) {
         const l = window.location
-        const trackURL = l.protocol + '//' + l.host + '/static/stations' + l.pathname + '/track.xml?version=' +
-          vm.trackVersion
+        const trackURL = l.protocol + '//' + l.host + '/static/stations' + l.pathname + '/' +
+          vm.trackFile + '?version=' + vm.trackVersion
         global.ymaps.geoXml.load(trackURL)
           .then( function (res) {
             vm.map.geoObjects.add(res.geoObjects)

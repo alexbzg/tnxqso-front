@@ -60,8 +60,16 @@
             <div class="station_setup_block">
                 <a href="/static/html/log.html" target="_blank" rel="noopener">
                     <img class="icon_info" src="/static/images/icon_info.png" title="Info">
-                    <u>The scheme of your weblog's broadcasting.<br/>Схема организации web-трансляции вашего лога.</u>
+                    <u><b>The scheme of your weblog's broadcasting</b>.<br/>
+                    Схема организации web-трансляции лога станции.</u>
                 </a>
+                <br/><br/>
+                <a href="https://n1mm.hamdocs.com/tiki-index.php" target="_blank" rel="noopener">
+                    <u><b>N1MM Logger+</b></u> website.</a> &nbsp; 
+                <a href="#" rel="noopener">
+                    <u><b>DxpClient.exe</b> download</u>.</a>  &nbsp; 
+                <a href="https://play.google.com/store/apps/details?id=com.jillybunch.shareGPS&hl=ru" target="_blank" rel="noopener">
+                    <u><b>Share GPS</b></u> at GooglePlay.</a>                
             </div>
 
             <div class="station_setup_block">
@@ -136,6 +144,7 @@
                     Instagram ID: <input type="text" id="setup_instagram" v-model="settings.instagramID"/>
                 </div>
             </div>
+
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info"

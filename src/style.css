@@ -360,8 +360,16 @@ table.tabs td#login{
     text-align: center;
 }
 
-
-
+table#search_results{
+    margin: 0 auto 50px auto;
+}
+table#search_results td#icon_close{
+    text-align: right;
+    padding: 0;
+}
+table#search_results td#icon_close img{
+    cursor: pointer;
+}
 
 
 

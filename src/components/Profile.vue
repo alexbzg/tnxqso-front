@@ -10,6 +10,21 @@
 
         <div id="station_setup">
             <div class="station_setup_block">
+                <a href="/static/html/log.html" target="_blank" rel="noopener">
+                    <img class="icon_info" src="/static/images/icon_info.png" title="Info">
+                    <b>The scheme of your weblog's broadcasting</b>.<br/>
+                    Схема организации web-трансляции лога станции.
+                </a>
+                <br/>
+                <a href="https://n1mm.hamdocs.com/tiki-index.php" target="_blank" rel="noopener" class="blue">
+                    <u><b>N1MM Logger+</b></u> website.</a> &nbsp; 
+                <a href="http://tnxqso.com/static/files/tnxqsoClient.zip" rel="noopener" class="blue">
+                    <u><b>tnxqsoClient.exe</b></u> download.</a>  &nbsp; 
+                <a href="https://play.google.com/store/apps/details?id=com.jillybunch.shareGPS&hl=ru" target="_blank" rel="noopener" class="blue">
+                    <u><b>Share GPS</b></u> at GooglePlay.</a>                
+            </div>
+
+            <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
                     @click="infoPopup='<b>Publish...</b> - Поставьте отметку для публикации вашей экспедиции в списке станций на главной странице. <br/>Отметку ставьте после того, как ваша страница по <b>Station\'s link</b> полностью готова.<br/><br/><b>Station\'s link - это прямая ссылка на страницу вашей экспедиции/станции</b>.<br/>Для распространения в соц.сетях/форумах/кластерах удобно использовать именное её.'">
                 <input type="checkbox" id="checkbox_publish" v-model="settings.publish"/> 
@@ -22,12 +37,6 @@
                 Activity period: 
                     <date-picker v-model="settings.station.activityPeriod" format="dd.MM.yyyy"
                         range confirm lang="en"></date-picker>
-                Keep station archive: 
-                    <select v-model="settings.station.keepArchive">
-                        <option value="1 week">One week</option>
-                        <option value="1 month">One month</option>
-                        <option value="6 month">Six monthes</option>
-                        <option value="1 year">One year</option>
                     </select>
             </div>
 
@@ -58,24 +67,14 @@
             </div>
 
             <div class="station_setup_block">
-                <a href="/static/html/log.html" target="_blank" rel="noopener">
-                    <img class="icon_info" src="/static/images/icon_info.png" title="Info">
-                    <u><b>The scheme of your weblog's broadcasting</b>.<br/>
-                    Схема организации web-трансляции лога станции.</u>
-                </a>
-                <br/><br/>
-                <a href="https://n1mm.hamdocs.com/tiki-index.php" target="_blank" rel="noopener">
-                    <u><b>N1MM Logger+</b></u> website.</a> &nbsp; 
-                <a href="#" rel="noopener">
-                    <u><b>DxpClient.exe</b> download</u>.</a>  &nbsp; 
-                <a href="https://play.google.com/store/apps/details?id=com.jillybunch.shareGPS&hl=ru" target="_blank" rel="noopener">
-                    <u><b>Share GPS</b></u> at GooglePlay.</a>                
-            </div>
-
-            <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
                     @click="infoPopup='Отметьте те колонки лога, которые будут транслироваться на сайт.'">
-                <input type="checkbox" id="checkbox_log" v-model="settings.enable.log" /> Show the <b>Online log</b> tab on the station's page 
+                <input type="checkbox" id="checkbox_log" v-model="settings.enable.log" />
+                Show the <b>Online log</b> tab on the station's page <br/> 
+                <template v-if="settings.enable.log">
+                    <input type="checkbox" id="checkbox_log" v-model="settings.enable.stats"/>
+                    Show the <b>Stats</b> tab on the station's page 
+                </template>
                 <div class="block_settings" v-if="settings.enable.log">
                     View:<br/>
                     <input type="checkbox" id="checkbox_log_rda" v-model="settings.log.columns.RDA" /> RDA<br/>

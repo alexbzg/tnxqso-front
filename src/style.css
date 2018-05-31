@@ -221,7 +221,9 @@ table.tabs td#login{
     color: #333;
     text-decoration: none;
 }
-
+.list a.blue{
+    color: #009;
+}
 .index_list{
     width: 800px;
     padding-top: 30px; 

@@ -57,7 +57,7 @@ export default {
               this.$set( this.data, c, { ...this.data[c], new: false } )
             }
           }
-        }, 60 * 1000 )
+        }, 10 * 1000 )
       }
     }
   }

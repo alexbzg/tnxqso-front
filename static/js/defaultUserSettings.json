@@ -4,12 +4,12 @@
         "callsign": "",
         "title": "",
         "info": "",
-        "activityPeriod": [],
-        "keepArchive": "1 week"
+        "activityPeriod": []
     },
     "enable": {
         "news": true,
         "log": true,
+        "stats": true,
         "cluster": true,
         "chat": true,
         "map": true,
@@ -21,7 +21,7 @@
         "columns": {
             "RDA": true,
             "RAFA": true,
-            "WFF": true,
+            "WFF": true, 
             "loc": true
         },
         "userColumns": [

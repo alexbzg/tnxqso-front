@@ -7,12 +7,12 @@
                     <router-link to="/stations" tag="div" id="tab_stations" class="tab">
                         Stations
                     </router-link>
-<!--                    <router-link to="/about" tag="div" id="tab_about" class="tab">
-                        Help
-                    </router-link> -->
                 </td>
                 <td id="login">
-                   <router-link to="/login" tag="div" id="tab_login" class="tab" v-if="!loggedIn">
+                    <router-link to="/about" tag="div" id="tab_about" class="tab">
+                        About
+                    </router-link>
+                    <router-link to="/login" tag="div" id="tab_login" class="tab" v-if="!loggedIn">
                         For administrators
                     </router-link>
                     <router-link to="/profile" tag="div" id="tab_login" class="tab" v-else>

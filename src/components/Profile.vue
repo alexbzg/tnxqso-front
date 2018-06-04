@@ -18,8 +18,8 @@
                 <br/>
                 <a href="https://n1mm.hamdocs.com/tiki-index.php" target="_blank" rel="noopener" class="blue">
                     <u><b>N1MM Logger+</b></u> website.</a> &nbsp; 
-                <a href="http://tnxqso.com/static/files/tnxqsoClient.zip" rel="noopener" class="blue">
-                    <u><b>tnxqsoClient.exe</b></u> download.</a>  &nbsp; 
+                <a href="http://tnxqso.com/static/files/qsoclient.zip" rel="noopener" class="blue">
+                    <u><b>QSOclient.exe</b></u> download.</a>  &nbsp; 
                 <a href="https://play.google.com/store/apps/details?id=com.jillybunch.shareGPS&hl=ru" target="_blank" rel="noopener" class="blue">
                     <u><b>Share GPS</b></u> at GooglePlay.</a>                
             </div>
@@ -57,9 +57,9 @@
                 <div class="block_settings" v-if="settings.enable.news">
                     <input type="button" id="button_clear_news" class="btn" value="Clear news"
                          :disabled="!user.stationCallsign"
-                        @click="clearNews()"/><br/>
+                        @click="clearNews()"/><br/><br/>
                     <vue-editor id="editor_news" 
-                        v-model="newsItem" :editorToolbar="editorToolbar"></vue-editor><br/>
+                        v-model="newsItem" :editorToolbar="editorToolbar"></vue-editor>
                     <input type="button" id="button_post_news" class="btn" value="Post news"
                         :disabled="!user.stationCallsign"
                         @click="postNewsItem()"/><br/>

@@ -48,7 +48,7 @@ export default {
     search () {
       this.searchValue = this.searchValue.toUpperCase()
       storage.save( logSearchValueStorageKey, this.searchValue, 'local' )
-      this.searchResults = this.data.filter( spot => spot === this.searchValue )
+      this.searchResults = this.data.filter( spot => spot.cs === this.searchValue )
       if ( this.searchResults.length === 0 ) {
         window.alert( 'Nothing was found.' )
       }

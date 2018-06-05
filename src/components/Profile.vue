@@ -71,10 +71,10 @@
                     @click="infoPopup='Отметьте те колонки лога, которые будут транслироваться на сайт.'">
                 <input type="checkbox" id="checkbox_log" v-model="settings.enable.log" />
                 Show the <b>Online log</b> tab on the station's page <br/> 
-                <template v-if="settings.enable.log">
+                <!--template v-if="settings.enable.log">
                     <input type="checkbox" id="checkbox_log" v-model="settings.enable.stats"/>
                     Show the <b>Stats</b> tab on the station's page 
-                </template>
+                </template-->
                 <div class="block_settings" v-if="settings.enable.log">
                     View:<br/>
                     <input type="checkbox" id="checkbox_log_rda" v-model="settings.log.columns.RDA" /> RDA<br/>
@@ -82,11 +82,8 @@
                     <input type="checkbox" id="checkbox_log_wff" v-model="settings.log.columns.WFF" /> WFF<br/>
                     <input type="checkbox" id="checkbox_log_loc" v-model="settings.log.columns.loc" /> Locator<br/>
                     <template v-for="n in 2">
-                        <input type="checkbox" :id="'checkbox_log_user' + n"  
-                            v-model="settings.log.userColumns[n-1].enabled" /> 
-                        User field #{{n}} <input type="text" :id="'user_field' + n" 
-                            v-model="settings.log.userColumns[n-1].column" 
-                            v-if="settings.log.userColumns[n-1].enabled"/><br/>
+                        User field #{{n}} <input type="checkbox" :id="'user_field' + n" 
+                            v-model="settings.log.userColumns[n-1].enabled"/><br/>
                     </template>
                     <input type="button" id="button_clear_log" class="btn" value="Clear online log" 
                         :disabled="!user.stationCallsign"

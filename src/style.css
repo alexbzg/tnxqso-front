@@ -383,7 +383,7 @@ table#log {
     margin: 10px auto;
 }
 table#log td{ 
-    padding: 7px 20px;
+    padding: 7px 10px;
     text-align: center;
     vertical-align: middle;
     border: 1px solid #ddd;
@@ -412,6 +412,17 @@ table#log td.head{
 table#log tr.new_qso{ 
     background-color: #DFFAFD;
 }
+
+#refresh_time{
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+    line-height: 12px;
+    width: 100px;
+    float: right;
+    color: #999;
+}
+
 
 
 
@@ -524,19 +535,13 @@ table#cluster td.spotter{
     padding: 0px;
     margin: 5px auto;
 }
-yandex-map {
-    display: block;
-    width: 100%;
-    height: 100%;
-    border: 1px solid #ccc;
+.ymap-container{
+    padding-top: 50px;
 }
-
 
 #gps_map iframe{
     margin: 3px 0 50px 0;
 }
-
-
 
 
 
@@ -601,6 +606,7 @@ table#message_form input#message_text{
     color: #777;
     font-size: 16px;
 }
+
 .chat_info_users2{
     padding: 10px 0 10px 20px;
     font-weight: bold;
@@ -608,8 +614,11 @@ table#message_form input#message_text{
     color: #999;
     font-size: 16px;
 }
-.chat_info_users span{
-
+.chat_info_users1 span.admin, .chat_info_users2 span.admin{
+    color: #991111;
+}
+.chat_info_users1 span, .chat_info_users2 span{
+    display: block;
 }
 
 
@@ -651,6 +660,11 @@ table#chat_window td.message{
     line-height: 1.5em;
     padding-top: 5px;
 }
+
+
+
+
+
 
 
 

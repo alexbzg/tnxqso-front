@@ -1,6 +1,6 @@
 <template>
     <div id="log">
-
+        <div id="refresh_time">Auto refresh<br/><b>1 min</b></div>
         <div id="call_search">
             Callsign: 
             <input type="text" id="input_call" v-model="searchValue"> 
@@ -16,12 +16,12 @@
           </tr>
           <tr>
             <td>
-              <log-table :data="searchResults"></log-table>
+              <log-table :data="searchResults" :log-settings="stationSettings.log"></log-table>
             </td>
           </tr>
         </table>
 
-        <log-table :data="dataSlice"></log-table>
+        <log-table :data="dataSlice" :log-settings="stationSettings.log"></log-table>
 
     </div>
 </template>
@@ -36,6 +36,7 @@ const logSearchValueStorageKey = 'logSearchValue'
 export default {
   mixins: [tabMixin],
   name: 'StationLog',
+  props: ['stationSettings'],
   components: { LogTable },
   data () {
     return {

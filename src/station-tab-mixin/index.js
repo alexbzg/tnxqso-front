@@ -18,6 +18,7 @@ export default {
   },
   beforeRouteLeave ( to, from, next ) {
     this.active = false
+    this.$parent.tabRead( null )
     next()
   },
   methods: {

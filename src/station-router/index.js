@@ -31,7 +31,8 @@ const router = new Router({
     {
       path: '/log',
       name: 'StationLog',
-      component: StationLog
+      component: StationLog,
+      props: true
     },
     {
       path: '/info',

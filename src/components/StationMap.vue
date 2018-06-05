@@ -1,5 +1,6 @@
 <template>
     <div id="map">
+    <div id="refresh_time">Auto refresh<br/><b>1 min</b></div>
         <yandex-map 
             :coords="[45,45]"
             zoom="5"

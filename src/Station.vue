@@ -159,12 +159,14 @@ export default {
   },
   methods: {
     tabRead ( id ) {
-      const tab = this.tabs[id]
-      if ( tab.updated && tab.read !== tab.updated ) {
-        tab.read = tab.updated
-        this.tabsRead[id] = tab.read
-        this.tabUnread( id )
-        storage.save( tabsReadStoragePfx + this.stationCS, this.tabsRead, 'local' )
+      if ( id ) {
+        const tab = this.tabs[id]
+        if ( tab.updated && tab.read !== tab.updated ) {
+          tab.read = tab.updated
+          this.tabsRead[id] = tab.read
+          this.tabUnread( id )
+          storage.save( tabsReadStoragePfx + this.stationCS, this.tabsRead, 'local' )
+        }
       }
       this.activeTab = id
       this.postUserActivity()

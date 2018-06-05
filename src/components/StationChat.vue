@@ -1,5 +1,6 @@
 <template>
     <div id="chat">
+    <div id="refresh_time">Auto refresh<br/><b>5 sec</b></div>
         <table id="message_form">
             <tbody>
                 <tr>
@@ -24,14 +25,14 @@
             <div class="chat_info_users1">
                 <span v-for="(user, cs) in activeUsers" v-if="user.chat"
                     :class="{'admin': user.admin, 'typing':user.typing}">
-                    {{cs}}
+                    {{cs}}<br/>
                 </span>
             </div>
             <div class="chat_info_title">Other pages</div>
             <div class="chat_info_users2">
                 <span v-for="(user, cs) in activeUsers" v-if="!user.chat"
                     :class="{'admin': user.admin, 'typing':user.typing}">
-                    {{cs}}
+                    {{cs}}<br/>
                 </span>
             </div>
 
@@ -120,8 +121,8 @@ export default {
         this.stationSettings.chatAdmins.indexOf( cs ) !== -1
     },
     chatUserFieldChanged () {
-      if (this.chatUserField && this.chatUserField !== this.chatUserField.toUpperCase()) {
-        this.chatUserField = this.chatUserField.toUpperCase()
+      if (this.chatUserField && this.chatUserField !== this.chatUserField.toUpperCase().trim()) {
+        this.chatUserField = this.chatUserField.toUpperCase().trim()
       }
     },
     onTyping: _.debounce( function () {
@@ -148,8 +149,8 @@ export default {
         this.user.siteAdmin
     },
     buttonVisible: function () {
-      return (this.chatUserField && this.chatUserField !== this.chatUser) ||
-        (this.chatUserField && this.messageText)
+      return (this.chatUserField && this.chatUserField !== '') &&
+        (this.chatUserField !== this.chatUser || this.messageText)
     },
     buttonCaption: function () {
       return this.messageText ? 'Post message' : 'Change callsign'

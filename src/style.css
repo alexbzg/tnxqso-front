@@ -256,6 +256,10 @@ table.tabs td#login{
     padding: 20px 50px 100px 50px;
 }
 
+.list img{
+max-width: 900px; 
+}
+
 
 
 
@@ -508,6 +512,7 @@ table#cluster td.mode{
 table#cluster td.call{ 
     width: 80px;
     font-weight: bold;
+    color: #555;
 }
 table#cluster td.text{ 
     color: #777;
@@ -615,10 +620,13 @@ table#message_form input#message_text{
     font-size: 16px;
 }
 .chat_info_users1 span.admin, .chat_info_users2 span.admin{
-    color: #991111;
+    color: #b24c4c;
 }
 .chat_info_users1 span, .chat_info_users2 span{
     display: block;
+}
+.delete_btn{
+    cursor: pointer;
 }
 
 
@@ -732,7 +740,7 @@ table#chat_window td.message{
 }
 #station_setup textarea{
     width: 670px;
-    height: 150px;
+    height: 300px;
 }
 .station_setup_block{
     padding: 10px;
@@ -762,7 +770,7 @@ input#admin_calls { width: 670px; }
     background-color: #fff;
 }
 #editor_info, #editor_news, #editor_donate{
-    height: 100px;
+    height: 300px;
 }
 
 

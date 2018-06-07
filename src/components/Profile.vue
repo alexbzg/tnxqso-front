@@ -68,7 +68,7 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='Отметьте те колонки лога, которые будут транслироваться на сайт.'">
+                    @click="infoPopup='Отметьте те колонки лога, которые будут транслироваться на сайт.<br/>Названия пользовательских колонок изменяются в программе QSOclient.'">
                 <input type="checkbox" id="checkbox_log" v-model="settings.enable.log" />
                 Show the <b>Online log</b> tab on the station's page <br/> 
                 <!--template v-if="settings.enable.log">
@@ -82,8 +82,9 @@
                     <input type="checkbox" id="checkbox_log_wff" v-model="settings.log.columns.WFF" /> WFF<br/>
                     <input type="checkbox" id="checkbox_log_loc" v-model="settings.log.columns.loc" /> Locator<br/>
                     <template v-for="n in 2">
-                        User field #{{n}} <input type="checkbox" :id="'user_field' + n" 
-                            v-model="settings.log.userColumns[n-1].enabled"/><br/>
+                        <input type="checkbox" :id="'user_field' + n" 
+                            v-model="settings.log.userColumns[n-1].enabled"/>
+                        User field #{{n}}<br/>
                     </template>
                     <input type="button" id="button_clear_log" class="btn" value="Clear online log" 
                         :disabled="!user.stationCallsign"

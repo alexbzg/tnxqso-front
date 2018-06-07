@@ -23,16 +23,16 @@
         <div id="chat_info">
             <div class="chat_info_title">Chat page</div>
             <div class="chat_info_users1">
-                <span v-for="(user, cs) in activeUsers" v-if="user.chat"
+                <span v-for="user in activeUsers" v-if="user.chat"
                     :class="{'admin': user.admin, 'typing':user.typing}">
-                    {{cs}}<br/>
+                    {{user.cs}}<br/>
                 </span>
             </div>
             <div class="chat_info_title">Other pages</div>
             <div class="chat_info_users2">
-                <span v-for="(user, cs) in activeUsers" v-if="!user.chat"
+                <span v-for="user in activeUsers" v-if="!user.chat"
                     :class="{'admin': user.admin, 'typing':user.typing}">
-                    {{cs}}<br/>
+                    {{user.cs}}<br/>
                 </span>
             </div>
 
@@ -69,7 +69,7 @@ export default {
       tabId: 'chat',
       chatUserField: this.chatUser,
       messageText: null,
-      activeUsers: {},
+      activeUsers: [],
       typingTs: null
     }
   },
@@ -113,7 +113,17 @@ export default {
               data[cs].typing = false
             }
           }
-          vm.activeUsers = data
+          vm.activeUsers = []
+          for ( const cs in data ) {
+            data[cs].cs = cs
+            vm.activeUsers.push( data[cs] )
+          }
+          vm.activeUsers = vm.activeUsers.sort(
+            function ( a, b ) {
+              if ( a.cs < b.cs ) { return -1 }
+              if ( b.cs > b.cs ) { return 1 }
+              return 0
+            })
         })
     },
     adminCS (cs) {

@@ -39,10 +39,10 @@
             <router-link to="/map" tag="div" id="tab_map" class="tab" 
                 v-if="enable.map">Map</router-link>
             <router-link to="/adxcluster" tag="div" id="tab_adxc" class="tab" 
-                v-if="enable.cluster" 
-                :class="{updated_tab: tabsUnread.cluster }">ADXcluster</router-link>
+                v-if="enable.cluster">ADXcluster</router-link>
             <router-link to="/chat" tag="div" id="tab_chat" class="tab" 
-                v-if="enable.chat">Chat</router-link>
+                v-if="enable.chat" :class="{updated_tab: tabsUnread.chat }">
+            Chat</router-link>
             <router-link to="/instagram" tag="div" id="tab_instagram" class="tab" 
                 v-if="enable.instagram">Instagram</router-link>
             <router-link to="/donate" tag="div" id="tab_donate" class="tab" 
@@ -90,7 +90,7 @@ export default {
       tabs: tabs,
       tabsRead: {},
       tabsUnread: tabsUnread,
-      chatUser: storage.load( chatUserStorageKey, 'local' ) || user.callsign,
+      chatUser: ( storage.load( chatUserStorageKey, 'local' ) || user.callsign ).toUpperCase(),
       user: user,
       activeTab: null,
       enable: {},
@@ -173,7 +173,7 @@ export default {
     },
     tabUnread ( id ) {
       const tab = this.tabs[id]
-      this.tabsUnread[id] = tab.updated ? tab.updated !== tab.read : false
+      this.$set( this.tabsUnread, id, tab.updated ? tab.updated !== tab.read : false )
     },
     postUserActivity ( typing ) {
       if (this.chatUser && this.stationSettings) {

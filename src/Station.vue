@@ -86,11 +86,12 @@ export default {
   name: 'station',
   data () {
     const tabsUnread = {}
+    const chatUser = storage.load( chatUserStorageKey, 'local' ) || user.callsign
     return {
       tabs: tabs,
       tabsRead: {},
       tabsUnread: tabsUnread,
-      chatUser: ( storage.load( chatUserStorageKey, 'local' ) || user.callsign ).toUpperCase(),
+      chatUser: chatUser ? chatUser.toUpperCase() : '',
       user: user,
       activeTab: null,
       enable: {},

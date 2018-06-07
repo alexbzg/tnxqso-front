@@ -121,7 +121,7 @@ export default {
           vm.activeUsers = vm.activeUsers.sort(
             function ( a, b ) {
               if ( a.cs < b.cs ) { return -1 }
-              if ( b.cs > b.cs ) { return 1 }
+              if ( b.cs > a.cs ) { return 1 }
               return 0
             })
         })

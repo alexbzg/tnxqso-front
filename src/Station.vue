@@ -6,7 +6,7 @@
             <td id="station_title">
                 <h1>{{stationCS}}</h1>
                 {{stationTitle}} 
-                <span class="period" v-if="stationSettings.station.activityPeriod && 
+                <span class="period" v-if="stationSettings && stationSettings.station.activityPeriod && 
                     stationSettings.station.activityPeriod.length == 2">
                     ({{formatDate(stationSettings.station.activityPeriod[0])}} &mdash; 
                     {{formatDate(stationSettings.station.activityPeriod[1])}})
@@ -32,10 +32,10 @@
             <router-link to="/info" tag="div" id="tab_info" class="tab" 
                 v-if="enable.stationInfo">Info</router-link>
             <router-link to="/news" tag="div" id="tab_news" class="tab" 
-                v-if="enable.news"
-                 :class="{updated_tab: tabsUnread.news }">News</router-link>
+                v-if="enable.news" :class="{updated_tab: tabsUnread.news}">
+                News</router-link>
             <router-link to="/log" tag="div" id="tab_log" class="tab" 
-                v-if="enable.log">Online log</router-link>
+                v-if="enable.log" :class="{updated_tab: tabsUnread.log}">Online log</router-link>
             <router-link to="/map" tag="div" id="tab_map" class="tab" 
                 v-if="enable.map">Map</router-link>
             <router-link to="/adxcluster" tag="div" id="tab_adxc" class="tab" 
@@ -85,12 +85,11 @@ const statusUpdateInt = 60 * 1000
 export default {
   name: 'station',
   data () {
-    const tabsUnread = {}
     const chatUser = storage.load( chatUserStorageKey, 'local' ) || user.callsign
     return {
       tabs: tabs,
       tabsRead: {},
-      tabsUnread: tabsUnread,
+      tabsUnread: {},
       chatUser: chatUser ? chatUser.toUpperCase() : '',
       user: user,
       activeTab: null,

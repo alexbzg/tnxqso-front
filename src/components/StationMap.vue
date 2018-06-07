@@ -4,7 +4,7 @@
         <yandex-map 
             :coords="[45,45]"
             zoom="5"
-            style="width: 100%; height: 100%;"
+            style="width: 100%; height: 700px;"
             @map-was-initialized="mapInit">
         </yandex-map>
     </div>

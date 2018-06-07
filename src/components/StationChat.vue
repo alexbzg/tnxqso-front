@@ -113,17 +113,18 @@ export default {
               data[cs].typing = false
             }
           }
-          vm.activeUsers = []
+          const au = []
           for ( const cs in data ) {
             data[cs].cs = cs
-            vm.activeUsers.push( data[cs] )
+            au.push( data[cs] )
           }
-          vm.activeUsers = vm.activeUsers.sort(
+          au.sort(
             function ( a, b ) {
               if ( a.cs < b.cs ) { return -1 }
               if ( b.cs > a.cs ) { return 1 }
               return 0
             })
+          vm.$set( vm, 'activeUsers', au )
         })
     },
     adminCS (cs) {

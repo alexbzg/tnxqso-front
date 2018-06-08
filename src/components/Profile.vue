@@ -10,10 +10,9 @@
 
         <div id="station_setup">
             <div class="station_setup_block">
-                <a href="/static/html/log.html" target="_blank" rel="noopener">
+                <a href="/static/html/log.html" target="_blank" rel="noopener" class="blue">
                     <img class="icon_info" src="/static/images/icon_info.png" title="Info">
-                    <b>The scheme of your weblog's broadcasting</b>.<br/>
-                    Схема организации web-трансляции лога станции.
+                    <b>Info</b>: <u>The scheme of your weblog's broadcasting</u>.
                 </a>
                 <br/>
                 <a href="https://n1mm.hamdocs.com/tiki-index.php" target="_blank" rel="noopener" class="blue">
@@ -26,7 +25,7 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='<b>Publish...</b> - Поставьте отметку для публикации вашей экспедиции в списке станций на главной странице. <br/>Отметку ставьте после того, как ваша страница по <b>Station\'s link</b> полностью готова.<br/><br/><b>Station\'s link - это прямая ссылка на страницу вашей экспедиции/станции</b>.<br/>Для распространения в соц.сетях/форумах/кластерах удобно использовать именное её.'">
+                    @click="infoPopup='<b>Publish... </b> - Set a mark for the publication of your expedition in the stations\'s list on the homepage. <br/>Set the mark only when your <b>Station\'s link</b> is completely ready.<br/><b>Station\'s link is a direct link to the page of your expedition/station </b>. There is convenient to use for sharing in social nets/forums/clusters.<br/><hr/><b>Publish...</b> - Поставьте отметку для публикации вашей экспедиции в списке станций на главной странице. <br/>Отметку ставьте после того, как ваша страница по <b>Station\'s link</b> полностью готова.<br/><b>Station\'s link - это прямая ссылка на страницу вашей экспедиции/станции</b>.<br/>Для распространения в соц.сетях/форумах/кластерах удобно использовать именное её.'">
                 <input type="checkbox" id="checkbox_publish" v-model="settings.publish"/> 
                 <b>Publish</b> this station's info on the TNXQSO.com main page <br/>
                 Station's callsign: <input type="text" id="station_callsign" v-model="settings.station.callsign"/> 
@@ -55,7 +54,7 @@
                     @click="infoPopup='Вкладка <b>NEWS</b> - добавление на сайт оперативных сообщений о работе экспедиции/станции.'">
                 <input type="checkbox" id="checkbox_news" v-model="settings.enable.news" /> Show the <b>News</b> tab on the station's page
                 <div class="block_settings" v-if="settings.enable.news">
-                    <input type="button" id="button_clear_news" class="btn" value="Clear news"
+                    <input type="button" id="button_clear_news" class="btn" value="Clear all news"
                          :disabled="!user.stationCallsign"
                         @click="clearNews()"/><br/><br/>
                     <vue-editor id="editor_news" 
@@ -97,19 +96,27 @@
                 <a href="/static/html/map.html" target="_blank" rel="noopener">
                     <img class="icon_info" src="/static/images/icon_info.png" title="Info">
                 </a>
-                <input type="checkbox" id="checkbox_map" v-model="settings.enable.map" /> Show the <b>Map</b> tab on the station's page
-                <div class="block_settings" v-if="settings.enable.map">
-                    <input type="file" id="fileTrack" style="display:none" @change="uploadTrack">
-                    <label class="btn" for="fileTrack">Upload KML/KMZ/GPX file with route</label> &nbsp; 
-                    <input type="button" id="button_clear_track" class="btn" value="Clear track"
-                        :disabled="!user.stationCallsign"
-                        @click="clearTrack()"/><br/>
-                </div>
+                <input type="checkbox" id="checkbox_map" v-model="settings.enable.map" /> Show the <b>Map</b> tab on the station's page<br/>
+                <a href="/static/html/map.html" target="_blank" rel="noopener" class="blue">
+                    <b>Info</b>: <u>Route's creation by using Google Maps</u>
+                </a><br/>
+                <template v-if="settings.enable.map">
+                    <b>Uploaded file</b>: {{trackFile ? trackFile : '...'}}<br/>
+                    <div class="block_settings">
+                        <input type="file" id="fileTrack" style="display:none" @change="uploadTrack">
+                        <label class="btn" for="fileTrack" :disabled="!user.stationCallsign">
+                            Upload KML/KMZ/GPX file with route
+                        </label> &nbsp; 
+                        <input type="button" id="button_clear_track" class="btn" value="Delete file"
+                            :disabled="!user.stationCallsign"
+                            @click="clearTrack()"/><br/>
+                    </div>
+                </template>
             </div>
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='Позывные, указанные в этом разделе, будут транслироваться на вкладке <b>ADXCLUSTER</b>.<br/>Указывать можно как конкретный позывной (R7AB или R7AB/M), так и группу позывных, используя &laquo;звездочку&raquo; (*/P - все позывные /P).'">
+                    @click="infoPopup='Позывные, указанные в этом разделе, будут отслеживаться в спотах кластера и транслироваться на вкладке <b>ADXCLUSTER</b>.<br/>Указывать можно как конкретный позывной (R7AB или R7AB/M), так и группу позывных, используя &laquo;звездочку&raquo; (*/P - все позывные /P).'">
                 <input type="checkbox" id="checkbox_cluster" v-model="settings.enable.cluster" /> Show the <b>ADXcluster</b> tab on the station's page 
                 <div class="block_settings" v-if="settings.enable.cluster">
                 Callsigns to track ( separeted by spaces or commas): 
@@ -121,14 +128,14 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='Вкладка <b>CHAT</b>. Позывные, указанные в этом разделе, будут выделяться цветом на странице чата.<br/>Удалять избранные сообщения чата может только администратор станции непосредственно на странице чата.'">
+                    @click="infoPopup='Вкладка <b>CHAT</b>. Позывные, указанные в этом разделе, выделяются цветом и у них есть возможность удалять избранные сообщения на странице чата.'">
                 <input type="checkbox" id="checkbox_chat" v-model="settings.enable.chat" /> Show the <b>Chat</b> tab on the station's page<br/>
                 <div class="block_settings" v-if="settings.enable.chat">
-                    <input type="button" id="button_clear_chat" class="btn" value="Clear chat"
-                        @click="clearChat()"/><br/>
                     Admin callsigns: <br/>
                     <input type="text" id="admin_calls" v-model="chatAdmins" 
-                        @change="chatAdminsChange" />
+                        @change="chatAdminsChange" /><br/>
+                    <input type="button" id="button_clear_chat" class="btn" value="Clear chat"
+                        @click="clearChat()"/>
                 </div>
             </div>
 
@@ -181,6 +188,7 @@ import {VueEditor} from 'vue2-editor'
 import DatePicker from 'vue2-datepicker'
 import {parseCallsigns} from './../utils'
 import request from './../request'
+
 export default {
   name: 'profile',
   props: ['user'],
@@ -194,10 +202,13 @@ export default {
       }
     } )
   },
+  mounted () {
+    this.getTrackFileName()
+  },
   data () {
     const settings = this.user.settings()
-    if (settings.station.callsign) {
-      settings.station.callsign = settings.station.callsign.toUpperCase()
+    if (this.user.stationCallsign) {
+      settings.station.callsign = this.user.stationCallsign.toUpperCase()
     } else {
       settings.station.callsign = this.user.callsign.toUpperCase()
     }
@@ -207,6 +218,7 @@ export default {
       clusterCallsigns: settings.clusterCallsigns.join(' '),
       chatAdmins: settings.chatAdmins.join(' '),
       infoPopup: null,
+      trackFile: null,
       editorToolbar: [ [ 'bold', 'italic', 'underline' ],
         [ 'image' ],
         [ { 'indent': '-1' }, { 'indent': '+1' } ],
@@ -241,6 +253,8 @@ export default {
       this.$router.push( '/login' )
     },
     saveSettings () {
+      const vm = this
+      let clearAll = false
       this.settings.station.callsign = this.settings.station.callsign.toUpperCase()
       if (this.user.stationCallsign &&
         this.user.stationCallsign !== this.settings.station.callsign) {
@@ -250,10 +264,14 @@ export default {
           'восстановления. Продолжить?' ) ) {
           return
         }
+        clearAll = true
       }
       this.user.saveSettings(this.settings)
         .then( function () {
           window.alert( 'Your settings were saved.' )
+          if (clearAll) {
+            vm.trackFile = null
+          }
         })
     },
     clearChat () {
@@ -268,7 +286,25 @@ export default {
     },
     clearTrack () {
       if (window.confirm( 'Do you really want to clear route?') ) {
+        const vm = this
         this.user.serverPost( 'track', { clear: 1 } )
+          .then( function () {
+            vm.trackFile = null
+          })
+      }
+    },
+    getTrackFileName () {
+      let scs = this.user.stationCallsign
+      if (scs) {
+        scs = scs.replace( /\//, '-' ).toLowerCase()
+        const vm = this
+        request.get( '/static/stations/' + scs + '/track.json' )
+          .then( function ( r ) {
+            vm.trackFile = r.data.filename
+          })
+          .catch( function () {
+            vm.trackFile = null
+          })
       }
     },
     uploadTrack (e) {
@@ -285,6 +321,7 @@ export default {
           } )
             .then( function () {
               window.alert( 'Your route file was uploaded successfully.' )
+              vm.getTrackFileName()
             })
             .finally( function () {
               el.value = ''
@@ -299,7 +336,7 @@ export default {
     },
     postNewsItem () {
       const vm = this
-      vm.user.serverPost( 'news', { station: this.user.stationCallsign, add: vm.newsItem } )
+      this.user.serverPost( 'news', { station: this.user.stationCallsign, add: vm.newsItem } )
         .then( function () {
           vm.newsItem = ''
         })

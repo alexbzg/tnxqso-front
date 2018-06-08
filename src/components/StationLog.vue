@@ -16,12 +16,13 @@
           </tr>
           <tr>
             <td>
-              <log-table :data="searchResults" :log-settings="stationSettings.log"></log-table>
+              <log-table :data="searchResults" :log-settings="stationSettings.log" 
+              v-if="stationSettings"></log-table>
             </td>
           </tr>
         </table>
 
-        <log-table :data="dataSlice" :log-settings="stationSettings.log"></log-table>
+        <log-table :data="dataSlice" :log-settings="stationSettings.log" v-if="stationSettings"></log-table>
 
     </div>
 </template>

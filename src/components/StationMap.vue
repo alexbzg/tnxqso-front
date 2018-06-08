@@ -5,6 +5,8 @@
             :coords="[45,45]"
             zoom="5"
             style="width: 100%; height: 700px;"
+            scroll-zoom="true"
+            :behaviors="['scrollZoom']"
             @map-was-initialized="mapInit">
         </yandex-map>
     </div>

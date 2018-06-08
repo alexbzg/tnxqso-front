@@ -86,10 +86,14 @@ export default {
   name: 'station',
   data () {
     const chatUser = storage.load( chatUserStorageKey, 'local' ) || user.callsign
+    const tabsUnread = {}
+    for (const tab in tabs) {
+      tabsUnread[tab] = false
+    }
     return {
       tabs: tabs,
       tabsRead: {},
-      tabsUnread: {},
+      tabsUnread: tabsUnread,
       chatUser: chatUser ? chatUser.toUpperCase() : '',
       user: user,
       activeTab: null,
@@ -157,6 +161,16 @@ export default {
     clearInterval( this.statusUpdateIntId )
     clearInterval( this.updateOnlineIntId )
   },
+  watch: {
+    tabsUnread: {
+      handler:
+        function (oldV, newV) {
+     //     console.log( oldV )
+     //     console.log( newV )
+        },
+      deep: true
+    }
+  },
   methods: {
     tabRead ( id ) {
       if ( id ) {
@@ -173,7 +187,11 @@ export default {
     },
     tabUnread ( id ) {
       const tab = this.tabs[id]
-      this.$set( this.tabsUnread, id, tab.updated ? tab.updated !== tab.read : false )
+      this.$set( this.tabsUnread, id,
+        tab.updated
+        ? tab.updated !== tab.read && tab.service.data.length > 0
+        : false )
+      // console.log( 'tabUnread: ' + id )
     },
     postUserActivity ( typing ) {
       if (this.chatUser && this.stationSettings) {

@@ -74,20 +74,17 @@ table.tabs td{
 
 table.tabs td#station_title{
     color: #777;
-    padding: 5px 0 20px 0;
+    padding: 5px 0 0 0;
     text-align: center;
+    height: 70px;
+    vertical-align: top;
 }
 table.tabs td#station_title h1{
     margin: 0;
-    padding: 5px 0 10px 0;
-    font-size: 48px;
+    padding: 0 0 10px 0;
+    font-size: 50px;
     font-weight: bold;
-    background-color: #555;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    text-shadow: rgba(255,255,255,0.4) 1px 2px 3px;
+    text-shadow: rgba(255,255,255,0.5) 1px 2px 3px;
 }
 
 
@@ -837,10 +834,8 @@ table#info_popup_close{
 }
 
 
-
-
-
-
-
+.ql-align-center{
+    text-align: center;
+}
 
 

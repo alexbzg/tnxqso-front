@@ -25,7 +25,7 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='<b>Publish... </b> - Set a mark for the publication of your expedition in the stations\'s list on the homepage. <br/>Set the mark only when your <b>Station\'s link</b> is completely ready.<br/><b>Station\'s link is a direct link to the page of your expedition/station </b>. There is convenient to use for sharing in social nets/forums/clusters.<br/><hr/><b>Publish...</b> - Поставьте отметку для публикации вашей экспедиции в списке станций на главной странице. <br/>Отметку ставьте после того, как ваша страница по <b>Station\'s link</b> полностью готова.<br/><b>Station\'s link - это прямая ссылка на страницу вашей экспедиции/станции</b>.<br/>Для распространения в соц.сетях/форумах/кластерах удобно использовать именное её.'">
+                    @click="infoPopup='<b>Publish... </b> - Set a mark for the publication of your expedition in the stations\'s list on the homepage. <br/>Set the mark only when your <b>Station\'s link</b> is completely ready.<br/><b>Station\'s link is a direct link to the page of your expedition/station </b>. There is convenient to use this link for sharing in social nets/forums/clusters.<br/><hr/><b>Publish...</b> - Поставьте отметку для публикации вашей экспедиции в списке станций на главной странице. <br/>Отметку ставьте после того, как ваша страница по <b>Station\'s link</b> полностью готова.<br/><b>Station\'s link - это прямая ссылка на страницу вашей экспедиции/станции</b>.<br/>Для распространения в соц.сетях/форумах/кластерах удобно использовать именное её.'">
                 <input type="checkbox" id="checkbox_publish" v-model="settings.publish"/> 
                 <b>Publish</b> this station's info on the TNXQSO.com main page <br/>
                 Station's callsign: <input type="text" id="station_callsign" v-model="settings.station.callsign"/> 
@@ -41,7 +41,7 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='Во вкладке <b>INFO</b> уместно разместить текст с описанием экспедиции/станции.'">
+                    @click="infoPopup='<b>The INFO tab</b> It\'s appropriate to place the common information and photos with the description of the expedition\'s purpose , operators, the route of the expedition etc.<br/><hr/>Во вкладке <b>INFO</b> уместно разместить общую информацию и фото с описанием цели, состава операторов, маршрута экспедиции/станции.'">
                 <input type="checkbox" id="checkbox_info" v-model="settings.enable.stationInfo" /> Show the <b>Info</b> tab on the station's page<br/><br/>
                 <div class="block_settings" v-if="settings.enable.stationInfo">
                     <vue-editor id="editor_info" v-model="settings.station.info" 
@@ -51,7 +51,7 @@
             
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='Вкладка <b>NEWS</b> - добавление на сайт оперативных сообщений о работе экспедиции/станции.'">
+                    @click="infoPopup='<b>The NEWS tab</b>. Adding current reports of the work of the expedition/station to the website.<br/><hr/>Вкладка <b>NEWS</b> - добавление на сайт оперативных сообщений о работе экспедиции/станции.'">
                 <input type="checkbox" id="checkbox_news" v-model="settings.enable.news" /> Show the <b>News</b> tab on the station's page
                 <div class="block_settings" v-if="settings.enable.news">
                     <input type="button" id="button_clear_news" class="btn" value="Clear all news"
@@ -67,7 +67,7 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='Отметьте те колонки лога, которые будут транслироваться на сайт.<br/>Названия пользовательских колонок изменяются в программе QSOclient.'">
+                    @click="infoPopup='Mark those columns of the log that will be broadcast to the site. <br/> The names of the user columns and their values can be changed in the QSOclient program.<br/><hr/>Отметьте те колонки лога, которые будут транслироваться на сайт.<br/>Названия пользовательских колонок изменяются в программе QSOclient.'">
                 <input type="checkbox" id="checkbox_log" v-model="settings.enable.log" />
                 Show the <b>Online log</b> tab on the station's page <br/> 
                 <!--template v-if="settings.enable.log">
@@ -116,7 +116,7 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='Позывные, указанные в этом разделе, будут отслеживаться в спотах кластера и транслироваться на вкладке <b>ADXCLUSTER</b>.<br/>Указывать можно как конкретный позывной (R7AB или R7AB/M), так и группу позывных, используя &laquo;звездочку&raquo; (*/P - все позывные /P).'">
+                    @click="infoPopup='The callsigns specified in this section will be tracked in the cluster\'s spots and broadcast to the <b> ADXCLUSTER </b> tab. <br/> You can specify either the specific callsign (R7AB or R7AB / M) and the callsign\'s group, using the & laquo; asterisk & raquo; (*/P - all the callsigns with /P).<br/><hr/>Позывные, указанные в этом разделе, будут отслеживаться в спотах кластера и транслироваться на вкладке <b>ADXCLUSTER</b>.<br/>Указывать можно как конкретный позывной (R7AB или R7AB/M), так и группу позывных, используя &laquo;звездочку&raquo; (*/P - все позывные /P).'">
                 <input type="checkbox" id="checkbox_cluster" v-model="settings.enable.cluster" /> Show the <b>ADXcluster</b> tab on the station's page 
                 <div class="block_settings" v-if="settings.enable.cluster">
                 Callsigns to track ( separeted by spaces or commas): 
@@ -128,7 +128,7 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='Вкладка <b>CHAT</b>. Позывные, указанные в этом разделе, выделяются цветом и у них есть возможность удалять избранные сообщения на странице чата.'">
+                    @click="infoPopup='The <b>CHAT</b> tab. Callsigns specified in this section highlighted in color and they have the ability to delete desired messages on the chat page.<br/><hr/>Вкладка <b>CHAT</b>. Позывные, указанные в этом разделе, выделяются цветом и у них есть возможность удалять избранные сообщения на странице чата.'">
                 <input type="checkbox" id="checkbox_chat" v-model="settings.enable.chat" /> Show the <b>Chat</b> tab on the station's page<br/>
                 <div class="block_settings" v-if="settings.enable.chat">
                     Admin callsigns: <br/>
@@ -142,7 +142,7 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='Вкладка <b>INSTAGRAM</b> - трансляция фото/видео выбранного аккаунта Instargam на страницу вашей станции.'">
+                    @click="infoPopup='The <b>INSTAGRAM</b> tab. Broadcasting the photo/video of the selected Instargam account to your station page.<br/><hr/>Вкладка <b>INSTAGRAM</b> - трансляция фото/видео выбранного аккаунта Instargam на страницу вашей станции.'">
                 <input type="checkbox" id="checkbox_instagram" v-model="settings.enable.instagram" /> Show the <b>Instagram</b> tab on the station's page<br/>
                 <div class="block_settings" v-if="settings.enable.instagram">
                     Instagram ID: <input type="text" id="setup_instagram" v-model="settings.instagramID"/>
@@ -152,7 +152,7 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info"
-                    @click="infoPopup='Вкладка <b>SUPPORT US</b> предназначена для размещения текста, предлагающего сделать пожертвование экспедиции/станции (в первом окне) и кода платежных систем (во втором окне).'">
+                    @click="infoPopup='The <b>SUPPORT US</b> tab is for placing text that suggests making an expedition/station\'s donation (in the first window) and for payment system code (in the second window).<br/><hr/>Вкладка <b>SUPPORT US</b> предназначена для размещения текста, предлагающего сделать пожертвование экспедиции/станции (в первом окне) и кода платежных систем (во втором окне).'">
                 <input type="checkbox" id="checkbox_support_us" v-model="settings.enable.donate" /> Show <b>Support us</b> tab on the station's page<br/>
                 <div class="block_settings" v-if="settings.enable.donate">
                     <vue-editor id="editor_donate" v-model="settings.donate.text" 

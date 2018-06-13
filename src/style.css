@@ -62,7 +62,7 @@ table.tabs{
     border-collapse: collapse;
 }
 table.index_tabs{
-    width: 802px;
+    width: 1002px;
 }
 
 
@@ -222,7 +222,7 @@ table.tabs td#login{
     color: #009;
 }
 .index_list{
-    width: 800px;
+    width: 1000px;
     padding-top: 30px; 
     padding-bottom: 0px; 
     line-height: 2em;
@@ -262,7 +262,7 @@ max-width: 900px;
 
 /* ===========================   S T A T I O N S  ==================================*/
 .stations_list{
-    width: 750px;
+    width: 950px;
     margin: 0px auto 70px auto;
     padding: 0;
     text-align: left;  
@@ -749,9 +749,9 @@ table#chat_window td.message{
     padding-left: 20px;
 }
 input#station_callsign { font-weight: bold; }
-input#station_name { width: 580px; }
-input#setup_cluster { width: 670px; }
-input#admin_calls { width: 670px; }
+input#station_name { width: 780px; }
+input#setup_cluster { width: 870px; }
+input#admin_calls { width: 870px; }
 
 #stations_link{
     font-size: 14px;

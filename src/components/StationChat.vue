@@ -81,7 +81,7 @@ export default {
   },
   methods: {
     buttonClick () {
-      if (this.adminCS( this.userField ) &&
+      if (this.adminCS( this.chatUserField ) &&
         this.chatUserField !== this.user.callsign ) {
         window.alert( 'You must be logged in as ' + this.chatUserField )
         return
@@ -91,7 +91,7 @@ export default {
       }
       if (this.messageText) {
         const vm = this
-        this.serverPost( { 'from': this.chatUser,
+        this.serverPost( { 'from': this.chatUserField,
           'text': this.messageText } )
           .then( function () { vm.messageText = null } )
       }

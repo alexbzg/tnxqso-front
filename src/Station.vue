@@ -43,8 +43,11 @@
             <router-link to="/chat" tag="div" id="tab_chat" class="tab" 
                 v-if="enable.chat" :class="{updated_tab: tabsUnread.chat }">
             Chat</router-link>
-            <router-link to="/instagram" tag="div" id="tab_instagram" class="tab" 
-                v-if="enable.instagram">Instagram</router-link>
+            <div id="tab_instagram" class="tab" 
+                v-if="enable.instagram && stationSettings && stationSettings.instagramID">
+                <a :href="'https://www.instagram.com/' + stationSettings.instagramID" 
+                    target="_blank" rel="noopener">Instagram</a>
+            </div>
             <router-link to="/donate" tag="div" id="tab_donate" class="tab" 
                 v-if="enable.donate">Support us</router-link>
         </td>
@@ -191,7 +194,6 @@ export default {
         tab.updated
         ? tab.updated !== tab.read && tab.service.data.length > 0
         : false )
-      // console.log( 'tabUnread: ' + id )
     },
     postUserActivity ( typing ) {
       if (this.chatUser && this.stationSettings) {

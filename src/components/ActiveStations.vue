@@ -34,11 +34,6 @@ export default {
       siteAdmin: this.user.siteAdmin
     }
   },
-  computed: {
-/*    siteAdmin () {
-      return this.user.siteAdmin
-    } */
-  },
   mounted () {
     const vm = this
     request.get( '/static/js/publish.json' )
@@ -46,14 +41,14 @@ export default {
         const publishData = response.data
         const current = moment()
         for ( const station in publishData ) {
-          if ( publishData[station]['user'] ) {
+          if ( ( publishData[station]['user'] && publishData[station]['admin'] ) || vm.siteAdmin ) {
             request.get( '/static/stations/' + station.replace( /\//, '-' ).toLowerCase() + '/settings.json' )
               .then( function ( response ) {
                 const settings = response.data
-                settings.publish = publishData[station]['admin']
+                settings.publish = { user: settings.publish, admin: publishData[station]['admin'] }
                 const period = settings.station.activityPeriod
                 if ( period && period.length === 2 && moment(period[0]) < current &&
-                  moment(period[1]) > current ) {
+                  moment(period[1]).add( 1, 'd' ) > current ) {
                   vm.activeStations.push( settings )
                 } else {
                   vm.archStations.push( settings )

@@ -188,6 +188,10 @@ table.tabs td#login{
     border-bottom: 1px solid #fff;
 }
 
+.tab a{
+    color: #333;
+    text-decoration: none;
+}
 
 
 

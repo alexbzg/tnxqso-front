@@ -1,7 +1,7 @@
 <template>
     <div id="cluster">
         <table id="cluster">
-            <tr v-for="spot in data" :class="{new: spot.new}">
+            <tr v-for="spot in data" :class="{new: spot.new, highlight: spot.highlight}">
                 <td class="time">{{spot.time}}z</td>
                 <td class="band">{{spot.freq}}</td>
                 <td class="mode">{{spot.subMode ? spot.subMode : spot.mode}}</td>

@@ -55,7 +55,7 @@ const u = {
     return JSON.parse( JSON.stringify( _user.settings ) )
   },
 
-  serverPost ( path, data ) {
+  serverPost ( path, data, supressAlert ) {
     const u = this
     if ( !data.token ) {
       data.token = _user.token
@@ -73,7 +73,9 @@ const u = {
         } else {
           msg = 'Server error. Please try again later.'
         }
-        alert(msg)
+        if ( !supressAlert ) {
+          alert(msg)
+        }
         throw error
       })
   },

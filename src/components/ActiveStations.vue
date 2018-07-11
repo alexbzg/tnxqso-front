@@ -8,12 +8,19 @@
             </active-stations-entry>
         </div>
         <div id="arch_stations" class="stations_list">
-            <div class="stations_block">Inactive</div>
-            <active-stations-entry v-for="(station, index) in archStations" 
+            <div class="stations_block">Coming soon</div>
+            <active-stations-entry v-for="(station, index) in futureStations" 
                 :station="station" :site-admin="siteAdmin"
                 @publish-change="publishChange(station)" :key="index">
             </active-stations-entry>
         </div>
+        <div id="ended_stations" class="stations_list">
+            <div class="stations_block">Archive</div>
+            <active-stations-entry v-for="(station, index) in archStations" 
+                :station="station" :site-admin="siteAdmin"
+                @publish-change="publishChange(station)" :key="index">
+            </active-stations-entry>
+       </div>
     </div>
 </template>
 
@@ -31,6 +38,7 @@ export default {
     return {
       activeStations: [],
       archStations: [],
+      futureStations: [],
       siteAdmin: this.user.siteAdmin
     }
   },
@@ -50,6 +58,8 @@ export default {
                 if ( period && period.length === 2 && moment(period[0]) < current &&
                   moment(period[1]).add( 1, 'd' ) > current ) {
                   vm.activeStations.push( settings )
+                } else if ( period && period.length === 2 && moment(period[0]) > current ) {
+                  vm.futureStations.push( settings )
                 } else {
                   vm.archStations.push( settings )
                 }

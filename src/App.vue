@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <a href="/"><img id="logo" src="/static/images/tnxqso_logo.png" border="0" title="TNXQSO.com"></a>
+        <a href="/"><img id="logo_index" src="/static/images/tnxqso_logo.png" border="0" title="TNXQSO.com"></a>
         <table class="tabs index_tabs">
             <tr>
                 <td>

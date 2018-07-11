@@ -45,9 +45,9 @@
                 </td>
                 <td class="message" @mouseover="msgMouseOver(true,$event)" 
                     @mouseout="msgMouseOver(false,$event)">
-                    {{msg.text}}
                     <img class="delete_btn" src="/static/images/delete.png" 
                         title="Delete this message" @click="deleteMsg( msg.ts )"/>
+                    {{msg.text}}
                 </td>
             </tr>
         </table>
@@ -128,8 +128,7 @@ export default {
         })
     },
     adminCS (cs) {
-      return cs === this.stationSettings.admin ||
-        this.stationSettings.chatAdmins.indexOf( cs ) !== -1
+      return cs === this.stationSettings.admin
     },
     chatUserFieldChanged () {
       if (this.chatUserField && this.chatUserField !== this.chatUserField.toUpperCase().trim()) {

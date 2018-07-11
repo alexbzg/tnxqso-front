@@ -201,7 +201,7 @@ export default {
           { 'station': this.stationSettings.station.callsign,
             'chat': this.activeTab === 'chat',
             'user': this.chatUser,
-            'typing': Boolean( typing ) } )
+            'typing': Boolean( typing ) }, true )
       }
     },
     setChatUser ( chatUser ) {

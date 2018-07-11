@@ -16,11 +16,11 @@
                 </a>
                 <br/>
                 <a href="https://n1mm.hamdocs.com/tiki-index.php" target="_blank" rel="noopener" class="blue">
-                    <u><b>N1MM Logger+</b></u> website.</a> &nbsp; 
+                    <u><b>N1MM Log</b></u> website.</a> &nbsp; 
                 <a href="http://tnxqso.com/static/files/qsoclient.zip" rel="noopener" class="blue">
-                    <u><b>QSOclient.exe</b></u> download.</a>  &nbsp; 
-                <a href="https://play.google.com/store/apps/details?id=com.jillybunch.shareGPS&hl=ru" target="_blank" rel="noopener" class="blue">
-                    <u><b>Share GPS</b></u> at GooglePlay.</a>                
+                    <u><b>QSOclient</b></u> download.</a>  &nbsp; 
+                <a href="https://play.google.com/store/apps/details?id=com.mendhak.gpslogger" target="_blank" rel="noopener" class="blue">
+                    <u><b>GPS Logger</b></u> at GooglePlay.</a>                
             </div>
 
             <div class="station_setup_block">
@@ -116,22 +116,25 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='The callsigns specified in this section will be tracked in the cluster\'s spots and broadcast to the <b> ADXCLUSTER </b> tab. <br/> You can specify either the specific callsign (R7AB or R7AB / M) and the callsign\'s group, using the & laquo; asterisk & raquo; (*/P - all the callsigns with /P).<br/><hr/>Позывные, указанные в этом разделе, будут отслеживаться в спотах кластера и транслироваться на вкладке <b>ADXCLUSTER</b>.<br/>Указывать можно как конкретный позывной (R7AB или R7AB/M), так и группу позывных, используя &laquo;звездочку&raquo; (*/P - все позывные /P).'">
+                    @click="infoPopup='<b>Callsigns to track</b> - The callsigns specified in this section will be tracked in the cluster\'s spots and broadcast to the <b> ADXCLUSTER </b> tab. You can specify either the specific callsign (R7AB or R7AB/M) and the callsign\'s group, using the & laquo; asterisk & raquo; (*/P - all the callsigns with /P).<br/><b>Highlight callsign...</b> - the callsigns specified in this section will be highlighted in color (For example, in tracking we specify */P, and here we write R7AB*.)<br/><hr/><b>Callsigns to track</b> - Позывные, указанные в этом разделе, будут отслеживаться в спотах кластера и транслироваться на вкладке <b>ADXCLUSTER</b>. Указывать можно как конкретный позывной (R7AB или R7AB/M), так и группу позывных, используя &laquo;звездочку&raquo; (*/P - все позывные /P).<br/><b>Highlight callsign...</b> - позывные, указанные в этом разделе, будут выделяться цветом (Например, в отслеживании указываем */P, а здесь пишем R7AB*.)'">
                 <input type="checkbox" id="checkbox_cluster" v-model="settings.enable.cluster" /> Show the <b>ADXcluster</b> tab on the station's page 
                 <div class="block_settings" v-if="settings.enable.cluster">
-                Callsigns to track ( separeted by spaces or commas): 
+                Callsigns to track ( separeted by spaces or commas):<br/>
                 <input type="text" id="setup_cluster" v-model="clusterCallsigns" 
-                    @change="clusterCallsignsChange"/>
+                    @change="clusterCallsignsChange"/><br/>
+                Highlight callsign with color:<br/>
+                <input type="text" id="highlight_calls" v-model="clusterHighlight" 
+                    @change="clusterHighlightChange" />
                 </div>
 
             </div>
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='The <b>CHAT</b> tab. Callsigns specified in this section highlighted in color and they have the ability to delete desired messages on the chat page.<br/><hr/>Вкладка <b>CHAT</b>. Позывные, указанные в этом разделе, выделяются цветом и у них есть возможность удалять избранные сообщения на странице чата.'">
+                    @click="infoPopup='The <b>CHAT</b> tab. Callsigns specified in this section highlighted in color. Only the administrator of the station can delete chat messages.<br/><hr/>Вкладка <b>CHAT</b>. Позывные, указанные в этом разделе, выделяются цветом на странице чата. Удалять сообщения чата может только администратор станции.'">
                 <input type="checkbox" id="checkbox_chat" v-model="settings.enable.chat" /> Show the <b>Chat</b> tab on the station's page<br/>
                 <div class="block_settings" v-if="settings.enable.chat">
-                    Admin callsigns: <br/>
+                    Highlighted callsigns: <br/>
                     <input type="text" id="admin_calls" v-model="chatAdmins" 
                         @change="chatAdminsChange" /><br/>
                     <input type="button" id="button_clear_chat" class="btn" value="Clear chat"
@@ -151,8 +154,9 @@
 
 
             <div class="station_setup_block">
-                <img class="icon_info" src="/static/images/icon_info.png" title="Info"
-                    @click="infoPopup='The <b>SUPPORT US</b> tab is for placing text that suggests making an expedition/station\'s donation (in the first window) and for payment system code (in the second window).<br/><hr/>Вкладка <b>SUPPORT US</b> предназначена для размещения текста, предлагающего сделать пожертвование экспедиции/станции (в первом окне) и кода платежных систем (во втором окне).'">
+                <a href="/static/html/support_us.html" target="_blank" rel="noopener">
+                    <img class="icon_info" src="/static/images/icon_info.png" title="Info">
+                </a>
                 <input type="checkbox" id="checkbox_support_us" v-model="settings.enable.donate" /> Show <b>Support us</b> tab on the station's page<br/>
                 <div class="block_settings" v-if="settings.enable.donate">
                     <vue-editor id="editor_donate" v-model="settings.donate.text" 
@@ -215,7 +219,8 @@ export default {
     return {
       settings: settings,
       newsItem: '',
-      clusterCallsigns: settings.clusterCallsigns.join(' '),
+      clusterCallsigns: settings.clusterCallsigns != null ? settings.clusterCallsigns.join(' ') : null,
+      clusterHighlight: settings.clusterHighlight != null ? settings.clusterHighlight.join(' ') : null,
       chatAdmins: settings.chatAdmins.join(' '),
       infoPopup: null,
       trackFile: null,
@@ -343,6 +348,9 @@ export default {
     },
     clusterCallsignsChange () {
       this.settings.clusterCallsigns = parseCallsigns(this.clusterCallsigns)
+    },
+    clusterHighlightChange () {
+      this.settings.clusterHighlight = parseCallsigns(this.clusterHighlight)
     },
     chatAdminsChange () {
       this.settings.chatAdmins = parseCallsigns(this.chatAdmins)

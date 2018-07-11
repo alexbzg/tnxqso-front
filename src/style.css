@@ -42,6 +42,9 @@ input, button, textarea, select{
 input:focus{   outline: none; }
 
 
+img#logo_index{
+    margin-top: 10px;
+}
 img#logo{
     position: absolute;
     top: 0px;
@@ -49,7 +52,10 @@ img#logo{
 }
 
 
-
+#about_imgs img{
+    margin: 0 20px;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+}
 
 
 
@@ -63,6 +69,7 @@ table.tabs{
 }
 table.index_tabs{
     width: 1002px;
+    margin: 0px auto 0px auto;
 }
 
 
@@ -89,7 +96,7 @@ table.tabs td#station_title h1{
 
 
 table.tabs td#status{
-    width: 150px;
+    width: 200px;
     text-align: center;
 }
 #status_block_top{
@@ -459,12 +466,11 @@ table#log tr.new_qso{
 }
 
 #ppal{
-    width: 300px;
+    width: 350px;
     margin: 0 auto 20px auto;
     background-color: #fff;
-    border: 1px solid #aaa;
-    border-radius: 7px;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    border: 1px solid #ccc;
+    border-radius: 5px;
     padding: 13px 13px 5px 13px;
 }
 #ppal form{
@@ -492,7 +498,7 @@ table#cluster {
     margin: 20px auto 5px auto;    
 }
 table#cluster td{ 
-    padding: 5px;
+    padding: 7px 10px;
     font-size: 16px;
     text-align: left;
     vertical-align: middle;
@@ -514,6 +520,12 @@ table#cluster td.call{
     width: 80px;
     font-weight: bold;
     color: #555;
+}
+table#cluster tr.highlight td.call{ 
+    color: #900;
+}
+table#cluster tr.highlight{ 
+    background-color: #ffffee;
 }
 table#cluster td.text{ 
     color: #777;
@@ -740,7 +752,7 @@ table#chat_window td.message{
     padding: 10px 30px;
 }
 #station_setup textarea{
-    width: 670px;
+    width: 870px;
     height: 300px;
 }
 .station_setup_block{
@@ -755,6 +767,7 @@ table#chat_window td.message{
 input#station_callsign { font-weight: bold; }
 input#station_name { width: 780px; }
 input#setup_cluster { width: 870px; }
+input#highlight_calls { width: 870px; }
 input#admin_calls { width: 870px; }
 
 #stations_link{

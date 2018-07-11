@@ -1,10 +1,22 @@
 <template>
     <div id="about">
-        <p>The website TNXQSO.com is made for information support of radioamateur expeditions and special stations. Registration on the website is required only for control of your radioexpedition/station information support services. All services on the website are free.</p>
-        <p><b>The website is in the "Public Beta" mode! Some errors are possible.</b></p>
-        <br/>
+        <p>The website TNXQSO.com is made for information support of radioamateur expeditions and special stations. Registration on the website is required only for control of your radioexpedition/station information support services.<br/>All services on the website are free.</p>
+        <div id="about_imgs">
+          <img src="/static/images/about_1.jpg"><img src="/static/images/about_2.jpg"><img src="/static/images/about_3.jpg"><img src="/static/images/about_4.jpg">
+        </div>
         <p>Сайт TNXQSO.com сделан для организации информационного сопровождения радиолюбительских экспедиций и специальных станций.  Регистрация на сайте нужна только для управления информационными службами сопровождения своей радиоэкспедиции/станции. Пользование всеми службами сайта бесплатно.</p>
-        <p><b>Сайт работает в режиме бета-тестирования! Возможны ошибки в работе.</b></p>
+        <br/>
+        <p><b><span style="color: #c00;">The website is in the "Public Beta" mode! Some errors are possible.<br/>Сайт работает в режиме бета-тестирования! Возможны ошибки в работе.</span></b></p>
+        <br/>
+        <h4><u>The configuration for your log broadcasting</u></h4>
+        <p><img src="/static/images/about_log.jpg" class="intext"></p>
+        <br/><br/>
+        <h4><u>Configurations for the broadcasting of your GPS coordinates</u></h4>
+        <p><br>
+            <img src="/static/images/about_gps1.jpg" class="intext"><br/><br/>
+            <b>OR</b><br/><br/>
+            <img src="/static/images/about_gps2.jpg" class="intext">
+        </p>
     </div>
 </template>
 

@@ -39,6 +39,46 @@
                     </select>
             </div>
 
+            <!--div class="station_setup_block">
+                <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
+                    @click="infoPopup='<b>The STATUS tab</b>. <br/><hr/>Вкладка <b>STATUS</b>'">
+                <input type="checkbox" id="checkbox_status" checked disabled/> Show the <b>Status</b> tab on the station's page
+                <div class="block_settings">
+                    <u>Take ONLINE/OFFLINE info from</u>: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                    <input type="radio" name="status_from" checked> QSOclient &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                    <input type="radio" name="status_from"> GPS Logger &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" name="status_from"> Manual<span id="manual_status">: &nbsp; <input type="radio" name="status_manual" checked><span style="color: green; font-weight: bold;">ONLINE</span> &nbsp; <input type="radio" name="status_from"><span style="color: red; font-weight: bold;">OFFLINE</span></span>
+                    <br/>
+                    <br/>
+                    <table id="status_setup"><tr>
+                    <td class="col1"><u>Show</u></td>
+                    <td><input type="radio" name="status_info_from"> Manual setup</td>
+                    <td><input type="radio" name="status_info_from" checked> Take data from QSOclient</td>
+                    </tr><tr>
+                    <td class="col1"><input type="checkbox" id="checkbox_status_rda" /> RDA</td>
+                    <td><input type="text" id="status_manual_rda" disabled /></td><td></td>
+                    </tr><tr>
+                    <td class="col1"><input type="checkbox" id="checkbox_status_rafa" /> RAFA</td>
+                    <td><input type="text" id="status_manual_rafa" disabled /></td><td></td>
+                    </tr><tr>
+                    <td class="col1"><input type="checkbox" id="checkbox_status_wff" /> WFF</td>
+                    <td><input type="text" id="status_manual_wff" disabled /></td><td></td>
+                    </tr><tr>
+                    <td class="col1"><input type="checkbox" id="checkbox_status_loc" /> Locator</td>
+                    <td><input type="text" id="status_manual_locator" disabled /></td><td></td>
+                    </tr><tr>
+                    <td class="col1"><input type="checkbox" id="checkbox_status_user1" /> <input type="text" id="status_manual_user2" disabled value="User field #1" /></td>
+                    <td><input type="text" id="status_manual_user1" disabled /></td><td></td>
+                    </tr><tr>
+                    <td class="col1"><input type="checkbox" id="checkbox_status_user2" /> <input type="text" id="status_manual_user2" disabled value="User field #2" /></td>
+                    <td><input type="text" id="status_manual_user2" disabled /></td><td></td>
+                    </tr></table>
+
+                </div>
+            </div-->
+
+
+
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
                     @click="infoPopup='<b>The INFO tab</b> It\'s appropriate to place the common information and photos with the description of the expedition\'s purpose , operators, the route of the expedition etc.<br/><hr/>Во вкладке <b>INFO</b> уместно разместить общую информацию и фото с описанием цели, состава операторов, маршрута экспедиции/станции.'">
@@ -49,6 +89,7 @@
                 </div>
             </div>
             
+<!--
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
                     @click="infoPopup='<b>The NEWS tab</b>. Adding current reports of the work of the expedition/station to the website.<br/><hr/>Вкладка <b>NEWS</b> - добавление на сайт оперативных сообщений о работе экспедиции/станции.'">
@@ -64,6 +105,7 @@
                         @click="postNewsItem()"/><br/>
                 </div>
             </div>
+-->
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
@@ -75,19 +117,22 @@
                     Show the <b>Stats</b> tab on the station's page 
                 </template-->
                 <div class="block_settings" v-if="settings.enable.log">
-                    View:<br/>
-                    <input type="checkbox" id="checkbox_log_rda" v-model="settings.log.columns.RDA" /> RDA<br/>
-                    <input type="checkbox" id="checkbox_log_rafa" v-model="settings.log.columns.RAFA" /> RAFA<br/>
-                    <input type="checkbox" id="checkbox_log_wff" v-model="settings.log.columns.WFF" /> WFF<br/>
-                    <input type="checkbox" id="checkbox_log_loc" v-model="settings.log.columns.loc" /> Locator<br/>
+                    
+                    <table id="log_setup"><tr><td><u>Show in the log</u>:</td>
+                    <td><input type="checkbox" id="checkbox_log_rda" v-model="settings.log.columns.RDA" /> RDA</td>
+                    <td><input type="checkbox" id="checkbox_log_rafa" v-model="settings.log.columns.RAFA" /> RAFA</td>
+                    <td><input type="checkbox" id="checkbox_log_wff" v-model="settings.log.columns.WFF" /> WFF</td>
+                    <td><input type="checkbox" id="checkbox_log_loc" v-model="settings.log.columns.loc" /> Locator</td>
+                    <td>
                     <template v-for="n in 2">
                         <input type="checkbox" :id="'user_field' + n" 
                             v-model="settings.log.userColumns[n-1].enabled"/>
                         User field #{{n}}<br/>
                     </template>
+                    </td></tr></table>
                     <input type="button" id="button_clear_log" class="btn" value="Clear online log" 
                         :disabled="!user.stationCallsign"
-                        @click="clearLog()"/><br/>
+                        @click="clearLog()"/>
                 </div>
             </div>
 
@@ -98,17 +143,17 @@
                 </a>
                 <input type="checkbox" id="checkbox_map" v-model="settings.enable.map" /> Show the <b>Map</b> tab on the station's page<br/>
                 <a href="/static/html/map.html" target="_blank" rel="noopener" class="blue">
-                    <b>Info</b>: <u>Route's creation by using Google Maps</u>
+                    <b>Info</b>: <u>Route's (geo marker's) creation by using Google Maps</u>
                 </a><br/>
                 <template v-if="settings.enable.map">
                     <b>Uploaded file</b>: {{trackFile ? trackFile : '...'}}<br/>
                     <div class="block_settings">
                         <input type="file" id="fileTrack" style="display:none" @change="uploadTrack">
                         <label class="btn" for="fileTrack" :disabled="!user.stationCallsign">
-                            Upload KML/KMZ/GPX file with route
+                            Upload KML/KMZ/GPX file with expedition's route or geo marker
                         </label> &nbsp; 
                         <input type="button" id="button_clear_track" class="btn" value="Delete file"
-                            :disabled="!user.stationCallsign"
+                            v-if="user.stationCallsign && trackFile"
                             @click="clearTrack()"/><br/>
                     </div>
                 </template>

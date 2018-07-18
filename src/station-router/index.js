@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import StationCluster from '../components/StationCluster'
-import StationNews from '../components/StationNews'
+// import StationNews from '../components/StationNews'
 import StationInfo from '../components/StationInfo'
 import StationMap from '../components/StationMap'
 import StationChat from '../components/StationChat'
@@ -22,12 +22,12 @@ const router = new Router({
       name: 'StationCluster',
       component: StationCluster
     },
-    {
+/*    {
       path: '/news',
       name: 'StationNews',
       component: StationNews,
       props: true
-    },
+    }, */
     {
       path: '/log',
       name: 'StationLog',

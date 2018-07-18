@@ -573,9 +573,9 @@ table#cluster td.spotter{
 
 
 table#message_form{
-    width: 850px;
+    width: 1010px;
     padding: 0px;
-    margin: 20px auto;
+    margin: 20px 0 0 15px;
     border: none;
     border-collapse: collapse;
     text-align: center;
@@ -590,25 +590,37 @@ table#message_form td.note{
     color: #777;
     line-height: 12px;
 }
-table#message_form input#your_call{
-    width: 150px;
+table#message_form input#your_call, table#message_form input#your_name{
+    width: 130px;
     font-weight: bold;
     font-size: 18px;
     padding: 1px;
+    margin: 0 10px;
     border: 1px solid #999;
 }
 table#message_form input#message_text{
-    width: 550px;
+    width: 500px;
     text-align: left;
     border: 1px solid #999;
+    font-size: 16px;
+    padding: 1px;
+}
+table#message_form button{
+    width: 130px;
+    padding: 1px;
+}
+
+
+
+table#chat_layout td{
+    vertical-align: top;
 }
 
 
 
 #chat_info{
-    width: 120px;
-    float: right;
-    margin: 0px 20px 0 0;
+    width: 130px;
+    margin: 20px 0 0 0;
     border: 1px solid #eee;
     text-align: left;
 }
@@ -653,7 +665,7 @@ table#chat_window{
     border-collapse: collapse;
 }
 table#chat_window td{
-    padding: 10px 5px;
+    padding: 5px 5px;
     text-align: left;
     vertical-align: top;
 }
@@ -667,12 +679,19 @@ table#chat_window td.call{
     color: #009;
 }
 table#chat_window td.call span.date_time{
-    font-size: 12px;
+    font-size: 10px;
     font-weight: normal;
     color: #777;
 }
 table#chat_window td.call span.call{
     color: #00A;
+    cursor: pointer;
+}
+table#chat_window td.call span.name{
+    font-size: 14px;
+    color: #555;
+    font-weight: normal;
+    cursor: pointer;
 }
 table#chat_window tr.admin td.call span.call{
     color: #A00;
@@ -795,6 +814,31 @@ input#button_save_all{
     background-color: #008000;
     color: #fff;
 }
+
+table#log_setup{
+    width: 80%;
+    margin: 0 auto;
+}
+table#log_setup td{
+    padding: 0;
+}
+
+table#status_setup{
+    width: 80%;
+    margin: 0 auto;
+}
+table#status_setup td{
+    text-align: center;
+    padding: 0;
+    line-height: 1em;
+}
+
+table#status_setup td.col1{
+    text-align: left;
+}
+
+
+
 
 
 table#info_popup{

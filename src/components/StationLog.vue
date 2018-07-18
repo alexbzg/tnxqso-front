@@ -61,7 +61,7 @@ export default {
   },
   computed: {
     dataSlice () {
-      return this.data ? this.data.slice( 0, 50 ) : []
+      return Array.isArray( this.data ) ? this.data.slice( 0, 50 ) : []
     }
   }
 }

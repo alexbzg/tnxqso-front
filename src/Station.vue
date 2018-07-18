@@ -15,7 +15,7 @@
         <td rowspan="2" id="status">
             <div id="status_block_top" 
                 :class="{status_online: statusData.online, status_offline: !statusData.online}">
-                Station <b>{{statusData.online ? 'ONLINE': 'OFFLINE'}}</b>
+                <b>{{statusData.online ? 'ONLINE': 'OFFLINE'}}</b>
             </div>
             <table id="status_block_info" v-if="statusData.online"><tr>
                 <td id="current_loc">
@@ -31,9 +31,9 @@
         <td>
             <router-link to="/info" tag="div" id="tab_info" class="tab" 
                 v-if="enable.stationInfo">Info</router-link>
-            <router-link to="/news" tag="div" id="tab_news" class="tab" 
+            <!--router-link to="/news" tag="div" id="tab_news" class="tab" 
                 v-if="enable.news" :class="{updated_tab: tabsUnread.news}">
-                News</router-link>
+                News</router-link-->
             <router-link to="/log" tag="div" id="tab_log" class="tab" 
                 v-if="enable.log" :class="{updated_tab: tabsUnread.log}">Online log</router-link>
             <router-link to="/map" tag="div" id="tab_map" class="tab" 
@@ -81,7 +81,7 @@ const tabs = {
   log: { service: logService, interval: 60000 },
   chat: { service: chatService, interval: 5000 }
 }
-const onlineInt = 300
+const onlineInt = 150
 const userActivityPostInt = 60 * 1000
 const statusUpdateInt = 60 * 1000
 

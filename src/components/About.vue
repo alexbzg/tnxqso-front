@@ -6,7 +6,7 @@
         </div>
         <p>Сайт TNXQSO.com сделан для организации информационного сопровождения радиолюбительских экспедиций и специальных станций.  Регистрация на сайте нужна только для управления информационными службами сопровождения своей радиоэкспедиции/станции. Пользование всеми службами сайта бесплатно.</p>
         <br/>
-        <p><b><span style="color: #c00;">The website is in the "Public Beta" mode! Some errors are possible.<br/>Сайт работает в режиме бета-тестирования! Возможны ошибки в работе.</span></b></p>
+        <!-- <p><b><span style="color: #c00;">The website is in the "Public Beta" mode! Some errors are possible.<br/>Сайт работает в режиме бета-тестирования! Возможны ошибки в работе.</span></b></p> -->
         <br/>
         <h4><u>The configuration for your log broadcasting</u></h4>
         <p><img src="/static/images/about_log.jpg" class="intext"></p>

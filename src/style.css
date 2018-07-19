@@ -367,6 +367,23 @@ max-width: 900px;
 
 /*              O N L I N E   L O G             */
 
+
+
+#log #no_net{
+    width: 900px;
+    margin: 20px auto 0 auto;
+    padding: 10px;
+    text-align: center;
+    color: #fff;
+    background-color: #ff4949;
+    box-shadow: 3px 3px 6px rgba(0,0,0,0.3); /* Параметры тени */
+}
+#log #no_net span{
+    color: #fafbb8;
+}
+
+
+
 #call_search{
     margin: 20px 0;
     text-align: center;
@@ -403,8 +420,9 @@ table#log td{
     line-height: 1em;
     color: #333;
 }
-table#log td.date, table#log td.rst{ 
-    
+table#log td.time span{ 
+    font-size: 12px;
+    line-height: 12px;
 }
 table#log td.mycall{ 
     font-weight: bold;
@@ -419,10 +437,11 @@ table#log td.urcall{
     font-size: 16px;
 }
 table#log td.head{ 
-    background-color: #f5f5f5;
+    background-color: #aaa;
+    color: #fff;
 }
 table#log tr.new_qso{ 
-    background-color: #DFFAFD;
+    background-color: #e3f9e3;
 }
 
 #refresh_time{
@@ -681,7 +700,7 @@ table#chat_window td.call{
 table#chat_window td.call span.date_time{
     font-size: 10px;
     font-weight: normal;
-    color: #777;
+    color: #ccc;
 }
 table#chat_window td.call span.call{
     color: #00A;
@@ -689,7 +708,7 @@ table#chat_window td.call span.call{
 }
 table#chat_window td.call span.name{
     font-size: 14px;
-    color: #555;
+    color: #333;
     font-weight: normal;
     cursor: pointer;
 }

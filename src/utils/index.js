@@ -38,4 +38,8 @@ function loadScript (url) {
   })
 }
 
-export { parseCallsigns, loadScript, validateEmail }
+function replace0 (str) {
+  return str === null ? null : str.replace( /0/g, '\u00D8' )
+}
+
+export { parseCallsigns, loadScript, validateEmail, replace0 }

@@ -1,6 +1,7 @@
 <template>
     <div id="log">
         <div id="refresh_time">Auto refresh<br/><b>1 min</b></div>
+        <div id="no_net" v-if="!statusOnline">There is no Internet connection to the station. <span>The data will be updated after the connection is restored.</span><br/>Со станцией нет Интернет-соединения. <span>Данные будут обновлены после восстановления соединения.</span></div>
         <div id="call_search">
             Callsign: 
             <input type="text" id="input_call" v-model="searchValue"> 
@@ -37,7 +38,7 @@ const logSearchValueStorageKey = 'logSearchValue'
 export default {
   mixins: [tabMixin],
   name: 'StationLog',
-  props: ['stationSettings'],
+  props: ['stationSettings', 'statusOnline'],
   components: { LogTable },
   data () {
     return {

@@ -54,7 +54,7 @@
     </tr></table>
         <div class="list">
             <router-view :station-settings="stationSettings" :user="user" :chatUser="chatUser"
-            :status-service="statusService"></router-view>
+            :status-service="statusService" :status-online="statusData.online"></router-view>
         </div>
     </div>
 
@@ -66,7 +66,6 @@ import * as moment from 'moment'
 import './style.css'
 import stationSettings from './station-settings-service'
 import clusterService from './cluster-service'
-import newsService from './news-service'
 import chatService from './chat-service'
 import statusService from './status-service'
 import logService from './log-service'
@@ -77,13 +76,12 @@ const chatUserStorageKey = 'chatUser'
 const tabsReadStoragePfx = 'stationTabsRead_'
 const tabs = {
   cluster: { service: clusterService, interval: 60000 },
-  news: { service: newsService, interval: 60000 },
   log: { service: logService, interval: 60000 },
   chat: { service: chatService, interval: 5000 }
 }
 const onlineInt = 150
-const userActivityPostInt = 60 * 1000
-const statusUpdateInt = 60 * 1000
+const userActivityPostInt = 60 * 1000 * 5
+const statusUpdateInt = 60 * 1000 * 5
 
 export default {
   name: 'station',

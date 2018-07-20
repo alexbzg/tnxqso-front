@@ -441,7 +441,7 @@ table#log td.head{
     color: #fff;
 }
 table#log tr.new_qso{ 
-    background-color: #eff9ef;
+    background-color: #e3f9e3;
 }
 
 #refresh_time{
@@ -535,12 +535,13 @@ table#cluster td.mode{
     font-size: 12px;
     text-align: center;
 }
-table#cluster td.call{ 
+table#cluster td.call, table#cluster td.call a{ 
     width: 80px;
     font-weight: bold;
     color: #555;
+    text-decoration: none;
 }
-table#cluster tr.highlight td.call{ 
+table#cluster tr.highlight td.call, table#cluster tr.highlight td.call a{ 
     color: #900;
 }
 table#cluster tr.highlight{ 
@@ -594,39 +595,45 @@ table#cluster td.spotter{
 table#message_form{
     width: 1010px;
     padding: 0px;
-    margin: 20px 0 0 15px;
+    margin: 20px 0 0 10px;
     border: none;
     border-collapse: collapse;
     text-align: center;
 }
-table#message_form td{
+table#message_form tr, table#message_form td{
     padding: 0;
-    margin: 0;
 }
 table#message_form td.note{
     font-size: 12px;
     vertical-align: top;
-    color: #777;
+    color: #999;
     line-height: 12px;
 }
 table#message_form input#your_call, table#message_form input#your_name{
     width: 130px;
     font-weight: bold;
     font-size: 18px;
-    padding: 1px;
+    padding: 3px;
     margin: 0 10px;
     border: 1px solid #999;
 }
+table#message_form input#your_call{
+    color: #009;
+}
+table#message_form input#your_name{
+    font-size: 16px;
+    font-weight: normal;
+}
 table#message_form input#message_text{
-    width: 500px;
+    width: 600px;
     text-align: left;
     border: 1px solid #999;
     font-size: 16px;
-    padding: 1px;
+    padding: 3px;
 }
 table#message_form button{
-    width: 130px;
-    padding: 1px;
+    width: 50px;
+    padding: 3px;
 }
 
 

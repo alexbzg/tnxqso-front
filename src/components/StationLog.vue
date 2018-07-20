@@ -1,7 +1,7 @@
 <template>
     <div id="log">
         <div id="refresh_time">Auto refresh<br/><b>1 min</b></div>
-        <div id="no_net" v-if="!statusOnline">There is no Internet connection to the station. <span>The data will be updated after the connection is restored.</span><br/>Со станцией нет Интернет-соединения. <span>Данные будут обновлены после восстановления соединения.</span></div>
+        <div id="no_net" v-if="stationActive && !statusOnline">There is no Internet connection to the station. <span>The data will be updated after the connection is restored.</span></div>
         <div id="call_search">
             Callsign: 
             <input type="text" id="input_call" v-model="searchValue"> 
@@ -29,11 +29,14 @@
 </template>
 
 <script>
+import * as moment from 'moment'
+
 import tabMixin from '../station-tab-mixin'
 import LogTable from './LogTable'
 import storage from '../storage'
 
 const logSearchValueStorageKey = 'logSearchValue'
+const current = moment()
 
 export default {
   mixins: [tabMixin],
@@ -63,6 +66,11 @@ export default {
   computed: {
     dataSlice () {
       return Array.isArray( this.data ) ? this.data.slice( 0, 50 ) : []
+    },
+    stationActive () {
+      const period = this.stationSettings.activityPeriod
+      return period && period.length === 2 && moment(period[0]) < current &&
+        moment(period[1]).add( 1, 'd' ) > current
     }
   }
 }

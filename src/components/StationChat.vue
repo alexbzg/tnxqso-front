@@ -14,7 +14,7 @@
                         <input type="text" id="message_text" v-model="messageText" @keyup="onTyping"/>
                     </td>
                     <td>
-                        <button @click="buttonClick()" :disabled="!buttonVisible">Post message</button>
+                        <button @click="buttonClick()" :disabled="!buttonVisible">OK</button>
                     </td>
             </tr>
             <tr>
@@ -34,7 +34,8 @@
                 <td class="call">
                     <span class="call" @click="replyTo(msg)">{{msg.user}}</span><br/>
                     <span class="name" @click="replyTo(msg)" v-if="msg.name">{{msg.name}}</span>
-                    <a :href="'http://qrz.com/db/' + msg.user" target="blank" rel="noopener">
+                    <a :href="'http://qrz.com/db/' + msg.user" target="_blank" rel="noopener" 
+                        title="Link to QRZ.com">
                         <img src="/static/images/icon_qrz.png"/>
                     </a>
                     <br/>
@@ -103,7 +104,7 @@ export default {
     }
   },
   mounted () {
-    this.activeUsersInterval = setInterval( this.updateActiveUsers, 1000 )
+    this.activeUsersInterval = setInterval( this.updateActiveUsers, 2000 )
     this.chatUserName = storage.load( chatUserNameStorageKey, 'local' )
   },
   beforeDestroy () {
@@ -116,10 +117,13 @@ export default {
         window.alert( 'You must be logged in as ' + this.chatUserField )
         return
       }
+      if (this.chatUser !== this.chatUserField) {
+        this.$parent.setChatUser( this.chatUserField )
+      }
       if (this.messageText) {
         const vm = this
         storage.save( chatUserNameStorageKey, this.chatUserName, 'local' )
-        this.serverPost( { 'from': this.chatUserField,
+        this.serverPost( { 'from': this.chatUser,
           'text': this.messageText,
           'name': this.chatUserName } )
           .then( function () { vm.messageText = null } )
@@ -195,7 +199,7 @@ export default {
         this.user.siteAdmin
     },
     buttonVisible: function () {
-      return !this.posting && Boolean( this.messageText )
+      return !this.posting && Boolean( this.messageText ) && Boolean( this.chatUserField )
     }
   },
   watch: {

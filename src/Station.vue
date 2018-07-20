@@ -80,8 +80,8 @@ const tabs = {
   chat: { service: chatService, interval: 5000 }
 }
 const onlineInt = 150
-const userActivityPostInt = 60 * 1000 * 5
-const statusUpdateInt = 60 * 1000 * 5
+const userActivityPostInt = 60 * 1000 * 1
+const statusUpdateInt = 60 * 1000 * 1
 
 export default {
   name: 'station',

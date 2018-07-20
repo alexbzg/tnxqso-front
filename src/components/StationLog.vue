@@ -68,7 +68,10 @@ export default {
       return Array.isArray( this.data ) ? this.data.slice( 0, 50 ) : []
     },
     stationActive () {
-      const period = this.stationSettings.activityPeriod
+      if ( !this.stationSettings ) {
+        return false
+      }
+      const period = this.stationSettings.station.activityPeriod
       return period && period.length === 2 && moment(period[0]) < current &&
         moment(period[1]).add( 1, 'd' ) > current
     }

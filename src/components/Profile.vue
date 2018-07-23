@@ -39,17 +39,26 @@
                     </select>
             </div>
 
-            <!--div class="station_setup_block">
+            <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
                     @click="infoPopup='<b>The STATUS tab</b>. <br/><hr/>Вкладка <b>STATUS</b>'">
                 <input type="checkbox" id="checkbox_status" checked disabled/> Show the <b>Status</b> tab on the station's page
                 <div class="block_settings">
                     <u>Take ONLINE/OFFLINE info from</u>: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-                    <input type="radio" name="status_from" checked> QSOclient &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-                    <input type="radio" name="status_from"> GPS Logger &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" name="status_from"> Manual<span id="manual_status">: &nbsp; <input type="radio" name="status_manual" checked><span style="color: green; font-weight: bold;">ONLINE</span> &nbsp; <input type="radio" name="status_from"><span style="color: red; font-weight: bold;">OFFLINE</span></span>
-                    <br/>
-                    <br/>
+                    <input type="radio" name="status_from" v-model="settings.status.get" value="qsoclient"/> 
+                    QSOclient &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                    <input type="radio" name="status_from" v-model="settings.status.get" value="gpslogger"/> 
+                    GPS Logger &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" name="status_from" v-model="settings.status.get" value="gpslogger"/> 
+                    Manual
+                    <span id="manual_status">
+                        : &nbsp; 
+                        <input type="radio" name="status_manual" v-model="status.online" :value="true">
+                        <span style="color: green; font-weight: bold;">ONLINE</span> &nbsp; 
+                        <input type="radio" name="status_manual" v-model="status.online" :value="false"/>
+                        <span style="color: red; font-weight: bold;">OFFLINE</span>
+                    </span>
+                    <br/><br/>
                     <table id="status_setup"><tr>
                     <td class="col1"><u>Show</u></td>
                     <td><input type="radio" name="status_info_from"> Manual setup</td>
@@ -75,7 +84,7 @@
                     </tr></table>
 
                 </div>
-            </div-->
+            </div>
 
 
 
@@ -232,11 +241,12 @@
 </template>
 
 <script>
-import router from './../router'
+import router from '../router'
 import {VueEditor} from 'vue2-editor'
 import DatePicker from 'vue2-datepicker'
-import {parseCallsigns} from './../utils'
-import request from './../request'
+import {parseCallsigns} from '../utils'
+import request from '../request'
+import statusService from '../status-service'
 
 export default {
   name: 'profile',
@@ -252,7 +262,12 @@ export default {
     } )
   },
   mounted () {
+    const vm = this
     this.getTrackFileName()
+    statusService.onUpdate( function () {
+      vm.$set( this, 'status', statusService.data )
+    })
+    statusService.load()
   },
   data () {
     const settings = this.user.settings()
@@ -269,6 +284,7 @@ export default {
       chatAdmins: settings.chatAdmins.join(' '),
       infoPopup: null,
       trackFile: null,
+      status: {},
       editorToolbar: [ [ 'bold', 'italic', 'underline' ],
         [ 'image' ],
         [ { 'indent': '-1' }, { 'indent': '+1' } ],

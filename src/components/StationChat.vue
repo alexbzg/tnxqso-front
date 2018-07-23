@@ -123,7 +123,7 @@ export default {
       if (this.messageText) {
         const vm = this
         storage.save( chatUserNameStorageKey, this.chatUserName, 'local' )
-        this.serverPost( { 'from': this.chatUser,
+        this.serverPost( { 'from': this.chatUserField,
           'text': this.messageText,
           'name': this.chatUserName } )
           .then( function () { vm.messageText = null } )

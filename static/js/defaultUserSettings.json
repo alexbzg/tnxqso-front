@@ -6,6 +6,7 @@
         "info": "",
         "activityPeriod": []
     },
+    "userColumns": [ "", "" ],
     "enable": {
         "news": true,
         "log": true,
@@ -24,10 +25,17 @@
             "WFF": true, 
             "loc": true
         },
-        "userColumns": [
-            { "enabled": false, "column": "" },
-            { "enabled": false, "column": "" }
-        ]
+        "userColumns": [ false, false ]
+    },
+    "status":{
+        "get": "qsoclient",
+        "fields": {
+            "RDA": true,
+            "RAFA": true,
+            "WFF": true,
+            "loc": true
+        },
+        "userFields": [ false, false ]
     },
     "clusterCallsigns": [],
     "clusterHighlight": [],

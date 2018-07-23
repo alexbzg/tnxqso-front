@@ -204,7 +204,7 @@ export default {
     },
     setChatUser ( chatUser ) {
       if (this.chatUser !== chatUser) {
-        this.chatUser = chatUser
+        this.$set( this, 'chatUser', chatUser )
         storage.save( chatUserStorageKey, chatUser, 'local' )
         this.postUserActivity()
       }

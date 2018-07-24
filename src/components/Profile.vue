@@ -44,14 +44,14 @@
                     @click="infoPopup='<b>The STATUS tab</b>. <br/><hr/>Вкладка <b>STATUS</b>'">
                 <input type="checkbox" id="checkbox_status" checked disabled/> Show the <b>Status</b> tab on the station's page
                 <div class="block_settings">
-                    <u>Take ONLINE/OFFLINE info from</u>: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                    <u>Take STATUS info from</u>: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
                     <input type="radio" name="status_from" v-model="settings.status.get" value="qsoclient"/> 
                     QSOclient &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
                     <input type="radio" name="status_from" v-model="settings.status.get" value="gpslogger"/> 
                     GPS Logger &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" name="status_from" v-model="settings.status.get" value="gpslogger"/> 
+                    <input type="radio" name="status_from" v-model="settings.status.get" value="manual"/> 
                     Manual
-                    <span id="manual_status">
+                    <span id="manual_status" v-if="settings.status.get === 'manual'">
                         : &nbsp; 
                         <input type="radio" name="status_manual" v-model="status.online" :value="true">
                         <span style="color: green; font-weight: bold;">ONLINE</span> &nbsp; 
@@ -59,30 +59,68 @@
                         <span style="color: red; font-weight: bold;">OFFLINE</span>
                     </span>
                     <br/><br/>
-                    <table id="status_setup"><tr>
-                    <td class="col1"><u>Show</u></td>
-                    <td><input type="radio" name="status_info_from"> Manual setup</td>
-                    <td><input type="radio" name="status_info_from" checked> Take data from QSOclient</td>
-                    </tr><tr>
-                    <td class="col1"><input type="checkbox" id="checkbox_status_rda" /> RDA</td>
-                    <td><input type="text" id="status_manual_rda" disabled /></td><td></td>
-                    </tr><tr>
-                    <td class="col1"><input type="checkbox" id="checkbox_status_rafa" /> RAFA</td>
-                    <td><input type="text" id="status_manual_rafa" disabled /></td><td></td>
-                    </tr><tr>
-                    <td class="col1"><input type="checkbox" id="checkbox_status_wff" /> WFF</td>
-                    <td><input type="text" id="status_manual_wff" disabled /></td><td></td>
-                    </tr><tr>
-                    <td class="col1"><input type="checkbox" id="checkbox_status_loc" /> Locator</td>
-                    <td><input type="text" id="status_manual_locator" disabled /></td><td></td>
-                    </tr><tr>
-                    <td class="col1"><input type="checkbox" id="checkbox_status_user1" /> <input type="text" id="status_manual_user2" disabled value="User field #1" /></td>
-                    <td><input type="text" id="status_manual_user1" disabled /></td><td></td>
-                    </tr><tr>
-                    <td class="col1"><input type="checkbox" id="checkbox_status_user2" /> <input type="text" id="status_manual_user2" disabled value="User field #2" /></td>
-                    <td><input type="text" id="status_manual_user2" disabled /></td><td></td>
-                    </tr></table>
-
+                    <table id="status_setup">
+                        <tr>
+                            <td class="col1"><u>Show</u></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td class="col1">
+                                <input type="checkbox" id="checkbox_status_rda" 
+                                    v-model="settings.status.fields.RDA"/> RDA
+                            </td>
+                            <td>
+                                <input type="text" id="status_manual_rda" v-model="status.rda" 
+                                    :disabled="settings.status.get === 'qsoclient'" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col1">
+                                <input type="checkbox" id="checkbox_status_rafa" 
+                                    v-model="settings.status.fields.RAFA"/> RAFA
+                            </td>
+                            <td>
+                                <input type="text" id="status_manual_rafa" v-model="status.rafa"
+                                    :disabled="settings.status.get === 'qsoclient'" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col1">
+                                <input type="checkbox" id="checkbox_status_wff" 
+                                    v-model="settings.status.fields.WFF"/> WFF
+                            </td>
+                            <td>
+                                <input type="text" id="status_manual_wff" v-model="status.wff" 
+                                    :disabled="settings.status.get === 'qsoclient'" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col1">
+                                <input type="checkbox" id="checkbox_status_loc" 
+                                    v-model="settings.status.fields.loc"/> Locator
+                            </td>
+                            <td>
+                                <input type="text" id="status_manual_locator" v-model="status.loc" 
+                                    :disabled="settings.status.get === 'qsoclient'" />
+                            </td>
+                        </tr>
+                        <tr v-for="n in $options.USER_FIELDS_COUNT">
+                            <td class="col1">
+                                <input type="checkbox" id="checkbox_status_user1" 
+                                    v-model="settings.status.userFields[n-1]"/> 
+                                <input type="text" id="status_manual_user2" 
+                                    :disabled="settings.status.get === 'qsoclient'" 
+                                    v-model="settings.userFields[n-1]" 
+                                    :placeholder="'User field #' + n"/>
+                            </td>
+                            <td>
+                                <input type="text" id="status_manual_user1" 
+                                    :disabled="settings.status.get === 'qsoclient'" 
+                                    v-model="status.userFields[n-1]"
+                                    />
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
 
@@ -133,10 +171,10 @@
                     <td><input type="checkbox" id="checkbox_log_wff" v-model="settings.log.columns.WFF" /> WFF</td>
                     <td><input type="checkbox" id="checkbox_log_loc" v-model="settings.log.columns.loc" /> Locator</td>
                     <td>
-                    <template v-for="n in 2">
+                    <template v-for="n in $options.USER_FIELDS_COUNT">
                         <input type="checkbox" :id="'user_field' + n" 
                             v-model="settings.log.userColumns[n-1].enabled"/>
-                        User field #{{n}}<br/>
+                        {{settings.userFields[n-1] ? settings.userFields[n-1] : 'User field #' + n}}<br/>
                     </template>
                     </td></tr></table>
                     <input type="button" id="button_clear_log" class="btn" value="Clear online log" 
@@ -241,14 +279,18 @@
 </template>
 
 <script>
+import {USER_FIELDS_COUNT} from '../constants'
+
 import router from '../router'
 import {VueEditor} from 'vue2-editor'
 import DatePicker from 'vue2-datepicker'
-import {parseCallsigns} from '../utils'
+import {parseCallsigns, getStationURL} from '../utils'
 import request from '../request'
 import statusService from '../status-service'
+import trackService from '../track-service'
 
 export default {
+  USER_FIELDS_COUNT: USER_FIELDS_COUNT,
   name: 'profile',
   props: ['user'],
   components: {
@@ -263,11 +305,18 @@ export default {
   },
   mounted () {
     const vm = this
-    this.getTrackFileName()
     statusService.onUpdate( function () {
-      vm.$set( this, 'status', statusService.data )
+      if (Object.keys(statusService.data).length !== 0) {
+        for ( const field in vm.status ) {
+          vm.$set( vm.status, field, field in statusService.data ? statusService.data[field] : null )
+        }
+      }
     })
     statusService.load()
+    trackService.onUpdate( function () {
+      vm.trackFile = trackService.data.filename
+    })
+    trackService.load()
   },
   data () {
     const settings = this.user.settings()
@@ -275,6 +324,10 @@ export default {
       settings.station.callsign = this.user.stationCallsign.toUpperCase()
     } else {
       settings.station.callsign = this.user.callsign.toUpperCase()
+    }
+    const userFields = []
+    for ( let c = 0; c < USER_FIELDS_COUNT; c++ ) {
+      userFields.push( null )
     }
     return {
       settings: settings,
@@ -284,7 +337,14 @@ export default {
       chatAdmins: settings.chatAdmins.join(' '),
       infoPopup: null,
       trackFile: null,
-      status: {},
+      status: {
+        rda: null,
+        rafa: null,
+        wff: null,
+        loc: null,
+        userFields: userFields,
+        online: false
+      },
       editorToolbar: [ [ 'bold', 'italic', 'underline' ],
         [ 'image' ],
         [ { 'indent': '-1' }, { 'indent': '+1' } ],
@@ -306,11 +366,7 @@ export default {
 
   computed: {
     stationLink: function () {
-      const l = window.location
-      return this.settings.station.callsign
-        ? ( l.protocol + '//' + l.host + '/' +
-          this.settings.station.callsign.replace( /\//, '-' ).toLowerCase() )
-        : null
+      return getStationURL(this.settings.station.callsign)
     }
   },
   methods: {
@@ -337,6 +393,10 @@ export default {
           window.alert( 'Your settings were saved.' )
           if (clearAll) {
             vm.trackFile = null
+          } else {
+            if ( vm.settings.status.get !== 'qsoclient' ) {
+              vm.user.serverPost( 'location', vm.status )
+            }
           }
         })
     },
@@ -359,20 +419,6 @@ export default {
           })
       }
     },
-    getTrackFileName () {
-      let scs = this.user.stationCallsign
-      if (scs) {
-        scs = scs.replace( /\//, '-' ).toLowerCase()
-        const vm = this
-        request.get( '/static/stations/' + scs + '/track.json' )
-          .then( function ( r ) {
-            vm.trackFile = r.data.filename
-          })
-          .catch( function () {
-            vm.trackFile = null
-          })
-      }
-    },
     uploadTrack (e) {
       const files = e.target.files || e.dataTransfer.files
       const el = e.target
@@ -387,7 +433,7 @@ export default {
           } )
             .then( function () {
               window.alert( 'Your route file was uploaded successfully.' )
-              vm.getTrackFileName()
+              trackService.load()
             })
             .finally( function () {
               el.value = ''
@@ -421,7 +467,6 @@ export default {
         const vm = this
         request.get( '/static/js/defaultUserSettings.json' )
           .then( function (response) {
-            console.log( response.data )
             vm.settings = response.data
             vm.chatAdmins = ''
             vm.clusterCallsigns = ''

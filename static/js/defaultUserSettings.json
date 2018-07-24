@@ -6,7 +6,7 @@
         "info": "",
         "activityPeriod": []
     },
-    "userColumns": [ "", "" ],
+    "userFields": [ null, null ],
     "enable": {
         "news": true,
         "log": true,

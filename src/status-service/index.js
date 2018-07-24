@@ -1,6 +1,6 @@
 import dataServiceFactory from '../data-service-factory'
 
-let s = dataServiceFactory()
+const s = dataServiceFactory()
 
 s.url = 'status.json'
 s.eventName = 'status-changed'

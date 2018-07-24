@@ -1,6 +1,12 @@
 import request from '../request'
 import Vue from 'vue'
 
+let dataServiceUrlPrefix = ''
+
+export function setDataServiceUrlPrefix (val) {
+  dataServiceUrlPrefix = val
+}
+
 export default function () {
   let bus = new Vue({})
   let s = { lastModified: null,
@@ -21,7 +27,7 @@ export default function () {
   }
 
   function load () {
-    return request.get( s.url )
+    return request.get( dataServiceUrlPrefix + s.url )
       .then(loadComplete)
 
     function loadComplete (response) {

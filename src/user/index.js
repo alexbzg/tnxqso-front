@@ -2,6 +2,8 @@ import storage from '../storage'
 import request from '../request'
 import Vue from 'vue'
 
+import {setDataServiceUrlPrefix} from '../data-service-factory'
+
 var _user = {}
 
 function userInit () {
@@ -41,6 +43,11 @@ const u = {
       ? _user.settings.station.callsign : false )
     Vue.set( this, 'siteAdmin', Boolean( _user.siteAdmin ) )
     Vue.set( this, 'email', _user.email )
+    if ( _user.settings.station.callsign ) {
+      let scs = _user.settings.station.callsign
+      scs = scs.replace( /\//, '-' ).toLowerCase()
+      setDataServiceUrlPrefix( '/static/stations/' + scs + '/' )
+    }
   },
 
   logout () {

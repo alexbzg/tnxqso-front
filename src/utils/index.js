@@ -42,4 +42,10 @@ function replace0 (str) {
   return str === null ? null : str.replace( /0/g, '\u00D8' )
 }
 
-export { parseCallsigns, loadScript, validateEmail, replace0 }
+function getStationURL (callsign) {
+  const l = window.location
+  return callsign ? ( l.protocol + '//' + l.host + '/' +
+    callsign.replace( /\//, '-' ).toLowerCase() ) : null
+}
+
+export { parseCallsigns, loadScript, validateEmail, replace0, getStationURL }

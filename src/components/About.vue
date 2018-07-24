@@ -8,14 +8,13 @@
         <br/>
         <!-- <p><b><span style="color: #c00;">The website is in the "Public Beta" mode! Some errors are possible.<br/>Сайт работает в режиме бета-тестирования! Возможны ошибки в работе.</span></b></p> -->
         <br/>
-        <h4><u>The configuration for your log broadcasting</u></h4>
+        <h4>The configuration for your log broadcasting</h4>
         <p><img src="/static/images/about_log.jpg" class="intext"></p>
-        <br/><br/>
-        <h4><u>Configurations for the broadcasting of your GPS coordinates</u></h4>
+        <br/><br/><br/>
+        <h4>Configurations for the broadcasting of your GPS coordinates</h4>
         <p><br>
-            <img src="/static/images/about_gps1.jpg" class="intext"><br/><br/>
-            <b>OR</b><br/><br/>
-            <img src="/static/images/about_gps2.jpg" class="intext">
+            <img src="/static/images/about_gps0.jpg" class="intext"><br/><br/>
+            <img src="/static/images/about_gps1.jpg" class="intext">
         </p>
     </div>
 </template>

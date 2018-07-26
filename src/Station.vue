@@ -20,9 +20,23 @@
             <table id="status_block_info" v-if="statusData.online"><tr>
                 <td id="current_loc">
                     <span>{{statusData.date}}  {{statusData.year}} {{statusData.time}}</span><br/>
-                    <template v-if="statusData.rda">RDA&nbsp;<b>{{statusData.rda}}</b><br/></template>
-                    <template v-if="statusData.rafa">RAFA&nbsp;<b>{{statusData.rafa}}</b><br/></template>
-                    <template v-if="statusData.loc"><b>{{statusData.loc}}</b></template>
+                    <template v-if="stationSettings && stationSettings.status.fields.RDA && statusData.rda">
+                        RDA&nbsp;<b>{{statusData.rda}}</b><br/>
+                    </template>
+                    <template v-if="stationSettings && stationSettings.status.fields.RAFA && statusData.rafa">
+                        RAFA&nbsp;<b>{{statusData.rafa}}</b><br/>
+                    </template>
+                    <template v-if="stationSettings && stationSettings.status.fields.WFF && statusData.wff">
+                        WFF&nbsp;<b>{{statusData.wff}}</b><br/>
+                    </template>
+                    <template v-if="stationSettings && stationSettings.status.fields.loc && statusData.loc">
+                        <b>{{statusData.loc}}</b><br/>
+                    </template>
+                    <template v-for="n in $options.USER_FIELDS_COUNT" 
+                        v-if="stationSettings && stationSettings.status.userFields[n-1] && 
+                            statusData.userFields[n-1]">
+                        {{stationSettings.userFields[n-1]}}&nbsp;<b>{{statusData.userFields[n-1]}}</b><br/>
+                    </template>
                 </td>
             </tr></table>
         </td>
@@ -61,6 +75,8 @@
 </template>
 
 <script>
+import {USER_FIELDS_COUNT} from './constants'
+
 import * as moment from 'moment'
 
 import './style.css'
@@ -79,11 +95,12 @@ const tabs = {
   log: { service: logService, interval: 60000 },
   chat: { service: chatService, interval: 5000 }
 }
-const onlineInt = 150
+const onlineInt = { qsoclient: 150, gpslogger: 300 }
 const userActivityPostInt = 60 * 1000 * 1
 const statusUpdateInt = 60 * 1000 * 1
 
 export default {
+  USER_FIELDS_COUNT: USER_FIELDS_COUNT,
   name: 'station',
   data () {
     const chatUser = storage.load( chatUserStorageKey, 'local' ) || user.callsign
@@ -210,7 +227,11 @@ export default {
       }
     },
     updateOnline () {
-      const online = ( ( Date.now() / 1000 ) - this.statusData.ts ) < onlineInt
+      if (!this.stationSettings) {
+        return
+      }
+      const online = this.stationSettings.status.get === 'manual' ? this.statusData.online
+        : ( ( Date.now() / 1000 ) - this.statusData.ts ) < onlineInt[this.stationSettings.status.get]
       if ( online !== this.statusData.online ) {
         this.$set( this.statusData, 'online', online )
       }

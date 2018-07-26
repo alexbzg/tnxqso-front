@@ -855,7 +855,7 @@ table#log_setup td{
 }
 
 table#status_setup{
-    width: 80%;
+    width: 50%;
     margin: 0 auto;
 }
 table#status_setup td{

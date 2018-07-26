@@ -16,11 +16,12 @@
                 </a>
                 <br/>
                 <a href="https://n1mm.hamdocs.com/tiki-index.php" target="_blank" rel="noopener" class="blue">
-                    <u><b>N1MM Log</b></u> website.</a> &nbsp; 
+                    <u><b>N1MM Log</b></u></a> website. &nbsp; 
                 <a href="http://tnxqso.com/static/files/qsoclient.zip" rel="noopener" class="blue">
-                    <u><b>QSOclient</b></u> download.</a>  &nbsp; 
-                <a href="https://play.google.com/store/apps/details?id=com.mendhak.gpslogger" target="_blank" rel="noopener" class="blue">
-                    <u><b>GPS Logger</b></u> at GooglePlay.</a>                
+                    <u><b>QSOclient</b></u></a> download.  &nbsp; 
+                <a href="https://play.google.com/store/apps/details?id=com.jillybunch.shareGPS" target="_blank" rel="noopener" class="blue">
+                    <u><b>Share GPS</b></u></a>,  &nbsp; <a href="https://play.google.com/store/apps/details?id=com.mendhak.gpslogger" target="_blank" rel="noopener" class="blue">
+                    <u><b>GPS Logger</b></u></a> at GooglePlay.                
             </div>
 
             <div class="station_setup_block">
@@ -41,10 +42,10 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='<b>The STATUS tab</b>. <br/><hr/>Вкладка <b>STATUS</b>'">
-                <input type="checkbox" id="checkbox_status" checked disabled/> Show the <b>Status</b> tab on the station's page
+                    @click="infoPopup='<b>The ONLINE/OFFLINE tab</b>. <br/><hr/>Вкладка <b>ONLINE/OFFLINE</b>'">
+                <input type="checkbox" id="checkbox_status" checked disabled/> Show the <b>ONLINE/OFFLINE</b> tab on the station's page
                 <div class="block_settings">
-                    <u>Take STATUS info from</u>: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                    <u>Take ONLINE/OFFLINE status from</u>: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
                     <input type="radio" name="status_from" v-model="settings.status.get" value="qsoclient"/> 
                     QSOclient &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
                     <input type="radio" name="status_from" v-model="settings.status.get" value="gpslogger"/> 
@@ -81,7 +82,8 @@
                             </td>
                             <td>
                                 <input type="text" id="status_manual_rafa" v-model="status.rafa"
-                                    :disabled="settings.status.get === 'qsoclient'" />
+                                    :disabled="settings.status.get === 'qsoclient' || 
+                                    settings.status.get === 'gpslogger' " />
                             </td>
                         </tr>
                         <tr>
@@ -101,7 +103,8 @@
                             </td>
                             <td>
                                 <input type="text" id="status_manual_locator" v-model="status.loc" 
-                                    :disabled="settings.status.get === 'qsoclient'" />
+                                    :disabled="settings.status.get === 'qsoclient' || 
+                                    settings.status.get === 'gpslogger'" />
                             </td>
                         </tr>
                         <tr v-for="n in $options.USER_FIELDS_COUNT">
@@ -164,19 +167,32 @@
                     Show the <b>Stats</b> tab on the station's page 
                 </template-->
                 <div class="block_settings" v-if="settings.enable.log">
-                    
-                    <table id="log_setup"><tr><td><u>Show in the log</u>:</td>
-                    <td><input type="checkbox" id="checkbox_log_rda" v-model="settings.log.columns.RDA" /> RDA</td>
-                    <td><input type="checkbox" id="checkbox_log_rafa" v-model="settings.log.columns.RAFA" /> RAFA</td>
-                    <td><input type="checkbox" id="checkbox_log_wff" v-model="settings.log.columns.WFF" /> WFF</td>
-                    <td><input type="checkbox" id="checkbox_log_loc" v-model="settings.log.columns.loc" /> Locator</td>
-                    <td>
-                    <template v-for="n in $options.USER_FIELDS_COUNT">
-                        <input type="checkbox" :id="'user_field' + n" 
-                            v-model="settings.log.userColumns[n-1].enabled"/>
-                        {{settings.userFields[n-1] ? settings.userFields[n-1] : 'User field #' + n}}<br/>
-                    </template>
-                    </td></tr></table>
+                    <table id="log_setup">
+                        <tr>
+                            <td><u>Show in the log</u>:</td>
+                            <td>
+                                <input type="checkbox" id="checkbox_log_rda" v-model="settings.log.columns.RDA" />
+                                RDA
+                            </td>
+                            <td>
+                                <input type="checkbox" id="checkbox_log_rafa" v-model="settings.log.columns.RAFA" />
+                                RAFA
+                            </td>
+                            <td>
+                                <input type="checkbox" id="checkbox_log_wff" v-model="settings.log.columns.WFF" />
+                                WFF
+                            </td>
+                            <td>
+                                <input type="checkbox" id="checkbox_log_loc" v-model="settings.log.columns.loc" />
+                                Locator
+                            </td>
+                            <td v-for="n in $options.USER_FIELDS_COUNT">
+                                <input type="checkbox" :id="'user_field' + n" 
+                                    v-model="settings.log.userColumns[n-1].enabled"/>
+                                {{settings.userFields[n-1] ? settings.userFields[n-1] : 'User field #' + n}}<br/>
+                            </td>
+                        </tr>
+                    </table>
                     <input type="button" id="button_clear_log" class="btn" value="Clear online log" 
                         :disabled="!user.stationCallsign"
                         @click="clearLog()"/>
@@ -308,7 +324,16 @@ export default {
     statusService.onUpdate( function () {
       if (Object.keys(statusService.data).length !== 0) {
         for ( const field in vm.status ) {
-          vm.$set( vm.status, field, field in statusService.data ? statusService.data[field] : null )
+          if ( field in statusService.data ) {
+            vm.$set( vm.status, field, statusService.data[field] )
+          } else if ( Array.isArray( vm.status[field] ) ) {
+            const l = vm.status[field].length
+            for ( let c = 0; c < l; c++ ) {
+              vm.$set( vm.status[field], c, null )
+            }
+          } else {
+            vm.$set( vm.status, field, null )
+          }
         }
       }
     })
@@ -470,6 +495,10 @@ export default {
             vm.settings = response.data
             vm.chatAdmins = ''
             vm.clusterCallsigns = ''
+          })
+        request.get( '/static/js/defaultStationStatus.json' )
+          .then( function (response) {
+            vm.status = response.data
           })
       }
     }

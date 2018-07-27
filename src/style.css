@@ -847,26 +847,79 @@ input#button_save_all{
 }
 
 table#log_setup{
-    width: 80%;
-    margin: 0 auto;
+    width: 90%;
+    margin: 20px auto;
 }
 table#log_setup td{
     padding: 0;
+}
+table#log_setup td.setting{
+    width: 12%;
 }
 
 table#status_setup{
     width: 50%;
     margin: 0 auto;
+    padding: 0;
+    border-collapse: collapse;
 }
 table#status_setup td{
     text-align: center;
     padding: 0;
     line-height: 1em;
 }
-
 table#status_setup td.col1{
     text-align: left;
 }
+table#status_setup input{
+    padding: 1px 5px;
+}
+
+
+
+table#custom_mark{
+    width: 70%;
+    margin: 40px auto 20px auto;
+    padding: 0;
+    border-collapse: collapse;
+}
+table#custom_mark td{
+    text-align: center;
+    line-height: 1em;
+}
+table#custom_mark td img{
+    padding-top: 5px;
+    cursor: pointer;
+}
+
+table#manual_gps{
+    width: 70%;
+    margin: 30px auto 10px auto;
+    padding: 0;
+    border-collapse: collapse;
+}
+table#manual_gps td{
+    text-align: center;
+}
+table#manual_gps td.note{
+    font-size: 12px;
+    color: #777;
+    line-height: 12px;
+    vertical-align: bottom;
+}
+table#manual_gps input{
+    padding: 1px 5px;
+    text-align: center;
+}
+
+
+
+
+
+
+
+
+
 
 
 

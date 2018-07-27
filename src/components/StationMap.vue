@@ -13,13 +13,15 @@
 </template>
 
 <script>
+import {CURRENT_POSITION_ICON_SIZE} from '../constants'
+
 import trackService from '../track-service'
 import { yandexMap, ymapMarker } from 'vue-yandex-maps'
 const currentMarkerOptions = { preset: 'islands#dotIcon', iconColor: '#ff0000' }
 
 export default {
   name: 'StationMap',
-  props: ['statusService'],
+  props: ['statusService', 'stationSettings'],
   components: { yandexMap, ymapMarker },
   data () {
     return {
@@ -66,13 +68,24 @@ export default {
         if ( dt.speed ) {
           balloon += '<br/> speed: ' + dt.speed.toFixed( 1 ) + ' km/h'
         }
+        if (dt.comments) {
+          balloon += '<br/> ' + dt.comments
+        }
+        let options = currentMarkerOptions
+        if (this.stationSettings && this.stationSettings.currentPositionIcon !== 0) {
+          options = { iconImageHref: '/static/images/icon_map_' +
+            this.stationSettings.currentPositionIcon + '.png',
+            iconLayout: 'default#image',
+            iconImageSize: CURRENT_POSITION_ICON_SIZE
+          }
+        }
         if (this.currentMarker) {
           this.currentMarker.geometry.setCoordinates( dt.location )
           this.currentMarker.properties.set( {balloonContent: balloon} )
+          this.currentMarker.options.set( options )
         } else {
           this.currentMarker = new global.ymaps.Placemark( dt.location,
-            { balloonContent: balloon },
-            currentMarkerOptions )
+            { balloonContent: balloon }, options )
           this.map.geoObjects.add( this.currentMarker )
         }
         this.map.setCenter( dt.location )

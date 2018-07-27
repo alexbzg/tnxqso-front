@@ -44,5 +44,6 @@
     "donate": {
         "text": "", 
         "code": ""
-    }
+    },
+    "currentPostionIcon": 0
 }

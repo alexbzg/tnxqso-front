@@ -20,7 +20,7 @@
                 <a href="http://tnxqso.com/static/files/qsoclient.zip" rel="noopener" class="blue">
                     <u><b>QSOclient</b></u></a> download.  &nbsp; 
                 <a href="https://play.google.com/store/apps/details?id=com.jillybunch.shareGPS" target="_blank" rel="noopener" class="blue">
-                    <u><b>Share GPS</b></u></a>,  &nbsp; <a href="https://play.google.com/store/apps/details?id=com.mendhak.gpslogger" target="_blank" rel="noopener" class="blue">
+                    <u><b>Share GPS</b></u></a> and <a href="https://play.google.com/store/apps/details?id=com.mendhak.gpslogger" target="_blank" rel="noopener" class="blue">
                     <u><b>GPS Logger</b></u></a> at GooglePlay.                
             </div>
 
@@ -42,7 +42,7 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='<b>The ONLINE/OFFLINE tab</b>. <br/><hr/>Вкладка <b>ONLINE/OFFLINE</b>'">
+                    @click="infoPopup='<b>Take status from:</b> - Choose from where we will receive information that the station is ONLINE or OFFLINE.<br/> <b>Manual</b> - manual status setting. <i>(Do not forget to click the Save all info button.) </i><br/><b>Show on this tab:</b> - You can select the data that will be broadcast on this tab.<br/><hr/><b>Take status from:</b> - Выберите откуда будем поступать информация о том, что станция ONLINE или OFFLINE.<br/><b>Manual</b> - ручная установка статуса. <i>(Не забудьте нажать кнопку Save all info.)</i><br/><b>Show on this tab:</b> - Можно выбрать данные, которые будут транслироваться на этой вкладке.'">
                 <input type="checkbox" id="checkbox_status" checked disabled/> Show the <b>ONLINE/OFFLINE</b> tab on the station's page
                 <div class="block_settings">
                     <u>Take ONLINE/OFFLINE status from</u>: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
@@ -62,7 +62,7 @@
                     <br/><br/>
                     <table id="status_setup">
                         <tr>
-                            <td class="col1"><u>Show</u></td>
+                            <td class="col1"><u>Show on this tab:</u></td>
                             <td>&nbsp;</td>
                         </tr>
                         <tr>
@@ -128,6 +128,100 @@
             </div>
 
 
+            <div class="station_setup_block">
+                <a href="/static/html/map.html" target="_blank" rel="noopener">
+                    <img class="icon_info" src="/static/images/icon_info.png" title="Info">
+                </a>
+                <input type="checkbox" id="checkbox_map" v-model="settings.enable.map" /> Show the <b>Map</b> tab on the station's page<br/>
+                <a href="/static/html/map.html" target="_blank" rel="noopener" class="blue">
+                    <b>Info</b>: <u>Route's (geo marker's) creation by using Google Maps</u>
+                </a><br/>
+                <template v-if="settings.enable.map">
+                    <b>Uploaded file</b>: {{trackFile ? trackFile : '...'}}<br/>
+                    <div class="block_settings">
+                        <input type="file" id="fileTrack" style="display:none" @change="uploadTrack">
+                        <label class="btn" for="fileTrack" :disabled="!user.stationCallsign">
+                            Upload KML/KMZ/GPX file with expedition's route or geo marker
+                        </label> &nbsp; 
+                        <input type="button" id="button_clear_track" class="btn" value="Delete file"
+                            v-if="user.stationCallsign && trackFile"
+                            @click="clearTrack()"/><br/>
+
+                        <table id="custom_mark">
+                            <tr>
+                                <td colspan="8"><u>Select a mark for your station on the map</u></td>
+                            </tr>
+                            <tr>
+                                <td v-for="n in $options.CURRENT_POSITION_ICONS_COUNT">
+                                    <img :src="'/static/images/icon_map_' + ( n - 1 ) + '.png'" 
+                                        @click="settings.currentPositionIcon = n - 1"/><br/>
+                                    <input type="radio" v-model="settings.currentPositionIcon" 
+                                        :value="n - 1"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <table id="manual_gps" v-if="settings.status.get === 'manual'">
+                            <tr>
+                                <td colspan="3"><u>Manual setting of your station's coordinates</u></td>
+                            </tr>
+                            <tr>
+                                <td class="note">Latitude</td>
+                                <td class="note">Longitude</td>
+                                <td class="note">Comment</td>
+                            </tr>
+                            <tr>                            
+                                <td><input type="number" v-model="status.location[0]"></td>
+                                <td><input type="number" v-model="status.location[1]"></td>
+                                <td><input type="text" v-model="status.comments"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </template>
+            </div>
+
+
+            <div class="station_setup_block">
+                <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
+                    @click="infoPopup='Mark those columns of the log that will be broadcast to the site. <br/> The names of the user columns and their values can be changed in the QSOclient program or in the ONLINE/OFFLINE tab settings.<br/><hr/>Отметьте те колонки лога, которые будут транслироваться на сайт.<br/>Названия пользовательских колонок изменяются в программе QSOclient или в настройках вкладки ONLINE/OFFLINE.'">
+                <input type="checkbox" id="checkbox_log" v-model="settings.enable.log" />
+                Show the <b>Online log</b> tab on the station's page <br/> 
+                <!--template v-if="settings.enable.log">
+                    <input type="checkbox" id="checkbox_log" v-model="settings.enable.stats"/>
+                    Show the <b>Stats</b> tab on the station's page 
+                </template-->
+                <div class="block_settings" v-if="settings.enable.log">
+                    <table id="log_setup">
+                        <tr>
+                            <td><u>Show in the log</u>:</td>
+                            <td class="setting">
+                                <input type="checkbox" id="checkbox_log_rda" v-model="settings.log.columns.RDA" />
+                                RDA
+                            </td>
+                            <td class="setting">
+                                <input type="checkbox" id="checkbox_log_rafa" v-model="settings.log.columns.RAFA" />
+                                RAFA
+                            </td>
+                            <td class="setting">
+                                <input type="checkbox" id="checkbox_log_wff" v-model="settings.log.columns.WFF" />
+                                WFF
+                            </td>
+                            <td class="setting">
+                                <input type="checkbox" id="checkbox_log_loc" v-model="settings.log.columns.loc" />
+                                Locator
+                            </td>
+                            <td class="setting" v-for="n in $options.USER_FIELDS_COUNT">
+                                <input type="checkbox" :id="'user_field' + n" 
+                                    v-model="settings.log.userColumns[n-1].enabled"/>
+                                {{settings.userFields[n-1] ? settings.userFields[n-1] : 'User field #' + n}}<br/>
+                            </td>
+                        </tr>
+                    </table>
+                    <input type="button" id="button_clear_log" class="btn" value="Clear online log" 
+                        :disabled="!user.stationCallsign"
+                        @click="clearLog()"/>
+                </div>
+            </div>
+
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
@@ -156,71 +250,6 @@
                 </div>
             </div>
 -->
-
-            <div class="station_setup_block">
-                <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='Mark those columns of the log that will be broadcast to the site. <br/> The names of the user columns and their values can be changed in the QSOclient program.<br/><hr/>Отметьте те колонки лога, которые будут транслироваться на сайт.<br/>Названия пользовательских колонок изменяются в программе QSOclient.'">
-                <input type="checkbox" id="checkbox_log" v-model="settings.enable.log" />
-                Show the <b>Online log</b> tab on the station's page <br/> 
-                <!--template v-if="settings.enable.log">
-                    <input type="checkbox" id="checkbox_log" v-model="settings.enable.stats"/>
-                    Show the <b>Stats</b> tab on the station's page 
-                </template-->
-                <div class="block_settings" v-if="settings.enable.log">
-                    <table id="log_setup">
-                        <tr>
-                            <td><u>Show in the log</u>:</td>
-                            <td>
-                                <input type="checkbox" id="checkbox_log_rda" v-model="settings.log.columns.RDA" />
-                                RDA
-                            </td>
-                            <td>
-                                <input type="checkbox" id="checkbox_log_rafa" v-model="settings.log.columns.RAFA" />
-                                RAFA
-                            </td>
-                            <td>
-                                <input type="checkbox" id="checkbox_log_wff" v-model="settings.log.columns.WFF" />
-                                WFF
-                            </td>
-                            <td>
-                                <input type="checkbox" id="checkbox_log_loc" v-model="settings.log.columns.loc" />
-                                Locator
-                            </td>
-                            <td v-for="n in $options.USER_FIELDS_COUNT">
-                                <input type="checkbox" :id="'user_field' + n" 
-                                    v-model="settings.log.userColumns[n-1].enabled"/>
-                                {{settings.userFields[n-1] ? settings.userFields[n-1] : 'User field #' + n}}<br/>
-                            </td>
-                        </tr>
-                    </table>
-                    <input type="button" id="button_clear_log" class="btn" value="Clear online log" 
-                        :disabled="!user.stationCallsign"
-                        @click="clearLog()"/>
-                </div>
-            </div>
-
-
-            <div class="station_setup_block">
-                <a href="/static/html/map.html" target="_blank" rel="noopener">
-                    <img class="icon_info" src="/static/images/icon_info.png" title="Info">
-                </a>
-                <input type="checkbox" id="checkbox_map" v-model="settings.enable.map" /> Show the <b>Map</b> tab on the station's page<br/>
-                <a href="/static/html/map.html" target="_blank" rel="noopener" class="blue">
-                    <b>Info</b>: <u>Route's (geo marker's) creation by using Google Maps</u>
-                </a><br/>
-                <template v-if="settings.enable.map">
-                    <b>Uploaded file</b>: {{trackFile ? trackFile : '...'}}<br/>
-                    <div class="block_settings">
-                        <input type="file" id="fileTrack" style="display:none" @change="uploadTrack">
-                        <label class="btn" for="fileTrack" :disabled="!user.stationCallsign">
-                            Upload KML/KMZ/GPX file with expedition's route or geo marker
-                        </label> &nbsp; 
-                        <input type="button" id="button_clear_track" class="btn" value="Delete file"
-                            v-if="user.stationCallsign && trackFile"
-                            @click="clearTrack()"/><br/>
-                    </div>
-                </template>
-            </div>
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
@@ -295,7 +324,7 @@
 </template>
 
 <script>
-import {USER_FIELDS_COUNT} from '../constants'
+import {USER_FIELDS_COUNT, CURRENT_POSITION_ICONS_COUNT} from '../constants'
 
 import router from '../router'
 import {VueEditor} from 'vue2-editor'
@@ -305,8 +334,13 @@ import request from '../request'
 import statusService from '../status-service'
 import trackService from '../track-service'
 
+const STATUS_FIELDS = [ 'rda', 'rafa', 'wff', 'loc', 'comments' ]
+const STATUS_ARRAY_FIELDS = [ 'userFields', 'location' ]
+const STATUS_BOOL_FIELDS = [ 'online' ]
+
 export default {
   USER_FIELDS_COUNT: USER_FIELDS_COUNT,
+  CURRENT_POSITION_ICONS_COUNT: CURRENT_POSITION_ICONS_COUNT,
   name: 'profile',
   props: ['user'],
   components: {
@@ -322,19 +356,24 @@ export default {
   mounted () {
     const vm = this
     statusService.onUpdate( function () {
-      if (Object.keys(statusService.data).length !== 0) {
-        for ( const field in vm.status ) {
-          if ( field in statusService.data ) {
-            vm.$set( vm.status, field, statusService.data[field] )
-          } else if ( Array.isArray( vm.status[field] ) ) {
-            const l = vm.status[field].length
-            for ( let c = 0; c < l; c++ ) {
-              vm.$set( vm.status[field], c, null )
-            }
+      const data = statusService.data
+      if (Object.keys(data).length !== 0) {
+        STATUS_FIELDS.forEach( f => {
+          vm.$set( vm.status, f, data[f] )
+        })
+        STATUS_ARRAY_FIELDS.forEach( f => {
+          if ( f in data ) {
+            vm.$set( vm.status, f, data[f] )
           } else {
-            vm.$set( vm.status, field, null )
+            const l = vm.status[f].length
+            for ( let c = 0; c < l; c++ ) {
+              vm.$set( vm.status[f], c, null )
+            }
           }
-        }
+        })
+        STATUS_BOOL_FIELDS.forEach( f => {
+          vm.status[f] = Boolean( data[f] )
+        })
       }
     })
     statusService.load()
@@ -368,7 +407,9 @@ export default {
         wff: null,
         loc: null,
         userFields: userFields,
-        online: false
+        online: false,
+        location: [ null, null ],
+        comments: null
       },
       editorToolbar: [ [ 'bold', 'italic', 'underline' ],
         [ 'image' ],
@@ -420,7 +461,16 @@ export default {
             vm.trackFile = null
           } else {
             if ( vm.settings.status.get !== 'qsoclient' ) {
-              vm.user.serverPost( 'location', vm.status )
+              const st = JSON.parse( JSON.stringify( vm.status ) )
+              if ( vm.settings.status.get === 'manual' ) {
+                if ( st.location[0] && st.location[1] ) {
+                  st.location[0] = Number( st.location[0] )
+                  st.location[1] = Number( st.location[1] )
+                } else {
+                  st.location = null
+                }
+              }
+              vm.user.serverPost( 'location', st )
             }
           }
         })

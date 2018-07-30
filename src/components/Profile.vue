@@ -137,19 +137,9 @@
                     <b>Info</b>: <u>Route's (geo marker's) creation by using Google Maps</u>
                 </a><br/>
                 <template v-if="settings.enable.map">
-                    <b>Uploaded file</b>: {{trackFile ? trackFile : '...'}}<br/>
-                    <div class="block_settings">
-                        <input type="file" id="fileTrack" style="display:none" @change="uploadTrack">
-                        <label class="btn" for="fileTrack" :disabled="!user.stationCallsign">
-                            Upload KML/KMZ/GPX file with expedition's route or geo marker
-                        </label> &nbsp; 
-                        <input type="button" id="button_clear_track" class="btn" value="Delete file"
-                            v-if="user.stationCallsign && trackFile"
-                            @click="clearTrack()"/><br/>
-
                         <table id="custom_mark">
                             <tr>
-                                <td colspan="8"><u>Select a mark for your station on the map</u></td>
+                                <td colspan="10"><u>Select a mark for your station on the map</u></td>
                             </tr>
                             <tr>
                                 <td v-for="n in $options.CURRENT_POSITION_ICONS_COUNT">
@@ -160,7 +150,7 @@
                                 </td>
                             </tr>
                         </table>
-                        <table id="manual_gps" v-if="settings.status.get === 'manual'">
+                        <table id="manual_gps">
                             <tr>
                                 <td colspan="3"><u>Manual setting of your station's coordinates</u></td>
                             </tr>
@@ -174,7 +164,20 @@
                                 <td><input type="number" v-model="status.location[1]"></td>
                                 <td><input type="text" v-model="status.comments"></td>
                             </tr>
+                            <tr>                            
+                                <td class="note" colspan="3">Coordinates format: &nbsp;&nbsp;&nbsp; 12,345678</td>
+                            </tr>
                         </table>
+
+                    <b>Uploaded file</b>: {{trackFile ? trackFile : '...'}}<br/>
+                    <div class="block_settings">
+                        <input type="file" id="fileTrack" style="display:none" @change="uploadTrack">
+                        <label class="btn" for="fileTrack" :disabled="!user.stationCallsign">
+                            Upload KML/KMZ/GPX file with expedition's route or geo marker
+                        </label> &nbsp; 
+                        <input type="button" id="button_clear_track" class="btn" value="Delete file"
+                            v-if="user.stationCallsign && trackFile"
+                            @click="clearTrack()"/><br/><br/>
                     </div>
                 </template>
             </div>

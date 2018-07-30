@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import {CURRENT_POSITION_ICON_SIZE} from '../constants'
+import {CURRENT_POSITION_ICONS_SIZE, CURRENT_POSITION_ICONS_OFFSET} from '../constants'
 
 import trackService from '../track-service'
 import { yandexMap, ymapMarker } from 'vue-yandex-maps'
@@ -76,7 +76,8 @@ export default {
           options = { iconImageHref: '/static/images/icon_map_' +
             this.stationSettings.currentPositionIcon + '.png',
             iconLayout: 'default#image',
-            iconImageSize: CURRENT_POSITION_ICON_SIZE
+            iconImageSize: CURRENT_POSITION_ICONS_SIZE,
+            iconImageOffset: CURRENT_POSITION_ICONS_OFFSET
           }
         }
         if (this.currentMarker) {

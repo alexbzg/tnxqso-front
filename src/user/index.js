@@ -24,6 +24,19 @@ function toStorage () {
 
 const u = {
 
+  useDataServiceUrlPrefix: false,
+
+  switchDataServiceUrlPrefix ( on ) {
+    this.useDataServiceUrlPrefix = on
+    if (on && _user.settings.station.callsign ) {
+      let scs = _user.settings.station.callsign
+      scs = scs.replace( /\//, '-' ).toLowerCase()
+      setDataServiceUrlPrefix( '/static/stations/' + scs + '/' )
+    } else {
+      setDataServiceUrlPrefix( '' )
+    }
+  },
+
   login ( data, remember ) {
     let user = this
     return request.post( 'login', data )
@@ -43,11 +56,7 @@ const u = {
       ? _user.settings.station.callsign : false )
     Vue.set( this, 'siteAdmin', Boolean( _user.siteAdmin ) )
     Vue.set( this, 'email', _user.email )
-    if ( _user.settings.station.callsign ) {
-      let scs = _user.settings.station.callsign
-      scs = scs.replace( /\//, '-' ).toLowerCase()
-      setDataServiceUrlPrefix( '/static/stations/' + scs + '/' )
-    }
+    this.switchDataServiceUrlPrefix( this.useDataServiceUrlPrefix )
   },
 
   logout () {

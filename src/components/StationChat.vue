@@ -112,6 +112,9 @@ export default {
   },
   methods: {
     buttonClick () {
+      if (!this.buttonVisible) {
+        return
+      }
       if (this.adminCS( this.chatUserField ) &&
         this.chatUserField !== this.user.callsign ) {
         window.alert( 'You must be logged in as ' + this.chatUserField )
@@ -170,7 +173,14 @@ export default {
         this.chatUserField = this.chatUserField.toUpperCase().trim()
       }
     },
-    onTyping: _.debounce( function () {
+    onTyping (event) {
+      if (event.key === 'Enter') {
+        this.buttonClick()
+      } else {
+        this.postTyping()
+      }
+    },
+    postTyping: _.debounce( function () {
       this.$parent.postUserActivity( true )
     }, 5000, { 'leading': true, 'trailing': false } ),
     msgMouseOver ( state, e ) {

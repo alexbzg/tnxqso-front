@@ -34,6 +34,18 @@ input, button, textarea, select{
     color: #333;
     border: 1px solid #ccc;
 }
+.btn4{
+    margin: 0;
+    padding: 5px 15px;
+    background-color: #4469E1;
+    color: #fff;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2); /* Параметры тени */
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;    
+}
+
+
 
  .ng-hide{
     display: none;
@@ -126,23 +138,20 @@ table#status_block_info td{
     text-align: center;
     vertical-align: middle;
 }
-table#status_block_info td#current_op{
-    width: 60px;
-    padding: 5px 0;
+table#status_block_info td#current_loc{
+    padding: 0 0 5px 0;
 }
-table#status_block_info td#current_op img{
-    width: 50px;
-    height: 50px;
-    border-radius: 25px;
-    border: 1px solid #4ab54a;
-    padding: 1px;
-}
-#status_block_info span{
+
+table#status_block_info span{
     display: inline-block;
     margin-bottom: 5px;
     font-size: 10px;
     color: #777;
 }
+
+
+
+
 
 
 table.tabs td#logo{
@@ -376,15 +385,7 @@ max-width: 900px;
 
 #log #no_net{
     width: 900px;
-    margin: 20px auto 0 auto;
-    padding: 10px;
-    text-align: center;
-    color: #fff;
-    background-color: #ff4949;
-    box-shadow: 3px 3px 6px rgba(0,0,0,0.3); /* Параметры тени */
-}
-#log #no_net span{
-    color: #fafbb8;
+    margin-top: 50px;
 }
 
 
@@ -516,6 +517,22 @@ table#log tr.new_qso{
 #cluster{
     font-size: 12px;
 }
+#view_send_form{
+    width: 1150px;
+    margin: 0 auto;
+    text-align: right;
+    position: absolute;
+}
+#view_send_form input{
+    margin: 12px 0 0 0;
+    padding: 5px 15px;
+    background-color: #4469E1;
+    color: #fff;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2); /* Параметры тени */
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
 
 
 table#send_spot_layout { 
@@ -538,13 +555,15 @@ table#send_spot_layout td input#spot_call{
     font-weight: bold;
 }
 table#send_spot_layout td input#spot_band{ 
-    width: 50px;
+    width: 70px;
 }
 table#send_spot_layout td input#spot_text{ 
     width: 300px;
+    color: #777;
 }
 table#send_spot_layout td input#spot_spotter{ 
     width: 100px;
+    color: #777;
 }
 
 table#send_spot_layout td input.add_text_btn{
@@ -562,13 +581,32 @@ table#send_spot_layout td input.add_text_btn{
 }
 
 
+table#send_spot_layout td input#button_send_spot{
+    padding: 5px 15px;
+}
 
 
-
-
-
-
-
+#spam{
+    width: 600px;
+}
+.warning{
+    font-size: 16px;
+    margin: 0px auto 50px auto;
+    padding: 5px;
+    text-align: center;
+    background-color: #ff4949;
+    color: #fff;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2); /* Параметры тени */
+}
+#warning_border{
+    margin: 0px;
+    padding: 10px;
+    border: 1px solid #fafbb8;
+}
+#warning_border span{
+    font-weight: bold;
+    color: #fafbb8;
+}
 
 
 
@@ -613,57 +651,6 @@ table#cluster td.text{
     font-size: 12px;
 }
 table#cluster td.spotter{ 
-    width: 100px;
-    color: #777;
-    font-size: 12px;
-    padding: 5px;
-}
-
-
-
-
-
-table#cluster_temp { 
-    border-collapse: collapse; 
-    width: 800px;
-    margin: 20px auto 5px auto;    
-}
-table#cluster_temp td{ 
-    padding: 7px 10px;
-    font-size: 16px;
-    text-align: left;
-    vertical-align: middle;
-    border: 1px solid #ddd;
-    line-height: 1em;
-}
-table#cluster_temp td.time{ 
-    width: 50px;
-}
-table#cluster_temp td.band{ 
-    width: 60px;
-}
-table#cluster_temp td.mode{ 
-    width: 30px;
-    font-size: 12px;
-    text-align: center;
-}
-table#cluster_temp td.call, table#cluster_temp td.call a{ 
-    width: 80px;
-    font-weight: bold;
-    color: #555;
-    text-decoration: none;
-}
-table#cluster_temp tr.highlight td.call, table#cluster_temp tr.highlight td.call a{ 
-    color: #900;
-}
-table#cluster_temp tr.highlight{ 
-    background-color: #ffffee;
-}
-table#cluster_temp td.text{ 
-    color: #777;
-    font-size: 12px;
-}
-table#cluster_temp td.spotter{ 
     width: 100px;
     color: #777;
     font-size: 12px;
@@ -786,7 +773,7 @@ table#chat_layout td{
     color: #777;
 }
 .chat_info_users1{
-    padding: 10px 0 10px 20px;
+    padding: 10px 0 10px 0px;
     font-weight: bold;
     line-height: 1.5em;
     color: #777;
@@ -794,7 +781,7 @@ table#chat_layout td{
 }
 
 .chat_info_users2{
-    padding: 10px 0 10px 20px;
+    padding: 10px 0 10px 0px;
     font-weight: bold;
     line-height: 1.5em;
     color: #999;
@@ -805,6 +792,10 @@ table#chat_layout td{
 }
 .chat_info_users1 span, .chat_info_users2 span{
     display: block;
+    padding-left: 22px;
+}
+.chat_info_users1 span.typing{
+    background: #fff url("/static/images/icon_typing.png") 1px 5px no-repeat;
 }
 .delete_btn{
     cursor: pointer;
@@ -944,7 +935,7 @@ input#station_name { width: 780px; }
 input#setup_cluster { width: 870px; font-weight: bold; color: #555;}
 input#highlight_calls { width: 870px; font-weight: bold; color: #900; background-color: #ffffee; border: 1px solid #aaa;}
 input#admin_calls { width: 870px; font-weight: bold; color: #900;}
-input#setup_instagram { font-weight: bold;}
+input#setup_instagram { font-weight: bold; text-align: center;}
 
 #stations_link{
     font-size: 14px;
@@ -973,15 +964,13 @@ input#button_save_all{
 }
 
 table#log_setup{
-    width: 90%;
+    width: 900px;
     margin: 20px auto;
 }
 table#log_setup td{
-    padding: 0;
+    padding: 0 15px 0 0;
 }
-table#log_setup td.setting{
-    width: 12%;
-}
+
 
 table#status_setup{
     width: 50%;

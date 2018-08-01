@@ -1,7 +1,11 @@
 <template>
     <div id="log">
         <div id="refresh_time">Auto refresh<br/><b>1 min</b></div>
-        <div id="no_net" v-if="stationActive && !statusOnline">There is no Internet connection to the station. <span>The data will be updated after the connection is restored.</span></div>
+        <div id="no_net" v-if="stationActive && !statusOnline" class="warning">
+          <div id="warning_border">
+            <span>There is no Internet connection to the station.</span> The data will be updated after the connection is restored.
+          </div>
+        </div>
         <div id="call_search">
             Callsign: 
             <input type="text" id="input_call" v-model="searchValue"> 

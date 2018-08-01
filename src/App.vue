@@ -32,6 +32,8 @@
 
 <script>
 import user from './user'
+user.switchDataServiceUrlPrefix( true )
+
 import './style.css'
 export default {
   name: 'app',

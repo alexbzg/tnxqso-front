@@ -16,6 +16,11 @@
             <img src="/static/images/about_gps0.jpg" class="intext"><br/><br/>
             <img src="/static/images/about_gps1.jpg" class="intext">
         </p>
+        <br/><br/><br/>
+        <h4>The example of DXpedition configuration</h4>
+        <p><br>
+            <img src="/static/images/example.jpg" class="intext"><br/>
+        </p>
     </div>
 </template>
 

@@ -39,7 +39,7 @@ function loadScript (url) {
 }
 
 function replace0 (str) {
-  return str === null ? null : str.replace( /0/g, '\u00D8' )
+  return str ? str.replace( /0/g, '\u00D8' ) : str
 }
 
 function getStationURL (callsign) {
@@ -48,4 +48,8 @@ function getStationURL (callsign) {
     callsign.replace( /\//, '-' ).toLowerCase() ) : null
 }
 
-export { parseCallsigns, loadScript, validateEmail, replace0, getStationURL }
+function deepCopy (obj) {
+  return JSON.parse( JSON.stringify( obj ) )
+}
+
+export { parseCallsigns, loadScript, validateEmail, replace0, getStationURL, deepCopy }

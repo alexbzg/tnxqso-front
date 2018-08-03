@@ -20,6 +20,7 @@ const router = new Router({
     {
       path: '/adxcluster',
       name: 'StationCluster',
+      props: true,
       component: StationCluster
     },
 /*    {

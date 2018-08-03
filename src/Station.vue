@@ -68,7 +68,8 @@
     </tr></table>
         <div class="list">
             <router-view :station-settings="stationSettings" :user="user" :chatUser="chatUser"
-            :status-service="statusService" :status-online="statusData.online"></router-view>
+            :status-service="statusService" :status-online="statusData.online" 
+            :log-service="logService"></router-view>
         </div>
     </div>
 
@@ -121,6 +122,7 @@ export default {
       stationInfo: null,
       stationSettings: null,
       statusService: statusService,
+      logService: logService,
       statusData: {}
     }
   },

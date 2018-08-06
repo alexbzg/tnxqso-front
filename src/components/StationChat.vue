@@ -32,7 +32,7 @@
         <table id="chat_window">
             <tr v-for="msg in data" :class="{admin: msg.admin, new_msg: msg.new}"> 
                 <td class="call">
-                    <span class="call" @click="replyTo(msg)">{{msg.user}}</span><br/>
+                    <span class="call" @click="replyTo(msg)">{{$options.replace0(msg.user)}}</span><br/>
                     <span class="name" @click="replyTo(msg)" v-if="msg.name">{{msg.name}}</span>
                     <a :href="'http://qrz.com/db/' + msg.user" target="_blank" rel="noopener" 
                         title="Link to QRZ.com">
@@ -58,14 +58,14 @@
             <div class="chat_info_users1">
                 <span v-for="user in activeUsers" v-if="user.chat"
                     :class="{'admin': user.admin, 'typing':user.typing}">
-                    {{user.cs}}<br/>
+                    {{$options.replace0(user.cs)}}<br/>
                 </span>
             </div>
             <div class="chat_info_title">Other pages</div>
             <div class="chat_info_users2">
                 <span v-for="user in activeUsers" v-if="!user.chat"
                     :class="{'admin': user.admin, 'typing':user.typing}">
-                    {{user.cs}}<br/>
+                    {{$options.replace0(user.cs)}}<br/>
                 </span>
             </div>
         </div>
@@ -81,6 +81,8 @@
 
 <script>
 import _ from 'underscore'
+
+import {replace0} from '../utils'
 import tabMixin from '../station-tab-mixin'
 import activeUsersService from '../active-users-service'
 import storage from '../storage'
@@ -89,6 +91,7 @@ const chatUserNameStorageKey = 'chatUserName'
 
 const typingInt = 5 * 60
 export default {
+  replace0: replace0,
   mixins: [tabMixin],
   name: 'StationChat',
   props: ['stationSettings', 'user', 'chatUser'],

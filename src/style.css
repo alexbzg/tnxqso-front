@@ -570,9 +570,8 @@ table#send_spot_layout td input#spot_spotter{
 }
 
 table#send_spot_layout td input.add_text_btn{
-    width: 50px;
     margin-top: 3px;
-    padding: 1px 5px;
+    padding: 1px 15px;
     font-size: 12px;
     background-color: #9fb4cc;
     color: #fff;

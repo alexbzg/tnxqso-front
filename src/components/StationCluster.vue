@@ -31,20 +31,21 @@
         <tr>
           <td class="spot_text text_btns" colspan="5">
             <input type="button" class="add_text_btn" value="RDA" 
-                v-if="stationSettings && stationSettings.log.columns.RDA"
-                @click="addSpotText('RDA')"/> 
+                v-if="stationSettings && stationSettings.status.fields.RDA && stationStatus && stationStatus.rda"
+                @click="addSpotTextField('RDA')"/> 
             <input type="button" class="add_text_btn" value="RAFA" 
-                v-if="stationSettings && stationSettings.log.columns.RAFA"
-                @click="addSpotText('RAFA')"/> 
+                v-if="stationSettings && stationSettings.status.fields.RAFA && stationStatus && stationStatus.rafa"
+                @click="addSpotTextField('RAFA')"/> 
             <input type="button" class="add_text_btn" value="WFF" 
-                v-if="stationSettings && stationSettings.log.columns.WFF"
-                @click="addSpotText('WFF')"/> 
+                v-if="stationSettings && stationSettings.status.fields.WFF && stationStatus && stationStatus.wff"
+                @click="addSpotTextField('WFF')"/> 
             <input type="button" class="add_text_btn" value="Locator" 
-                v-if="stationSettings && stationSettings.log.columns.loc"
-                @click="addSpotText('loc')"/> 
+                v-if="stationSettings && stationSettings.status.fields.loc && stationStatus && stationStatus.loc"
+                @click="addSpotTextField('loc')"/> 
             <input type="button" class="add_text_btn" 
                 v-for="n in $options.USER_FIELDS_COUNT"
-                v-if="stationSettings && stationSettings.log.userColumns[n-1]"
+                v-if="stationSettings && stationSettings.status.userFields[n-1] && stationStatus && 
+                    stationStatus.userFields[n-1]"
                 :value="stationSettings.userFields[n-1] || ( 'userField#' + n )"
                 @click="addSpotTextUserField(n-1)"/> 
           </td>
@@ -91,11 +92,11 @@ export default {
     return {
       tabId: 'cluster',
       replace0: replace0,
-      status: new StationStatus(),
+      stationStatus: new StationStatus(),
       spot: {
         show: false,
         userCS: this.chatUser,
-        info: '',
+        info: 'www.TNXQSO.com',
         freq: null,
         cs: this.stationSettings === null ? '' : this.stationSettings.station.callsign,
         disable: null,
@@ -125,9 +126,33 @@ export default {
           .finally( function () { vm.spot.posting = false } )
       }
     },
-    addSpotText (field) {
+    addSpotText (txt) {
+      let info = this.spot.info
+      if ( !info.includes( txt ) ) {
+        if ( info.includes( 'TNXQSO.com' ) ) {
+          info = info.replace( /(\s)?(www\.)?(TNXQSO\.com)$/, '$1' + txt + ' $2$3' )
+        } else {
+          info += ( info ? ' ' : '' ) + txt
+        }
+        if (info.length > 30) {
+          info = info.replace( 'www.', '' )
+        }
+        if (info.length > 30) {
+          info = info.replace( ' TNXQSO.com', '' )
+        }
+        this.spot.info = info
+      }
+    },
+    addSpotTextField (field) {
+      let txt = ''
+      if (field === 'RDA' || field === 'RAFA') {
+        txt = field + ' '
+      }
+      txt += this.stationStatus[field.toLowerCase()]
+      this.addSpotText( txt )
     },
     addSpotTextUserField (n) {
+      this.addSpotText( this.stationSettings.userFields[n] + ' ' + this.stationStatus.userFields[n] )
     },
     onLogUpdate () {
       if (this.logService.data.length > 0) {
@@ -137,7 +162,7 @@ export default {
       }
     },
     onStatusUpdate () {
-      this.status.update( this.statusService.data )
+      this.stationStatus.update( this.statusService.data )
     },
     clearSpotDisableTimeout () {
       if ( this.$spotDisableTimeout ) {

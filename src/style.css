@@ -537,7 +537,7 @@ table#log tr.new_qso{
 
 table#send_spot_layout { 
     border-collapse: collapse; 
-    width: 900px;
+    width: 920px;
     margin: 20px auto 50px auto;    
 }
 table#send_spot_layout td{ 
@@ -558,7 +558,7 @@ table#send_spot_layout td input#spot_call{
     background-color: #f9f9f9;
 }
 table#send_spot_layout td input#spot_band{ 
-    width: 70px;
+    width: 90px;
 }
 table#send_spot_layout td input#spot_text{ 
     width: 300px;

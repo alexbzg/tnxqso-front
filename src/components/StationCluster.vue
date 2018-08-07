@@ -7,29 +7,28 @@
             @click="spot.show = !spot.show">
     </div>
     
-    <form id="send_spot" v-if="spot.show">
-      <table id="send_spot_layout">
+    <table id="send_spot_layout" v-if="spot.show">
         <tr>
-          <td class="spot_call" style="color: #aaa;">DX call</td>
-          <td class="spot_band" style="color: #aaa;">MHz</td>
-          <td class="spot_text" style="color: #aaa;">Info</td>
-          <td class="spot_spotter" style="color: #aaa;">Your call</td>
-          <td class="spot_btn"></td>
+            <td class="spot_call" style="color: #aaa;">DX call</td>
+            <td class="spot_band" style="color: #aaa;">MHz</td>
+            <td class="spot_text" style="color: #aaa;">Info</td>
+            <td class="spot_spotter" style="color: #aaa;">Your call</td>
+            <td class="spot_btn"></td>
         </tr>
         <tr>
-          <td class="spot_call"><input type="text" id="spot_call" v-model="spot.cs" disabled /></td>
-          <td class="spot_band"><input type="text" id="spot_band" v-model="spot.freq" /></td>
-          <td class="spot_text"><input type="text" id="spot_text" v-model="spot.info" /></td>
-          <td class="spot_spotter"><input type="text" id="spot_spotter" v-model="spot.userCS" /></td>
-          <td class="spot_btn">
-              <button id="button_send_spot" class="btn4" :disabled="spot.posting || spot.disabled"
-                                                             @click="sendSpot()">
-                  Send spot
-              </button>
-          </td>
+            <td class="spot_call"><input type="text" id="spot_call" v-model="spot.cs" disabled /></td>
+            <td class="spot_band"><input type="number" id="spot_band" v-model="spot.freq" /></td>
+            <td class="spot_text"><input type="text" id="spot_text" v-model="spot.info" /></td>
+            <td class="spot_spotter"><input type="text" id="spot_spotter" v-model="spot.userCS" /></td>
+            <td class="spot_btn">
+                <button id="button_send_spot" class="btn4" :disabled="sendSpotButtonDisabled"
+                                                                @click="sendSpot()">
+                    Send spot
+                </button>
+            </td>
         </tr>
         <tr>
-          <td class="spot_text text_btns" colspan="5">
+            <td class="spot_text text_btns" colspan="5">
             <input type="button" class="add_text_btn" value="RDA" 
                 v-if="stationSettings && stationSettings.status.fields.RDA && stationStatus && stationStatus.rda"
                 @click="addSpotTextField('RDA')"/> 
@@ -48,10 +47,9 @@
                     stationStatus.userFields[n-1]"
                 :value="stationSettings.userFields[n-1] || ( 'userField#' + n )"
                 @click="addSpotTextUserField(n-1)"/> 
-          </td>
+            </td>
         </tr>
-      </table>
-    </form>
+    </table>
 
     <div id="spam" class="warning" v-if="spot.show && spot.disable"><div id="warning_border">
         <span>Spam protection!</span> &nbsp; This spot can be sent after <b>{{spot.disable}}</b> second.
@@ -116,11 +114,11 @@ export default {
       const vm = this
       if (confirm('Do you really want to send this spot?')) {
         this.user.serverPost( 'sendSpot', this.spot )
-          .then( function (data) {
-            alert( data.sent ? 'Your spot could not be sent.'
-              : 'Your spot was sent succeffully.' )
+          .then( function (response) {
+            alert( response.data.sent ? 'Your spot was sent succeffully.'
+              : 'Your spot could not be sent. Cluster reply was: ' + response.data.reply )
             vm.clearSpotDisableTimeout()
-            vm.spot.disable = data.secondsLeft
+            vm.spot.disable = response.data.secondsLeft
             vm.setSpotDisableTimeout()
           } )
           .finally( function () { vm.spot.posting = false } )
@@ -188,6 +186,12 @@ export default {
       },
       deep: true
 
+    }
+  },
+  computed: {
+    sendSpotButtonDisabled () {
+      return this.spot.posting || this.spot.disable || !this.spot.userCS || this.spot.userCS === '' ||
+        !this.spot.cs || this.spot.cs === '' || !this.spot.freq
     }
   }
 }

@@ -828,9 +828,9 @@ table#chat_window td.call{
     color: #009;
 }
 table#chat_window td.call span.date_time{
-    font-size: 10px;
+    font-size: 12px;
     font-weight: normal;
-    color: #ccc;
+    color: #999;
 }
 table#chat_window td.call span.call{
     color: #00A;

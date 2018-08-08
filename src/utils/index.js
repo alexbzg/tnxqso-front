@@ -45,7 +45,7 @@ function replace0 (str) {
 function getStationURL (callsign) {
   const l = window.location
   return callsign ? ( l.protocol + '//' + l.host + '/' +
-    callsign.replace( /\//, '-' ).toLowerCase() ) : null
+    callsign.replace( /\//g, '-' ).toLowerCase() ) : null
 }
 
 function deepCopy (obj) {

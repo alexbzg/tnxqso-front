@@ -465,13 +465,11 @@ export default {
           } else {
             if ( vm.settings.status.get !== 'qsoclient' ) {
               const st = JSON.parse( JSON.stringify( vm.status ) )
-              if ( vm.settings.status.get === 'manual' ) {
-                if ( st.location[0] && st.location[1] ) {
-                  st.location[0] = Number( st.location[0] )
-                  st.location[1] = Number( st.location[1] )
-                } else {
-                  st.location = null
-                }
+              if ( st.location[0] && st.location[1] ) {
+                st.location[0] = Number( st.location[0] )
+                st.location[1] = Number( st.location[1] )
+              } else {
+                st.location = null
               }
               vm.user.serverPost( 'location', st )
             }

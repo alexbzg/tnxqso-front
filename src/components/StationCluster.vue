@@ -51,8 +51,9 @@
         </tr>
     </table>
 
-    <div id="spam" class="warning" v-if="spot.show && spot.disable"><div id="warning_border">
-        <span>Spam protection!</span> &nbsp; This spot can be sent after <b>{{spot.disable}}</b> second.
+    <div id="spam" class="warning" v-if="spot.show && spot.disable && spot.showDisable"><div id="warning_border">
+        <span>Spam protection!</span> &nbsp; This spot can be sent after <b>{{spot.disable}}</b> 
+        second{{spot.disable > 1 ? 's' : ''}}.
     </div></div>
  
 
@@ -75,7 +76,7 @@
 </template>
 
 <script>
-import {USER_FIELDS_COUNT} from '../constants'
+import {USER_FIELDS_COUNT, CLUSTER_SPOT_TEXT_LIMIT} from '../constants'
 import StationStatus from '../station-status'
 
 import {replace0} from '../utils'
@@ -98,6 +99,7 @@ export default {
         freq: null,
         cs: this.stationSettings === null ? '' : this.stationSettings.station.callsign,
         disable: null,
+        showDisable: false,
         posting: false
       }
     }
@@ -112,14 +114,26 @@ export default {
   methods: {
     sendSpot () {
       const vm = this
+      if (this.spot.disable) {
+        this.spot.showDisable = true
+        return
+      }
       if (confirm('Do you really want to send this spot?')) {
+        this.spot.posting = true
         this.user.serverPost( 'sendSpot', this.spot )
           .then( function (response) {
-            alert( response.data.sent ? 'Your spot was sent succeffully.'
-              : 'Your spot could not be sent. Cluster reply was: ' + response.data.reply )
+            let alertText = response.data.sent ? 'Your spot was sent succeffully.'
+              : 'Your spot could not be sent.'
+            if (!response.data.sent && response.data.reply) {
+              alertText += ' Cluster reply was: \'' + response.data.reply + '\''
+            }
+            alert( alertText )
             vm.clearSpotDisableTimeout()
-            vm.spot.disable = response.data.secondsLeft
+            vm.spot.disable = Math.ceil( response.data.secondsLeft )
             vm.setSpotDisableTimeout()
+            if (!response.data.sent) {
+              vm.spot.showDisable = true
+            }
           } )
           .finally( function () { vm.spot.posting = false } )
       }
@@ -132,10 +146,10 @@ export default {
         } else {
           info += ( info ? ' ' : '' ) + txt
         }
-        if (info.length > 30) {
+        if (info.length > CLUSTER_SPOT_TEXT_LIMIT) {
           info = info.replace( 'www.', '' )
         }
-        if (info.length > 30) {
+        if (info.length > CLUSTER_SPOT_TEXT_LIMIT) {
           info = info.replace( ' TNXQSO.com', '' )
         }
         this.spot.info = info
@@ -153,7 +167,7 @@ export default {
       this.addSpotText( this.stationSettings.userFields[n] + ' ' + this.stationStatus.userFields[n] )
     },
     onLogUpdate () {
-      if (this.logService.data.length > 0) {
+      if (this.logService.data && this.logService.data.length > 0) {
         const l = this.logService.data[0]
         this.spot.cs = l.myCS
         this.spot.freq = l.freq
@@ -173,6 +187,7 @@ export default {
         this.setSpotDisableTimeout()
       } else {
         this.spot.disable = null
+        this.spot.showDisable = false
       }
     },
     setSpotDisableTimeout (val) {
@@ -190,7 +205,7 @@ export default {
   },
   computed: {
     sendSpotButtonDisabled () {
-      return this.spot.posting || this.spot.disable || !this.spot.userCS || this.spot.userCS === '' ||
+      return this.spot.posting || this.spot.showDisable || !this.spot.userCS || this.spot.userCS === '' ||
         !this.spot.cs || this.spot.cs === '' || !this.spot.freq
     }
   }

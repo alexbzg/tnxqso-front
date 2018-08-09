@@ -27,6 +27,7 @@
 <script>
 import request from '../request'
 import * as moment from 'moment'
+import {urlCallsign} from '../utils'
 
 import ActiveStationsEntry from './ActiveStationsEntry'
 
@@ -50,7 +51,7 @@ export default {
         const current = moment()
         for ( const station in publishData ) {
           if ( ( publishData[station]['user'] && publishData[station]['admin'] ) || vm.siteAdmin ) {
-            request.get( '/static/stations/' + station.replace( /\//, '-' ).toLowerCase() + '/settings.json' )
+            request.get( '/static/stations/' + urlCallsign( station ) + '/settings.json' )
               .then( function ( response ) {
                 const settings = response.data
                 settings.publish = { user: settings.publish, admin: publishData[station]['admin'] }

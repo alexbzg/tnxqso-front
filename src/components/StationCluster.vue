@@ -56,6 +56,10 @@
         second{{spot.disable > 1 ? 's' : ''}}.
     </div></div>
  
+    <div id="spot_sended" class="ok_window"><div id="ok_border">
+        <span>OK!</span> &nbsp; Your spot was successfully sended.
+    </div></div>
+ 
 
 
         <table id="cluster">

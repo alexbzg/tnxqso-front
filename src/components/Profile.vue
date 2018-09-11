@@ -444,8 +444,16 @@ export default {
       this.$router.push( '/login' )
     },
     saveSettings () {
+      if (this.settings.station.info.length + this.settings.donate.text.length > 524288) {
+        alert('The size limit for all your station information is 1 Megabyte.\n' +
+                'Please reduce the quantity and size of your images.\n' +
+                'Максимальный допустимый размер всех ваших данных - 1 мегабайт.\n' +
+                'Пожалуйста, уменьшите количество и объем изображений')
+        return
+      }
       const vm = this
       let clearAll = false
+
       this.settings.station.callsign = this.settings.station.callsign.toUpperCase()
       if (this.user.stationCallsign &&
         this.user.stationCallsign !== this.settings.station.callsign) {

@@ -588,7 +588,7 @@ table#send_spot_layout td input#button_send_spot{
 }
 
 
-#spam{
+#spam, #spot_sent, #cluster_error{
     width: 600px;
 }
 .warning{
@@ -609,6 +609,8 @@ table#send_spot_layout td input#button_send_spot{
     font-weight: bold;
     color: #fafbb8;
 }
+
+
 
 .ok_window{
     font-size: 16px;

@@ -56,10 +56,13 @@
         second{{spot.disable > 1 ? 's' : ''}}.
     </div></div>
  
-    <div id="spot_sended" class="ok_window"><div id="ok_border">
-        <span>OK!</span> &nbsp; Your spot was successfully sended.
+    <div id="spot_sent" class="ok_window" v-if="spot.success"><div id="ok_border">
+        <span>OK!</span> &nbsp; Your spot was successfully sent.
     </div></div>
  
+    <div id="cluster_error" class="warning" v-if="spot.error"><div id="warning_border">
+        {{spot.error}}
+    </div></div>
 
 
         <table id="cluster">
@@ -88,6 +91,7 @@ import tabMixin from '../station-tab-mixin'
 export default {
   USER_FIELDS_COUNT: USER_FIELDS_COUNT,
   $spotDisableTimeout: null,
+  $clusterResultTimeout: null,
   mixins: [tabMixin],
   name: 'StationCluster',
   props: ['user', 'chatUser', 'stationSettings', 'logService', 'statusService'],
@@ -104,6 +108,8 @@ export default {
         cs: this.stationSettings === null ? '' : this.stationSettings.station.callsign,
         disable: null,
         showDisable: false,
+        success: false,
+        error: false,
         posting: false
       }
     }
@@ -114,6 +120,9 @@ export default {
   },
   beforeDestroy () {
     this.clearSpotDisableTimeout()
+    if (this.$spotSuccessTimeout) {
+      clearTimeout(this.$spotSuccessTimeout)
+    }
   },
   methods: {
     sendSpot () {
@@ -122,25 +131,26 @@ export default {
         this.spot.showDisable = true
         return
       }
-      if (confirm('Do you really want to send this spot?')) {
-        this.spot.posting = true
-        this.user.serverPost( 'sendSpot', this.spot )
-          .then( function (response) {
-            let alertText = response.data.sent ? 'Your spot was sent succeffully.'
-              : 'Your spot could not be sent.'
-            if (!response.data.sent && response.data.reply) {
-              alertText += ' Cluster reply was: \'' + response.data.reply + '\''
-            }
-            alert( alertText )
-            vm.clearSpotDisableTimeout()
-            vm.spot.disable = Math.ceil( response.data.secondsLeft )
-            vm.setSpotDisableTimeout()
-            if (!response.data.sent) {
+      this.spot.posting = true
+      this.user.serverPost( 'sendSpot', this.spot )
+        .then( function (response) {
+          if (response.data.sent) {
+            vm.spot.success = true
+            vm.$spotSuccessTimeout = setTimeout(vm.clusterResultTimeout, 5000)
+          } else {
+            if (response.data.reply) {
+              vm.spot.error = 'Your spot could not be sent. Cluster reply was: \'' +
+                response.data.reply + '\''
+              vm.$spotSuccessTimeout = setTimeout(vm.clusterResultTimeout, 5000)
+            } else {
               vm.spot.showDisable = true
             }
-          } )
-          .finally( function () { vm.spot.posting = false } )
-      }
+          }
+          vm.clearSpotDisableTimeout()
+          vm.spot.disable = Math.ceil( response.data.secondsLeft )
+          vm.setSpotDisableTimeout()
+        })
+        .finally( function () { vm.spot.posting = false } )
     },
     addSpotText (txt) {
       let info = this.spot.info
@@ -158,6 +168,10 @@ export default {
         }
         this.spot.info = info
       }
+    },
+    clusterResultTimeout () {
+      this.spot.success = false
+      this.spot.error = false
     },
     addSpotTextField (field) {
       let txt = ''

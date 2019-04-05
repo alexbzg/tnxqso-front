@@ -5,6 +5,7 @@ import StationCluster from '../components/StationCluster'
 // import StationNews from '../components/StationNews'
 import StationInfo from '../components/StationInfo'
 import StationMap from '../components/StationMap'
+import StationMapLeaflet from '../components/StationMapLeaflet'
 import StationChat from '../components/StationChat'
 import StationLog from '../components/StationLog'
 import StationInstagram from '../components/StationInstagram'
@@ -47,6 +48,13 @@ const router = new Router({
       component: StationMap,
       props: true
     },
+    {
+      path: '/map_ll',
+      name: 'StationMapLeaflet',
+      component: StationMapLeaflet,
+      props: true
+    },
+
     {
       path: '/chat',
       name: 'StationChat',

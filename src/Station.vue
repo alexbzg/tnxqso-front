@@ -52,6 +52,8 @@
                 v-if="enable.log" :class="{updated_tab: tabsUnread.log}">Online log</router-link>
             <router-link to="/map" tag="div" id="tab_map" class="tab" 
                 v-if="enable.map">Map</router-link>
+            <router-link to="/map_ll" tag="div" id="tab_map" class="tab" 
+                v-if="enable.map">Map_LL</router-link>
             <router-link to="/adxcluster" tag="div" id="tab_adxc" class="tab" 
                 v-if="enable.cluster">ADXcluster</router-link>
             <router-link to="/chat" tag="div" id="tab_chat" class="tab" 

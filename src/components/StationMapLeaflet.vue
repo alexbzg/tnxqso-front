@@ -1,8 +1,24 @@
 <template>
     <div id="map">
     <div id="refresh_time">Auto refresh<br/><b>1 min</b></div>
-      <l-map style="height: 100%; width: 100%" :zoom="zoom" :center="center" :options="{zoomControl: false}">
+      <l-map style="height: 100%; width: 100%" :zoom="zoom" :center="center" :options="{zoomControl: false}"
+        @update:zoom="updateZoom">
         <l-tile-layer :url="url"></l-tile-layer>
+        <l-control-layers/>
+        <l-wms-tile-layer
+            v-for="(layer, idx) in layers"
+            :key="idx"
+            base-url="https://r1cf.ru/geoserver/cite/wms?"
+            :layers="layer.layers"
+            :name="layer.name"
+            layer-type="overlay"
+            :transparent="true"
+            format="image/png"
+            version="1.3.0"
+            :styles="layer.styles"
+            :visible="layer.visible"
+            :options="{minZoom: layer.minZoom, maxZoom: layer.maxZoom}"
+            />
       </l-map>
     </div>
 </template>
@@ -13,13 +29,13 @@ import {CURRENT_POSITION_ICONS_SIZE, CURRENT_POSITION_ICONS_OFFSET} from '../con
 import trackService from '../track-service'
 const currentMarkerOptions = { preset: 'islands#dotIcon', iconColor: '#ff0000' }
 
-import {LMap} from 'vue2-leaflet'
+import {LMap, LTileLayer, LWMSTileLayer, LControlLayers} from 'vue2-leaflet'
 import 'leaflet/dist/leaflet.css'
 
 export default {
   name: 'StationMap',
   props: ['statusService', 'stationSettings'],
-  components: {LMap},
+  components: {LMap, LTileLayer, 'l-wms-tile-layer': LWMSTileLayer, LControlLayers},
   data () {
     return {
       tabId: 'news',
@@ -27,7 +43,44 @@ export default {
       data: {},
       url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
       zoom: 8,
-      center: [47.313220, -1.319482]
+      center: [45, 45],
+      layers: [
+        {
+          name: 'RDA',
+          layers: 'RDA_FULL',
+          styles: 'rda',
+          visible: true,
+          minZoom: 5
+        },
+        {
+          name: 'Locator',
+          layers: 'GRID576F',
+          styles: 'line',
+          visible: true,
+          minZoom: 11
+        },
+        {
+          name: 'Locator',
+          layers: 'GRID',
+          styles: 'line',
+          visible: true,
+          maxZoom: 10
+        },
+        {
+          name: 'Locator QTH',
+          layers: 'QTH',
+          styles: 'QTH',
+          visible: true,
+          minZoom: 11
+        },
+        {
+          name: 'RAFA',
+          layers: 'AOPAF',
+          styles: 'rafa',
+          visible: true,
+          minZomm: 8
+        }
+      ]
     }
   },
   created () {
@@ -45,6 +98,9 @@ export default {
       this.map = map
       this.showTrack()
       this.updateLocation()
+    },
+    updateZoom (zoom) {
+      this.zoom = zoom
     },
     showTrack () {
       const vm = this

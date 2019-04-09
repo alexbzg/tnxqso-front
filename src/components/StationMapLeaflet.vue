@@ -19,31 +19,73 @@
             :visible="layer.visible"
             :options="{minZoom: layer.minZoom, maxZoom: layer.maxZoom}"
             />
+        <l-geo-json v-if="track" :geojson="track"></l-geo-json>
+        <l-marker :lat-lng="[46, 40]">
+            <l-icon v-if="stationSettings"
+                :icon-url="'/static/images/icon_map_' + stationSettings.currentPositionIcon + '.png'"
+                :icon-size="[56, 56]"
+                :icon-anchor="$options.CURRENT_POSITION_ICON_OFFSET"
+            />
+            <l-popup>
+                {{currentPopup.dateTime}}
+                <span v-if="currentPopup.speed"><br>{{currentPopup.speed}}</span>
+                <span v-if="currentPopup.comments"><br>{{currentPopup.comments}}</span>
+            </l-popup>
+        </l-marker>
       </l-map>
     </div>
 </template>
 
 <script>
+import {LMap, LTileLayer, LWMSTileLayer, LControlLayers, LGeoJson, LMarker, LIcon, LPopup} from 'vue2-leaflet'
+import {Icon} from 'leaflet'
+import 'leaflet/dist/leaflet.css'
+// this part resolve an issue where the markers would not appear
+delete Icon.Default.prototype._getIconUrl
+
+Icon.Default.mergeOptions({
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+})
+
+import toGeoJson from '@mapbox/togeojson'
+
 import {CURRENT_POSITION_ICONS_SIZE, CURRENT_POSITION_ICONS_OFFSET} from '../constants'
 
 import trackService from '../track-service'
-const currentMarkerOptions = { preset: 'islands#dotIcon', iconColor: '#ff0000' }
-
-import {LMap, LTileLayer, LWMSTileLayer, LControlLayers} from 'vue2-leaflet'
-import 'leaflet/dist/leaflet.css'
+import request from '../request'
+// const currentMarkerOptions = { preset: 'islands#dotIcon', iconColor: '#ff0000' }
 
 export default {
+  CURRENT_POSITION_ICONS_SIZE: CURRENT_POSITION_ICONS_SIZE,
+  CURRENT_POSITION_ICONS_OFFSET: CURRENT_POSITION_ICONS_OFFSET,
   name: 'StationMap',
   props: ['statusService', 'stationSettings'],
-  components: {LMap, LTileLayer, 'l-wms-tile-layer': LWMSTileLayer, LControlLayers},
+  components: {
+    LMap,
+    LTileLayer,
+    'l-wms-tile-layer': LWMSTileLayer,
+    LControlLayers,
+    LGeoJson,
+    LMarker,
+    LIcon,
+    LPopup
+  },
   data () {
     return {
       tabId: 'news',
       currentLocation: null,
+      currentPopup: {
+        dateTime: null,
+        speed: null,
+        comments: null
+      },
       data: {},
       url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+      track: null,
       zoom: 8,
-      center: [45, 45],
+      center: [46, 40],
       layers: [
         {
           name: 'RDA',
@@ -104,51 +146,26 @@ export default {
     },
     showTrack () {
       const vm = this
-      if (vm.map && vm.trackVersion) {
-        const l = window.location
-        const trackURL = l.protocol + '//' + l.host + '/static/stations' + l.pathname + '/' +
-          vm.trackFile + '?version=' + vm.trackVersion
-        global.ymaps.geoXml.load(trackURL)
-          .then( function (res) {
-            vm.map.geoObjects.add(res.geoObjects)
-          }, function (err) {
-            console.log('Ошибка: ' )
-            console.log( err )
+      if (vm.trackVersion) {
+        request.get('/static/stations' + window.location.pathname + '/' +
+          vm.trackFile + '?version=' + vm.trackVersion)
+          .then(response => {
+            const trackDOM = new DOMParser().parseFromString(response.data, 'application/xml')
+            if (response.data.includes('kml')) {
+              this.track = toGeoJson.kml(trackDOM)
+            } else {
+              this.track = toGeoJson.gpx(trackDOM)
+            }
           })
       }
     },
     updateLocation () {
-      if (this.statusService.data.location && this.map) {
+      if (this.statusService.data.location) {
         const dt = this.statusService.data
-        let balloon = dt.date + ' ' + dt.time
-        if ( dt.speed ) {
-          balloon += '<br/> speed: ' + dt.speed.toFixed( 1 ) + ' km/h'
-        }
-        if (dt.comments) {
-          balloon += '<br/> ' + dt.comments
-        }
-        let options = currentMarkerOptions
-        if (this.stationSettings && this.stationSettings.currentPositionIcon !== 0) {
-          options = { iconImageHref: '/static/images/icon_map_' +
-            this.stationSettings.currentPositionIcon + '.png',
-            iconLayout: 'default#image',
-            iconImageSize: CURRENT_POSITION_ICONS_SIZE,
-            iconImageOffset: CURRENT_POSITION_ICONS_OFFSET
-          }
-        }
-        if (this.currentMarker) {
-          this.currentMarker.geometry.setCoordinates( dt.location )
-          this.currentMarker.properties.set( {balloonContent: balloon} )
-          this.currentMarker.options.set( options )
-        } else {
-          this.currentMarker = new global.ymaps.Placemark( dt.location,
-            { balloonContent: balloon }, options )
-          this.map.geoObjects.add( this.currentMarker )
-        }
-        this.map.setCenter( dt.location )
-      } else if (this.map && this.currentMarker) {
-        this.map.geoObjects.remove( this.curretnMarker )
-        this.currentMarker = null
+        this.currentLocation = dt.location
+        this.currentPopup.dateTime = dt.date + ' ' + dt.time
+        this.currentPopup.speed = dt.speed ? 'speed: ' + dt.speed.toFixed( 1 ) + ' km/h' : null
+        this.currentPopup.comments = dt.comments ? dt.comments : null
       }
     }
   }

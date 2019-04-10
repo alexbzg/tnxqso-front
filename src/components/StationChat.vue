@@ -32,8 +32,8 @@
         <table id="chat_window">
             <tr v-for="msg in data" :class="{admin: msg.admin, new_msg: msg.new}"> 
                 <td class="call">
-                    <span class="call" @click="replyTo(msg)">{{$options.replace0(msg.user)}}</span><br/>
-                    <span class="name" @click="replyTo(msg)" v-if="msg.name">{{msg.name}}</span>
+                    <span class="call" @click="replyTo(msg.user)">{{$options.replace0(msg.user)}}</span><br/>
+                    <span class="name" @click="replyTo(msg.user)" v-if="msg.name">{{msg.name}}</span>
                     <a :href="'http://qrz.com/db/' + msg.user" target="_blank" rel="noopener" 
                         title="Link to QRZ.com">
                         <img src="/static/images/icon_qrz.png"/>
@@ -45,6 +45,9 @@
                     @mouseout="msgMouseOver(false,$event)">
                     <img class="delete_btn" src="/static/images/delete.png" 
                         title="Delete this message" @click="deleteMsg( msg.ts )"/>
+                    <span class="message_to" v-for="callsign in msg.to" :key="callsign">
+                        &rArr; {{callsign}}
+                    </span>
                     {{msg.text}}
                 </td>
             </tr>
@@ -88,8 +91,9 @@ import activeUsersService from '../active-users-service'
 import storage from '../storage'
 
 const chatUserNameStorageKey = 'chatUserName'
-
 const typingInt = 5 * 60
+const RE_MSG_TO = /(:?\u21d2\s?\w+\s?)+(:?\s|$)/
+
 export default {
   replace0: replace0,
   mixins: [tabMixin],
@@ -200,9 +204,24 @@ export default {
         this.serverPost( { 'delete': ts } )
       }
     },
-    replyTo (msg) {
-      if ( !this.messageText || this.messageText.indexOf( msg.user + ':' ) === -1 ) {
-        this.messageText = msg.user + ': ' + ( this.messageText ? this.messageText : '' )
+    replyTo (callsign) {
+      const txt = String.fromCharCode(8658) + ' ' + callsign
+      if ( !this.messageText || this.messageText.indexOf(txt) === -1 ) {
+        this.messageText = txt + ' ' + (this.messageText ? this.messageText : '')
+      }
+    },
+    serviceUpdate () {
+      this.mixinServiceUpdate()
+      if (this.data) {
+        for (const msg of this.data) {
+          let match = null
+          if (match = RE_MSG_TO.exec(msg.text)) {
+            const to = match[0]
+            msg.text = msg.text.substring(to.length, msg.text.length)
+            msg.to = to.split(/\s?\u21d2\s?/)
+            msg.to.shift()
+          }
+        }
       }
     }
   },

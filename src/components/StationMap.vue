@@ -1,33 +1,114 @@
 <template>
     <div id="map">
     <div id="refresh_time">Auto refresh<br/><b>1 min</b></div>
-        <yandex-map 
-            :coords="[45,45]"
-            zoom="11"
-            style="width: 100%; height: 700px;"
-            :scroll-zoom="true"
-            :behaviors="['scrollZoom', 'drag']"
-            @map-was-initialized="mapInit">
-        </yandex-map>
+      <l-map style="height: 100%; width: 100%" :zoom="zoom" :center="center"
+        :options="{zoomControl: false, attributionControl: false}">
+        <l-tile-layer :url="url"></l-tile-layer>
+        <l-control-attribution prefix="Powered by <a href='https://r1cf.ru/rdaloc/' target='_blank' rel='noopener'>
+            R1CF RDA/RAFA maps</a>" position="bottomright"/>
+        <l-control-layers/>
+        <l-wms-tile-layer
+            v-for="(layer, idx) in layers"
+            :key="idx"
+            base-url="https://r1cf.ru/geoserver/cite/wms?"
+            :layers="layer.layers"
+            :name="layer.name"
+            layer-type="overlay"
+            :transparent="true"
+            format="image/png"
+            version="1.3.0"
+            :styles="layer.styles"
+            :visible="layer.visible"
+            :options="{minZoom: layer.minZoom, maxZoom: layer.maxZoom}"
+            />
+        <l-geo-json v-if="track" :geojson="track"></l-geo-json>
+        <l-marker :lat-lng="currentLocation" v-if="stationSettings && currentLocation">
+            <l-icon                 
+                :icon-url="'/static/images/icon_map_' + stationSettings.currentPositionIcon + '.png'"
+                :icon-size="[56, 56]"
+                :icon-anchor="stationSettings.currentPositionIcon ? [28, 28] : [28, 56]"
+            />
+            <l-popup>
+                {{currentPopup.dateTime}}
+                <span v-if="currentPopup.speed"><br>{{currentPopup.speed}}</span>
+                <span v-if="currentPopup.comments"><br>{{currentPopup.comments}}</span>
+            </l-popup>
+        </l-marker>
+      </l-map>
     </div>
 </template>
 
 <script>
-import {CURRENT_POSITION_ICONS_SIZE, CURRENT_POSITION_ICONS_OFFSET} from '../constants'
+import {LMap, LTileLayer, LWMSTileLayer, LControlLayers, LGeoJson, LMarker, LIcon, LPopup, LControlAttribution} from 'vue2-leaflet'
+import {Icon} from 'leaflet'
+import 'leaflet/dist/leaflet.css'
+// this part resolve an issue where the markers would not appear
+delete Icon.Default.prototype._getIconUrl
+
+Icon.Default.mergeOptions({
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+})
+
+import toGeoJson from '@mapbox/togeojson'
 
 import trackService from '../track-service'
-import { yandexMap, ymapMarker } from 'vue-yandex-maps'
-const currentMarkerOptions = { preset: 'islands#dotIcon', iconColor: '#ff0000' }
+import request from '../request'
+// const currentMarkerOptions = { preset: 'islands#dotIcon', iconColor: '#ff0000' }
 
 export default {
   name: 'StationMap',
   props: ['statusService', 'stationSettings'],
-  components: { yandexMap, ymapMarker },
+  components: {
+    LMap,
+    LTileLayer,
+    'l-wms-tile-layer': LWMSTileLayer,
+    LControlLayers,
+    LGeoJson,
+    LMarker,
+    LIcon,
+    LPopup,
+    LControlAttribution
+  },
   data () {
     return {
       tabId: 'news',
       currentLocation: null,
-      data: {}
+      currentPopup: {
+        dateTime: null,
+        speed: null,
+        comments: null
+      },
+      data: {},
+      url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+      track: null,
+      zoom: 8,
+      center: [60, 60],
+      map: null,
+      layers: [
+        {
+          name: 'RDA',
+          layers: 'RDA_FULL',
+          styles: 'rda',
+          visible: true,
+          minZoom: 5
+        },
+        {
+          name: 'RAFA',
+          layers: 'AOPAF',
+          styles: 'rafa',
+          visible: true,
+          minZomm: 8
+        },
+        {
+          name: 'Locator',
+          layers: 'QTH,GRID576F',
+          styles: 'QTH,line',
+          visible: true,
+          minZoom: 11
+        }
+      ]
     }
   },
   created () {
@@ -41,58 +122,29 @@ export default {
     this.statusService.onUpdate( this.updateLocation )
   },
   methods: {
-    mapInit (map) {
-      this.map = map
-      this.showTrack()
-      this.updateLocation()
-    },
     showTrack () {
       const vm = this
-      if (vm.map && vm.trackVersion) {
-        const l = window.location
-        const trackURL = l.protocol + '//' + l.host + '/static/stations' + l.pathname + '/' +
-          vm.trackFile + '?version=' + vm.trackVersion
-        global.ymaps.geoXml.load(trackURL)
-          .then( function (res) {
-            vm.map.geoObjects.add(res.geoObjects)
-          }, function (err) {
-            console.log('Ошибка: ' )
-            console.log( err )
+      if (vm.trackVersion) {
+        request.get('/static/stations' + window.location.pathname + '/' +
+          vm.trackFile + '?version=' + vm.trackVersion)
+          .then(response => {
+            const trackDOM = new DOMParser().parseFromString(response.data, 'application/xml')
+            if (response.data.includes('kml')) {
+              this.track = toGeoJson.kml(trackDOM)
+            } else {
+              this.track = toGeoJson.gpx(trackDOM)
+            }
           })
       }
     },
     updateLocation () {
-      if (this.statusService.data.location && this.map) {
+      if (this.statusService.data && this.statusService.data.location) {
         const dt = this.statusService.data
-        let balloon = dt.date + ' ' + dt.time
-        if ( dt.speed ) {
-          balloon += '<br/> speed: ' + dt.speed.toFixed( 1 ) + ' km/h'
-        }
-        if (dt.comments) {
-          balloon += '<br/> ' + dt.comments
-        }
-        let options = currentMarkerOptions
-        if (this.stationSettings && this.stationSettings.currentPositionIcon !== 0) {
-          options = { iconImageHref: '/static/images/icon_map_' +
-            this.stationSettings.currentPositionIcon + '.png',
-            iconLayout: 'default#image',
-            iconImageSize: CURRENT_POSITION_ICONS_SIZE,
-            iconImageOffset: CURRENT_POSITION_ICONS_OFFSET
-          }
-        }
-        if (this.currentMarker) {
-          this.currentMarker.geometry.setCoordinates( dt.location )
-          this.currentMarker.properties.set( {balloonContent: balloon} )
-          this.currentMarker.options.set( options )
-        } else {
-          this.currentMarker = new global.ymaps.Placemark( dt.location,
-            { balloonContent: balloon }, options )
-          this.map.geoObjects.add( this.currentMarker )
-        }
-        this.map.setCenter( dt.location )
-      } else if (this.map && this.currentMarker) {
-        this.map.geoObjects.remove( this.curretnMarker )
-        this.currentMarker = null
+        this.currentLocation = dt.location
+        this.center = dt.location
+        this.currentPopup.dateTime = dt.date + ' ' + dt.time
+        this.currentPopup.speed = dt.speed ? 'speed: ' + dt.speed.toFixed( 1 ) + ' km/h' : null
+        this.currentPopup.comments = dt.comments ? dt.comments : null
       }
     }
   }

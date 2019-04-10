@@ -717,8 +717,12 @@ table#cluster td.spotter{
     padding: 0px;
     margin: 5px auto;
 }
-.ymap-container{
-    padding-top: 50px;
+.vue2leaflet-map{
+    margin-top: 50px;
+    border: 1px solid #ccc;
+}
+#map #refresh_time{
+    margin-bottom: 20px;
 }
 
 #gps_map iframe{
@@ -786,6 +790,10 @@ table#chat_layout td{
     vertical-align: top;
 }
 
+table#chat_layout .message_to{
+    color: #aaa;
+}
+
 
 
 #chat_info{
@@ -826,7 +834,14 @@ table#chat_layout td{
 }
 .delete_btn{
     cursor: pointer;
+    float: right;
 }
+
+
+
+
+
+
 
 
 

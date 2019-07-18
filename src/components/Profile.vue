@@ -1,9 +1,9 @@
 <template>
     <div>
          <div id="station_menu">
-            <input type="button" id="button_clear_all" class="btn" value="Clear all info" @click="clearAll()"/>
+            <input type="button" id="button_clear_all" class="btn" value="Очистить профиль" @click="clearAll()"/>
             <router-link to="/changePassword" tag="input" type="button" id="button_change_email" 
-                class="btn" value="Change email/password"/>
+                class="btn" value="Сменить email/пароль"/>
             <!--input type="button" id="button_change_email" class="btn" value="Change password"/-->
             <input type="button" id="button_change_email" class="btn" value="Logout" @click="logout()"/>
         </div>
@@ -11,30 +11,34 @@
         <div id="station_setup">
             <div class="station_setup_block">
                 <a href="/static/html/log.html" target="_blank" rel="noopener" class="blue">
-                    <img class="icon_info" src="/static/images/icon_info.png" title="Info">
-                    <b>Info</b>: <u>The scheme of your weblog's broadcasting</u>.
-                </a>
-                <br/>
+                    <b>Info</b>: <u>Схема организации WEB-трансляции лога</u>.
+                </a><br/>
+                <a href="/static/html/map.html" target="_blank" rel="noopener" class="blue">
+                    <b>Info</b>: <u>Создание маршрута экспедиции. &nbsp;&nbsp; Настройка GPS программ.</u>
+                </a><br/>
+                <a href="/static/html/support_us.html" target="_blank" rel="noopener" class="blue">
+                    <b>Info</b>: <u>Создание формы для приема платежей.</u>
+                </a><br/>
                 <a href="https://n1mm.hamdocs.com/tiki-index.php" target="_blank" rel="noopener" class="blue">
-                    <u><b>N1MM Log</b></u></a> website. &nbsp; 
-                <a href="http://tnxqso.com/static/files/qsoclient.zip" rel="noopener" class="blue">
-                    <u><b>QSOclient</b></u></a> download.  &nbsp; 
+                    <u><b>N1MM Log</b></u></a> вебсайт. &nbsp;&nbsp;&nbsp;&nbsp; 
+                Скачать <a href="http://tnxqso.com/static/files/qsoclient.zip" rel="noopener" class="blue">
+                    <u><b>QSOclient</b></u></a>. &nbsp;&nbsp;&nbsp;&nbsp; 
                 <a href="https://play.google.com/store/apps/details?id=com.jillybunch.shareGPS" target="_blank" rel="noopener" class="blue">
                     <u><b>Share GPS</b></u></a> and <a href="https://play.google.com/store/apps/details?id=com.mendhak.gpslogger" target="_blank" rel="noopener" class="blue">
-                    <u><b>GPS Logger</b></u></a> at GooglePlay.                
+                    <u><b>GPS Logger</b></u></a> на GooglePlay.                
             </div>
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='<b>Publish... </b> - Set a mark for the publication of your expedition in the stations\'s list on the homepage. <br/>Set the mark only when your <b>Station\'s link</b> is completely ready.<br/><b>Station\'s link is a direct link to the page of your expedition/station </b>. There is convenient to use this link for sharing in social nets/forums/clusters.<br/><hr/><b>Publish...</b> - Поставьте отметку для публикации вашей экспедиции в списке станций на главной странице. <br/>Отметку ставьте после того, как ваша страница по <b>Station\'s link</b> полностью готова.<br/><b>Station\'s link - это прямая ссылка на страницу вашей экспедиции/станции</b>.<br/>Для распространения в соц.сетях/форумах/кластерах удобно использовать именное её.'">
+                    @click="infoPopup='Поставьте отметку для публикации вашей экспедиции в списке станций на главной странице. <br/>Отметку ставьте после того, как ваш профиль по станции полностью готов.<br/><u>Ссылку на страницу станции</u> удобно использовать для распространения в соц.сетях/форумах/кластерах.'">
                 <input type="checkbox" id="checkbox_publish" v-model="settings.publish"/> 
-                <b>Publish</b> this station's info on the TNXQSO.com main page <br/>
-                Station's callsign: <input type="text" id="station_callsign" v-model="settings.station.callsign"/> 
+                <b>Показывать</b> эту станцию на главной странице TNXQSO.com<br/>
+                Позывной экспедиции: <input type="text" id="station_callsign" v-model="settings.station.callsign"/> 
                 <span id="stations_link">
-                    Station's link: <a :href="stationLink" target="_blank" rel="noopener">{{stationLink}}</a>
+                    Ссылка: <a :href="stationLink" target="_blank" rel="noopener">{{stationLink}}</a>
                 </span><br/>
-                Station's title: <input type="text" id="station_name" v-model="settings.station.title"/><br/>
-                Activity period: 
+                Название экспедиции: <input type="text" id="station_name" v-model="settings.station.title"/><br/>
+                Период активности: 
                     <date-picker v-model="settings.station.activityPeriod" format="dd.MM.yyyy"
                         range confirm lang="en"></date-picker>
                     </select>
@@ -42,16 +46,16 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='<b>Take status from:</b> - Choose from where we will receive information that the station is ONLINE or OFFLINE.<br/> <b>Manual</b> - manual status setting. <i>(Do not forget to click the Save all info button.) </i><br/><b>Show on this tab:</b> - You can select the data that will be broadcast on this tab.<br/><hr/><b>Take status from:</b> - Выберите откуда будем поступать информация о том, что станция ONLINE или OFFLINE.<br/><b>Manual</b> - ручная установка статуса. <i>(Не забудьте нажать кнопку Save all info.)</i><br/><b>Show on this tab:</b> - Можно выбрать данные, которые будут транслироваться на этой вкладке.'">
-                <input type="checkbox" id="checkbox_status" checked disabled/> Show the <b>ONLINE/OFFLINE</b> tab on the station's page
+                    @click="infoPopup='Выберите, откуда будет поступать информация о том, что станция ONLINE или OFFLINE.<br/><br/><b>QSOclient</b><br/>Если на компьютере экспедиции запущен настроенный QSOclient, то статус - ONLINE.<br/>Все данные об RDA, RAFA и т.д. задаются в программе QSOclient.<br/><br/><b>GPS Logger</b><br/>Если на телефоне экспедиции запущен настроенный GPS Logger, то статус - ONLINE.<br/>Район RDA и возможный WFF, указывается здесь, в Профиле станции. RAFA указывается автоматически, исходя из координат.<br/><br/><b>При ручном указании</b> статуса ONLINE/OFFLNE все поля заполняются здесь, в Профиле станции.<br/>Можно выбирать данные, которые будут транслироваться на этой вкладке.<br/><br/><i>Не забудьте нажать на кнопку Save all info.</i>'">
+                <input type="checkbox" id="checkbox_status" checked disabled/> Показывать <b>ONLINE/OFFLINE</b> вкладку на странице станции
                 <div class="block_settings">
-                    <u>Take ONLINE/OFFLINE status from</u>: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                    <u>Брать ONLINE/OFFLINE статус из</u>: &nbsp;&nbsp;&nbsp;&nbsp; 
                     <input type="radio" name="status_from" v-model="settings.status.get" value="qsoclient"/> 
-                    QSOclient &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                    QSOclient &nbsp;&nbsp;&nbsp;&nbsp; 
                     <input type="radio" name="status_from" v-model="settings.status.get" value="gpslogger"/> 
-                    GPS Logger &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    GPS Logger &nbsp;&nbsp;&nbsp;&nbsp; 
                     <input type="radio" name="status_from" v-model="settings.status.get" value="manual"/> 
-                    Manual
+                    Указать вручную
                     <span id="manual_status" v-if="settings.status.get === 'manual'">
                         : &nbsp; 
                         <input type="radio" name="status_manual" v-model="status.online" :value="true">
@@ -62,7 +66,7 @@
                     <br/><br/>
                     <table id="status_setup">
                         <tr>
-                            <td class="col1"><u>Show on this tab:</u></td>
+                            <td class="col1"><u>Показывать на этой вкладке:</u></td>
                             <td>&nbsp;</td>
                         </tr>
                         <tr>
@@ -132,14 +136,12 @@
                 <a href="/static/html/map.html" target="_blank" rel="noopener">
                     <img class="icon_info" src="/static/images/icon_info.png" title="Info">
                 </a>
-                <input type="checkbox" id="checkbox_map" v-model="settings.enable.map" /> Show the <b>Map</b> tab on the station's page<br/>
-                <a href="/static/html/map.html" target="_blank" rel="noopener" class="blue">
-                    <b>Info</b>: <u>Route's (geo marker's) creation by using Google Maps</u>
-                </a><br/>
+                <input type="checkbox" id="checkbox_map" v-model="settings.enable.map" /> Показывать вкладку <b>Map</b> на странице вашей станции<br/>
+
                 <template v-if="settings.enable.map">
                         <table id="custom_mark">
                             <tr>
-                                <td colspan="10"><u>Select a mark for your station on the map</u></td>
+                                <td colspan="10"><u>Иконка для отображения вашей станции на карте</u></td>
                             </tr>
                             <tr>
                                 <td v-for="n in $options.CURRENT_POSITION_ICONS_COUNT">
@@ -152,12 +154,12 @@
                         </table>
                         <table id="manual_gps">
                             <tr>
-                                <td colspan="3"><u>Manual setting of your station's coordinates</u></td>
+                                <td colspan="3"><u>Указание координат станции вручную</u></td>
                             </tr>
                             <tr>
-                                <td class="note">Latitude</td>
-                                <td class="note">Longitude</td>
-                                <td class="note">Comment</td>
+                                <td class="note">Широта</td>
+                                <td class="note">Долгота</td>
+                                <td class="note">Комментарий</td>
                             </tr>
                             <tr>                            
                                 <td><input type="number" v-model="status.location[0]"></td>
@@ -165,17 +167,17 @@
                                 <td><input type="text" v-model="status.comments"></td>
                             </tr>
                             <tr>                            
-                                <td class="note" colspan="3">Coordinates format: &nbsp;&nbsp;&nbsp; 12,345678</td>
+                                <td class="note" colspan="3">формат коодинат: &nbsp;&nbsp;&nbsp; 12,345678</td>
                             </tr>
                         </table>
 
-                    <b>Uploaded file</b>: {{trackFile ? trackFile : '...'}}<br/>
+                    <b>Загружен файл</b>: {{trackFile ? trackFile : '...'}}<br/>
                     <div class="block_settings">
                         <input type="file" id="fileTrack" style="display:none" @change="uploadTrack">
                         <label class="btn" for="fileTrack" :disabled="!user.stationCallsign">
-                            Upload KML/KMZ/GPX file with expedition's route or geo marker
+                            Загрузка KML/KMZ/GPX файла с маршрутом экспедиции
                         </label> &nbsp; 
-                        <input type="button" id="button_clear_track" class="btn" value="Delete file"
+                        <input type="button" id="button_clear_track" class="btn" value="Удалить файл"
                             v-if="user.stationCallsign && trackFile"
                             @click="clearTrack()"/><br/><br/>
                     </div>
@@ -185,17 +187,14 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='Mark those columns of the log that will be broadcast to the site. <br/> The names of the user columns and their values can be changed in the QSOclient program or in the ONLINE/OFFLINE tab settings.<br/><hr/>Отметьте те колонки лога, которые будут транслироваться на сайт.<br/>Названия пользовательских колонок изменяются в программе QSOclient или в настройках вкладки ONLINE/OFFLINE.'">
+                    @click="infoPopup='Отметьте те колонки лога, которые будут транслироваться на сайт.<br/>Названия пользовательских колонок изменяются в программе QSOclient или в настройках вкладки ONLINE/OFFLINE.'">
                 <input type="checkbox" id="checkbox_log" v-model="settings.enable.log" />
-                Show the <b>Online log</b> tab on the station's page <br/> 
-                <!--template v-if="settings.enable.log">
-                    <input type="checkbox" id="checkbox_log" v-model="settings.enable.stats"/>
-                    Show the <b>Stats</b> tab on the station's page 
-                </template-->
+                Показывать вкладку <b>Online log</b> на странице вашей станции<br/> 
+
                 <div class="block_settings" v-if="settings.enable.log">
                     <table id="log_setup">
                         <tr>
-                            <td><u>Show in the log</u>:</td>
+                            <td><u>Показывать в логе</u>:</td>
                             <td class="setting">
                                 <input type="checkbox" id="checkbox_log_rda" v-model="settings.log.columns.RDA" />
                                 RDA
@@ -219,7 +218,7 @@
                             </td>
                         </tr>
                     </table>
-                    <input type="button" id="button_clear_log" class="btn" value="Clear online log" 
+                    <input type="button" id="button_clear_log" class="btn" value="Очистить Online log" 
                         :disabled="!user.stationCallsign"
                         @click="clearLog()"/>
                 </div>
@@ -228,8 +227,8 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='<b>The INFO tab</b> It\'s appropriate to place the common information and photos with the description of the expedition\'s purpose , operators, the route of the expedition etc.<br/><hr/>Во вкладке <b>INFO</b> уместно разместить общую информацию и фото с описанием цели, состава операторов, маршрута экспедиции/станции.'">
-                <input type="checkbox" id="checkbox_info" v-model="settings.enable.stationInfo" /> Show the <b>Info</b> tab on the station's page<br/><br/>
+                    @click="infoPopup='Во вкладке <b>INFO</b> уместно разместить общую информацию и фото с описанием цели, состава операторов, маршрута экспедиции/станции.'">
+                <input type="checkbox" id="checkbox_info" v-model="settings.enable.stationInfo" /> Показывать вкладку <b>Info</b> на странице вашей станции<br/><br/>
                 <div class="block_settings" v-if="settings.enable.stationInfo">
                     <vue-editor id="editor_info" v-model="settings.station.info" 
                         :editorToolbar="editorToolbar"></vue-editor><br/>
@@ -240,7 +239,7 @@
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
                     @click="infoPopup='<b>The NEWS tab</b>. Adding current reports of the work of the expedition/station to the website.<br/><hr/>Вкладка <b>NEWS</b> - добавление на сайт оперативных сообщений о работе экспедиции/станции.'">
-                <input type="checkbox" id="checkbox_news" v-model="settings.enable.news" /> Show the <b>News</b> tab on the station's page
+                <input type="checkbox" id="checkbox_news" v-model="settings.enable.news" /> Show the <b>News</b> на странице вашей станции
                 <div class="block_settings" v-if="settings.enable.news">
                     <input type="button" id="button_clear_news" class="btn" value="Clear all news"
                          :disabled="!user.stationCallsign"
@@ -256,13 +255,13 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='<b>Callsigns to track</b> - The callsigns specified in this section will be tracked in the cluster\'s spots and broadcast to the <b> ADXCLUSTER </b> tab. You can specify either the specific callsign (R7AB or R7AB/M) and the callsign\'s group, using the & laquo; asterisk & raquo; (*/P - all the callsigns with /P).<br/><b>Highlight callsign...</b> - the callsigns specified in this section will be highlighted in color (For example, in tracking we specify */P, and here we write R7AB*.)<br/><hr/><b>Callsigns to track</b> - Позывные, указанные в этом разделе, будут отслеживаться в спотах кластера и транслироваться на вкладке <b>ADXCLUSTER</b>. Указывать можно как конкретный позывной (R7AB или R7AB/M), так и группу позывных, используя &laquo;звездочку&raquo; (*/P - все позывные /P).<br/><b>Highlight callsign...</b> - позывные, указанные в этом разделе, будут выделяться цветом (Например, в отслеживании указываем */P, а здесь пишем R7AB*.)'">
-                <input type="checkbox" id="checkbox_cluster" v-model="settings.enable.cluster" /> Show the <b>ADXcluster</b> tab on the station's page 
+                    @click="infoPopup='Указывать можно как конкретный позывной (R7AB или R7AB/M), так и группу позывных, используя &laquo;звездочку&raquo;<br/><b>*/P</b> - будут показываться все позывные .../P.<br/><b>R* UA* UB* UC* UD* UE* UF* UG* UH* UI*</b> - будут показываться все российские позывные.<br/>Выделять цветом лучше только позывной своей экспедиции/станции.'">
+                <input type="checkbox" id="checkbox_cluster" v-model="settings.enable.cluster" /> Показывать вкладку <b>ADXcluster</b>  на странице вашей станции
                 <div class="block_settings" v-if="settings.enable.cluster">
-                Callsigns to track ( separeted by spaces or commas):<br/>
+                Позывные или фильтры для отслеживания <i>(разделяются пробелом или запятой)</i>:<br/>
                 <input type="text" id="setup_cluster" v-model="clusterCallsigns" 
                     @change="clusterCallsignsChange"/><br/>
-                Highlight callsign with color:<br/>
+                Позывные для выделения цветом:<br/>
                 <input type="text" id="highlight_calls" v-model="clusterHighlight" 
                     @change="clusterHighlightChange" />
                 </div>
@@ -271,13 +270,13 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='The <b>CHAT</b> tab. Callsigns specified in this section highlighted in color. Only the administrator of the station can delete chat messages.<br/><hr/>Вкладка <b>CHAT</b>. Позывные, указанные в этом разделе, выделяются цветом на странице чата. Удалять сообщения чата может только администратор станции.'">
-                <input type="checkbox" id="checkbox_chat" v-model="settings.enable.chat" /> Show the <b>Chat</b> tab on the station's page<br/>
+                    @click="infoPopup='Удалять сообщения чата может только администратор станции.'">
+                <input type="checkbox" id="checkbox_chat" v-model="settings.enable.chat" /> Показывать вкладку <b>Chat</b> на странице вашей станции<br/>
                 <div class="block_settings" v-if="settings.enable.chat">
-                    Highlighted callsigns: <br/>
+                    Позывные для выделения цветом: <br/>
                     <input type="text" id="admin_calls" v-model="chatAdmins" 
                         @change="chatAdminsChange" /><br/>
-                    <input type="button" id="button_clear_chat" class="btn" value="Clear chat"
+                    <input type="button" id="button_clear_chat" class="btn" value="Очистить чат"
                         @click="clearChat()"/>
                 </div>
             </div>
@@ -285,8 +284,8 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='The <b>INSTAGRAM</b> tab. Broadcasting the photo/video of the selected Instargam account to your station page.<br/><hr/>Вкладка <b>INSTAGRAM</b> - трансляция фото/видео выбранного аккаунта Instargam на страницу вашей станции.'">
-                <input type="checkbox" id="checkbox_instagram" v-model="settings.enable.instagram" /> Show the <b>Instagram</b> tab on the station's page<br/>
+                    @click="infoPopup='На этой вкладке будет стоять ссылка на нашу страницу в Instagram'">
+                <input type="checkbox" id="checkbox_instagram" v-model="settings.enable.instagram" /> Показывать вкладку <b>Instagram</b> на странице вашей станции<br/>
                 <div class="block_settings" v-if="settings.enable.instagram">
                     Instagram ID: <input type="text" id="setup_instagram" v-model="settings.instagramID"/>
                 </div>
@@ -297,7 +296,7 @@
                 <a href="/static/html/support_us.html" target="_blank" rel="noopener">
                     <img class="icon_info" src="/static/images/icon_info.png" title="Info">
                 </a>
-                <input type="checkbox" id="checkbox_support_us" v-model="settings.enable.donate" /> Show <b>Support us</b> tab on the station's page<br/>
+                <input type="checkbox" id="checkbox_support_us" v-model="settings.enable.donate" /> Показывать вкладку <b>Support us</b> на странице вашей станции<br/>
                 <div class="block_settings" v-if="settings.enable.donate">
                     <vue-editor id="editor_donate" v-model="settings.donate.text" 
                         :editorToolbar="editorToolbar"></vue-editor>

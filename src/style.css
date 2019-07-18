@@ -792,6 +792,7 @@ table#chat_layout td{
 
 table#chat_layout .message_to{
     color: #aaa;
+    padding-right: 15px;
 }
 
 
@@ -973,7 +974,7 @@ table#chat_window td.message{
     padding-left: 20px;
 }
 input#station_callsign { font-weight: bold; }
-input#station_name { width: 780px; }
+input#station_name { width: 900px; }
 input#setup_cluster { width: 870px; font-weight: bold; color: #555;}
 input#highlight_calls { width: 870px; font-weight: bold; color: #900; background-color: #ffffee; border: 1px solid #aaa;}
 input#admin_calls { width: 870px; font-weight: bold; color: #900;}

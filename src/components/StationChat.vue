@@ -92,7 +92,7 @@ import storage from '../storage'
 
 const chatUserNameStorageKey = 'chatUserName'
 const typingInt = 5 * 60
-const RE_MSG_TO = /(:?\u21d2\s?\w+\s?)+(:?\s|$)/
+const RE_MSG_TO = /(:?\u21d2\s?\w+(:?\/\w+)*\s?)+(:?\s|$)/
 
 export default {
   replace0: replace0,

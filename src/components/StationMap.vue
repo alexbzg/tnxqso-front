@@ -2,6 +2,7 @@
     <div id="map">
     <div id="refresh_time">Auto refresh<br/><b>1 min</b></div>
       <l-map style="height: 100%; width: 100%" :zoom="zoom" :center="center"
+        :bounds="bounds"
         :options="{zoomControl: false, attributionControl: false}">
         <l-tile-layer :url="url"></l-tile-layer>
         <l-control-attribution prefix="Powered by <a href='https://r1cf.ru/rdaloc/' target='_blank' rel='noopener'>
@@ -21,7 +22,7 @@
             :visible="layer.visible"
             :options="{minZoom: layer.minZoom, maxZoom: layer.maxZoom}"
             />
-        <l-geo-json v-if="track" :geojson="track"></l-geo-json>
+        <l-geo-json :geojson="track" ref="geoJsonTrack"></l-geo-json>
         <l-marker :lat-lng="currentLocation" v-if="stationSettings && currentLocation">
             <l-icon                 
                 :icon-url="'/static/images/icon_map_' + stationSettings.currentPositionIcon + '.png'"
@@ -57,6 +58,8 @@ import trackService from '../track-service'
 import request from '../request'
 // const currentMarkerOptions = { preset: 'islands#dotIcon', iconColor: '#ff0000' }
 
+const DEFAULT_ZOOM = 8
+
 export default {
   name: 'StationMap',
   props: ['statusService', 'stationSettings'],
@@ -83,8 +86,9 @@ export default {
       data: {},
       url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
       track: null,
-      zoom: 8,
+      zoom: DEFAULT_ZOOM,
       center: [60, 60],
+      bounds: null,
       map: null,
       layers: [
         {
@@ -98,7 +102,7 @@ export default {
           name: 'RAFA',
           layers: 'AOPAF',
           styles: 'rafa',
-          visible: true,
+          visible: false,
           minZomm: 8
         },
         {
@@ -111,15 +115,15 @@ export default {
       ]
     }
   },
-  created () {
+  mounted () {
     const vm = this
+    this.statusService.onUpdate( this.updateLocation )
     trackService.load()
       .then( function () {
         vm.trackVersion = trackService.data.version
         vm.trackFile = trackService.data.file
         vm.showTrack()
       })
-    this.statusService.onUpdate( this.updateLocation )
   },
   methods: {
     showTrack () {
@@ -130,9 +134,14 @@ export default {
           .then(response => {
             const trackDOM = new DOMParser().parseFromString(response.data, 'application/xml')
             if (response.data.includes('kml')) {
-              this.track = toGeoJson.kml(trackDOM)
+              vm.track = toGeoJson.kml(trackDOM)
             } else {
-              this.track = toGeoJson.gpx(trackDOM)
+              vm.track = toGeoJson.gpx(trackDOM)
+            }
+            if (!vm.currentLocation && vm.track) {
+              vm.$nextTick(() => {
+                vm.bounds = vm.$refs.geoJsonTrack.getBounds()
+              })
             }
           })
       }
@@ -140,7 +149,11 @@ export default {
     updateLocation () {
       if (this.statusService.data && this.statusService.data.location) {
         const dt = this.statusService.data
+        if (!this.currentLocation) {
+          this.zoom = DEFAULT_ZOOM
+        }
         this.currentLocation = dt.location
+        this.bounds = null
         this.center = dt.location
         this.currentPopup.dateTime = dt.date + ' ' + dt.time
         this.currentPopup.speed = dt.speed ? 'speed: ' + dt.speed.toFixed( 1 ) + ' km/h' : null

@@ -951,6 +951,11 @@ table#chat_window td.message{
 #button_clear_all{
     float: left;
 }
+#button_help_info{
+    float: left;
+    color: yellow;
+    margin-left: 130px;
+}
 .icon_info{
     cursor: pointer;
     float: right;
@@ -973,8 +978,8 @@ table#chat_window td.message{
 .block_settings{
     padding-left: 20px;
 }
-input#station_callsign { font-weight: bold; }
-input#station_name { width: 900px; }
+input#station_callsign { font-weight: bold; text-align: center;}
+input#station_name { width: 900px;  text-align: center; font-weight: bold; }
 input#setup_cluster { width: 870px; font-weight: bold; color: #555;}
 input#highlight_calls { width: 870px; font-weight: bold; color: #900; background-color: #ffffee; border: 1px solid #aaa;}
 input#admin_calls { width: 870px; font-weight: bold; color: #900;}

@@ -2,6 +2,8 @@
     <div>
          <div id="station_menu">
             <input type="button" id="button_clear_all" class="btn" value="Очистить профиль" @click="clearAll()"/>
+            <input type="button" id="button_help_info" class="btn" value="Справочная информация" 
+                @click="openInfo()"/>
             <router-link to="/changePassword" tag="input" type="button" id="button_change_email" 
                 class="btn" value="Сменить email/пароль"/>
             <!--input type="button" id="button_change_email" class="btn" value="Change password"/-->
@@ -9,6 +11,7 @@
         </div>
 
         <div id="station_setup">
+        <!--
             <div class="station_setup_block">
                 <a href="/static/html/log.html" target="_blank" rel="noopener" class="blue">
                     <b>Info</b>: <u>Схема организации WEB-трансляции лога</u>.
@@ -27,12 +30,11 @@
                     <u><b>Share GPS</b></u></a> and <a href="https://play.google.com/store/apps/details?id=com.mendhak.gpslogger" target="_blank" rel="noopener" class="blue">
                     <u><b>GPS Logger</b></u></a> на GooglePlay.                
             </div>
+        -->
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
                     @click="infoPopup='Поставьте отметку для публикации вашей экспедиции в списке станций на главной странице. <br/>Отметку ставьте после того, как ваш профиль по станции полностью готов.<br/><u>Ссылку на страницу станции</u> удобно использовать для распространения в соц.сетях/форумах/кластерах.'">
-                <input type="checkbox" id="checkbox_publish" v-model="settings.publish"/> 
-                <b>Показывать</b> эту станцию на главной странице TNXQSO.com<br/>
                 Позывной экспедиции: <input type="text" id="station_callsign" v-model="settings.station.callsign"/> 
                 <span id="stations_link">
                     Ссылка: <a :href="stationLink" target="_blank" rel="noopener">{{stationLink}}</a>
@@ -41,13 +43,15 @@
                 Период активности: 
                     <date-picker v-model="settings.station.activityPeriod" format="dd.MM.yyyy"
                         range confirm lang="en"></date-picker>
-                    </select>
+                    </select><br/>
+                <input type="checkbox" id="checkbox_publish" v-model="settings.publish"/> <b>Показывать</b> эту станцию на главной странице TNXQSO.com
+                
             </div>
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
-                    @click="infoPopup='Выберите, откуда будет поступать информация о том, что станция ONLINE или OFFLINE.<br/><br/><b>QSOclient</b><br/>Если на компьютере экспедиции запущен настроенный QSOclient, то статус - ONLINE.<br/>Все данные об RDA, RAFA и т.д. задаются в программе QSOclient.<br/><br/><b>GPS Logger</b><br/>Если на телефоне экспедиции запущен настроенный GPS Logger, то статус - ONLINE.<br/>Район RDA и возможный WFF, указывается здесь, в Профиле станции. RAFA указывается автоматически, исходя из координат.<br/><br/><b>При ручном указании</b> статуса ONLINE/OFFLNE все поля заполняются здесь, в Профиле станции.<br/>Можно выбирать данные, которые будут транслироваться на этой вкладке.<br/><br/><i>Не забудьте нажать на кнопку Save all info.</i>'">
-                <input type="checkbox" id="checkbox_status" checked disabled/> Показывать <b>ONLINE/OFFLINE</b> вкладку на странице станции
+                    @click="infoPopup='Выберите, откуда будет поступать информация о том, что станция ONLINE или OFFLINE.<br/><img src=&quot;/static/images/oo_tab.jpg&quot;><br/><br/><b>QSOclient</b><br/>Если на компьютере экспедиции запущен настроенный QSOclient, то статус - ONLINE.<br/>Все данные об RDA, RAFA и т.д. задаются в программе QSOclient.<br/><br/><b>GPS Logger</b><br/>Если на телефоне экспедиции запущен настроенный GPS Logger, то статус - ONLINE.<br/>Район RDA и возможный WFF, указывается здесь, в Профиле станции. RAFA указывается автоматически, исходя из координат.<br/><br/><b>При ручном указании</b> статуса ONLINE/OFFLNE все поля заполняются здесь, в Профиле станции.<br/>Можно выбирать данные, которые будут транслироваться на этой вкладке.<br/><br/><i>Не забудьте нажать на кнопку Save all info.</i>'">
+                <!--<input type="checkbox" id="checkbox_status" checked disabled/> Показывать <b>ONLINE/OFFLINE</b> вкладку на странице станции -->
                 <div class="block_settings">
                     <u>Брать ONLINE/OFFLINE статус из</u>: &nbsp;&nbsp;&nbsp;&nbsp; 
                     <input type="radio" name="status_from" v-model="settings.status.get" value="qsoclient"/> 
@@ -152,7 +156,19 @@
                                 </td>
                             </tr>
                         </table>
-                        <table id="manual_gps">
+
+                    <b>Загружен файл</b>: {{trackFile ? trackFile : '...'}}<br/>
+                    <div class="block_settings">
+                        <input type="file" id="fileTrack" style="display:none" @change="uploadTrack">
+                        <label class="btn" for="fileTrack" :disabled="!user.stationCallsign">
+                            Загрузка KML/KMZ/GPX файла с маршрутом экспедиции
+                        </label> &nbsp; 
+                        <input type="button" id="button_clear_track" class="btn" value="Удалить файл"
+                            v-if="user.stationCallsign && trackFile"
+                            @click="clearTrack()"/><br/><br/>
+                    </div>
+
+                    <table id="manual_gps">
                             <tr>
                                 <td colspan="3"><u>Указание координат станции вручную</u></td>
                             </tr>
@@ -171,16 +187,6 @@
                             </tr>
                         </table>
 
-                    <b>Загружен файл</b>: {{trackFile ? trackFile : '...'}}<br/>
-                    <div class="block_settings">
-                        <input type="file" id="fileTrack" style="display:none" @change="uploadTrack">
-                        <label class="btn" for="fileTrack" :disabled="!user.stationCallsign">
-                            Загрузка KML/KMZ/GPX файла с маршрутом экспедиции
-                        </label> &nbsp; 
-                        <input type="button" id="button_clear_track" class="btn" value="Удалить файл"
-                            v-if="user.stationCallsign && trackFile"
-                            @click="clearTrack()"/><br/><br/>
-                    </div>
                 </template>
             </div>
 
@@ -194,7 +200,7 @@
                 <div class="block_settings" v-if="settings.enable.log">
                     <table id="log_setup">
                         <tr>
-                            <td><u>Показывать в логе</u>:</td>
+                            <td><u>Показывать в логе колонки</u>:</td>
                             <td class="setting">
                                 <input type="checkbox" id="checkbox_log_rda" v-model="settings.log.columns.RDA" />
                                 RDA
@@ -261,7 +267,7 @@
                 Позывные или фильтры для отслеживания <i>(разделяются пробелом или запятой)</i>:<br/>
                 <input type="text" id="setup_cluster" v-model="clusterCallsigns" 
                     @change="clusterCallsignsChange"/><br/>
-                Позывные для выделения цветом:<br/>
+                Позывные для выделения цветом <i>(разделяются пробелом или запятой)</i>:<br/>
                 <input type="text" id="highlight_calls" v-model="clusterHighlight" 
                     @change="clusterHighlightChange" />
                 </div>
@@ -273,7 +279,7 @@
                     @click="infoPopup='Удалять сообщения чата может только администратор станции.'">
                 <input type="checkbox" id="checkbox_chat" v-model="settings.enable.chat" /> Показывать вкладку <b>Chat</b> на странице вашей станции<br/>
                 <div class="block_settings" v-if="settings.enable.chat">
-                    Позывные для выделения цветом: <br/>
+                    Позывные для выделения цветом <i>(разделяются пробелом или запятой)</i>: <br/>
                     <input type="text" id="admin_calls" v-model="chatAdmins" 
                         @change="chatAdminsChange" /><br/>
                     <input type="button" id="button_clear_chat" class="btn" value="Очистить чат"
@@ -438,6 +444,9 @@ export default {
     }
   },
   methods: {
+    openInfo () {
+      window.open('/static/html/info.html', '_blank')
+    },
     logout () {
       this.user.logout()
       this.$router.push( '/login' )

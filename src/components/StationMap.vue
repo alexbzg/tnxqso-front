@@ -58,7 +58,7 @@ import trackService from '../track-service'
 import request from '../request'
 // const currentMarkerOptions = { preset: 'islands#dotIcon', iconColor: '#ff0000' }
 
-const DEFAULT_ZOOM = 8
+const DEFAULT_ZOOM = 13
 
 export default {
   name: 'StationMap',
@@ -102,7 +102,7 @@ export default {
           name: 'RAFA',
           layers: 'AOPAF',
           styles: 'rafa',
-          visible: false,
+          visible: true,
           minZomm: 8
         },
         {

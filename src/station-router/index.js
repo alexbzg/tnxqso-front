@@ -7,6 +7,7 @@ import StationInfo from '../components/StationInfo'
 import StationMap from '../components/StationMap'
 import StationChat from '../components/StationChat'
 import StationLog from '../components/StationLog'
+import StationStats from '../components/StationStats'
 import StationInstagram from '../components/StationInstagram'
 import StationDonate from '../components/StationDonate'
 
@@ -23,12 +24,12 @@ const router = new Router({
       props: true,
       component: StationCluster
     },
-/*    {
-      path: '/news',
-      name: 'StationNews',
-      component: StationNews,
+    {
+      path: '/stats',
+      name: 'StationStats',
+      component: StationStats,
       props: true
-    }, */
+    },
     {
       path: '/log',
       name: 'StationLog',

@@ -56,12 +56,15 @@
                 v-if="enable.cluster">ADXcluster</router-link>
             <router-link to="/chat" tag="div" id="tab_chat" class="tab" 
                 v-if="enable.chat" :class="{updated_tab: tabsUnread.chat }">
-            Chat</router-link>
+                Chat
+            </router-link>
             <div id="tab_instagram" class="tab" 
                 v-if="enable.instagram && stationSettings && stationSettings.instagramID">
                 <a :href="'https://www.instagram.com/' + stationSettings.instagramID" 
                     target="_blank" rel="noopener">Instagram</a>
             </div>
+            <router-link to="/stats" tag="div" id="tab_log" class="tab" 
+                v-if="enable.log">Stats</router-link>
             <router-link to="/donate" tag="div" id="tab_donate" class="tab" 
                 v-if="enable.donate">Support us</router-link>
         </td>

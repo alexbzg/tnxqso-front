@@ -2,20 +2,19 @@ import rdaShort from '../rdaShort.json'
 
 export const BANDS = ['1.8', '3.5', '7', '10', '14', '18', '21', '24', '28']
 
-export function orderedBands() {
+export function orderedBands () {
   return BANDS.slice().sort((a, b) => {
-        return Number(a) - Number(b)
-      })
+    return Number(a) - Number(b)
+  })
 }
 
-export const MODES = ['CW', 'SSB', 'DIGI']
+export const MODES = ['CW', 'SSB', 'FT8']
 export const MODES_FULL = {
   'CW': ['CW'],
   'SSB': ['USB', 'SSB', 'LSB', 'AM', 'FM'],
   'FT8': ['FT8']
 }
 export const ROLES = {hunter: 'Hunter', activator: 'Activator'}
-
 
 const rdaValues = []
 for (const group of rdaShort) {
@@ -44,20 +43,20 @@ export function parseRDA (val) {
   return r
 }
 
+const RE_STRIP_CALLSIGN = /\d*[A-Z]+\d+[A-Z]+/
 
-const reSTRIP_CALLSIGN = /\d*[A-Z]+\d+[A-Z]+/
-
-export function stripCallsign(callsign) {
-    let match = null
-    if (match = reSTRIP_CALLSIGN.exec(callsign))
-        return match[0]
-    else
-        return null
+export function stripCallsign (callsign) {
+  let match = null
+  if (match = RE_STRIP_CALLSIGN.exec(callsign)) {
+    return match[0]
+  } else {
+    return null
+  }
 }
 
-const reCALLSIGN_FULL = /^(:?[A-Z\d]+\/)?\d?[A-Z]+\d+[A-Z]+(:?\/[A-Z\d]+)*$/
+const RE_CALLSIGN_FULL = /^(:?[A-Z\d]+\/)?\d?[A-Z]+\d+[A-Z]+(:?\/[A-Z\d]+)*$/
 
 export function validCallsignFull (callsign) {
-  return reCALLSIGN_FULL.test(callsign)
+  return RE_CALLSIGN_FULL.test(callsign)
 }
 

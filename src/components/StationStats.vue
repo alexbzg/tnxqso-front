@@ -1,75 +1,104 @@
 <template>
-    <div id="log">
-        <div id="refresh_time">Auto refresh<br/><b>1 min</b></div>
-        <div id="no_net" v-if="stationActive && !statusOnline" class="warning">
-          <div id="warning_border">
-            <span>There is no Internet connection to the station.</span> The data will be updated after the connection is restored.
-          </div>
-        </div>
-        <div id="call_search">
-            Callsign: 
-            <input type="text" id="input_call" v-model="searchValue"> 
-            <button @click="search()">Search</button>
-        </div>
-
-        <table id="search_results" v-if="searchResults && searchResults.length > 0">
-          <tr>
-            <td id="icon_close">
-              <img src="/static/images/icon_close.png" title="Close search results"
-                @click="clearSearch()">
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <log-table :data="searchResults" :log-settings="stationSettings.log" 
-              v-if="stationSettings"></log-table>
-            </td>
-          </tr>
+    <div id="stats_block">
+        <table id="stats">
+            <tr>
+                <td id="stats_total">
+                    <table>
+                        <tr>
+                            <td class="top option"></td><td class="top value">Total</td>
+                        </tr>
+                        <tr>
+                            <td class="option">QSO</td><td class="value">{{qsoCount}}</td>
+                        </tr>
+                        <tr>
+                            <td class="option">Calls</td><td class="value">{{csCount}}</td>
+                        </tr>
+                        <tr v-for="field in fields">
+                            <td class="option">{{field}}</td><td class="value">{{fieldValuesCount[field]}}</td>
+                        </tr>
+                        <tr>
+                            <td class="option">Locators</td><td class="value">{{locatorsCount}}</td>
+                        </tr>
+                        <tr>
+                            <td class="option">Days</td><td class="value">{{daysCount}}</td>
+                        </tr>
+                 </table>
+                </td>
+                <td id="stats_filter">
+                    Statistic filter<br/>
+                    <select v-model="filter.band">
+                        <option :value="null">All bands</option>
+                        <option v-for="band in BANDS" :value="band">{{band}} MHz</option>
+                    </select>
+                    +
+                    <select v-model="filter.mode">
+                        <option :value="null">All modes</option>
+                        <option v-for="mode in MODES" :value="mode">{{mode}}</option>
+                    </select>
+                    +
+                    <select v-model="filter.field" @change="filter.fieldValue = null">
+                        <option v-for="field in fields" :value="field">{{field}}</option>
+                    </select>
+                    +
+                    <select v-model="filter.fieldValue">
+                        <option :value="null">All</option>
+                        <option v-for="value in filterFieldValues" :value="value">{{value}}</option>
+                    </select>
+                    <div id="filter_result">{{filteredQsoCount}} QSO</div>
+                </td>
+            </tr>
         </table>
-
-        <log-table :data="dataSlice" :log-settings="stationSettings.log" v-if="stationSettings"></log-table>
 
     </div>
 </template>
-
 <script>
-import * as moment from 'moment'
+// import storage from '../storage'
+import {MODES, MODES_FULL, orderedBands} from '../ham-radio'
 
-import tabMixin from '../station-tab-mixin'
-import LogTable from './LogTable'
-import storage from '../storage'
-
-const logSearchValueStorageKey = 'logSearchValue'
-const current = moment()
+// const logSearchValueStorageKey = 'logSearchValue'
 
 export default {
-  mixins: [tabMixin],
   name: 'StationStats',
   props: ['stationSettings'],
   data () {
-    const fields = []
-    for (const field in this.stationSettings.log.columns) {
-      if (field !== 'loc' && this.stationSettings.log.columns[field])
-        fields.push(field)
-    }
-    const userField = this.stationSettings.log.userColumns[0]
-    const userFieldName = this.stationSettings.userFields[0] || 'User field'
-    if (userField)
-      fields.push(userFieldName)
     return {
       tabId: 'stats',
-      fields: fields,
+      data: [],
       filter: {
         band: null,
         mode: null,
         field: 'RDA',
         fieldValue: null
       },
-      userField: userField,
-      userFieldName: userFieldName
+      BANDS: orderedBands(),
+      MODES: MODES,
+      MODES_FULL: MODES_FULL
     }
   },
+  mounted () {
+    this.service = this.$parent.$data.tabs.log.service
+    this.service.onUpdate(this.serviceUpdate)
+  },
   computed: {
+    fields () {
+      const fields = []
+      if (this.stationSettings) {
+        for (const field in this.stationSettings.log.columns) {
+          if (field !== 'loc' && this.stationSettings.log.columns[field]) {
+            fields.push(field)
+          }
+        }
+        if (this.stationSettings.log.userColumns[0]) {
+          fields.push(this.userFieldName)
+        }
+      }
+      return fields
+    },
+    userFieldName () {
+      return (this.stationSettings
+        ? this.stationSettings.userFields[0] || 'User field'
+        : null)
+    },
     qsoCount () {
       return this.data.length
     },
@@ -80,12 +109,15 @@ export default {
       const count = {}
       for (const field of this.fields) {
         if (field !== this.userFieldName) {
-          count[field] = this.uniqueVFieldalues(field).size
+          count[field] = this.uniqueFieldValues(field).size
         }
       }
+      return count
     },
     userFieldCount () {
-      return this.uniqueValues(x => x.userFields[0]).size
+      return (this.fields.includes(this.userFieldName)
+        ? this.uniqueValues(x => x.userFields[0]).size
+        : 0)
     },
     locatorsCount () {
       return this.uniqueValues(x => x.loc).size
@@ -94,49 +126,69 @@ export default {
       return this.uniqueValues(x => x.date).size
     },
     filterFieldValues () {
-      const values = this.filter.field === this.userFieldName ?
-        this.uniqueValues(x => x.userFields[0]) :
-        this.uniqueFieldValues(field)
+      const data = this.filterQso({band: this.filter.band, mode: this.filter.mode})
+      const values = (this.filter.field === this.userFieldName
+        ? this.uniqueValues(x => x.userFields[0], data)
+        : this.uniqueFieldValues(this.filter.field, data))
       return Array.from(values).sort((a, b) => {
-          if (a > b) {
-            return 1
-          }
-          if (a === b) {
-            return 0
-          }
-          if (a < b) {
-            return -1
-          }
-        })
+        if (a > b) {
+          return 1
+        }
+        if (a === b) {
+          return 0
+        }
+        if (a < b) {
+          return -1
+        }
+      })
     },
     filteredQsoCount () {
-      return this.data.reduce((accumulator, qso) => {
-        if (!this.filter.band || qso.band === this.filter.band) {
-          if (!this.filter.mode || FULL_MODES[this.filter.mode].indexOf(qso.mode) !== -1) {
-            if (!this.filter.fieldValue || 
-              ((this.filter.field === this.userFieldName && this.filter.fieldValue === qso.userFields[0]) ||
-               (this.filter.field !== this.userFieldName && 
-                this.filter.fieldValue === qso[this.filter.field.toLowerCase()]))) {
-              accumulator++
-            }
-          }
-        }
-        return accumulator
-      })
+      if (!this.data.length) {
+        return 0
+      }
+      return this.filterQso(this.filter).length
     }
   },
   methods: {
-    uniqueFieldValues (field) {
-      return this.uniqueValues(x => x[field.toLowerCase()], ', ')
+    filterQso (filter) {
+      const userFieldName = this.userFieldName
+      const modes = filter.mode ? this.MODES_FULL[filter.mode] : null
+      return this.data.filter(qso => {
+        if (!filter.band || qso.band === filter.band) {
+          if (!filter.mode || modes.includes(qso.mode)) {
+            if (!filter.fieldValue ||
+              ((filter.field === userFieldName && filter.fieldValue === qso.userFields[0]) ||
+               (filter.field !== userFieldName && qso[filter.field.toLowerCase()] &&
+                qso[filter.field.toLowerCase()].includes(filter.fieldValue)))) {
+              return true
+            }
+          }
+        }
+        return false
+      })
     },
-    uniqueValues (lambda, delimiter) {
-      if (delimiter) {
-        return new Set(this.data.reduce((accumulator, value) => {
-          value.split(delimiter).map(x => acummulator.push(x))
-          return accumulator
-        }))
+    serviceUpdate () {
+      this.data = this.service.data
+    },
+    uniqueFieldValues (field, data) {
+      return this.uniqueValues(x => x[field.toLowerCase()], /[, ]+/, data)
+    },
+    uniqueValues (lambda, delimiter, data) {
+      if (!data) {
+        data = this.data
       }
-      return new Set(this.data.map(lambda))
+      if (!data.length) {
+        return new Set([])
+      }
+      if (delimiter) {
+        return new Set(data.map(lambda).reduce((accumulator, value) => {
+          if (value) {
+            value.split(delimiter).map(x => accumulator.push(x))
+          }
+          return accumulator
+        }, []))
+      }
+      return new Set(data.map(lambda))
     }
   }
 }

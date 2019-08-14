@@ -287,6 +287,11 @@
                 </div>
             </div>
 
+            <div class="station_setup_block">
+                <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
+                    @click="infoPopup='На этой вкладке будет отображаться статистика связей в реальном времени'">
+                <input type="checkbox" id="checkbox_stats" v-model="settings.enable.stats" /> Показывать вкладку <b>Stats</b> на странице вашей станции<br/>
+            </div>
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
@@ -296,7 +301,6 @@
                     Instagram ID: <input type="text" id="setup_instagram" v-model="settings.instagramID"/>
                 </div>
             </div>
-
 
             <div class="station_setup_block">
                 <a href="/static/html/support_us.html" target="_blank" rel="noopener">

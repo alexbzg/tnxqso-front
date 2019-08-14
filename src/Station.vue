@@ -58,13 +58,13 @@
                 v-if="enable.chat" :class="{updated_tab: tabsUnread.chat }">
                 Chat
             </router-link>
+            <router-link to="/stats" tag="div" id="tab_log" class="tab" 
+                v-if="enable.stats">Stats</router-link>
             <div id="tab_instagram" class="tab" 
                 v-if="enable.instagram && stationSettings && stationSettings.instagramID">
                 <a :href="'https://www.instagram.com/' + stationSettings.instagramID" 
                     target="_blank" rel="noopener">Instagram</a>
             </div>
-            <router-link to="/stats" tag="div" id="tab_log" class="tab" 
-                v-if="enable.log">Stats</router-link>
             <router-link to="/donate" tag="div" id="tab_donate" class="tab" 
                 v-if="enable.donate">Support us</router-link>
         </td>

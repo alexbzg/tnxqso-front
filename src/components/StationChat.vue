@@ -48,7 +48,7 @@
                     <span class="message_to" v-for="callsign in msg.to" :key="callsign">
                         &rArr; {{callsign}}
                     </span>
-                    {{msg.text}}
+                    <span class="message_text" v-html="msg.text"></span>
                 </td>
             </tr>
         </table>
@@ -84,6 +84,7 @@
 
 <script>
 import _ from 'underscore'
+import sanitizeHTML from 'sanitize-html'
 
 import {replace0} from '../utils'
 import tabMixin from '../station-tab-mixin'
@@ -93,6 +94,12 @@ import storage from '../storage'
 const chatUserNameStorageKey = 'chatUserName'
 const typingInt = 5 * 60
 const RE_MSG_TO = /(:?\u21d2\s?\w+(:?\/\w+)*\s?)+(:?\s|$)/
+
+const MSG_SANITIZE_HTML_SETTINGS = {
+  allowedTags: ['h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
+    'nl', 'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
+    'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre']
+}
 
 export default {
   replace0: replace0,
@@ -214,6 +221,7 @@ export default {
       this.mixinServiceUpdate()
       if (this.data) {
         for (const msg of this.data) {
+          msg.text = sanitizeHTML(msg.text, MSG_SANITIZE_HTML_SETTINGS)
           let match = null
           if (match = RE_MSG_TO.exec(msg.text)) {
             const to = match[0]

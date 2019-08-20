@@ -42,7 +42,7 @@ input, button, textarea, select{
     box-shadow: 2px 2px 5px rgba(0,0,0,0.2); /* Параметры тени */
     border: none;
     border-radius: 7px;
-    cursor: pointer;    
+    cursor: pointer;
 }
 
 
@@ -175,7 +175,7 @@ table.tabs td#login{
 
 /* =============================   T A B  ==================================== */
 .tab{
-    display: inline-block;   
+    display: inline-block;
     padding: 7px 20px 7px 20px;
     margin: 0;
     font-size: 14px;
@@ -228,7 +228,7 @@ table.tabs td#login{
     border-bottom: 1px solid #ccc;
     margin-bottom: 50px;
     box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
-    text-align: center; 
+    text-align: center;
 }
 .list a {
     color: #333;
@@ -239,8 +239,8 @@ table.tabs td#login{
 }
 .index_list{
     width: 1000px;
-    padding-top: 30px; 
-    padding-bottom: 0px; 
+    padding-top: 30px;
+    padding-bottom: 0px;
     line-height: 2em;
 }
 .index_list a{
@@ -280,7 +280,7 @@ table.tabs td#login{
 
 
 .list img{
-max-width: 900px; 
+max-width: 900px;
 }
 
 
@@ -291,7 +291,7 @@ max-width: 900px;
     width: 950px;
     margin: 0px auto 70px auto;
     padding: 0;
-    text-align: left;  
+    text-align: left;
     border-top: 1px solid #eee;
 }
 .stations_list div{
@@ -352,13 +352,13 @@ max-width: 900px;
     margin: 10px auto;
     text-align: left;
 }
-.info_block{ 
+.info_block{
     margin: 0 0 20px 0;
     padding: 0;
     background-color: white;
     border: 1px solid #ddd;
 }
-.info_date{ 
+.info_date{
     font-weight: bold;
     font-size: 12px;
     background-color: #ddd;
@@ -367,7 +367,7 @@ max-width: 900px;
     line-height: 1em;
     width: 130px;
 }
-.info_block p{ 
+.info_block p{
     padding: 10px 20px;
     margin: 0;
     text-indent: 1em;
@@ -418,11 +418,11 @@ table#search_results td#icon_close img{
 
 
 
-table#log { 
-    border-collapse: collapse; 
+table#log {
+    border-collapse: collapse;
     margin: 10px auto;
 }
-table#log td{ 
+table#log td{
     padding: 7px 10px;
     text-align: center;
     vertical-align: middle;
@@ -431,27 +431,27 @@ table#log td{
     line-height: 1em;
     color: #333;
 }
-table#log td.time span{ 
+table#log td.time span{
     font-size: 12px;
     line-height: 12px;
 }
-table#log td.mycall{ 
+table#log td.mycall{
     font-weight: bold;
     width: 80px;
     font-size: 16px;
     color: #555;
 }
-table#log td.urcall{ 
+table#log td.urcall{
     background-color: #f9ffec;
     font-weight: bold;
     width: 100px;
     font-size: 16px;
 }
-table#log td.head{ 
+table#log td.head{
     background-color: #aaa;
     color: #fff;
 }
-table#log tr.new_qso{ 
+table#log tr.new_qso{
     background-color: #e3f9e3;
 }
 
@@ -476,15 +476,15 @@ table#log tr.new_qso{
 
 
 
-#sponsor{ 
+#sponsor{
     width: 85%;
     margin: 10px auto 0px auto;
-    background-color: #fdfbda;  
+    background-color: #fdfbda;
     border: 1px solid #aaa;
     border-radius: 7px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     padding: 10px 20px;
-    font-size: 18px; 
+    font-size: 18px;
     line-height: 1.5em;
     color: #000;
     text-align: left;
@@ -540,36 +540,36 @@ table#log tr.new_qso{
 }
 
 
-table#send_spot_layout { 
-    border-collapse: collapse; 
+table#send_spot_layout {
+    border-collapse: collapse;
     width: 920px;
-    margin: 20px auto 50px auto;    
+    margin: 20px auto 50px auto;
 }
-table#send_spot_layout td{ 
+table#send_spot_layout td{
     padding: 0px 10px;
     text-align: center;
     line-height: 1em;
 }
-table#send_spot_layout input{ 
+table#send_spot_layout input{
     margin: 0;
     padding: 1px 10px;
     text-align: center;
 }
-table#send_spot_layout td input#spot_call{ 
+table#send_spot_layout td input#spot_call{
     width: 120px;
     font-weight: bold;
     border: 1px solid #aaa;
     padding: 2px 10px;
     background-color: #f9f9f9;
 }
-table#send_spot_layout td input#spot_band{ 
+table#send_spot_layout td input#spot_band{
     width: 90px;
 }
-table#send_spot_layout td input#spot_text{ 
+table#send_spot_layout td input#spot_text{
     width: 300px;
     color: #777;
 }
-table#send_spot_layout td input#spot_spotter{ 
+table#send_spot_layout td input#spot_spotter{
     width: 100px;
     color: #777;
 }
@@ -642,12 +642,12 @@ table#send_spot_layout td input#button_send_spot{
 
 
 
-table#cluster { 
-    border-collapse: collapse; 
+table#cluster {
+    border-collapse: collapse;
     width: 800px;
-    margin: 20px auto 5px auto;    
+    margin: 20px auto 5px auto;
 }
-table#cluster td{ 
+table#cluster td{
     padding: 7px 10px;
     font-size: 16px;
     text-align: left;
@@ -655,34 +655,34 @@ table#cluster td{
     border: 1px solid #ddd;
     line-height: 1em;
 }
-table#cluster td.time{ 
+table#cluster td.time{
     width: 50px;
 }
-table#cluster td.band{ 
+table#cluster td.band{
     width: 60px;
 }
-table#cluster td.mode{ 
+table#cluster td.mode{
     width: 30px;
     font-size: 12px;
     text-align: center;
 }
-table#cluster td.call, table#cluster td.call a{ 
+table#cluster td.call, table#cluster td.call a{
     width: 120px;
     font-weight: bold;
     color: #555;
     text-decoration: none;
 }
-table#cluster tr.highlight td.call, table#cluster tr.highlight td.call a{ 
+table#cluster tr.highlight td.call, table#cluster tr.highlight td.call a{
     color: #900;
 }
-table#cluster tr.highlight{ 
+table#cluster tr.highlight{
     background-color: #ffffee;
 }
-table#cluster td.text{ 
+table#cluster td.text{
     color: #777;
     font-size: 12px;
 }
-table#cluster td.spotter{ 
+table#cluster td.spotter{
     width: 100px;
     color: #777;
     font-size: 12px;
@@ -713,10 +713,10 @@ table#cluster td.spotter{
 
 
 
-#gps_map{ 
+#gps_map{
     font-size: 14px;
 }
-#map{ 
+#map{
     width: 1100px;
     height: 700px;
     padding: 0px;
@@ -1143,7 +1143,7 @@ table#info_popup_close{
 }
 #contact input#button_submit{
     width: 50%;
-    margin: 0 0 50px 0; 
+    margin: 0 0 50px 0;
 }
 
 
@@ -1163,37 +1163,34 @@ table#info_popup_close{
 /* ================================== S T A T S ==========================================*/
 
 
+
+
 #stats_block{
     text-align: center;
-    margin-top: 50px;
 }
 
 table#stats{
-    margin: 0 auto 100px auto;
+    margin: 0 auto 200px auto;
 }
-
 table#stats td{
     vertical-align: top;
 }
-table#stats td#stats_total{
-    vertical-align: top;
+table#stats_total{
     width: 250px;
-}
-table#stats td#stats_total table{
+    margin: 70px 100px 0 0;
     border-collapse: collapse;
 }
-table#stats td#stats_total td{
+table#stats_total td{
     width: 100px;
     border: 1px solid #ccc;
     padding: 5px 5px 5px 15px;
 }
-table#stats td#stats_total td.value{
+table#stats_total td.value{
     text-align: center;
     padding: 5px 5px 5px 5px;
     font-weight: bold;
-    color: #007;
 }
-table#stats td#stats_total td.top{
+table#stats_total td.top{
     border: none;
 }
 
@@ -1204,20 +1201,49 @@ table#stats td#stats_filter{
     font-weight: bold;
     color: #070;
 }
-table#stats td#stats_filter select, table#stats td#stats_filter option{ 
+table#stats td#stats_filter select, table#stats td#stats_filter option{
+    border: 1px solid #eee;
     color: #070;
 }
 table#stats td#stats_filter select{
     margin: 10px 0;
 }
 
-#filter_result{
-    text-align: center;
-    padding: 5px 0 0 50px;
-    font-weight: bold;
-    font-size: 24px;
-}
 
+table#filter_data{
+    border-collapse: collapse;
+    margin: 10px auto 0 auto;
+}
+table#filter_data td{
+    border: 1px solid #ccc;
+    padding: 5px 15px;
+    font-weight: bold;
+    color: #333;
+}
+table#filter_data span{
+    font-weight: normal;
+}
+table#filter_data td#qso_calls{
+    border: none;
+    padding: 0 15px;
+}
+table#filter_data td#qso_calls select{
+    margin: 0;
+    padding: 3px 10px;
+    font-size: 18px;
+    font-weight: bold;
+    border: 1px solid #eee;
+}
+table#filter_data td#qso_calls{
+    border: none;
+    padding: 0 10px;
+}
+table#filter_data tr.odd td{
+    background-color: #f9f9f9;
+}
+table#filter_data .data{
+    color: #070;
+}
 
 
 

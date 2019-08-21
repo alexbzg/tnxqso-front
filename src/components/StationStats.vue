@@ -26,10 +26,11 @@
                 </td>
                 <td id="stats_filter">
                     Statistic filter
-                    <select v-model="filter.field" @change="filter.fieldValue = null">
+                    <select v-model="filter.field" @change="filter.fieldValue = null; saveFilter()">
+                        <option :value="null">All</option>
                         <option v-for="field in fields" :value="field">{{field}}</option>
                     </select>
-                    <select v-model="filter.fieldValue">
+                    <select v-model="filter.fieldValue" @change="saveFilter()">
                         <option :value="null">All</option>
                         <option v-for="value in filterFieldValues" :value="value">{{value}}</option>
                     </select>
@@ -64,6 +65,9 @@
 <script>
 // import storage from '../storage'
 import {MODES, MODES_FULL, orderedBands} from '../ham-radio'
+import storage from '../storage'
+
+const STATS_FILTER_STORAGE_KEY = 'statsFilter'
 
 // const logSearchValueStorageKey = 'logSearchValue'
 
@@ -80,7 +84,7 @@ export default {
       },
       types: ['QSO', 'Calls'],
       type: 'QSO',
-      BANDS: orderedBands().reverse(),
+      BANDS: orderedBands(),
       MODES: MODES,
       MODES_FULL: MODES_FULL
     }
@@ -88,6 +92,7 @@ export default {
   mounted () {
     this.service = this.$parent.$data.tabs.log.service
     this.service.onUpdate(this.serviceUpdate)
+    this.loadFilter()
   },
   computed: {
     fields () {
@@ -136,6 +141,9 @@ export default {
       return this.uniqueValues(x => x.date).size
     },
     filterFieldValues () {
+      if (!this.filter.field) {
+        return []
+      }
       const r = (this.filter.field === this.userFieldName
         ? this.uniqueValues(x => x.userFields[0])
         : this.uniqueFieldValues(this.filter.field))
@@ -219,15 +227,37 @@ export default {
         }
       }
     },
+    loadFilter () {
+      if (this.stationSettings) {
+        const filter = storage.load(STATS_FILTER_STORAGE_KEY, 'local')
+        if (filter && this.stationSettings.callsign in filter) {
+          this.filter = filter[this.stationSettings.callsign]
+        }
+      }
+    },
+    saveFilter () {
+      const filter = storage.load(STATS_FILTER_STORAGE_KEY, 'local') || {}
+      filter[this.stationSettings.callsign] = this.filter
+      storage.save(STATS_FILTER_STORAGE_KEY, filter, 'local' )
+    },
     filterQso () {
       const userFieldName = this.userFieldName
       const filter = this.filter
       return this.data.filter(qso => {
-        if (!filter.fieldValue ||
-          ((filter.field === userFieldName && filter.fieldValue === qso.userFields[0]) ||
-          (filter.field !== userFieldName && qso[filter.field.toLowerCase()] &&
-          qso[filter.field.toLowerCase()].includes(filter.fieldValue)))) {
+        if (!filter.field) {
           return true
+        }
+        if (filter.fieldValue) {
+          if (((filter.field === userFieldName && filter.fieldValue === qso.userFields[0]) ||
+            (filter.field !== userFieldName && qso[filter.field.toLowerCase()] &&
+            qso[filter.field.toLowerCase()].includes(filter.fieldValue)))) {
+            return true
+          }
+        } else {
+          if ((filter.field === userFieldName && qso.userFields[0]) ||
+            (filter.field !== userFieldName && qso[filter.field.toLowerCase()])) {
+            return true
+          }
         }
         return false
       })
@@ -254,6 +284,11 @@ export default {
         }, []))
       }
       return new Set(data.map(lambda))
+    }
+  },
+  watch: {
+    stationSettings () {
+      this.loadFilter()
     }
   }
 }

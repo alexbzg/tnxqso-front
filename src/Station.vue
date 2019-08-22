@@ -133,6 +133,7 @@ export default {
     const vm = this
     stationSettings.load()
       .then( function () {
+        document.title = stationSettings.data.station.callsign + ' - TNXQSO.com'
         vm.stationCS = stationSettings.data.station.callsign
         vm.stationTitle = stationSettings.data.station.title
         vm.enable = stationSettings.data.enable

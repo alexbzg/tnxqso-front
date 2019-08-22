@@ -734,7 +734,9 @@ table#cluster td.spotter{
     margin: 3px 0 50px 0;
 }
 
-
+.leaflet-control-layers-base, .leaflet-control-layers-overlays{
+    text-align: left;
+}
 
 
 

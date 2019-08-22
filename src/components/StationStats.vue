@@ -230,8 +230,8 @@ export default {
     loadFilter () {
       if (this.stationSettings) {
         const filter = storage.load(STATS_FILTER_STORAGE_KEY, 'local')
-        if (filter && this.stationSettings.callsign in filter) {
-          this.filter = filter[this.stationSettings.callsign]
+        if (filter && this.stationSettings.station.callsign in filter) {
+          this.filter = filter[this.stationSettings.station.callsign]
         }
       }
     },

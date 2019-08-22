@@ -4,12 +4,13 @@
       <l-map style="height: 100%; width: 100%" :zoom="zoom" :center="center"
         :bounds="bounds"
         :options="{zoomControl: false, attributionControl: false}">
-        <l-tile-layer :url="url"></l-tile-layer>
+        <l-control-layers :sort-layers="true"/>
+        <l-tile-layer v-for="layer in baseLayers" :key="layer.id" :url="url" :options="{id: layer.id}" 
+            layer-type="base" :name="layer.name" :visible="layer.visible"/>
         <l-control-attribution prefix="Powered by <a href='https://r1cf.ru/rdaloc/' target='_blank' rel='noopener'>
-            R1CF RDA/RAFA maps</a>" position="bottomright"/>
-        <l-control-layers/>
+        R1CF RDA/RAFA maps</a>, <a href='https://www.mapbox.com/'>Mapbox</a>" position="bottomright"/>
         <l-wms-tile-layer
-            v-for="(layer, idx) in layers"
+            v-for="(layer, idx) in overlays"
             :key="idx"
             base-url="https://r1cf.ru/geoserver/cite/wms?"
             :layers="layer.layers"
@@ -59,6 +60,7 @@ import request from '../request'
 // const currentMarkerOptions = { preset: 'islands#dotIcon', iconColor: '#ff0000' }
 
 const DEFAULT_ZOOM = 13
+const MAPBOX_TOKEN = 'pk.eyJ1IjoiYWxleGJ6ZyIsImEiOiJjanptaDZhcTgwMHVtM2NwaDZycDQzcWM0In0.k6KQplJD5j-7O_L65Q7Vrg'
 
 export default {
   name: 'StationMap',
@@ -84,13 +86,25 @@ export default {
         comments: null
       },
       data: {},
-      url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+      url: 'https://api.mapbox.com/v4/{id}/{z}/{x}/{y}@2x.jpg90?access_token=' + MAPBOX_TOKEN,
+      baseLayers: [
+        {
+          id: 'mapbox.satellite',
+          name: 'Satellite',
+          visible: false
+        },
+        {
+          id: 'mapbox.streets',
+          name: 'Map',
+          visible: true
+        }
+      ],
       track: null,
       zoom: DEFAULT_ZOOM,
       center: [60, 60],
       bounds: null,
       map: null,
-      layers: [
+      overlays: [
         {
           name: 'RDA',
           layers: 'RDA_FULL',

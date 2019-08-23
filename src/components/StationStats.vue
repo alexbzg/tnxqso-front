@@ -237,7 +237,7 @@ export default {
     },
     saveFilter () {
       const filter = storage.load(STATS_FILTER_STORAGE_KEY, 'local') || {}
-      filter[this.stationSettings.callsign] = this.filter
+      filter[this.stationSettings.station.callsign] = this.filter
       storage.save(STATS_FILTER_STORAGE_KEY, filter, 'local' )
     },
     filterQso () {

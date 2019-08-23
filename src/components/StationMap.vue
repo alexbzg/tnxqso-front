@@ -4,11 +4,11 @@
       <l-map style="height: 100%; width: 100%" :zoom="zoom" :center="center"
         :bounds="bounds"
         :options="{zoomControl: false, attributionControl: false}">
-        <l-control-layers :sort-layers="true"/>
+        <l-control-layers :hide-single-base="true"/>
         <l-tile-layer v-for="layer in baseLayers" :key="layer.id" :url="url" :options="{id: layer.id}" 
             layer-type="base" :name="layer.name" :visible="layer.visible"/>
         <l-control-attribution prefix="Powered by <a href='https://r1cf.ru/rdaloc/' target='_blank' rel='noopener'>
-        R1CF RDA/RAFA maps</a>, <a href='https://www.mapbox.com/'>Mapbox</a>" position="bottomright"/>
+        R1CF RDA/RAFA maps</a>, <a href='https://www.openstreetmap.org/'>OpenStreeMap</a>" position="bottomright"/>
         <l-wms-tile-layer
             v-for="(layer, idx) in overlays"
             :key="idx"
@@ -66,7 +66,6 @@ import request from '../request'
 // const currentMarkerOptions = { preset: 'islands#dotIcon', iconColor: '#ff0000' }
 
 const DEFAULT_ZOOM = 13
-const MAPBOX_TOKEN = 'pk.eyJ1IjoiYWxleGJ6ZyIsImEiOiJjanptaDZhcTgwMHVtM2NwaDZycDQzcWM0In0.k6KQplJD5j-7O_L65Q7Vrg'
 
 export default {
   name: 'StationMap',
@@ -92,15 +91,10 @@ export default {
         comments: null
       },
       data: {},
-      url: 'https://api.mapbox.com/v4/{id}/{z}/{x}/{y}@2x.jpg90?access_token=' + MAPBOX_TOKEN,
+      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       baseLayers: [
         {
-          id: 'mapbox.satellite',
-          name: 'Satellite',
-          visible: false
-        },
-        {
-          id: 'mapbox.streets',
+          id: '',
           name: 'Map',
           visible: true
         }

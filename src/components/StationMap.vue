@@ -107,7 +107,7 @@ export default {
       overlays: [
         {
           name: 'RDA',
-          layers: 'RDA_FULL',
+          layers: 'RDA_FULL_R',
           styles: 'rda',
           visible: true,
           minZoom: 5

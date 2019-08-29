@@ -39,16 +39,20 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex'
+
 import _ from 'underscore'
 import VueRecaptcha from 'vue-recaptcha'
+
 import router from '../router'
-import {validateEmail} from '../utils'
+import {validateEmail, debugLog} from '../utils'
+import {ACTION_LOGIN, ACTION_POST} from '../store-user'
+
 export default {
   name: 'login',
-  props: ['user'],
   beforeRouteEnter ( to, from, next ) {
     next( vm => {
-      if ( vm.user.loggedIn ) {
+      if ( vm.$store.getters.loggedIn ) {
         router.push( '/profile' )
       }
     } )
@@ -66,6 +70,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions([ACTION_LOGIN, ACTION_POST]),
     onSubmit: _.debounce(function (e) {
       if ((this.newUser || this.passwordRecovery) && !this.recaptcha) {
         this.$refs.invisibleRecaptcha.execute()
@@ -78,42 +83,46 @@ export default {
       }
     }, 300, true),
     doLogin () {
-      const vm = this
-      this.user.login(
-        { login: this.login,
-          password: this.password,
-          newUser: this.newUser,
-          email: this.email,
-          recaptcha: this.recaptcha },
-        this.remember
-      )
-        .then( function () {
-          vm.$router.push( '/profile' )
+      this[ACTION_LOGIN](
+        {
+          data: {
+            login: this.login,
+            password: this.password,
+            newUser: this.newUser,
+            email: this.email,
+            recaptcha: this.recaptcha },
+          remember: this.remember
         })
-        .catch(function (error) {
+        .then(() => {
+          this.$router.push( '/profile' )
+        })
+        .catch(error => {
           var msg = ''
-          console.log(error)
+          debugLog(error)
           if (error.status === 400) {
             msg = error.message
           } else {
             msg = 'Login failed because of server error. Please try again later.'
           }
           alert(msg)
-          vm.resetRecaptcha()
+          this.resetRecaptcha()
         })
     },
     passwordRecoveryRequest () {
-      const vm = this
-      this.user.serverPost( 'passwordRecoveryRequest',
-        { login: this.login,
-          recaptcha: this.recaptcha } )
-        .then( function () {
+      this[ACTION_POST]({
+        path: 'passwordRecoveryRequest',
+        data: {
+          login: this.login,
+          recaptcha: this.recaptcha
+        }
+      })
+        .then(() => {
           alert( 'Your request was accepted. Please check your email.' )
-          vm.passwordRecovery = false
-          vm.resetRecaptcha()
+          this.passwordRecovery = false
+          this.resetRecaptcha()
         })
-        .catch( function () {
-          vm.resetRecaptcha()
+        .catch(() => {
+          this.resetRecaptcha()
         })
     },
     onVerify (response) {
@@ -128,7 +137,9 @@ export default {
       this.recaptcha = null
     },
     resetRecaptcha () {
-      this.$refs.invisibleRecaptcha.reset() // Direct call reset method
+      if ('invisibleRecaptcha' in this.$refs) {
+        this.$refs.invisibleRecaptcha.reset() // Direct call reset method
+      }
       this.recaptcha = null
     }
   },

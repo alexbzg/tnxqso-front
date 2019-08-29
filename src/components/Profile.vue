@@ -11,27 +11,6 @@
         </div>
 
         <div id="station_setup">
-        <!--
-            <div class="station_setup_block">
-                <a href="/static/html/log.html" target="_blank" rel="noopener" class="blue">
-                    <b>Info</b>: <u>Схема организации WEB-трансляции лога</u>.
-                </a><br/>
-                <a href="/static/html/map.html" target="_blank" rel="noopener" class="blue">
-                    <b>Info</b>: <u>Создание маршрута экспедиции. &nbsp;&nbsp; Настройка GPS программ.</u>
-                </a><br/>
-                <a href="/static/html/support_us.html" target="_blank" rel="noopener" class="blue">
-                    <b>Info</b>: <u>Создание формы для приема платежей.</u>
-                </a><br/>
-                <a href="https://n1mm.hamdocs.com/tiki-index.php" target="_blank" rel="noopener" class="blue">
-                    <u><b>N1MM Log</b></u></a> вебсайт. &nbsp;&nbsp;&nbsp;&nbsp; 
-                Скачать <a href="http://tnxqso.com/static/files/qsoclient.zip" rel="noopener" class="blue">
-                    <u><b>QSOclient</b></u></a>. &nbsp;&nbsp;&nbsp;&nbsp; 
-                <a href="https://play.google.com/store/apps/details?id=com.jillybunch.shareGPS" target="_blank" rel="noopener" class="blue">
-                    <u><b>Share GPS</b></u></a> and <a href="https://play.google.com/store/apps/details?id=com.mendhak.gpslogger" target="_blank" rel="noopener" class="blue">
-                    <u><b>GPS Logger</b></u></a> на GooglePlay.                
-            </div>
-        -->
-
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info" 
                     @click="infoPopup='Поставьте отметку для публикации вашей экспедиции в списке станций на главной странице. <br/>Отметку ставьте после того, как ваш профиль по станции полностью готов.<br/><u>Ссылку на страницу станции</u> удобно использовать для распространения в соц.сетях/форумах/кластерах.'">
@@ -164,7 +143,7 @@
                             Загрузка KML/KMZ/GPX файла с маршрутом экспедиции
                         </label> &nbsp; 
                         <input type="button" id="button_clear_track" class="btn" value="Удалить файл"
-                            v-if="user.stationCallsign && trackFile"
+                            v-if="$store.getters.user.stationCallsign && trackFile"
                             @click="clearTrack()"/><br/><br/>
                     </div>
 
@@ -341,10 +320,14 @@ import {USER_FIELDS_COUNT, CURRENT_POSITION_ICONS_COUNT} from '../constants'
 import router from '../router'
 import {VueEditor} from 'vue2-editor'
 import DatePicker from 'vue2-datepicker'
+import {mapGetters, mapActions, mapMutations} from 'vuex'
+
 import {parseCallsigns, getStationURL} from '../utils'
 import request from '../request'
 import statusService from '../status-service'
 import trackService from '../track-service'
+
+import {MUTATE_USER, ACTION_SAVE_SETTINGS, ACTION_POST} from '../store-user'
 
 const STATUS_FIELDS = [ 'rda', 'rafa', 'wff', 'loc', 'comments' ]
 const STATUS_ARRAY_FIELDS = [ 'userFields', 'location' ]
@@ -354,52 +337,22 @@ export default {
   USER_FIELDS_COUNT: USER_FIELDS_COUNT,
   CURRENT_POSITION_ICONS_COUNT: CURRENT_POSITION_ICONS_COUNT,
   name: 'profile',
-  props: ['user'],
   components: {
     VueEditor, DatePicker
   },
   beforeRouteEnter ( to, from, next ) {
     next( vm => {
-      if ( !vm.user.loggedIn ) {
+      if ( !vm.$store.getters.loggedIn ) {
         router.push( '/login' )
       }
     } )
   },
-  mounted () {
-    const vm = this
-    statusService.onUpdate( function () {
-      const data = statusService.data
-      if (Object.keys(data).length !== 0) {
-        STATUS_FIELDS.forEach( f => {
-          vm.$set( vm.status, f, data[f] )
-        })
-        STATUS_ARRAY_FIELDS.forEach( f => {
-          if ( f in data ) {
-            vm.$set( vm.status, f, data[f] )
-          } else {
-            const l = vm.status[f].length
-            for ( let c = 0; c < l; c++ ) {
-              vm.$set( vm.status[f], c, null )
-            }
-          }
-        })
-        STATUS_BOOL_FIELDS.forEach( f => {
-          vm.status[f] = Boolean( data[f] )
-        })
-      }
-    })
-    statusService.load()
-    trackService.onUpdate( function () {
-      vm.trackFile = trackService.data.filename
-    })
-    trackService.load()
-  },
   data () {
-    const settings = this.user.settings()
-    if (this.user.stationCallsign) {
-      settings.station.callsign = this.user.stationCallsign.toUpperCase()
+    const settings = this.$store.getters.user.settings
+    if (this.$store.getters.stationCallsign) {
+      settings.station.callsign = this.$store.getters.stationCallsign.toUpperCase()
     } else {
-      settings.station.callsign = this.user.callsign.toUpperCase()
+      settings.station.callsign = this.$store.getters.userCallsign.toUpperCase()
     }
     const userFields = []
     for ( let c = 0; c < USER_FIELDS_COUNT; c++ ) {
@@ -434,25 +387,49 @@ export default {
       ]
     }
   },
-
-  watch: {
-    settings: {
-      handler: function () {},
-      deep: true
-    }
+  mounted () {
+    const vm = this
+    statusService.onUpdate( function () {
+      const data = statusService.data
+      if (Object.keys(data).length !== 0) {
+        STATUS_FIELDS.forEach( f => {
+          vm.$set( vm.status, f, data[f] )
+        })
+        STATUS_ARRAY_FIELDS.forEach( f => {
+          if ( f in data ) {
+            vm.$set( vm.status, f, data[f] )
+          } else {
+            const l = vm.status[f].length
+            for ( let c = 0; c < l; c++ ) {
+              vm.$set( vm.status[f], c, null )
+            }
+          }
+        })
+        STATUS_BOOL_FIELDS.forEach( f => {
+          vm.status[f] = Boolean( data[f] )
+        })
+      }
+    })
+    statusService.load()
+    trackService.onUpdate( function () {
+      vm.trackFile = trackService.data.filename
+    })
+    trackService.load()
   },
-
   computed: {
     stationLink: function () {
       return getStationURL(this.settings.station.callsign)
-    }
+    },
+    ...mapGetters(['user', 'stationCallsign', 'userCallsign', 'loggedIn'])
   },
   methods: {
+    ...mapActions([ACTION_POST, ACTION_SAVE_SETTINGS]),
+    ...mapMutations([MUTATE_USER]),
     openInfo () {
       window.open('/static/html/info.html', '_blank')
     },
     logout () {
-      this.user.logout()
+      this[MUTATE_USER]()
       this.$router.push( '/login' )
     },
     saveSettings () {
@@ -477,7 +454,7 @@ export default {
         }
         clearAll = true
       }
-      this.user.saveSettings(this.settings)
+      this[ACTION_SAVE_SETTINGS](this.settings)
         .then( function () {
           window.alert( 'Your settings were saved.' )
           if (clearAll) {
@@ -498,20 +475,19 @@ export default {
     },
     clearChat () {
       if (window.confirm( 'Do you really want to delete all chat messages?') ) {
-        this.user.serverPost( 'chat', { station: this.user.stationCallsign, clear: 1 } )
+        this[ACTION_POST]({path: 'chat', data: {station: this.stationCallsign, clear: 1}})
       }
     },
     clearLog () {
       if (window.confirm( 'Do you really want to delete all log entries?') ) {
-        this.user.serverPost( 'log', { clear: 1 } )
+        this[ACTION_POST]({path: 'log', data: {clear: 1}})
       }
     },
     clearTrack () {
       if (window.confirm( 'Do you really want to clear route?') ) {
-        const vm = this
-        this.user.serverPost( 'track', { clear: 1 } )
-          .then( function () {
-            vm.trackFile = null
+        this[ACTION_POST]({path: 'track', data: {clear: 1}})
+          .then(() => {
+            this.trackFile = null
           })
       }
     },
@@ -520,33 +496,37 @@ export default {
       const el = e.target
       if (!files.length) { return }
       const reader = new FileReader()
-      const vm = this
 
-      reader.onload = function (e) {
-        vm.user.serverPost( 'track',
-          { file: e.target.result,
-            name: files[0].name
-          } )
-            .then( function () {
-              window.alert( 'Your route file was uploaded successfully.' )
-              trackService.load()
-            })
-            .finally( function () {
-              el.value = ''
-            })
+      reader.onload = e => {
+        this[ACTION_POST]({
+          path: 'track',
+          data: {file: e.target.result, name: files[0].name}
+        })
+          .then(() => {
+            window.alert( 'Your route file was uploaded successfully.' )
+            trackService.load()
+          })
+          .finally(() => {
+            el.value = ''
+          })
       }
       reader.readAsDataURL(files[0])
     },
     clearNews () {
       if (window.confirm( 'Do you really want to delete all news entries?') ) {
-        this.user.serverPost( 'news', { station: this.user.stationCallsign, clear: 1 } )
+        this[ACTION_POST]({path: 'news', data: {station: this.user.stationCallsign, clear: 1}})
       }
     },
     postNewsItem () {
-      const vm = this
-      this.user.serverPost( 'news', { station: this.user.stationCallsign, add: vm.newsItem } )
-        .then( function () {
-          vm.newsItem = ''
+      this[ACTION_POST]({
+        path: 'news',
+        data: {
+          station: this.stationCallsign,
+          add: this.newsItem
+        }
+      })
+        .then(() => {
+          this.newsItem = ''
         })
     },
     clusterCallsignsChange () {
@@ -560,16 +540,15 @@ export default {
     },
     clearAll () {
       if (window.confirm( 'Do you really want to reset all station settings?') ) {
-        const vm = this
         request.get( '/static/js/defaultUserSettings.json' )
-          .then( function (response) {
-            vm.settings = response.data
-            vm.chatAdmins = ''
-            vm.clusterCallsigns = ''
-          })
+         .then(response => {
+           this.settings = response.data
+           this.chatAdmins = ''
+           this.clusterCallsigns = ''
+         })
         request.get( '/static/js/defaultStationStatus.json' )
-          .then( function (response) {
-            vm.status = response.data
+          .then(response => {
+            this.status = response.data
           })
       }
     }

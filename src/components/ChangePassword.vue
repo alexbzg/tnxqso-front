@@ -15,15 +15,18 @@
 </template>
 
 <script>
+import {mapMutations, mapGetters, mapActions} from 'vuex'
 import _ from 'underscore'
+
 import router from './../router'
+import {MUTATE_USER, ACTION_POST} from '../store-user'
 import {validateEmail} from '../utils'
+
 export default {
   name: 'changePassword',
-  props: ['user'],
   beforeRouteEnter ( to, from, next ) {
     next( vm => {
-      if ( !vm.loggedIn && !vm.token ) {
+      if ( !vm.$store.getters.loggedIn && !vm.token ) {
         router.push( '/login' )
       }
     } )
@@ -32,13 +35,13 @@ export default {
     return {
       email: this.user.email,
       password: null,
-      loggedIn: this.user.loggedIn,
       token: this.$route.query.token
     }
   },
   methods: {
-    submit: _.debounce(function (e) {
-      const vm = this
+    ...mapActions([ACTION_POST]),
+    ...mapMutations([MUTATE_USER]),
+    submit: _.debounce(e => {
       const data = {}
       if ( this.loggedIn ) {
         data.email = this.email
@@ -49,10 +52,11 @@ export default {
         data.token = this.token
         data.password = this.password
       }
-      this.user.serverPost( 'userSettings', data )
-        .then( function () {
-          vm.user.email = vm.email
-          if (vm.loggedIn) {
+      this[ACTION_POST]({path: 'userSettings', data: data})
+        .then(() => {
+          if (this.loggedIn) {
+            this.user.email = this.email
+            this[MUTATE_USER](this.user)
             router.push( '/profile' )
           } else {
             router.push( '/login' )
@@ -64,6 +68,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['loggedIn', 'user']),
     disableSubmit () {
       if (this.token) {
         return !this.password || this.password.length < 8

@@ -25,27 +25,27 @@
             </tr>
         </table>
         <div class="list index_list">
-            <router-view :user="user"></router-view>
+            <router-view></router-view>
         </div>
     </div>
 </template>
 
 <script>
-import user from './user'
-user.switchDataServiceUrlPrefix( true )
+// import user from './user'
+// user.switchDataServiceUrlPrefix( true )
 
 import './style.css'
 export default {
   name: 'app',
   data () {
     return {
-      user: user
+//      user: user
 //      loggedIn: user.loggedIn
     }
   },
   computed: {
     loggedIn: function () {
-      return this.user.loggedIn
+      return this.$store.getters.loggedIn
     }
   }
 }

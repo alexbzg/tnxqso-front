@@ -79,6 +79,7 @@ const u = {
     return request.post( path, data )
       .catch(function (error) {
         var msg = ''
+        if (
         console.log(error)
         if (error.status === 400 || error.status === 403 ) {
           if ( error.message === 'Login expired' || error.message === 'Not logged in' ) {

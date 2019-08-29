@@ -89,7 +89,7 @@ import clusterService from './cluster-service'
 import chatService from './chat-service'
 import statusService from './status-service'
 import logService from './log-service'
-import user from './user'
+// import user from './user'
 import storage from './storage'
 
 const chatUserStorageKey = 'chatUser'
@@ -107,7 +107,7 @@ export default {
   USER_FIELDS_COUNT: USER_FIELDS_COUNT,
   name: 'station',
   data () {
-    const chatUser = storage.load( chatUserStorageKey, 'local' ) || user.callsign
+    const chatUser = storage.load( chatUserStorageKey, 'local' ) // || user.callsign
     const tabsUnread = {}
     for (const tab in tabs) {
       tabsUnread[tab] = false
@@ -117,7 +117,7 @@ export default {
       tabsRead: {},
       tabsUnread: tabsUnread,
       chatUser: chatUser ? chatUser.toUpperCase() : '',
-      user: user,
+//      user: user,
       activeTab: null,
       enable: {},
       stationCS: null,
@@ -218,11 +218,13 @@ export default {
     },
     postUserActivity ( typing ) {
       if (this.chatUser && this.stationSettings) {
+        /*
         user.serverPost( 'activeUsers',
           { 'station': this.stationSettings.station.callsign,
             'chat': this.activeTab === 'chat',
             'user': this.chatUser,
             'typing': Boolean( typing ) }, true )
+        */
       }
     },
     setChatUser ( chatUser ) {

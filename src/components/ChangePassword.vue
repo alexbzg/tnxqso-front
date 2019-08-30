@@ -16,7 +16,6 @@
 
 <script>
 import {mapMutations, mapGetters, mapActions} from 'vuex'
-import _ from 'underscore'
 
 import router from './../router'
 import {MUTATE_USER, ACTION_POST} from '../store-user'
@@ -33,7 +32,8 @@ export default {
   },
   data () {
     return {
-      email: this.user.email,
+      pending: false,
+      email: this.$store.getters.user.email,
       password: null,
       token: this.$route.query.token
     }
@@ -41,7 +41,8 @@ export default {
   methods: {
     ...mapActions([ACTION_POST]),
     ...mapMutations([MUTATE_USER]),
-    submit: _.debounce(e => {
+    submit () {
+      this.pending = true
       const data = {}
       if ( this.loggedIn ) {
         data.email = this.email
@@ -62,7 +63,10 @@ export default {
             router.push( '/login' )
           }
         })
-    }, 300, true),
+        .finally(() => {
+          this.pending = false
+        })
+    },
     cancel () {
       router.push( '/profile' )
     }
@@ -70,6 +74,9 @@ export default {
   computed: {
     ...mapGetters(['loggedIn', 'user']),
     disableSubmit () {
+      if (this.pending) {
+        return false
+      }
       if (this.token) {
         return !this.password || this.password.length < 8
       } else {

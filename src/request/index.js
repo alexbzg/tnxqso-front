@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import {debugLog} from '../utils'
+import {urlCallsign, debugLog} from '../utils'
 
 const API_URL = '/aiohttp/'
 
@@ -42,6 +42,14 @@ export default {
     }
     return axios.get(URL)
       .catch(this.onError)
+  },
+
+  getJSON (file, station) {
+    let URL = file + '.json'
+    if (station) {
+      URL = '/static/stations/' + urlCallsign(station) + '/' + URL
+    }
+    return this.get(URL)
   }
 
 }

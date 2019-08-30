@@ -25,55 +25,61 @@
 </template>
 
 <script>
-import request from '../request'
+import {mapActions, mapGetters} from 'vuex'
 import * as moment from 'moment'
-import {urlCallsign} from '../utils'
+
+import request from '../request'
+import {ACTION_POST} from '../store-user'
 
 import ActiveStationsEntry from './ActiveStationsEntry'
 
 export default {
   name: 'activeStations',
-  props: ['user'],
-  components: { ActiveStationsEntry },
+  components: {ActiveStationsEntry},
   data () {
     return {
       activeStations: [],
       archStations: [],
-      futureStations: [],
-      siteAdmin: this.user.siteAdmin
+      futureStations: []
     }
   },
   mounted () {
-    const vm = this
     request.get( '/static/js/publish.json' )
-      .then( function ( response ) {
+      .then(response => {
         const publishData = response.data
         const current = moment()
         for ( const station in publishData ) {
-          if ( ( publishData[station]['user'] && publishData[station]['admin'] ) || vm.siteAdmin ) {
-            request.get( '/static/stations/' + urlCallsign( station ) + '/settings.json' )
-              .then( function ( response ) {
+          if ( ( publishData[station]['user'] && publishData[station]['admin'] ) || this.siteAdmin ) {
+            request.getJSON('settings', station)
+              .then(response => {
                 const settings = response.data
                 settings.publish = { user: settings.publish, admin: publishData[station]['admin'] }
                 const period = settings.station.activityPeriod
                 if ( period && period.length === 2 && moment(period[0]) < current &&
                   moment(period[1]).add( 1, 'd' ) > current ) {
-                  vm.activeStations.push( settings )
+                  this.activeStations.push( settings )
                 } else if ( period && period.length === 2 && moment(period[0]) > current ) {
-                  vm.futureStations.push( settings )
+                  this.futureStations.push( settings )
                 } else {
-                  vm.archStations.push( settings )
+                  this.archStations.push( settings )
                 }
-                vm.activeStations = vm.activeStations.sort( vm.sortStations )
-                vm.archStations = vm.archStations.sort( vm.sortStations )
+                this.activeStations = this.activeStations.sort(this.sortStations)
+                this.archStations = this.archStations.sort(this.sortStations)
               })
           }
         }
       })
   },
+  computed: {
+    ...mapGetters(['siteAdmin'])
+  },
   methods: {
+    ...mapActions([ACTION_POST]),
     publishChange (station) {
-      this.user.serverPost( 'publish', { station: station.station.callsign, publish: station.publish } )
+      this[ACTION_POST]({
+        path: 'publish',
+        data: {station: station.station.callsign, publish: station.publish}
+      })
     },
     sortStations (a, b) {
       if (a.station.callsign.toLowerCase() < b.station.callsign.toLowerCase()) {

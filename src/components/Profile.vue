@@ -317,15 +317,13 @@
 <script>
 import {USER_FIELDS_COUNT, CURRENT_POSITION_ICONS_COUNT} from '../constants'
 
-import router from '../router'
 import {VueEditor} from 'vue2-editor'
 import DatePicker from 'vue2-datepicker'
 import {mapGetters, mapActions, mapMutations} from 'vuex'
 
 import {parseCallsigns, getStationURL} from '../utils'
+import router from '../router'
 import request from '../request'
-import statusService from '../status-service'
-import trackService from '../track-service'
 
 import {MUTATE_USER, ACTION_SAVE_SETTINGS, ACTION_POST} from '../store-user'
 
@@ -388,33 +386,7 @@ export default {
     }
   },
   mounted () {
-    const vm = this
-    statusService.onUpdate( function () {
-      const data = statusService.data
-      if (Object.keys(data).length !== 0) {
-        STATUS_FIELDS.forEach( f => {
-          vm.$set( vm.status, f, data[f] )
-        })
-        STATUS_ARRAY_FIELDS.forEach( f => {
-          if ( f in data ) {
-            vm.$set( vm.status, f, data[f] )
-          } else {
-            const l = vm.status[f].length
-            for ( let c = 0; c < l; c++ ) {
-              vm.$set( vm.status[f], c, null )
-            }
-          }
-        })
-        STATUS_BOOL_FIELDS.forEach( f => {
-          vm.status[f] = Boolean( data[f] )
-        })
-      }
-    })
-    statusService.load()
-    trackService.onUpdate( function () {
-      vm.trackFile = trackService.data.filename
-    })
-    trackService.load()
+    this.loadMisc()
   },
   computed: {
     stationLink: function () {
@@ -422,9 +394,52 @@ export default {
     },
     ...mapGetters(['user', 'stationCallsign', 'userCallsign', 'loggedIn'])
   },
+  watch: {
+    stationCallsign () {
+      this.loadMisc()
+    }
+  },
   methods: {
     ...mapActions([ACTION_POST, ACTION_SAVE_SETTINGS]),
     ...mapMutations([MUTATE_USER]),
+    loadMisc () {
+      this.loadStatus()
+      this.loadTrack()
+    },
+    loadTrack () {
+      if (this.stationCallsign) {
+        request.getJSON('track', this.stationCallsign)
+          .then(response => {
+            this.trackFile = response.data.filename
+          })
+      }
+    },
+    loadStatus () {
+      if (this.stationCallsign) {
+        request.getJSON('status', this.stationCallsign)
+          .then(response => {
+            const data = response.data
+            if (Object.keys(data).length !== 0) {
+              STATUS_FIELDS.forEach( f => {
+                this.$set(this.status, f, data[f])
+              })
+              STATUS_ARRAY_FIELDS.forEach(f => {
+                if (f in data) {
+                  this.$set(this.status, f, data[f])
+                } else {
+                  const l = this.status[f].length
+                  for (let c = 0; c < l; c++) {
+                    this.$set(this.status[f], c, null)
+                  }
+                }
+              })
+              STATUS_BOOL_FIELDS.forEach( f => {
+                this.status[f] = Boolean(data[f])
+              })
+            }
+          })
+      }
+    },
     openInfo () {
       window.open('/static/html/info.html', '_blank')
     },
@@ -440,7 +455,6 @@ export default {
                 'Пожалуйста, уменьшите количество и объем изображений')
         return
       }
-      const vm = this
       let clearAll = false
 
       this.settings.station.callsign = this.settings.station.callsign.toUpperCase()
@@ -455,20 +469,20 @@ export default {
         clearAll = true
       }
       this[ACTION_SAVE_SETTINGS](this.settings)
-        .then( function () {
+        .then(() => {
           window.alert( 'Your settings were saved.' )
           if (clearAll) {
-            vm.trackFile = null
+            this.trackFile = null
           } else {
-            if ( vm.settings.status.get !== 'qsoclient' ) {
-              const st = JSON.parse( JSON.stringify( vm.status ) )
-              if ( st.location[0] && st.location[1] ) {
+            if (this.settings.status.get !== 'qsoclient') {
+              const st = JSON.parse(JSON.stringify(this.status))
+              if (st.location[0] && st.location[1]) {
                 st.location[0] = Number( st.location[0] )
                 st.location[1] = Number( st.location[1] )
               } else {
                 st.location = null
               }
-              vm.user.serverPost( 'location', st )
+              this[ACTION_POST]({path: 'location', data: st})
             }
           }
         })
@@ -504,7 +518,7 @@ export default {
         })
           .then(() => {
             window.alert( 'Your route file was uploaded successfully.' )
-            trackService.load()
+            this.loadTrack()
           })
           .finally(() => {
             el.value = ''

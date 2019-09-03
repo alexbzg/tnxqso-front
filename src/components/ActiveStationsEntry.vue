@@ -4,15 +4,18 @@
             <input type="checkbox" v-model="station.publish.admin" @change="publishChange()"/>
             <input type="checkbox" v-model="station.publish.user" @change="publishChange()"/>
         </template>
-        <a :href="'/' + $options.urlCallsign(station.station.callsign)">
             <span class="callsign">{{$options.replace0(station.station.callsign.toUpperCase())}}</span>
+            <span class="station_internal_links">
+              <a href="#">Info</a> <a href="#">Log</a> <a href="#">Map</a> <a href="#">Chat</a> <a href="#">Stats</a> <a href="#">Instargam</a> <a href="#">Support us</a>
+            </span><br/>
             <span class="title">{{station.station.title}}</span>
-            <span class="period" 
+            <span class="period"
                 v-if="station.station.activityPeriod && station.station.activityPeriod.length == 2">
-                ({{formatDate(station.station.activityPeriod[0])}} &mdash; 
-                {{formatDate(station.station.activityPeriod[1])}})
+                ( {{formatDate(station.station.activityPeriod[0])}} &mdash;
+                {{formatDate(station.station.activityPeriod[1])}} )
             </span>
-        </a>
+
+        <a :href="'/' + $options.urlCallsign(station.station.callsign)"></a>
     </div>
 </template>
 

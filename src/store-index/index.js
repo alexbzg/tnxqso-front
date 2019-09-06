@@ -4,14 +4,15 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 import {storeUser, ACTION_UPDATE_USER} from '../store-user'
-import {storeServices, MUTATE_SERVICE, ACTION_UPDATE_SERVICE} from '../store-services'
-
-const CHAT_RELOAD_INTERVAL = 5000
+import {storeServices} from '../store-services'
+import {storeActivity, activityInit} from '../store-activity'
+import talksInit from '../talks-init'
 
 const store = new Vuex.Store({
   modules: {
     user: storeUser,
-    services: storeServices
+    services: storeServices,
+    activity: storeActivity
   }
 })
 
@@ -19,7 +20,7 @@ if (store.getters.userToken) {
   store.dispatch(ACTION_UPDATE_USER)
 }
 
-store.commit(MUTATE_SERVICE, {name: 'talks', station: null})
-setInterval(store.dispatch(ACTION_UPDATE_SERVICE, 'talks'), CHAT_RELOAD_INTERVAL)
+talksInit(store)
+activityInit(store)
 
 export default store

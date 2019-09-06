@@ -252,13 +252,4 @@ export default {
 </script>
 
 <style>
-.delete_btn {
-    width: 20px;
-    height: 20px;
-    display: none;
-}
-
-.can_delete img{
-    display: inline;
-}
 </style>

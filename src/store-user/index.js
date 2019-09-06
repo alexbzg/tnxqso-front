@@ -3,11 +3,14 @@ import request from '../request'
 import {debugLog} from '../utils'
 
 const STORAGE_KEY_CHAT_USER = 'chatUser'
+const STORAGE_KEY_CHAT_USER_NAME = 'chatUserName'
+
 const STORAGE_KEY_USER = 'user'
 
 export const MUTATE_SETTINGS = 'mutateSettings'
 export const MUTATE_USER = 'mutateUser'
 export const MUTATE_CHAT_USER = 'mutateChatUser'
+export const MUTATE_CHAT_USER_NAME = 'mutateChatUserName'
 
 export const ACTION_UPDATE_USER = 'actionUpdateUser'
 export const ACTION_LOGIN = 'actionLogin'
@@ -21,10 +24,13 @@ const EMPTY_USER = {
   }
 }
 
+const user = storage.load(STORAGE_KEY_USER) || JSON.parse(JSON.stringify(EMPTY_USER))
+
 export const storeUser = {
   state: {
-    user: storage.load(STORAGE_KEY_USER) || EMPTY_USER,
-    chatUser: storage.load(STORAGE_KEY_CHAT_USER, 'local')
+    user: user,
+    chatUser: storage.load(STORAGE_KEY_CHAT_USER, 'local') || (user ? user.callsign : null),
+    chatUserName: storage.load(STORAGE_KEY_CHAT_USER_NAME, 'local')
   },
   getters: {
     userCallsign: state => {
@@ -44,9 +50,6 @@ export const storeUser = {
     },
     user: state => {
       return JSON.parse(JSON.stringify(state.user))
-    },
-    chatUser: state => {
-      return state.chatUser
     }
   },
   mutations: {
@@ -56,10 +59,16 @@ export const storeUser = {
         storage.save(STORAGE_KEY_CHAT_USER, payload, 'local')
       }
     },
+    [MUTATE_CHAT_USER_NAME] (state, payload) {
+      if (state.chatUserName !== payload) {
+        state.chatUserName = payload
+        storage.save(STORAGE_KEY_CHAT_USER_NAME, payload, 'local')
+      }
+    },
     [MUTATE_USER] (state, payload) {
       const remember = (payload && 'remember' in payload) ? payload.remember : state.user.remember
       const user = (payload && 'user' in payload) ? payload.user : payload
-      state.user = user || EMPTY_USER
+      state.user = user || JSON.parse(JSON.stringify(EMPTY_USER))
       state.user.remember = remember
       storage.remove(STORAGE_KEY_USER, 'local')
       storage.remove(STORAGE_KEY_USER, 'session')

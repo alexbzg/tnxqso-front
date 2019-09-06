@@ -801,7 +801,17 @@ table#chat_layout td{
 table#chat_layout .message_to{
     color: #aaa;
     padding-right: 15px;
+
 }
+table#chat_layout .personal{
+    color: #999;
+    background-color: #FBFD9C;
+    font-weight: bold;
+}
+
+
+
+
 
 
 
@@ -841,11 +851,6 @@ table#chat_layout .message_to{
 .chat_info_users1 span.typing{
     background: #fff url("/static/images/icon_typing.gif") 1px 5px no-repeat;
 }
-.delete_btn{
-    cursor: pointer;
-    float: right;
-}
-
 
 
 
@@ -897,9 +902,22 @@ table#chat_window tr.admin td.call span.call{
 table#chat_window td.message{
     line-height: 1.5em;
     padding-top: 5px;
+    padding-bottom: 20px;
+    line-height: 1.7em;
 }
 
 
+.delete_btn{
+    cursor: pointer;
+    float: right;
+    width: 20px;
+    height: 20px;
+    display: none;
+}
+
+table#chat_window td.message:hover img.delete_btn{
+    display: inline;
+}
 
 
 

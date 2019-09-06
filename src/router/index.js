@@ -6,6 +6,7 @@ import Profile from './../components/Profile'
 import ActiveStations from './../components/ActiveStations'
 import ChangePassword from '../components/ChangePassword'
 import Contact from '../components/Contact'
+import Chat from '../components/Chat'
 
 Vue.use(Router)
 
@@ -19,6 +20,12 @@ const router = new Router({
       name: 'Stations',
       component: ActiveStations,
       props: true
+    },
+    {
+      path: '/talks',
+      name: 'Talks',
+      component: Chat,
+      props: {serviceName: 'talks'}
     },
     {
       path: '/about',

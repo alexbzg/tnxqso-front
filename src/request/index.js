@@ -48,6 +48,8 @@ export default {
     let URL = file + '.json'
     if (station) {
       URL = '/static/stations/' + urlCallsign(station) + '/' + URL
+    } else {
+      URL = '/static/js/' + URL
     }
     return this.get(URL)
   }

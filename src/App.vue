@@ -7,6 +7,10 @@
                     <router-link to="/stations" tag="div" id="tab_stations" class="tab">
                         Stations
                     </router-link>
+                    <router-link to="/talks" tag="div" id="tab_talks" class="tab"
+                        :class="{updated_tab: $store.state.services.talks.new}">
+                        Talks
+                    </router-link>
                 </td>
                 <td id="login">
                     <router-link to="/about" tag="div" id="tab_about" class="tab">

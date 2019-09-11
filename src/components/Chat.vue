@@ -31,7 +31,8 @@
             <td>
 
         <table id="chat_window">
-            <tr v-for="msg in data" :class="{admin: msg.admin, new_msg: msg.new}"> 
+            <tr v-for="msg in data" :class="{admin: msg.admin && service && service.station, 
+                new_msg: msg.new}"> 
                 <td class="call">
                     <span class="call" @click="replyTo(msg.user)">{{$options.replace0(msg.user)}}</span><br/>
                     <span class="name" @click="replyTo(msg.user)" v-if="msg.name">{{msg.name}}</span>
@@ -167,7 +168,7 @@ export default {
       if (this.chatUserNameField) {
         this.chatUserNameField = this.chatUserNameField.trim()
       }
-      if (this.chatUserName !== this.chatUserName) {
+      if (this.chatUserName !== this.chatUserNameField) {
         this[MUTATE_CHAT_USER_NAME](this.chatUserNameField)
       }
     },
@@ -281,6 +282,8 @@ export default {
         u.cs = cs
         if (this.service.station) {
           u.admin = u.cs === stationSettings.admin || stationSettings.chatAdmins.includes(cs)
+        } else {
+          u.admin = false
         }
         if (u.chat && ((u.station && u.station === this.service.station) ||
           (!u.station && !this.service.station))) {

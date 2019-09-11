@@ -2,7 +2,7 @@ import dataServiceFactory from '../data-service-factory'
 
 let s = dataServiceFactory()
 
-s.url = 'instagram.json'
-s.eventName = 'instagram-changed'
+s.url = '/talks.json'
+s.eventName = 'talks-updated'
 
 export default s

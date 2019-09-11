@@ -5,11 +5,12 @@ import StationCluster from '../components/StationCluster'
 // import StationNews from '../components/StationNews'
 import StationInfo from '../components/StationInfo'
 import StationMap from '../components/StationMap'
-import StationChat from '../components/StationChat'
 import StationLog from '../components/StationLog'
 import StationStats from '../components/StationStats'
 import StationInstagram from '../components/StationInstagram'
 import StationDonate from '../components/StationDonate'
+import Chat from '../components/Chat'
+import ActiveStations from './../components/ActiveStations'
 
 Vue.use(Router)
 
@@ -19,10 +20,28 @@ const router = new Router({
       redirect: '/log'
     },
     {
+      path: '/stations',
+      name: 'Stations',
+      component: ActiveStations,
+      props: true
+    },
+    {
       path: '/adxcluster',
       name: 'StationCluster',
       props: true,
       component: StationCluster
+    },
+    {
+      path: '/chat',
+      name: 'Chat',
+      component: Chat,
+      props: {serviceName: 'chat'}
+    },
+    {
+      path: '/talks',
+      name: 'Talks',
+      component: Chat,
+      props: {serviceName: 'talks'}
     },
     {
       path: '/stats',
@@ -46,12 +65,6 @@ const router = new Router({
       path: '/map',
       name: 'StationMap',
       component: StationMap,
-      props: true
-    },
-    {
-      path: '/chat',
-      name: 'StationChat',
-      component: StationChat,
       props: true
     },
     {

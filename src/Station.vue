@@ -45,19 +45,12 @@
         <td>
             <router-link to="/info" tag="div" id="tab_info" class="tab" 
                 v-if="enable.stationInfo">Info</router-link>
-            <!--router-link to="/news" tag="div" id="tab_news" class="tab" 
-                v-if="enable.news" :class="{updated_tab: tabsUnread.news}">
-                News</router-link-->
             <router-link to="/log" tag="div" id="tab_log" class="tab" 
-                v-if="enable.log" :class="{updated_tab: tabsUnread.log}">Online log</router-link>
+                v-if="enable.log" :class="{updated_tab: tabsUnread.log}">Log</router-link>
             <router-link to="/map" tag="div" id="tab_map" class="tab" 
                 v-if="enable.map">Map</router-link>
             <router-link to="/adxcluster" tag="div" id="tab_adxc" class="tab" 
-                v-if="enable.cluster">ADXcluster</router-link>
-            <router-link to="/chat" tag="div" id="tab_chat" class="tab" 
-                v-if="enable.chat" :class="{updated_tab: tabsUnread.chat }">
-                Chat
-            </router-link>
+                v-if="enable.cluster">Cluster</router-link>
             <router-link to="/stats" tag="div" id="tab_log" class="tab" 
                 v-if="enable.stats">Stats</router-link>
             <div id="tab_instagram" class="tab" 
@@ -65,12 +58,23 @@
                 <a :href="'https://www.instagram.com/' + stationSettings.instagramID" 
                     target="_blank" rel="noopener">Instagram</a>
             </div>
+            <router-link to="/chat" tag="div" id="tab_chat" class="tab" 
+                v-if="enable.chat" :class="{updated_tab: $store.state.services.chat.new}">
+                Chat
+            </router-link>
             <router-link to="/donate" tag="div" id="tab_donate" class="tab" 
                 v-if="enable.donate">Support us</router-link>
+            <router-link to="/stations" tag="div" id="tab_stations" class="tab">
+                Stations
+            </router-link>
+            <router-link to="/talks" tag="div" id="tab_chat" class="tab"
+              :class="{updated_tab: $store.state.services.talks.new}">
+                Talks
+            </router-link>
         </td>
     </tr></table>
         <div class="list">
-            <router-view :station-settings="stationSettings" :user="user" :chatUser="chatUser"
+            <router-view :station-settings="stationSettings"
             :status-service="statusService" :status-online="statusData.online" 
             :log-service="logService"></router-view>
         </div>
@@ -86,28 +90,22 @@ import * as moment from 'moment'
 import './style.css'
 import stationSettings from './station-settings-service'
 import clusterService from './cluster-service'
-import chatService from './chat-service'
 import statusService from './status-service'
 import logService from './log-service'
-// import user from './user'
 import storage from './storage'
 
-const chatUserStorageKey = 'chatUser'
 const tabsReadStoragePfx = 'stationTabsRead_'
 const tabs = {
   cluster: { service: clusterService, interval: 60000 },
-  log: { service: logService, interval: 60000 },
-  chat: { service: chatService, interval: 5000 }
+  log: { service: logService, interval: 60000 }
 }
 const onlineInt = { qsoclient: 150, gpslogger: 300 }
-const userActivityPostInt = 60 * 1000 * 1
 const statusUpdateInt = 60 * 1000 * 1
 
 export default {
   USER_FIELDS_COUNT: USER_FIELDS_COUNT,
   name: 'station',
   data () {
-    const chatUser = storage.load( chatUserStorageKey, 'local' ) // || user.callsign
     const tabsUnread = {}
     for (const tab in tabs) {
       tabsUnread[tab] = false
@@ -116,8 +114,6 @@ export default {
       tabs: tabs,
       tabsRead: {},
       tabsUnread: tabsUnread,
-      chatUser: chatUser ? chatUser.toUpperCase() : '',
-//      user: user,
       activeTab: null,
       enable: {},
       stationCS: null,
@@ -154,7 +150,6 @@ export default {
             tabs[id].read = tabsRead[id]
           }
         }
-        vm.postUserActivity()
       })
       .catch( function () {
         window.location.href = '/'
@@ -165,7 +160,6 @@ export default {
     })
     statusService.load()
     vm.statusUpdateInd = setInterval( statusService.load, statusUpdateInt )
-    vm.userActivityPostIntId = setInterval( vm.postUserActivity, userActivityPostInt )
     vm.updateOnlineIntId = setInterval( vm.updateOnline, 1000 )
     for (const id in vm.tabs) {
       const tab = vm.tabs[id]
@@ -217,22 +211,6 @@ export default {
         : false )
     },
     postUserActivity ( typing ) {
-      if (this.chatUser && this.stationSettings) {
-        /*
-        user.serverPost( 'activeUsers',
-          { 'station': this.stationSettings.station.callsign,
-            'chat': this.activeTab === 'chat',
-            'user': this.chatUser,
-            'typing': Boolean( typing ) }, true )
-        */
-      }
-    },
-    setChatUser ( chatUser ) {
-      if (this.chatUser !== chatUser) {
-        this.$set( this, 'chatUser', chatUser )
-        storage.save( chatUserStorageKey, chatUser, 'local' )
-        this.postUserActivity()
-      }
     },
     updateOnline () {
       if (!this.stationSettings) {

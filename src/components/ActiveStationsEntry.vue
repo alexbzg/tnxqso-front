@@ -4,18 +4,20 @@
             <input type="checkbox" v-model="station.publish.admin" @change="publishChange()"/>
             <input type="checkbox" v-model="station.publish.user" @change="publishChange()"/>
         </template>
-            <span class="callsign">{{$options.replace0(station.station.callsign.toUpperCase())}}</span>
-            <span class="station_internal_links">
-              <a href="#">Info</a> <a href="#">Log</a> <a href="#">Map</a> <a href="#">Chat</a> <a href="#">Stats</a> <a href="#">Instargam</a> <a href="#">Support us</a>
-            </span><br/>
-            <span class="title">{{station.station.title}}</span>
-            <span class="period"
-                v-if="station.station.activityPeriod && station.station.activityPeriod.length == 2">
-                ( {{formatDate(station.station.activityPeriod[0])}} &mdash;
-                {{formatDate(station.station.activityPeriod[1])}} )
-            </span>
-
-        <a :href="'/' + $options.urlCallsign(station.station.callsign)"></a>
+        <span class="callsign">{{$options.replace0(station.station.callsign.toUpperCase())}}</span>
+        <span class="station_internal_links">
+            <a :href="stationURL + '#/info'" v-if="station.enable.stationInfo">Info</a>
+            <a :href="stationURL + '#/log'" v-if="station.enable.log">Log</a>
+            <a :href="stationURL + '#/map'" v-if="station.enable.map">Map</a>
+            <a :href="stationURL + '#/chat'" v-if="station.enable.chat">Chat</a>
+            <a :href="stationURL + '#/stats'" v-if="station.enable.stats">Stats</a>
+            <a :href="'https://www.instagram.com/' + station.instagramID"
+                v-if="station.enable.instagram && station.instagramID"
+                target="_blank" rel="noopener">Instagram</a>
+            <a :href="stationURL + '#/donate'" v-if="station.enable.donate">Support</a>
+        </span><span class="period" v-if="period">{{period}}</span><br/>
+        <span class="title">{{station.station.title}}</span>
+        <a :href="stationURL"></a>
     </div>
 </template>
 
@@ -26,11 +28,31 @@ import {replace0, urlCallsign} from '../utils'
 
 export default {
   replace0: replace0,
-  urlCallsign: urlCallsign,
   name: 'activeStations',
-  props: ['siteAdmin', 'station'],
+  props: ['siteAdmin', 'station', 'hidePeriod'],
   data () {
     return {
+    }
+  },
+  computed: {
+    period () {
+      if (!this.hidePeriod && this.station.station.activityPeriod &&
+        this.station.station.activityPeriod.length) {
+        if (this.station.station.activityPeriod.length < 2) {
+          return this.formatDate(this.station.station.activityPeriod[0])
+        } else {
+          const fdt = this.station.station.activityPeriod.map(item => this.formatDate(item))
+          if (fdt[0] === fdt[1]) {
+            return fdt[0]
+          } else {
+            return fdt[0] + ' \u2014 ' + fdt[1]
+          }
+        }
+      }
+      return ''
+    },
+    stationURL () {
+      return '/' + urlCallsign(this.station.station.callsign)
     }
   },
   methods: {

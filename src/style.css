@@ -67,6 +67,136 @@ img#logo{
 
 
 
+
+
+
+
+
+
+/* =============================   L I S T   ==================================== */
+
+.list{
+    width: 1200px;
+    padding: 10px 0 100px 0;
+    margin: 0px auto;
+    background-color: #fff;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 50px;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+.list a {
+    color: #009;
+}
+
+#about{
+    padding: 20px 50px 100px 50px;
+}
+#about h4{
+    width: 100%;
+    background-color: #ccc;
+}
+#about_imgs img{
+    margin: 0 20px;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+
+.list img{
+max-width: 900px;
+}
+
+
+
+
+/* ===========================   S T A T I O N S  ==================================*/
+.stations_list{
+    width: 1100px;
+    margin: 20px auto 70px auto;
+    padding: 0;
+    text-align: left;
+    border-top: 1px solid #eee;
+    text-align: center;
+    color: #999;
+    line-height: 1.6em;
+}
+.stations_list div{
+    margin: 0 0 30px 0;
+}
+.stations_list .stations_block{
+    width: 100px;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    font-size: 12px;
+    background-color: #eee;
+
+}
+
+
+
+.stations_list .callsign{
+    font-size: 24px;
+    font-weight: bold;
+    margin-right: 50px;
+    color: #333;
+    text-shadow: rgba(255,255,255,0.5) 1px 2px 3px;
+}
+.stations_list .period{
+    font-size: 14px;
+    color: #777;
+    font-weight: bold;
+    margin-left: 30px;
+}
+.stations_list .title{
+    color: #777;
+    padding: 0 30px;
+}
+
+.station_internal_links{
+}
+.station_internal_links a{
+    font-weight: bold;
+    font-size: 18px;
+    margin-right: 25px;
+}
+.station_internal_links a:hover, #ended_stations .station_internal_links a:hover{
+    color: #00d;
+}
+
+
+
+
+#ended_stations.stations_list .callsign {
+    color: #555;
+}
+#ended_stations.stations_list .title {
+    color: #999;
+}
+#ended_stations .station_internal_links a{
+    color: #777;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* =============================   H E A D   T A B S   T A B L E   ==================================== */
 
 table.tabs{
@@ -187,7 +317,7 @@ table.tabs td#login{
 }
 #tab_donate{
     font-weight: bold;
-    color: #900;
+    color: #555;
 }
 .updated_tab{
     background: #f5f5f5  url("/static/images/tabs_background.jpg") bottom right no-repeat;
@@ -208,111 +338,6 @@ table.tabs td#login{
 
 
 
-
-
-
-
-
-
-
-/* =============================   L I S T   ==================================== */
-
-.list{
-    width: 1200px;
-    padding: 10px 0 200px 0;
-    margin: 0px auto;
-    background-color: #fff;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    margin-bottom: 50px;
-    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
-    text-align: center;
-}
-.list a {
-    color: #339;
-}
-
-#about{
-    padding: 20px 50px 100px 50px;
-}
-#about h4{
-    width: 100%;
-    background-color: #ccc;
-}
-#about_imgs img{
-    margin: 0 20px;
-    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
-}
-
-
-.list img{
-max-width: 900px;
-}
-
-
-
-
-/* ===========================   S T A T I O N S  ==================================*/
-.stations_list{
-    width: 1100px;
-    margin: 20px auto 70px auto;
-    padding: 0;
-    text-align: left;
-    border-top: 1px solid #eee;
-    text-align: center;
-    color: #999;
-}
-.stations_list div{
-    margin: 0 0 30px 0;
-}
-.stations_list .stations_block{
-    width: 100px;
-    padding: 0;
-    margin: 0;
-    text-align: center;
-    font-size: 12px;
-    background-color: #eee;
-    color: #555;
-}
-
-
-
-.stations_list .callsign{
-    font-size: 24px;
-    font-weight: bold;
-    margin-right: 50px;
-    color: #007;
-}
-.stations_list .title{
-    padding: 0 30px 0 30px;
-}
-.stations_list .period{
-    font-size: 14px;
-    font-style: italic;
-    color: #595;
-}
-
-.station_internal_links{
-}
-.station_internal_links a{
-    font-size: 16px;
-    font-weight: bold;
-    margin-right: 30px;
-}
-.station_internal_links a:hover, #ended_stations .station_internal_links a:hover{
-    color: #00d;
-}
-
-
-
-
-#ended_stations.stations_list .callsign{
-    color: #333;
-}
-#ended_stations .station_internal_links a{
-    color: #555;
-}
 
 
 
@@ -992,7 +1017,7 @@ table#chat_window td.message:hover img.delete_btn{
     padding: 10px 30px;
 }
 #station_setup textarea{
-    width: 870px;
+    width: 1080px;
     height: 300px;
 }
 .station_setup_block{

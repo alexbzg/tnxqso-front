@@ -10,14 +10,14 @@
         <div id="arch_stations" class="stations_list">
             <div class="stations_block">Coming soon</div>
             <active-stations-entry v-for="(station, index) in futureStations" 
-                :station="station" :site-admin="siteAdmin"
+                :station="station" :site-admin="siteAdmin" :hide-period="true"
                 @publish-change="publishChange(station)" :key="index">
             </active-stations-entry>
         </div>
         <div id="ended_stations" class="stations_list">
             <div class="stations_block">Archive</div>
             <active-stations-entry v-for="(station, index) in archStations" 
-                :station="station" :site-admin="siteAdmin"
+                :station="station" :site-admin="siteAdmin" :hide-period="true"
                 @publish-change="publishChange(station)" :key="index">
             </active-stations-entry>
        </div>

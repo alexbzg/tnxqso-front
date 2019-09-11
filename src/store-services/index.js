@@ -57,6 +57,9 @@ export const storeServices = {
     },
     [MUTATE_SERVICE_READ] (state, payload) {
       const s = state[payload.service]
+      if (!s) {
+        return
+      }
       Vue.set(s, 'read', payload.read)
       Vue.set(s, 'new',
         s.data && s.data.length ? s.data[0].ts > payload.read : false)
@@ -82,6 +85,9 @@ export const storeServices = {
     },
     [ACTION_SERVICE_MARK_READ] ({commit, state}, payload) {
       const s = state[payload.service]
+      if (!s) {
+        return
+      }
       const ts = payload.ts || (s.data && s.data.length ? s.data[0].ts : 0)
       commit(MUTATE_SERVICE_READ, {service: payload.service, read: ts})
       if (ts) {

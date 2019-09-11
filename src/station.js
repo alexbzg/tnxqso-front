@@ -3,13 +3,14 @@
 import Vue from 'vue'
 import Station from './Station'
 import router from './station-router'
+import store from './store-station'
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
-  data: {
-  },
+  store,
+  data: {},
   template: '<Station/>',
   components: { Station }
 })

@@ -143,7 +143,7 @@
                             Загрузка KML/KMZ/GPX файла с маршрутом экспедиции
                         </label> &nbsp;
                         <input type="button" id="button_clear_track" class="btn" value="Удалить файл"
-                            v-if="$store.getters.user.stationCallsign && trackFile"
+                            v-if="stationCallsign && trackFile"
                             @click="clearTrack()"/><br/><br/>
                     </div>
 
@@ -204,7 +204,7 @@
                         </tr>
                     </table>
                     <input type="button" id="button_clear_log" class="btn" value="Очистить Online log"
-                        :disabled="!user.stationCallsign"
+                        :disabled="!stationCallsign"
                         @click="clearLog()"/>
                 </div>
             </div>

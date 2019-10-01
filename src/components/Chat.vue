@@ -240,7 +240,7 @@ export default {
         return false
       }
       return this.siteAdmin || (this.service.station &&
-        this.$store.stationSettings.admin === this.userCallsign)
+        this.$store.state.stationSettings.admin === this.userCallsign)
     },
     data () {
       const data = []

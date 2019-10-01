@@ -83,8 +83,11 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex'
+
 import {USER_FIELDS_COUNT, CLUSTER_SPOT_TEXT_LIMIT} from '../constants'
 import StationStatus from '../station-status'
+import {ACTION_POST} from '../store-user'
 
 import {replace0} from '../utils'
 import tabMixin from '../station-tab-mixin'
@@ -94,7 +97,7 @@ export default {
   $clusterResultTimeout: null,
   mixins: [tabMixin],
   name: 'StationCluster',
-  props: ['user', 'chatUser', 'stationSettings', 'logService', 'statusService'],
+  props: ['stationSettings', 'logService', 'statusService'],
   data () {
     return {
       tabId: 'cluster',
@@ -102,7 +105,7 @@ export default {
       stationStatus: new StationStatus(),
       spot: {
         show: false,
-        userCS: this.chatUser,
+        userCS: this.$store.state.user.chatUser,
         info: 'www.TNXQSO.com',
         freq: null,
         cs: this.stationSettings === null ? '' : this.stationSettings.station.callsign,
@@ -125,6 +128,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions([ACTION_POST]),
     sendSpot () {
       const vm = this
       if (this.spot.disable) {
@@ -132,7 +136,7 @@ export default {
         return
       }
       this.spot.posting = true
-      this.user.serverPost( 'sendSpot', this.spot )
+      this[ACTION_POST]({path: 'sendSpot', data: this.spot})
         .then( function (response) {
           if (response.data.sent) {
             vm.spot.success = true

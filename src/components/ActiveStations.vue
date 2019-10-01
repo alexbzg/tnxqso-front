@@ -10,7 +10,7 @@
         <div id="arch_stations" class="stations_list">
             <div class="stations_block">Coming soon</div>
             <active-stations-entry v-for="(station, index) in futureStations" 
-                :station="station" :site-admin="siteAdmin" :hide-period="true"
+                :station="station" :site-admin="siteAdmin"
                 @publish-change="publishChange(station)" :key="index">
             </active-stations-entry>
         </div>

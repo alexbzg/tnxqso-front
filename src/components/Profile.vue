@@ -29,14 +29,14 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info"
-                    @click="infoPopup='Выберите, откуда будет поступать информация о том, что станция ONLINE или OFFLINE.<br/><img src=&quot;/static/images/oo_tab.jpg&quot;><br/><br/><b>QSOclient</b><br/>Если на компьютере экспедиции запущен настроенный QSOclient, то статус - ONLINE.<br/>Все данные об RDA, RAFA и т.д. задаются в программе QSOclient.<br/><br/><b>GPS Logger</b><br/>Если на телефоне экспедиции запущен настроенный GPS Logger, то статус - ONLINE.<br/>Район RDA и возможный WFF, указывается здесь, в Профиле станции. RAFA указывается автоматически, исходя из координат.<br/><br/><b>При ручном указании</b> статуса ONLINE/OFFLNE все поля заполняются здесь, в Профиле станции.<br/>Можно выбирать данные, которые будут транслироваться на этой вкладке.<br/><br/><i>Не забудьте нажать на кнопку Save all info.</i>'">
+                    @click="infoPopup='Выберите, откуда будет поступать информация о том, что станция ONLINE или OFFLINE.<br/><img src=&quot;/static/images/oo_tab.jpg&quot;><br/><br/><b>QSOclient</b><br/>Если на компьютере экспедиции запущен настроенный QSOclient, то статус - ONLINE.<br/>Все данные об RDA, RAFA и т.д. задаются в программе QSOclient.<br/><br/><b>QTH now</b><br/>Если на телефоне экспедиции запущена программа QTH now, то статус - ONLINE.<br/>Район RDA и возможный WFF, указывается здесь, в Профиле станции. RAFA указывается автоматически, исходя из координат.<br/><br/><b>При ручном указании</b> статуса ONLINE/OFFLNE все поля заполняются здесь, в Профиле станции.<br/>Можно выбирать данные, которые будут транслироваться на этой вкладке.<br/><br/><i>Не забудьте нажать на кнопку Save all info.</i>'">
                 <!--<input type="checkbox" id="checkbox_status" checked disabled/> Показывать <b>ONLINE/OFFLINE</b> вкладку на странице станции -->
                 <div class="block_settings">
                     <u>Брать ONLINE/OFFLINE статус из</u>: &nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="radio" name="status_from" v-model="settings.status.get" value="qsoclient"/>
                     QSOclient &nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="radio" name="status_from" v-model="settings.status.get" value="gpslogger"/>
-                    GPS Logger &nbsp;&nbsp;&nbsp;&nbsp;
+                    QTH now &nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="radio" name="status_from" v-model="settings.status.get" value="manual"/>
                     Указать вручную
                     <span id="manual_status" v-if="settings.status.get === 'manual'">

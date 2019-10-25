@@ -1,5 +1,5 @@
 <template>
-    <div v-if="station.publish || siteAdmin">
+    <div v-if="station.publish || siteAdmin" class="one_station">
         <template v-if="siteAdmin">
             <input type="checkbox" v-model="station.publish.admin" @change="publishChange()"/>
             <input type="checkbox" v-model="station.publish.user" @change="publishChange()"/>

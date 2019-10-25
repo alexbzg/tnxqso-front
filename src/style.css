@@ -104,6 +104,45 @@ img#logo{
 }
 
 
+
+#qthnow{
+    padding: 20px 50px 100px 50px;
+    width: 950px;
+    margin: 0 auto;
+}
+#rdalog{
+    padding: 20px 50px 100px 50px;
+    width: 700px;
+    margin: 0 auto;
+}
+#qthnow h3, #rdalog h3{
+    font-size: 24px;
+    font-weight: bold;
+    margin: 10px 0 30px 0;
+    text-align: center;
+}
+#qthnow img, #rdalog img{
+    margin: 0 20px;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+}
+#qthnow p, #rdalog p{
+    text-align: left;
+    margin: 0 0 20px 0;
+}
+#qthnow .intext{
+    box-shadow: none;
+}
+
+
+
+
+
+
+
+
+
+
+
 .list img{
 max-width: 900px;
 }
@@ -135,12 +174,17 @@ max-width: 900px;
 
 }
 
-
+.one_station{
+    padding-left: 110px;
+    text-align: left;
+}
 
 .stations_list .callsign{
     font-size: 24px;
     font-weight: bold;
-    margin-right: 50px;
+    display: inline-block;
+    text-align: left;
+    width: 160px;
     color: #333;
     text-shadow: rgba(255,255,255,0.5) 1px 2px 3px;
 }
@@ -152,7 +196,7 @@ max-width: 900px;
 }
 .stations_list .title{
     color: #888;
-    padding: 0 30px;
+    padding-left: 170px;
 }
 
 .station_internal_links{

@@ -16,14 +16,20 @@
                     <router-link to="/about" tag="div" id="tab_about" class="tab">
                         About
                     </router-link>
+                    <router-link to="/qthnow" tag="div" id="tab_qthnow" class="tab">
+                        QTH now
+                    </router-link>
+                    <router-link to="/rdalog" tag="div" id="tab_qthnow" class="tab">
+                        RDA log
+                    </router-link>
+                    <router-link to="/contact" tag="div" id="tab_contacts" class="tab">
+                        Contact
+                    </router-link>
                     <router-link to="/login" tag="div" id="tab_login" class="tab" v-if="!loggedIn">
                         For administrators
                     </router-link>
                     <router-link to="/profile" tag="div" id="tab_login" class="tab" v-else>
                         Profile
-                    </router-link>
-                    <router-link to="/contact" tag="div" id="tab_contacts" class="tab">
-                        Contact
                     </router-link>
                 </td>
             </tr>

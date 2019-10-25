@@ -7,6 +7,8 @@ import ActiveStations from './../components/ActiveStations'
 import ChangePassword from '../components/ChangePassword'
 import Contact from '../components/Contact'
 import Chat from '../components/Chat'
+import QthNow from '../components/Qthnow'
+import RdaLog from '../components/RdaLog'
 
 Vue.use(Router)
 
@@ -31,6 +33,16 @@ const router = new Router({
       path: '/about',
       name: 'About',
       component: About
+    },
+    {
+      path: '/qthnow',
+      name: 'QthNow',
+      component: QthNow
+    },
+    {
+      path: '/rdalog',
+      name: 'RdaLog',
+      component: RdaLog
     },
     {
       path: '/login',

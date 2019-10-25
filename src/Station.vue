@@ -15,7 +15,8 @@
         <td rowspan="2" id="status">
             <div id="status_block_top" 
                 :class="{status_online: statusData.online, status_offline: !statusData.online}">
-                <b>{{statusData.online ? 'ONLINE': 'OFFLINE'}}</b>
+                <b>{{statusData.online ? (statusData.freqDisplay ? statusData.freqDisplay : 'ONLINE') 
+                    : 'OFFLINE'}}</b>
             </div>
             <table id="status_block_info" v-if="statusData.online"><tr>
                 <td id="current_loc">
@@ -100,6 +101,7 @@ const tabs = {
   log: { service: logService, interval: 60000 }
 }
 const onlineInt = { qsoclient: 150, gpslogger: 300 }
+const FREQ_INT = 300
 const statusUpdateInt = 60 * 1000 * 1
 
 export default {
@@ -216,10 +218,16 @@ export default {
       if (!this.stationSettings) {
         return
       }
+      const now = Date.now() / 1000
       const online = this.stationSettings.status.get === 'manual' ? this.statusData.online
-        : ( ( Date.now() / 1000 ) - this.statusData.ts ) < onlineInt[this.stationSettings.status.get]
+        : (now - this.statusData.ts ) < onlineInt[this.stationSettings.status.get]
       if ( online !== this.statusData.online ) {
         this.$set( this.statusData, 'online', online )
+      }
+      if (this.statusData.freq && this.statusData.freq.value && now - this.statusData.freq.ts < FREQ_INT) {
+        this.$set(this.statusData, 'freqDisplay', this.statusData.freq.value)
+      } else {
+        this.$set(this.statusData, 'freqDisplay', null)
       }
     },
     formatDate (dt) {

@@ -19,8 +19,8 @@
                     <router-link to="/qthnow" tag="div" id="tab_qthnow" class="tab">
                         QTH now
                     </router-link>
-                    <router-link to="/rdalog" tag="div" id="tab_qthnow" class="tab">
-                        RDA log
+                    <router-link to="/tnxlog" tag="div" id="tab_qthnow" class="tab">
+                        TNXLOG
                     </router-link>
                     <router-link to="/contact" tag="div" id="tab_contacts" class="tab">
                         Contact

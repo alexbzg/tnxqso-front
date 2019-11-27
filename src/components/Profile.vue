@@ -29,14 +29,16 @@
 
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info"
-                    @click="infoPopup='Выберите, откуда будет поступать информация о том, что станция ONLINE или OFFLINE.<br/><img src=&quot;/static/images/oo_tab.jpg&quot;><br/><br/><b>QSOclient</b><br/>Если на компьютере экспедиции запущен настроенный QSOclient, то статус - ONLINE.<br/>Все данные об RDA, RAFA и т.д. задаются в программе QSOclient.<br/><br/><b>QTH now</b><br/>Если на телефоне экспедиции запущена программа QTH now, то статус - ONLINE.<br/>Район RDA и возможный WFF, указывается здесь, в Профиле станции. RAFA указывается автоматически, исходя из координат.<br/><br/><b>При ручном указании</b> статуса ONLINE/OFFLNE все поля заполняются здесь, в Профиле станции.<br/>Можно выбирать данные, которые будут транслироваться на этой вкладке.<br/><br/><i>Не забудьте нажать на кнопку Save all info.</i>'">
+                    @click="infoPopup='Выберите, откуда будет поступать информация о том, что станция ONLINE или OFFLINE.<br/><img src=&quot;/static/images/oo_tab.jpg&quot;><br/><br/><b>TNXLOG / QTH now</b><br/>Если на компьютере экспедиции запущен настроенный TNXLOG или на телефоне запущена QTH now, то статус - ONLINE.<br/>Данные об RDA, RAFA и т.д. задаются в программе TNXlog (вручную или автоматически).<br/><br/><b>При ручном указании</b> статуса ONLINE/OFFLNE все поля заполняются здесь, в Профиле станции.<br/>Можно выбирать данные, которые будут транслироваться на этой вкладке.<br/><br/><i>Не забудьте нажать на кнопку Save all info.</i>'">
                 <!--<input type="checkbox" id="checkbox_status" checked disabled/> Показывать <b>ONLINE/OFFLINE</b> вкладку на странице станции -->
                 <div class="block_settings">
                     <u>Брать ONLINE/OFFLINE статус из</u>: &nbsp;&nbsp;&nbsp;&nbsp;
+                    <!--
                     <input type="radio" name="status_from" v-model="settings.status.get" value="qsoclient"/>
-                    QSOclient &nbsp;&nbsp;&nbsp;&nbsp;
+                    TNXLOG &nbsp;&nbsp;&nbsp;&nbsp;
+                    -->
                     <input type="radio" name="status_from" v-model="settings.status.get" value="gpslogger"/>
-                    QTH now &nbsp;&nbsp;&nbsp;&nbsp;
+                    TNXLOG / QTH now &nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="radio" name="status_from" v-model="settings.status.get" value="manual"/>
                     Указать вручную
                     <span id="manual_status" v-if="settings.status.get === 'manual'">
@@ -59,7 +61,8 @@
                             </td>
                             <td>
                                 <input type="text" id="status_manual_rda" v-model="status.rda"
-                                    :disabled="settings.status.get === 'qsoclient'" />
+                                    :disabled="settings.status.get === 'qsoclient' ||
+                                    settings.status.get === 'gpslogger'" />
                             </td>
                         </tr>
                         <tr>
@@ -73,7 +76,7 @@
                                     settings.status.get === 'gpslogger' " />
                             </td>
                         </tr>
-                        <tr>
+<!--                        <tr>
                             <td class="col1">
                                 <input type="checkbox" id="checkbox_status_wff"
                                     v-model="settings.status.fields.WFF"/> WFF
@@ -82,7 +85,7 @@
                                 <input type="text" id="status_manual_wff" v-model="status.wff"
                                     :disabled="settings.status.get === 'qsoclient'" />
                             </td>
-                        </tr>
+                        </tr> -->
                         <tr>
                             <td class="col1">
                                 <input type="checkbox" id="checkbox_status_loc"
@@ -188,10 +191,10 @@
                                 <input type="checkbox" id="checkbox_log_rafa" v-model="settings.log.columns.RAFA" />
                                 RAFA
                             </td>
-                            <td class="setting">
+<!--                            <td class="setting">
                                 <input type="checkbox" id="checkbox_log_wff" v-model="settings.log.columns.WFF" />
                                 WFF
-                            </td>
+                            </td>  -->
                             <td class="setting">
                                 <input type="checkbox" id="checkbox_log_loc" v-model="settings.log.columns.loc" />
                                 Locator
@@ -271,7 +274,7 @@
                     @click="infoPopup='На этой вкладке будет отображаться статистика связей в реальном времени'">
                 <input type="checkbox" id="checkbox_stats" v-model="settings.enable.stats" /> Показывать вкладку <b>Stats</b> на странице вашей станции<br/>
             </div>
-
+<!--
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info"
                     @click="infoPopup='На этой вкладке будет стоять ссылка на нашу страницу в Instagram'">
@@ -280,6 +283,16 @@
                     Instagram ID: <input type="text" id="setup_instagram" v-model="settings.instagramID"/>
                 </div>
             </div>
+-->
+            <div class="station_setup_block">
+                <img class="icon_info" src="/static/images/icon_info.png" title="Info"
+                    @click="infoPopup='галерея'">
+                <input type="checkbox" id="checkbox_gallery" v-model="settings.enable.gallery" /> Показывать вкладку <b>Gallery</b> на странице вашей станции<br/>
+                <div class="block_settings" v-if="settings.enable.instagram">
+                    Instagram ID: <input type="text" id="setup_instagram" v-model="settings.instagramID"/>
+                </div>
+            </div>
+
 
             <div class="station_setup_block">
                 <a href="/static/html/support_us.html" target="_blank" rel="noopener">

@@ -8,7 +8,7 @@ import ChangePassword from '../components/ChangePassword'
 import Contact from '../components/Contact'
 import Chat from '../components/Chat'
 import QthNow from '../components/Qthnow'
-import RdaLog from '../components/RdaLog'
+import Tnxlog from '../components/Tnxlog'
 
 Vue.use(Router)
 
@@ -40,9 +40,9 @@ const router = new Router({
       component: QthNow
     },
     {
-      path: '/rdalog',
-      name: 'RdaLog',
-      component: RdaLog
+      path: '/tnxlog',
+      name: 'Tnxlog',
+      component: Tnxlog
     },
     {
       path: '/login',

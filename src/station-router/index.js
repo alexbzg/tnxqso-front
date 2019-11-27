@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import StationCluster from '../components/StationCluster'
-// import StationNews from '../components/StationNews'
+import StationGallery from '../components/StationGallery'
 import StationInfo from '../components/StationInfo'
 import StationMap from '../components/StationMap'
 import StationLog from '../components/StationLog'
@@ -47,6 +47,12 @@ const router = new Router({
       path: '/stats',
       name: 'StationStats',
       component: StationStats,
+      props: true
+    },
+    {
+      path: '/gallery',
+      name: 'StationGallery',
+      component: StationGallery,
       props: true
     },
     {

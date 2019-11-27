@@ -107,45 +107,47 @@ img#logo{
 
 #qthnow{
     padding: 20px 50px 100px 50px;
-    width: 950px;
     margin: 0 auto;
 }
-#rdalog{
+#tnxlog{
     padding: 20px 50px 100px 50px;
-    width: 700px;
+    width: 1102px;
     margin: 0 auto;
 }
-#qthnow h3, #rdalog h3{
+#tnxlog table{
+    text-align: left;
+}
+#qthnow h3, #tnxlog h3{
     font-size: 24px;
     font-weight: bold;
     margin: 10px 0 30px 0;
     text-align: center;
 }
-#qthnow img, #rdalog img{
-    margin: 0 20px;
+#qthnow img{
+    margin: 0 5px;
     box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
 }
-#qthnow p, #rdalog p{
+#qthnow p, #tnxlog p{
     text-align: left;
-    margin: 0 0 20px 0;
+    margin: 0 100px 20px 100px;
 }
 #qthnow .intext{
     box-shadow: none;
 }
 
 
-
-
-
-
-
-
-
-
-
 .list img{
 max-width: 900px;
 }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -161,9 +163,7 @@ max-width: 900px;
     color: #999;
     line-height: 1.6em;
 }
-.stations_list div{
-    margin: 0 0 30px 0;
-}
+
 .stations_list .stations_block{
     width: 100px;
     padding: 0;
@@ -175,40 +175,80 @@ max-width: 900px;
 }
 
 .one_station{
-    padding-left: 110px;
+    padding-left: 100px;
     text-align: left;
 }
 
-.stations_list .callsign{
-    font-size: 24px;
+.one_station table{
+    border-collapse: collapse;
+    margin: 0 0 30px 0;
+}
+.one_station table td{
+    padding: 0;
+    vertical-align: top;
+}
+.one_station table td.callsign{
+    font-size: 20px;
     font-weight: bold;
-    display: inline-block;
     text-align: left;
-    width: 160px;
-    color: #333;
-    text-shadow: rgba(255,255,255,0.5) 1px 2px 3px;
+    width: 130px;
+    color: #000;
+
 }
-.stations_list .period{
-    font-size: 14px;
-    color: #777;
+.one_station table td.status{
+    width: 120px;
+}
+.one_station .status{
+    width: 120px;
+    padding: 5px;
+    font-size: 18px;
+    line-height: 18px;
     font-weight: bold;
-    margin-left: 30px;
+    color: #fff;
+    text-align: center;
 }
-.stations_list .title{
-    color: #888;
-    padding-left: 170px;
+.one_station .status.online{
+    background-color: #4ab54a;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+.one_station .status.offline{
+    background-color: #ff4949;
+    border-radius: 7px;
+    font-size: 12px;
+    line-height: 12px;
+    font-weight: normal;
+}
+.one_station .status_info{
+    text-align: center;
+    font-size: 12px;
+    background-color: #9f9;
+    color: #555;
+    line-height: 14px;
+    padding: 5px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
 }
 
-.station_internal_links{
+.one_station .station_internal_links{
+    padding-left: 30px;
 }
-.station_internal_links a{
+.one_station .station_internal_links a{
     font-weight: bold;
     font-size: 18px;
-    margin-right: 25px;
+    margin-right: 20px;
 }
-.station_internal_links a:hover, #ended_stations .station_internal_links a:hover{
-    color: #00d;
+.one_station .title{
+    padding-left: 30px;
+    color: #888;
 }
+.one_station .period{
+    padding-left: 30px;
+    color: #555;
+    font-weight: bold;
+}
+
+
 
 
 
@@ -284,7 +324,7 @@ table.tabs td#status{
     color: #fff;
     padding:  5px 5px;
     border-radius: 10px 10px 0px 0px;
-    font-size: 14px;
+    font-size: 20px;
     text-align: center;
     line-height: 16px;
 }
@@ -1334,6 +1374,85 @@ table#filter_data tr.odd td{
 table#filter_data .data{
     color: #070;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*              G A L L E R Y           */
+
+#gallery{
+    margin: 30px 0;
+    position: relative;
+}
+#instagram_link{
+    position: absolute;
+    left: 30px;
+    top: 0px;
+
+}
+
+
+.media{
+    display: inline-block;
+    margin: 0 20px 30px 20px;
+    position: relative;
+}
+.media img{
+    border: 1px solid #ddd;
+}
+.media .delete{
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    border: none;
+}
+.media .caption{
+    width: 200px;
+    height: 50px;
+    overflow: hidden;
+    font-size: 14px;
+    line-height: 16px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

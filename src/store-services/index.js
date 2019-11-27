@@ -15,6 +15,7 @@ export const ACTION_UPDATE_SERVICE = 'actionUpdateService'
 export const ACTION_SERVICE_MARK_READ = 'actnServiceMarkRead'
 
 const INT_READ = 10 * 1000
+export const RELOAD_INT_SRVC = 1000 * 60
 
 function setNew (service, val, ts) {
   Vue.set(service, 'new', false)

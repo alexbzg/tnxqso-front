@@ -1,23 +1,34 @@
 <template>
     <div v-if="station.publish || siteAdmin" class="one_station">
-        <template v-if="siteAdmin">
-            <input type="checkbox" v-model="station.publish.admin" @change="publishChange()"/>
-            <input type="checkbox" v-model="station.publish.user" @change="publishChange()"/>
-        </template>
-        <span class="callsign">{{$options.replace0(station.station.callsign.toUpperCase())}}</span>
-        <span class="station_internal_links">
-            <a :href="stationURL + '#/info'" v-if="station.enable.stationInfo">Info</a>
-            <a :href="stationURL + '#/log'" v-if="station.enable.log">Log</a>
-            <a :href="stationURL + '#/map'" v-if="station.enable.map">Map</a>
-            <a :href="stationURL + '#/chat'" v-if="station.enable.chat">Chat</a>
-            <a :href="stationURL + '#/stats'" v-if="station.enable.stats">Stats</a>
-            <a :href="'https://www.instagram.com/' + station.instagramID"
-                v-if="station.enable.instagram && station.instagramID"
-                target="_blank" rel="noopener">Instagram</a>
-            <a :href="stationURL + '#/donate'" v-if="station.enable.donate">Support</a>
-        </span><span class="period" v-if="period">{{period}}</span><br/>
-        <span class="title">{{station.station.title}}</span>
-        <a :href="stationURL"></a>
+      <table>
+        <tr>
+          <td class="callsign">
+            <template v-if="siteAdmin">
+                <input type="checkbox" v-model="station.publish.admin" @change="publishChange()"/>
+                <input type="checkbox" v-model="station.publish.user" @change="publishChange()"/>
+            </template>
+            {{$options.replace0(station.station.callsign.toUpperCase())}}
+          </td>
+          <td>
+            <div class="status online">14050.3</div>
+            <div class="status_info">KR-03<br/>XRDR UKR5<br/>KO95MC</div>
+          </td>
+          <td>
+            <div class="station_internal_links">
+              <a :href="stationURL + '#/info'" v-if="station.enable.stationInfo">Info</a>
+              <a :href="stationURL + '#/log'" v-if="station.enable.log">Log</a>
+              <a :href="stationURL + '#/map'" v-if="station.enable.map">Map</a>
+              <a :href="stationURL + '#/chat'" v-if="station.enable.chat">Chat</a>
+              <a :href="stationURL + '#/stats'" v-if="station.enable.stats">Stats</a>
+              <a :href="stationURL + '#/gallery'" v-if="station.enable.gallery">Gallery</a>
+              <a :href="stationURL + '#/donate'" v-if="station.enable.donate">Support</a>
+            </div>
+            <div class="title">{{station.station.title}}</div>
+            <div class="period" v-if="period">{{period}}</div>
+          </td>
+        </tr>
+      </table>
+<!--        <a :href="stationURL"></a>   Это так надо? -->
     </div>
 </template>
 

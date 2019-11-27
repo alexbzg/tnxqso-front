@@ -17,6 +17,7 @@
         "donate": true,
         "instagram": true,
         "stats": true,
+        "gallery": true,
         "stationInfo": true
     },
     "log": {

@@ -10,7 +10,6 @@
             <td class="rst head">RST/RST</td>
             <td class="rda head" v-if="logSettings.columns.RDA">RDA</td>
             <td class="rafa head" v-if="logSettings.columns.RAFA">RAFA</td>
-            <td class="wff head" v-if="logSettings.columns.WFF">WFF</td>
             <td class="locator head" v-if="logSettings.columns.loc">Locator</td>
             <td class="user head" v-for="uc in logSettings.userColumns" v-if="uc.enabled">{{uc.column}}</td>
         </tr>
@@ -25,7 +24,6 @@
                 <td class="rst">{{spot.rcv}}/{{spot.snt}}</td>
                 <td class="rda" v-if="logSettings.columns.RDA">{{spot.rda}}</td>
                 <td class="rafa" v-if="logSettings.columns.RAFA">{{spot.rafa}}</td>
-                <td class="wff" v-if="logSettings.columns.WFF">{{spot.wff}}</td>
                 <td class="locator" v-if="logSettings.columns.loc">{{spot.loc}}</td>
                 <td class="user" v-for="(uc, idx) in logSettings.userColumns" v-if="uc.enabled">
                     {{spot.userFields ? spot.userFields[idx] : null}}

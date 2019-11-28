@@ -1,7 +1,7 @@
 <template>
     <div id="log">
         <div id="refresh_time">Auto refresh<br/><b>1 min</b></div>
-        <div id="no_net" v-if="stationActive && !statusOnline" class="warning">
+        <div id="no_net" v-if="stationActive && !statusData.online" class="warning">
           <div id="warning_border">
             <span>There is no Internet connection to the station.</span> The data will be updated after the connection is restored.
           </div>
@@ -45,7 +45,7 @@ const current = moment()
 export default {
   mixins: [tabMixin],
   name: 'StationLog',
-  props: ['stationSettings', 'statusOnline'],
+  props: ['stationSettings', 'statusData'],
   components: { LogTable },
   data () {
     return {

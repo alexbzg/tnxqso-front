@@ -30,21 +30,18 @@
         <tr>
             <td class="spot_text text_btns" colspan="5">
             <input type="button" class="add_text_btn" value="RDA" 
-                v-if="stationSettings && stationSettings.status.fields.RDA && stationStatus && stationStatus.rda"
+                v-if="stationSettings && stationSettings.status.fields.RDA && statusData && statusData.rda"
                 @click="addSpotTextField('RDA')"/> 
             <input type="button" class="add_text_btn" value="RAFA" 
-                v-if="stationSettings && stationSettings.status.fields.RAFA && stationStatus && stationStatus.rafa"
+                v-if="stationSettings && stationSettings.status.fields.RAFA && statusData && statusData.rafa"
                 @click="addSpotTextField('RAFA')"/> 
-            <input type="button" class="add_text_btn" value="WFF" 
-                v-if="stationSettings && stationSettings.status.fields.WFF && stationStatus && stationStatus.wff"
-                @click="addSpotTextField('WFF')"/> 
             <input type="button" class="add_text_btn" value="Locator" 
-                v-if="stationSettings && stationSettings.status.fields.loc && stationStatus && stationStatus.loc"
+                v-if="stationSettings && stationSettings.status.fields.loc && statusData && statusData.loc"
                 @click="addSpotTextField('loc')"/> 
             <input type="button" class="add_text_btn" 
                 v-for="n in $options.USER_FIELDS_COUNT"
-                v-if="stationSettings && stationSettings.status.userFields[n-1] && stationStatus && 
-                    stationStatus.userFields[n-1]"
+                v-if="stationSettings && stationSettings.status.userFields[n-1] && statusData && 
+                    statusData.userFields[n-1]"
                 :value="stationSettings.userFields[n-1] || ( 'userField#' + n )"
                 @click="addSpotTextUserField(n-1)"/> 
             </td>
@@ -97,7 +94,7 @@ export default {
   $clusterResultTimeout: null,
   mixins: [tabMixin],
   name: 'StationCluster',
-  props: ['stationSettings', 'logService', 'statusService'],
+  props: ['stationSettings', 'logService', 'statusData'],
   data () {
     return {
       tabId: 'cluster',
@@ -119,7 +116,6 @@ export default {
   },
   mounted () {
     this.logService.onUpdate( this.onLogUpdate )
-    this.statusService.onUpdate( this.onStatusUpdate )
   },
   beforeDestroy () {
     this.clearSpotDisableTimeout()
@@ -182,21 +178,23 @@ export default {
       if (field === 'RDA' || field === 'RAFA') {
         txt = field + ' '
       }
-      txt += this.stationStatus[field.toLowerCase()]
+      txt += this.statusData[field.toLowerCase()]
       this.addSpotText( txt )
     },
     addSpotTextUserField (n) {
       this.addSpotText( this.stationSettings.userFields[n] + ' ' + this.stationStatus.userFields[n] )
     },
     onLogUpdate () {
+      if (this.statusData.freqDisplay) {
+        this.spot.freq = this.statusData.freqDisplay
+      }
       if (this.logService.data && this.logService.data.length > 0) {
         const l = this.logService.data[0]
         this.spot.cs = l.myCS
-        this.spot.freq = l.freq
+        if (!this.statusData.freqDisplay) {
+          this.spot.freq = this.statusData.l.freq
+        }
       }
-    },
-    onStatusUpdate () {
-      this.stationStatus.update( this.statusService.data )
     },
     clearSpotDisableTimeout () {
       if ( this.$spotDisableTimeout ) {
@@ -222,7 +220,14 @@ export default {
         this.spot.cs = val.station.callsign
       },
       deep: true
-
+    },
+    statusData: {
+      handler: function (val) {
+        if (val.freqDisplay) {
+          this.spot.freq = val.freqDisplay
+        }
+      },
+      deep: true
     }
   },
   computed: {

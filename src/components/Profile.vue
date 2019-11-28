@@ -38,7 +38,7 @@
                     TNXLOG &nbsp;&nbsp;&nbsp;&nbsp;
                     -->
                     <input type="radio" name="status_from" v-model="settings.status.get" value="gpslogger"/>
-                    TNXLOG / QTH now &nbsp;&nbsp;&nbsp;&nbsp;
+                    TNXLOG / QTH now &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="radio" name="status_from" v-model="settings.status.get" value="manual"/>
                     Указать вручную
                     <span id="manual_status" v-if="settings.status.get === 'manual'">
@@ -263,7 +263,7 @@
                 <div class="block_settings" v-if="settings.enable.chat">
                     Позывные для выделения цветом <i>(разделяются пробелом или запятой)</i>: <br/>
                     <input type="text" id="admin_calls" v-model="chatAdmins"
-                        @change="chatAdminsChange" /><br/>
+                        @change="chatAdminsChange" /><br/><br/>
                     <input type="button" id="button_clear_chat" class="btn" value="Очистить чат"
                         @click="clearChat()"/>
                 </div>
@@ -286,10 +286,11 @@
 -->
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info"
-                    @click="infoPopup='галерея'">
+                    @click="infoPopup='На этой вкладке будет отображаться фото, которые вы можете загрузить либо с телефона программой TNXpost,<br/>либо в форме загрузки непосредственно во вкладке Gallery вашей станции.'">
                 <input type="checkbox" id="checkbox_gallery" v-model="settings.enable.gallery" /> Показывать вкладку <b>Gallery</b> на странице вашей станции<br/>
-                <div class="block_settings" v-if="settings.enable.instagram">
-                    Instagram ID: <input type="text" id="setup_instagram" v-model="settings.instagramID"/>
+                <div class="block_settings" v-if="settings.enable.gallery">
+                    <br/>
+                    <input type="button" id="button_clear_photos" class="btn" value="Очистить Gallery"/>
                 </div>
             </div>
 

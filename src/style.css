@@ -1393,18 +1393,23 @@ table#filter_data .data{
     margin: 30px 0;
     position: relative;
 }
-#instagram_link{
+#add_image{
     position: absolute;
-    left: 30px;
+    left: 40px;
     top: 0px;
-
+    cursor: pointer;
 }
 
 
 .media{
     display: inline-block;
-    margin: 0 20px 30px 20px;
+    width: 200px;
+    height: 260px;
+    margin: 0 20px;
     position: relative;
+    overflow: hidden;
+    padding: 0 0 20px 0;
+    font-size: 12px;
 }
 .media img{
     border: 1px solid #ddd;
@@ -1424,6 +1429,31 @@ table#filter_data .data{
     line-height: 16px;
 }
 
+.media_upload_form{
+    border:1px solid #e0e0e0;
+    background-color: #f0f0f0;
+    text-align: center;
+}
+
+.media input#select_file, .media input#upload_file {
+    width: 180px;
+    border:1px solid #aaa;
+    margin: 10px 0;
+    cursor: pointer;
+}
+.media textarea{
+    width: 170px;
+    height: 50px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    margin: 0px auto 10px auto;
+}
+#selected_filename{
+    font-weight: bold;
+    margin: 10px 0;
+    text-align: center;
+    font-size: 16px;
+}
 
 
 

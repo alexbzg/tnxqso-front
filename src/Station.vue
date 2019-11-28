@@ -27,9 +27,6 @@
                     <template v-if="stationSettings && stationSettings.status.fields.RAFA && statusData.rafa">
                         RAFA&nbsp;<b>{{statusData.rafa}}</b><br/>
                     </template>
-                    <template v-if="stationSettings && stationSettings.status.fields.WFF && statusData.wff">
-                        WFF&nbsp;<b>{{statusData.wff}}</b><br/>
-                    </template>
                     <template v-if="stationSettings && stationSettings.status.fields.loc && statusData.loc">
                         <b>{{statusData.loc}}</b><br/>
                     </template>
@@ -75,7 +72,7 @@
     </tr></table>
         <div class="list">
             <router-view :station-settings="stationSettings"
-            :status-service="statusService" :status-online="statusData.online" 
+            :status-service="statusService" :status-data="statusData" 
             :log-service="logService"></router-view>
         </div>
     </div>
@@ -202,7 +199,6 @@ export default {
         }
       }
       this.activeTab = id
-      this.postUserActivity()
     },
     tabUnread ( id ) {
       const tab = this.tabs[id]
@@ -210,8 +206,6 @@ export default {
         tab.updated
         ? tab.updated !== tab.read && tab.service.data.length > 0
         : false )
-    },
-    postUserActivity ( typing ) {
     },
     updateOnline () {
       if (!this.stationSettings) {

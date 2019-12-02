@@ -27,15 +27,19 @@ export default function () {
   }
 
   function load () {
-    return request.get( dataServiceUrlPrefix + s.url )
-      .then(loadComplete)
+    if (s.url) {
+      return request.get( dataServiceUrlPrefix + s.url )
+        .then(loadComplete)
+    }
 
     function loadComplete (response) {
       if (s.lastModified !== response.headers['last-modified']) {
         s.lastModified = response.headers['last-modified']
         s.data = response.data
         s.processData()
-        bus.$emit(s.eventName)
+        if (s.eventName) {
+          bus.$emit(s.eventName)
+        }
       }
       return response.data
     }

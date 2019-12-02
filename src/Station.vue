@@ -13,30 +13,7 @@
                 </span>
             </td>
         <td rowspan="2" id="status">
-            <div id="status_block_top" 
-                :class="{status_online: statusData.online, status_offline: !statusData.online}">
-                <b>{{statusData.online ? (statusData.freqDisplay ? statusData.freqDisplay : 'ONLINE') 
-                    : 'OFFLINE'}}</b>
-            </div>
-            <table id="status_block_info" v-if="statusData.online"><tr>
-                <td id="current_loc">
-                    <span>{{statusData.date}}  {{statusData.year}} {{statusData.time}}</span><br/>
-                    <template v-if="stationSettings && stationSettings.status.fields.RDA && statusData.rda">
-                        RDA&nbsp;<b>{{statusData.rda}}</b><br/>
-                    </template>
-                    <template v-if="stationSettings && stationSettings.status.fields.RAFA && statusData.rafa">
-                        RAFA&nbsp;<b>{{statusData.rafa}}</b><br/>
-                    </template>
-                    <template v-if="stationSettings && stationSettings.status.fields.loc && statusData.loc">
-                        <b>{{statusData.loc}}</b><br/>
-                    </template>
-                    <template v-for="n in $options.USER_FIELDS_COUNT" 
-                        v-if="stationSettings && stationSettings.status.userFields[n-1] && 
-                            statusData.userFields[n-1]">
-                        {{stationSettings.userFields[n-1]}}&nbsp;<b>{{statusData.userFields[n-1]}}</b><br/>
-                    </template>
-                </td>
-            </tr></table>
+            <station-status :stationSettings="stationSettings" @change="onStatusChange"></station-status>
         </td>
     </tr>
     <tr>
@@ -72,8 +49,8 @@
     </tr></table>
         <div class="list">
             <router-view :station-settings="stationSettings"
-            :status-service="statusService" :status-data="statusData" 
-            :log-service="logService"></router-view>
+            :status-data="statusData" :log-service="logService">
+            </router-view>
         </div>
     </div>
 
@@ -87,22 +64,20 @@ import * as moment from 'moment'
 import './style.css'
 import stationSettings from './station-settings-service'
 import clusterService from './cluster-service'
-import statusService from './status-service'
 import logService from './log-service'
 import storage from './storage'
+import StationStatus from './components/StationStatus'
 
 const tabsReadStoragePfx = 'stationTabsRead_'
 const tabs = {
   cluster: { service: clusterService, interval: 60000 },
   log: { service: logService, interval: 60000 }
 }
-const onlineInt = { qsoclient: 150, gpslogger: 300 }
-const FREQ_INT = 300
-const statusUpdateInt = 60 * 1000 * 1
 
 export default {
   USER_FIELDS_COUNT: USER_FIELDS_COUNT,
   name: 'station',
+  components: {StationStatus},
   data () {
     const tabsUnread = {}
     for (const tab in tabs) {
@@ -118,9 +93,9 @@ export default {
       stationTitle: null,
       stationInfo: null,
       stationSettings: null,
-      statusService: statusService,
+      statusData: {},
       logService: logService,
-      statusData: {}
+      freq: null
     }
   },
   mounted () {
@@ -152,13 +127,6 @@ export default {
       .catch( function () {
         window.location.href = '/'
       })
-    statusService.onUpdate( function () {
-      vm.statusData = statusService.data
-      vm.updateOnline()
-    })
-    statusService.load()
-    vm.statusUpdateInd = setInterval( statusService.load, statusUpdateInt )
-    vm.updateOnlineIntId = setInterval( vm.updateOnline, 1000 )
     for (const id in vm.tabs) {
       const tab = vm.tabs[id]
       tab.service.load()
@@ -174,8 +142,6 @@ export default {
       clearInterval( this.tabs[id].intervalId )
     }
     clearInterval( this.userActivityPostIntId )
-    clearInterval( this.statusUpdateIntId )
-    clearInterval( this.updateOnlineIntId )
   },
   watch: {
     tabsUnread: {
@@ -207,21 +173,8 @@ export default {
         ? tab.updated !== tab.read && tab.service.data.length > 0
         : false )
     },
-    updateOnline () {
-      if (!this.stationSettings) {
-        return
-      }
-      const now = Date.now() / 1000
-      const online = this.stationSettings.status.get === 'manual' ? this.statusData.online
-        : (now - this.statusData.ts ) < onlineInt[this.stationSettings.status.get]
-      if ( online !== this.statusData.online ) {
-        this.$set( this.statusData, 'online', online )
-      }
-      if (this.statusData.freq && this.statusData.freq.value && now - this.statusData.freq.ts < FREQ_INT) {
-        this.$set(this.statusData, 'freqDisplay', this.statusData.freq.value)
-      } else {
-        this.$set(this.statusData, 'freqDisplay', null)
-      }
+    onStatusChange (statusData) {
+      this.$set(this, 'statusData', statusData)
     },
     formatDate (dt) {
       return moment(dt).format( 'DD MMM YYYY' ).toLowerCase()

@@ -207,19 +207,21 @@ max-width: 900px;
     color: #fff;
     text-align: center;
 }
-.one_station .status.online{
+.one_station .status.status_online{
     background-color: #4ab54a;
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
 }
-.one_station .status.offline{
+.one_station .status.status_offline{
     background-color: #ff4949;
     border-radius: 7px;
-    font-size: 12px;
+    font-size: 10px;
     line-height: 12px;
     font-weight: normal;
+    letter-spacing: 5px;
 }
 .one_station .status_info{
+    width: 120px;
     text-align: center;
     font-size: 12px;
     background-color: #9f9;
@@ -228,6 +230,10 @@ max-width: 900px;
     padding: 5px;
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
+}
+.one_station .status_info span{
+    color: #333;
+    font-weight: bold;
 }
 
 .one_station .station_internal_links{

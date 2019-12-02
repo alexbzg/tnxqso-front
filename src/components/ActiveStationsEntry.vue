@@ -10,8 +10,9 @@
             {{$options.replace0(station.station.callsign.toUpperCase())}}
           </td>
           <td>
-            <div class="status online">14050.3</div>
-            <div class="status_info">KR-03<br/>XRDR UKR5<br/>KO95MC</div>
+            <station-status-small v-if="type == 'active'" :stationSettings="station" 
+                :station="station.station.callsign">
+            </station-status-small>
           </td>
           <td>
             <div class="station_internal_links">
@@ -36,18 +37,20 @@
 import * as moment from 'moment'
 
 import {replace0, urlCallsign} from '../utils'
+import StationStatusSmall from './StationStatusSmall'
 
 export default {
   replace0: replace0,
   name: 'activeStations',
-  props: ['siteAdmin', 'station', 'hidePeriod'],
+  components: {StationStatusSmall},
+  props: ['siteAdmin', 'station', 'type'],
   data () {
     return {
     }
   },
   computed: {
     period () {
-      if (!this.hidePeriod && this.station.station.activityPeriod &&
+      if (this.type !== 'archive' && this.station.station.activityPeriod &&
         this.station.station.activityPeriod.length) {
         if (this.station.station.activityPeriod.length < 2) {
           return this.formatDate(this.station.station.activityPeriod[0])

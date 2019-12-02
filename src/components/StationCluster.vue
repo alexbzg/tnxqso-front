@@ -191,8 +191,8 @@ export default {
       if (this.logService.data && this.logService.data.length > 0) {
         const l = this.logService.data[0]
         this.spot.cs = l.myCS
-        if (!this.statusData.freqDisplay) {
-          this.spot.freq = this.statusData.l.freq
+        if (!this.freq) {
+          this.spot.freq = l.freq
         }
       }
     },
@@ -222,9 +222,9 @@ export default {
       deep: true
     },
     statusData: {
-      handler: function (val) {
-        if (val.freqDisplay) {
-          this.spot.freq = val.freqDisplay
+      handler: function () {
+        if (this.statusData.freqDisplay) {
+          this.spot.freq = this.statusData.freqDisplay
         }
       },
       deep: true

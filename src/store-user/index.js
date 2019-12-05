@@ -20,7 +20,8 @@ export const ACTION_SAVE_SETTINGS = 'actionSaveSettings'
 const EMPTY_USER = {
   settings: {
     enable: {},
-    station: {}
+    station: {},
+    skipConfimation: {}
   }
 }
 
@@ -68,7 +69,16 @@ export const storeUser = {
     [MUTATE_USER] (state, payload) {
       const remember = (payload && 'remember' in payload) ? payload.remember : state.user.remember
       const user = (payload && 'user' in payload) ? payload.user : payload
-      state.user = user || JSON.parse(JSON.stringify(EMPTY_USER))
+      if (user) {
+        state.user = user
+        for (const field in EMPTY_USER) {
+          if (!user[field]) {
+            user[field] = {}
+          }
+        }
+      } else {
+        state.user = user || JSON.parse(JSON.stringify(EMPTY_USER))
+      }
       state.user.remember = remember
       storage.remove(STORAGE_KEY_USER, 'local')
       storage.remove(STORAGE_KEY_USER, 'session')

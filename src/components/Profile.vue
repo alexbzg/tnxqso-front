@@ -11,6 +11,8 @@
         </div>
 
         <div id="station_setup">
+
+            <!-- STATION -->
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info"
                     @click="infoPopup='Поставьте отметку для публикации вашей экспедиции в списке станций на главной странице. <br/>Отметку ставьте после того, как ваш профиль по станции полностью готов.<br/><u>Ссылку на страницу станции</u> удобно использовать для распространения в соц.сетях/форумах/кластерах.'">
@@ -27,6 +29,7 @@
 
             </div>
 
+            <!-- STATUS -->
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info"
                     @click="infoPopup='Выберите, откуда будет поступать информация о том, что станция ONLINE или OFFLINE.<br/><img src=&quot;/static/images/oo_tab.jpg&quot;><br/><br/><b>TNXLOG / QTH now</b><br/>Если на компьютере экспедиции запущен настроенный TNXLOG или на телефоне запущена QTH now, то статус - ONLINE.<br/>Данные об RDA, RAFA и т.д. задаются в программе TNXlog (вручную или автоматически).<br/><br/><b>При ручном указании</b> статуса ONLINE/OFFLNE все поля заполняются здесь, в Профиле станции.<br/>Можно выбирать данные, которые будут транслироваться на этой вкладке.<br/><br/><i>Не забудьте нажать на кнопку Save all info.</i>'">
@@ -76,16 +79,6 @@
                                     settings.status.get === 'gpslogger' " />
                             </td>
                         </tr>
-<!--                        <tr>
-                            <td class="col1">
-                                <input type="checkbox" id="checkbox_status_wff"
-                                    v-model="settings.status.fields.WFF"/> WFF
-                            </td>
-                            <td>
-                                <input type="text" id="status_manual_wff" v-model="status.wff"
-                                    :disabled="settings.status.get === 'qsoclient'" />
-                            </td>
-                        </tr> -->
                         <tr>
                             <td class="col1">
                                 <input type="checkbox" id="checkbox_status_loc"
@@ -118,6 +111,7 @@
             </div>
 
 
+            <!-- MAP -->
             <div class="station_setup_block">
                 <a href="/static/html/map.html" target="_blank" rel="noopener">
                     <img class="icon_info" src="/static/images/icon_info.png" title="Info">
@@ -173,6 +167,7 @@
             </div>
 
 
+            <!-- LOG -->
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info"
                     @click="infoPopup='Отметьте те колонки лога, которые будут транслироваться на сайт.<br/>Названия пользовательских колонок изменяются в программе QSOclient или в настройках вкладки ONLINE/OFFLINE.'">
@@ -213,6 +208,7 @@
             </div>
 
 
+            <!-- INFO -->>
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info"
                     @click="infoPopup='Во вкладке <b>INFO</b> уместно разместить общую информацию и фото с описанием цели, состава операторов, маршрута экспедиции/станции.'">
@@ -223,24 +219,7 @@
                 </div>
             </div>
 
-<!--
-            <div class="station_setup_block">
-                <img class="icon_info" src="/static/images/icon_info.png" title="Info"
-                    @click="infoPopup='<b>The NEWS tab</b>. Adding current reports of the work of the expedition/station to the website.<br/><hr/>Вкладка <b>NEWS</b> - добавление на сайт оперативных сообщений о работе экспедиции/станции.'">
-                <input type="checkbox" id="checkbox_news" v-model="settings.enable.news" /> Show the <b>News</b> на странице вашей станции
-                <div class="block_settings" v-if="settings.enable.news">
-                    <input type="button" id="button_clear_news" class="btn" value="Clear all news"
-                         :disabled="!user.stationCallsign"
-                        @click="clearNews()"/><br/><br/>
-                    <vue-editor id="editor_news"
-                        v-model="newsItem" :editorToolbar="editorToolbar"></vue-editor>
-                    <input type="button" id="button_post_news" class="btn" value="Post news"
-                        :disabled="!user.stationCallsign"
-                        @click="postNewsItem()"/><br/>
-                </div>
-            </div>
--->
-
+            <!-- CLUSTER -->
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info"
                     @click="infoPopup='Указывать можно как конкретный позывной (R7AB или R7AB/M), так и группу позывных, используя &laquo;звездочку&raquo;.<br/><b>*/P</b> - будут показываться все .../P позывные в мире.<br/><b>R* UA* UB* UC* UD* UE* UF* UG* UH* UI*</b> - будут показываться все российские позывные.<br/><b>R*/* UA*/* UB*/* UC*/* UD*/* UE*/* UF*/* UG*/* UH*/* UI*/*</b> - будут показываться все российские позывные c дробью.<br/>Выделять цветом лучше только позывной своей экспедиции/станции.'">
@@ -256,6 +235,7 @@
 
             </div>
 
+            <!-- CHAT -->
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info"
                     @click="infoPopup='Удалять сообщения чата может только администратор станции.'">
@@ -264,37 +244,38 @@
                     Позывные для выделения цветом <i>(разделяются пробелом или запятой)</i>: <br/>
                     <input type="text" id="admin_calls" v-model="chatAdmins"
                         @change="chatAdminsChange" /><br/><br/>
+                    <input type="checkbox" id="checkbox_chat_delete" 
+                        v-model="settings.skipConfimation.chatDelete" />
+                    Не требовать подтверждения при удалении сообщений<br/>
                     <input type="button" id="button_clear_chat" class="btn" value="Очистить чат"
                         @click="clearChat()"/>
+
                 </div>
             </div>
 
+            <!-- STATS -->
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info"
                     @click="infoPopup='На этой вкладке будет отображаться статистика связей в реальном времени'">
                 <input type="checkbox" id="checkbox_stats" v-model="settings.enable.stats" /> Показывать вкладку <b>Stats</b> на странице вашей станции<br/>
             </div>
-<!--
-            <div class="station_setup_block">
-                <img class="icon_info" src="/static/images/icon_info.png" title="Info"
-                    @click="infoPopup='На этой вкладке будет стоять ссылка на нашу страницу в Instagram'">
-                <input type="checkbox" id="checkbox_instagram" v-model="settings.enable.instagram" /> Показывать вкладку <b>Instagram</b> на странице вашей станции<br/>
-                <div class="block_settings" v-if="settings.enable.instagram">
-                    Instagram ID: <input type="text" id="setup_instagram" v-model="settings.instagramID"/>
-                </div>
-            </div>
--->
+
+            <!-- GALLERY -->
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info"
                     @click="infoPopup='На этой вкладке будет отображаться фото, которые вы можете загрузить либо с телефона программой TNXpost,<br/>либо в форме загрузки непосредственно во вкладке Gallery вашей станции.'">
                 <input type="checkbox" id="checkbox_gallery" v-model="settings.enable.gallery" /> Показывать вкладку <b>Gallery</b> на странице вашей станции<br/>
                 <div class="block_settings" v-if="settings.enable.gallery">
                     <br/>
+                    <input type="checkbox" id="checkbox_gallery_delete" 
+                        v-model="settings.skipConfimation.galleryDelete" />
+                    Не требовать подтверждения при удалении фото/видео<br/>
                     <input type="button" id="button_clear_photos" class="btn" value="Очистить Gallery"/>
+
                 </div>
             </div>
 
-
+            <!-- DONATE -->
             <div class="station_setup_block">
                 <a href="/static/html/support_us.html" target="_blank" rel="noopener">
                     <img class="icon_info" src="/static/images/icon_info.png" title="Info">

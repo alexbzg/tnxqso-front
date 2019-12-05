@@ -35,4 +35,11 @@ store.dispatch(ACTION_LOAD_STATION)
 talksInit(store)
 activityInit(store)
 
+export function isAdmin () {
+  if (!store.getters.loggedIn) {
+    return false
+  }
+  return store.getters.siteAdmin || store.state.stationSettings.admin === store.getters.userCallsign
+}
+
 export default store

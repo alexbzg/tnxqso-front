@@ -200,7 +200,7 @@ max-width: 900px;
 }
 .one_station .status{
     width: 120px;
-    padding: 5px;
+    padding: 4px;
     font-size: 18px;
     line-height: 18px;
     font-weight: bold;
@@ -211,6 +211,8 @@ max-width: 900px;
     background-color: #4ab54a;
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
+    border: 1px solid #4ab54a;
+    padding: 1px 4px;
 }
 .one_station .status.status_offline{
     background-color: #ff4949;
@@ -224,10 +226,11 @@ max-width: 900px;
     width: 120px;
     text-align: center;
     font-size: 12px;
-    background-color: #9f9;
+    background-color: #e3f9e3;
     color: #555;
     line-height: 14px;
-    padding: 5px;
+    padding: 4px;
+    border: 1px solid #aef2ae;
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
 }

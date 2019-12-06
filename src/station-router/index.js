@@ -53,7 +53,7 @@ const router = new Router({
       path: '/gallery',
       name: 'StationGallery',
       component: StationGallery,
-      props: true
+      props: {serviceName: 'gallery'}
     },
     {
       path: '/log',

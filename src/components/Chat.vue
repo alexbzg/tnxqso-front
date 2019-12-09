@@ -153,6 +153,7 @@ export default {
     storeCurrentActivity () {
       if (this.service) {
         this[MUTATE_CURRENT_ACTIVITY]({chat: true, station: this.service.station})
+        this[ACTION_POST_ACTIVITY]()
       }
     },
     chatUserBlur () {

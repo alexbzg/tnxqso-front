@@ -12,7 +12,7 @@
             <label for="upload_file" id="select_file">Выбрать файл</label><br/>
             <div id="selected_filename">{{upload.fileName}}</div>
         	Подпись к файлу<br/>
-        	<textarea type="text" id="caption"></textarea><br/>
+        	<textarea type="text" id="caption" v-model="upload.caption"></textarea><br/>
         	<input type="button" id="upload_file" value="Загрузить в Gallery" 
                 :disabled="posting || !upload.file" @click="uploadPost"/>
         </div>
@@ -20,7 +20,7 @@
         <div class="media" v-for="(item, idx) in serviceData">
         	<img class="delete" src="/static/images/delete.png" width='30' v-if="isAdmin"
                 @click="deleteItem(item.id)"/>
-            <img :src="item.thumb" />
+            <img :src="stationPath + item.thumb" />
             <div class="caption">{{item.caption}}</div>
         </div>
     </div>
@@ -34,6 +34,7 @@ import ServiceDisplay from './ServiceDisplay'
 import {ACTION_POST} from '../store-user'
 import {ACTION_UPDATE_SERVICE} from '../store-services'
 import {isAdmin} from '../store-station'
+import {urlCallsign} from '../utils'
 
 export default {
   extends: ServiceDisplay,
@@ -51,6 +52,9 @@ export default {
   },
   computed: {
     ...mapState(['stationSettings']),
+    stationPath () {
+      return '/static/stations/' + urlCallsign(this.stationSettings.station.callsign) + '/'
+    },
     isAdmin () {
       return isAdmin()
     }
@@ -72,7 +76,6 @@ export default {
     },
     serverPost (data) {
       this.posting = true
-      data.station = this.service.station
       return this[ACTION_POST]({path: 'gallery', data: data})
         .then(() => { this[ACTION_UPDATE_SERVICE](this.serviceName) })
         .finally(() => { this.posting = false })

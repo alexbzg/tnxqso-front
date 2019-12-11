@@ -21,7 +21,7 @@ const EMPTY_USER = {
   settings: {
     enable: {},
     station: {},
-    skipConfimation: {}
+    skipConfirmation: {}
   }
 }
 
@@ -74,6 +74,11 @@ export const storeUser = {
         for (const field in EMPTY_USER) {
           if (!user[field]) {
             user[field] = {}
+          }
+          for (const subField in EMPTY_USER[field]) {
+            if (!user[field][subField]) {
+              user[field][subField] = {}
+            }
           }
         }
       } else {

@@ -18,9 +18,13 @@
         </div>
 
         <div class="media" v-for="(item, idx) in serviceData">
-        	<img class="delete" src="/static/images/delete.png" width='30' v-if="isAdmin"
-                @click="deleteItem(item.id)"/>
-            <img :src="stationPath + item.thumb" />
+            <img class="delete" src="/static/images/delete.png" width='30' v-if="isAdmin"
+            @click="deleteItem(item.id)"/>
+           
+            <a :href="stationPath + item.file">
+                <img :src="stationPath + item.thumb" />
+            </a>
+            <!--video v-else controls :src="stationPath + item.file" width="200"/-->
             <div class="caption">{{item.caption}}</div>
         </div>
     </div>
@@ -41,7 +45,7 @@ export default {
   name: 'StationGallery',
   data () {
     return {
-      showUpload: true,
+      showUpload: false,
       upload: {
         file: null,
         fileName: null,
@@ -51,7 +55,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['stationSettings']),
+    ...mapState(['user', 'stationSettings']),
     stationPath () {
       return '/static/stations/' + urlCallsign(this.stationSettings.station.callsign) + '/'
     },
@@ -88,7 +92,7 @@ export default {
         })
     },
     deleteItem (id) {
-      if ((this.stationSettings && this.stationSettings.skipConfirmation.galleryDelete) ||
+      if (this.user.user.settings.skipConfirmation.galleryDelete ||
         confirm('Удалить изображение или видео? Do you really want to delete this image or video?')) {
         this.serverPost({delete: id})
       }

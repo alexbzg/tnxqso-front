@@ -245,7 +245,7 @@
                     <input type="text" id="admin_calls" v-model="chatAdmins"
                         @change="chatAdminsChange" /><br/><br/>
                     <input type="checkbox" id="checkbox_chat_delete" 
-                        v-model="settings.skipConfimation.chatDelete" />
+                        v-model="settings.skipConfirmation.chatDelete" />
                     Не требовать подтверждения при удалении сообщений<br/>
                     <input type="button" id="button_clear_chat" class="btn" value="Очистить чат"
                         @click="clearChat()"/>
@@ -268,7 +268,7 @@
                 <div class="block_settings" v-if="settings.enable.gallery">
                     <br/>
                     <input type="checkbox" id="checkbox_gallery_delete" 
-                        v-model="settings.skipConfimation.galleryDelete" />
+                        v-model="settings.skipConfirmation.galleryDelete" />
                     Не требовать подтверждения при удалении фото/видео<br/>
                     <input type="button" id="button_clear_photos" class="btn" value="Очистить Gallery"/>
 

@@ -111,7 +111,7 @@ export const storeUser = {
       data.settings = JSON.parse(JSON.stringify(payload))
       return dispatch(ACTION_POST, {path: 'userSettings', data: data})
         .then(() => {
-          commit(MUTATE_USER, {user: data, remember: state.user.remeber})
+          commit(MUTATE_USER, {user: data, remember: state.user.remember})
         })
     },
     [ACTION_POST] ({commit, state}, payload) {

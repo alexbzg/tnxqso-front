@@ -94,10 +94,7 @@
                             <td class="col1">
                                 <input type="checkbox" id="checkbox_status_user1"
                                     v-model="settings.status.userFields[n-1]"/>
-                                <input type="text" id="status_manual_user2"
-                                    :disabled="settings.status.get === 'qsoclient'"
-                                    v-model="settings.userFields[n-1]"
-                                    :placeholder="'User field #' + n"/>
+                                User field
                             </td>
                             <td>
                                 <input type="text" id="status_manual_user1"
@@ -208,7 +205,7 @@
             </div>
 
 
-            <!-- INFO -->>
+            <!-- INFO -->
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info"
                     @click="infoPopup='Во вкладке <b>INFO</b> уместно разместить общую информацию и фото с описанием цели, состава операторов, маршрута экспедиции/станции.'">
@@ -270,7 +267,8 @@
                     <input type="checkbox" id="checkbox_gallery_delete" 
                         v-model="settings.skipConfirmation.galleryDelete" />
                     Не требовать подтверждения при удалении фото/видео<br/>
-                    <input type="button" id="button_clear_photos" class="btn" value="Очистить Gallery"/>
+                    <input type="button" id="button_clear_photos" class="btn" value="Очистить Gallery"
+                        @click="clearGallery"/>
 
                 </div>
             </div>
@@ -485,6 +483,11 @@ export default {
     clearChat () {
       if (window.confirm( 'Do you really want to delete all chat messages?') ) {
         this[ACTION_POST]({path: 'chat', data: {station: this.stationCallsign, clear: 1}})
+      }
+    },
+    clearGallery () {
+      if (window.confirm( 'Do you really want to delete all gallery content?') ) {
+        this[ACTION_POST]({path: 'gallery', data: {clear: 1}})
       }
     },
     clearLog () {

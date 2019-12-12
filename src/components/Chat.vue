@@ -214,7 +214,8 @@ export default {
       }
     },
     deleteMsg (ts) {
-      if (window.confirm('Do you really want to delete this message?')) {
+      if (this.skipConfirmation.chatDelete ||
+        confirm('Удалить сообщение?\nDo you really want to delete this message?')) {
         this.serverPost( { 'delete': ts } )
       }
     },
@@ -234,7 +235,8 @@ export default {
     ...mapGetters(['siteAdmin', 'loggedIn', 'userCallsign']),
     ...mapState({
       chatUser: state => state.user.chatUser,
-      chatUserName: state => state.user.chatUserName
+      chatUserName: state => state.user.chatUserName,
+      skipConfirmation: state => state.user.user.settings.skipConfirmation
     }),
     isAdmin () {
       if (!this.service || !this.loggedIn) {

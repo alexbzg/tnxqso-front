@@ -1098,7 +1098,7 @@ table#chat_window td.message:hover img.delete_btn{
 #button_help_info{
     float: left;
     color: yellow;
-    margin-left: 130px;
+    margin-left: 250px;
 }
 .icon_info{
     cursor: pointer;
@@ -1165,7 +1165,6 @@ table#log_setup td{
 
 
 table#status_setup{
-    width: 50%;
     margin: 0 auto;
     padding: 0;
     border-collapse: collapse;
@@ -1180,6 +1179,14 @@ table#status_setup td.col1{
 }
 table#status_setup input{
     padding: 1px 5px;
+}
+table#status_setup input#status_manual_rda,
+table#status_setup input#status_manual_rafa,
+table#status_setup input#status_manual_locator,
+table#status_setup input#status_manual_user1
+{
+    width: 300px;
+    text-align: center;
 }
 
 
@@ -1412,24 +1419,40 @@ table#filter_data .data{
 
 .media{
     display: inline-block;
-    width: 200px;
+    width: 202px;
     height: 260px;
     margin: 0 20px;
     position: relative;
     overflow: hidden;
     padding: 0 0 20px 0;
     font-size: 12px;
+
 }
+
 .media img{
     border: 1px solid #ddd;
+    cursor: pointer;
 }
+.media .icon_video{
+    position: absolute;
+    top: 65px;
+    left: 65px;
+    cursor: pointer;
+    border: none;
+}
+
 .media .delete{
     position: absolute;
     top: 0;
     right: 0;
     cursor: pointer;
     border: none;
+    display: none;
 }
+.media:hover .delete{
+    display: block;
+}
+
 .media .caption{
     width: 200px;
     height: 50px;
@@ -1442,6 +1465,15 @@ table#filter_data .data{
     border:1px solid #e0e0e0;
     background-color: #f0f0f0;
     text-align: center;
+}
+.media_upload_form label{
+    display: inline-block;
+    border:1px solid #999;
+    background-color: #BBB;
+    cursor: pointer;
+    padding: 3px 15px;
+    margin-top: 5px;
+    box-shadow: 3px 3px 6px rgba(0,0,0,0.3); /* Параметры тени */
 }
 
 .media input#select_file, .media input#upload_file {
@@ -1456,12 +1488,17 @@ table#filter_data .data{
     border: 1px solid #ccc;
     background-color: #fff;
     margin: 0px auto 10px auto;
+    text-align: center;
+     font-size: 14px;
 }
 #selected_filename{
     font-weight: bold;
     margin: 10px 0;
     text-align: center;
     font-size: 16px;
+}
+.media input#upload_file {
+    box-shadow: 3px 3px 6px rgba(0,0,0,0.3); /* Параметры тени */
 }
 
 

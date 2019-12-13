@@ -98,7 +98,7 @@
                             </td>
                             <td>
                                 <input type="text" id="status_manual_user1"
-                                    :disabled="settings.status.get === 'qsoclient'"
+                                    :disabled="settings.status.get !== 'manual'"
                                     v-model="status.userFields[n-1]"
                                     />
                             </td>
@@ -151,9 +151,15 @@
                                 <td class="note">Комментарий</td>
                             </tr>
                             <tr>
-                                <td><input type="number" v-model="status.location[0]"></td>
-                                <td><input type="number" v-model="status.location[1]"></td>
-                                <td><input type="text" v-model="status.comments"></td>
+                                <td><input type="number" v-model="status.location[0]" 
+                                    :disabled="settings.status.get !== 'manual'">
+                                </td>
+                                <td><input type="number" v-model="status.location[1]"
+                                    :disabled="settings.status.get !== 'manual'">
+                                </td>
+                                <td><input type="text" v-model="status.comments"
+                                    :disabled="settings.status.get !== 'manual'">
+                                </td>
                             </tr>
                             <tr>
                                 <td class="note" colspan="3">формат коодинат: &nbsp;&nbsp;&nbsp; 12,345678</td>
@@ -183,10 +189,6 @@
                                 <input type="checkbox" id="checkbox_log_rafa" v-model="settings.log.columns.RAFA" />
                                 RAFA
                             </td>
-<!--                            <td class="setting">
-                                <input type="checkbox" id="checkbox_log_wff" v-model="settings.log.columns.WFF" />
-                                WFF
-                            </td>  -->
                             <td class="setting">
                                 <input type="checkbox" id="checkbox_log_loc" v-model="settings.log.columns.loc" />
                                 Locator
@@ -194,7 +196,7 @@
                             <td class="setting" v-for="n in $options.USER_FIELDS_COUNT">
                                 <input type="checkbox" :id="'user_field' + n"
                                     v-model="settings.log.userColumns[n-1].enabled"/>
-                                {{settings.userFields[n-1] ? settings.userFields[n-1] : 'User field #' + n}}<br/>
+                                User field
                             </td>
                         </tr>
                     </table>
@@ -467,7 +469,7 @@ export default {
           if (clearAll) {
             this.trackFile = null
           } else {
-            if (this.settings.status.get !== 'qsoclient') {
+            if (this.settings.status.get === 'manual') {
               const st = JSON.parse(JSON.stringify(this.status))
               if (st.location[0] && st.location[1]) {
                 st.location[0] = Number( st.location[0] )

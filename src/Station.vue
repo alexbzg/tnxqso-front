@@ -29,11 +29,13 @@
             <router-link to="/stats" tag="div" id="tab_log" class="tab" 
                 v-if="enable.stats">Stats</router-link>
             <router-link to="/chat" tag="div" id="tab_chat" class="tab" 
-                v-if="enable.chat" :class="{updated_tab: $store.state.services.chat.new}">
+                v-if="enable.chat" 
+                :class="{updated_tab: $store.state.services.chat && $store.state.services.chat.new}">
                 Chat
             </router-link>
             <router-link to="/gallery" tag="div" id="tab_gallery" class="tab" 
-                v-if="enable.gallery" :class="{updated_tab: $store.state.services.gallery.new}">
+                v-if="enable.gallery" 
+                :class="{updated_tab: $store.state.services.gallery && $store.state.services.gallery.new}">
                 Gallery
             </router-link>
             <router-link to="/donate" tag="div" id="tab_donate" class="tab" 
@@ -42,7 +44,7 @@
                 Stations
             </router-link>
             <router-link to="/talks" tag="div" id="tab_chat" class="tab"
-              :class="{updated_tab: $store.state.services.talks.new}">
+              :class="{updated_tab: $store.state.services.talks && $store.state.services.talks.new}">
                 Talks
             </router-link>
         </td>

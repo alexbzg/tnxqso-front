@@ -69,7 +69,7 @@ const DEFAULT_ZOOM = 13
 
 export default {
   name: 'StationMap',
-  props: ['statusService', 'stationSettings'],
+  props: ['statusData', 'stationSettings'],
   components: {
     LMap,
     LTileLayer,
@@ -130,14 +130,13 @@ export default {
     }
   },
   mounted () {
-    const vm = this
-    this.statusService.onUpdate( this.updateLocation )
     trackService.load()
-      .then( function () {
-        vm.trackVersion = trackService.data.version
-        vm.trackFile = trackService.data.file
-        vm.showTrack()
+      .then(() => {
+        this.trackVersion = trackService.data.version
+        this.trackFile = trackService.data.file
+        this.showTrack()
       })
+    this.updateLocation()
   },
   methods: {
     showTrack () {
@@ -161,8 +160,8 @@ export default {
       }
     },
     updateLocation () {
-      if (this.statusService.data && this.statusService.data.location) {
-        const dt = this.statusService.data
+      if (this.statusData && this.statusData.location) {
+        const dt = this.statusData
         if (!this.currentLocation) {
           this.zoom = DEFAULT_ZOOM
         }
@@ -173,6 +172,11 @@ export default {
         this.currentPopup.speed = dt.speed ? 'speed: ' + dt.speed.toFixed( 1 ) + ' km/h' : null
         this.currentPopup.comments = dt.comments ? dt.comments : null
       }
+    }
+  },
+  watch: {
+    statusData () {
+      this.updateLocation()
     }
   }
 }

@@ -29,11 +29,15 @@
             <div class="caption">{{item.caption}}</div>
         </div>
 
+
         <vue-pure-lightbox :images="lbImages" :open-at-index="lbIndex" ref="lb">
             <template v-slot:loader>Loading…</template>
             <template v-slot:content="{url: {link, alt, type, width}}">
-                <img :src="link" :alt="alt" v-if="type === 'image'"/>
-                <video v-else controls :src="link" :width="width"/>
+                <div class="imgbox">
+                    <span class="helper"></span>
+                    <img :src="link" :alt="alt" v-if="type === 'image'"/>
+                    <video v-else controls :src="link" :width="width"/>
+                </div>
             </template>
         </vue-pure-lightbox>
     </div>
@@ -75,6 +79,11 @@ export default {
     }),
     stationPath () {
       return '/static/stations/' + urlCallsign(this.stationCallsign) + '/'
+    },
+    _lbImages () {
+      return this.serviceData.map(x => {
+        return this.stationPath + x.file
+      })
     },
     lbImages () {
       return this.serviceData.map(x => {
@@ -133,4 +142,22 @@ export default {
 </script>
 
 <style>
+.imgbox {
+   width:90vw;
+   height:100vh;
+   white-space: nowrap;
+   text-align:center;
+}
+.imgbox .helper {
+   display: inline-block;
+   height: 100%;
+   vertical-align: middle;
+}
+.imgbox img, .imgbox video {
+   max-width:100%;
+   max-height:100%;
+   width:auto;
+   height:auto;
+   vertical-align: middle;
+}
 </style>

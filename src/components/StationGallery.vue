@@ -156,8 +156,8 @@ export default {
 .imgbox img, .imgbox video {
    max-width:100%;
    max-height:100%;
-   width:auto;
-   height:auto;
+   width:auto !important;
+   height:auto !important;
    vertical-align: middle;
 }
 </style>

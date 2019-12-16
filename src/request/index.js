@@ -31,9 +31,23 @@ export default {
     throw e
   },
 
-  post (URL, data) {
-    return axios.post(API_URL + URL, data)
-      .catch(this.onError)
+  post (URL, data, multipart) {
+    if (multipart) {
+      const fData = new FormData()
+      for (const key in data) {
+        fData.append(key, data[key])
+      }
+      return axios({
+        method: 'post',
+        url: API_URL + URL,
+        data: fData,
+        headers: {'Content-Type': 'multipart/form-data'}
+      })
+        .catch(this.onError)
+    } else {
+      return axios.post(API_URL + URL, data)
+        .catch(this.onError)
+    }
   },
 
   get (URL) {

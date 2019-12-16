@@ -6,8 +6,7 @@
 
         <div class="media media_upload_form" v-show="isAdmin && showUpload">
             <input type="file" @change="uploadFileChange" style="display:none"
-                id="upload_file"
-                ref="fileInput" />
+                id="upload_file" ref="fileInput" />
 
             <label for="upload_file" id="select_file">Выбрать файл</label><br/>
             <div id="selected_filename">{{upload.fileName}}</div>
@@ -66,7 +65,6 @@ export default {
       lbIndex: 0,
       upload: {
         file: null,
-        fileName: null,
         caption: null
       },
       posting: false
@@ -102,30 +100,20 @@ export default {
   methods: {
     ...mapActions([ACTION_POST, ACTION_UPDATE_SERVICE]),
     uploadFileChange (e) {
-      const files = e.target.files || e.dataTransfer.files
-      if (!files.length) {
-        return
-      }
-      const reader = new FileReader()
-      this.upload.fileName = files[0].name
-
-      reader.onload = e => {
-        this.upload.file = e.target.result
-      }
-      reader.readAsDataURL(files[0])
+      this.upload.file = this.$refs.fileInput.files[0]
     },
     openLightbox (idx) {
       this.lbIndex = idx
       this.$nextTick(() => { this.$refs.lb.show() })
     },
-    serverPost (data) {
+    serverPost (data, multipart) {
       this.posting = true
-      return this[ACTION_POST]({path: 'gallery', data: data})
+      return this[ACTION_POST]({path: 'gallery', data: data, multipart: multipart})
         .then(() => { this[ACTION_UPDATE_SERVICE](this.serviceName) })
         .finally(() => { this.posting = false })
     },
     uploadPost () {
-      this.serverPost(this.upload)
+      this.serverPost(this.upload, true)
         .then(() => {
           this.upload.file = null
           this.upload.fileName = null

@@ -118,7 +118,7 @@ export const storeUser = {
       if (!payload.data.token) {
         payload.data.token = state.user.token
       }
-      return request.post(payload.path, payload.data)
+      return request.post(payload.path, payload.data, payload.multipart)
         .catch(error => {
           let msg = ''
           debugLog(error)

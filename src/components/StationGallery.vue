@@ -4,12 +4,12 @@
         		<img src="/static/images/icon_add_image.png" width='50' />
         </div>
 
-        <div class="media media_upload_form" v-show="isAdmin && showUpload">
+        <div class="media media_upload_form" v-if="isAdmin && showUpload">
             <input type="file" @change="uploadFileChange" style="display:none"
                 id="upload_file" ref="fileInput" />
 
             <label for="upload_file" id="select_file">Выбрать файл</label><br/>
-            <div id="selected_filename">{{upload.fileName}}</div>
+            <div id="selected_filename">{{upload.file ? upload.file.name : "\xa0"}}</div>
         	Подпись к файлу<br/>
         	<textarea type="text" id="caption" v-model="upload.caption"></textarea><br/>
         	<input type="button" id="upload_file" value="Загрузить в Gallery"
@@ -116,7 +116,7 @@ export default {
       this.serverPost(this.upload, true)
         .then(() => {
           this.upload.file = null
-          this.upload.fileName = null
+          this.upload.caption = null
         })
     },
     deleteItem (id) {

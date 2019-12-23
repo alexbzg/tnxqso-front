@@ -41,7 +41,7 @@ import StationStatusSmall from './StationStatusSmall'
 
 export default {
   replace0: replace0,
-  name: 'activeStations',
+  name: 'ActiveStationsEntry',
   components: {StationStatusSmall},
   props: ['siteAdmin', 'station', 'type'],
   data () {

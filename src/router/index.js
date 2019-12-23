@@ -9,6 +9,7 @@ import Contact from '../components/Contact'
 import Chat from '../components/Chat'
 import QthNow from '../components/Qthnow'
 import Tnxlog from '../components/Tnxlog'
+import Tnxpost from '../components/Tnxpost'
 
 Vue.use(Router)
 
@@ -43,6 +44,11 @@ const router = new Router({
       path: '/tnxlog',
       name: 'Tnxlog',
       component: Tnxlog
+    },
+    {
+      path: '/tnxpost',
+      name: 'Tnxlog',
+      component: Tnxpost
     },
     {
       path: '/login',

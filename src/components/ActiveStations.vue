@@ -48,26 +48,38 @@ export default {
       .then(response => {
         const publishData = response.data
         const current = moment()
+        const promises = []
+        const active = []
+        const arch = []
+        const future = []
         for ( const station in publishData ) {
           if ( ( publishData[station]['user'] && publishData[station]['admin'] ) || this.siteAdmin ) {
-            request.getJSON('settings', station)
+            promises.push(request.getJSON('settings', station)
               .then(response => {
                 const settings = response.data
-                settings.publish = { user: settings.publish, admin: publishData[station]['admin'] }
-                const period = settings.station.activityPeriod
-                if ( period && period.length === 2 && moment(period[0]) < current &&
-                  moment(period[1]).add( 1, 'd' ) > current ) {
-                  this.activeStations.push( settings )
-                } else if ( period && period.length === 2 && moment(period[0]) > current ) {
-                  this.futureStations.push( settings )
-                } else {
-                  this.archStations.push( settings )
+                if (settings.station && settings.station.callsign) {
+                  settings.publish = { user: settings.publish, admin: publishData[station]['admin'] }
+                  const period = settings.station.activityPeriod
+                  if ( period && period.length === 2 && moment(period[0]) < current &&
+                    moment(period[1]).add( 1, 'd' ) > current ) {
+                    active.push( settings )
+                  } else if ( period && period.length === 2 && moment(period[0]) > current ) {
+                    future.push( settings )
+                  } else {
+                    arch.push( settings )
+                  }
                 }
-                this.activeStations = this.activeStations.sort(this.sortStations)
-                this.archStations = this.archStations.sort(this.sortStations)
               })
+              .catch( e => e))
           }
         }
+        Promise.all(promises)
+          .then(() => {
+            console.log(this)
+            this.activeStations = this.sortStations(active)
+            this.archStations = this.sortStations(arch)
+            this.futureStations = this.sortStations(future)
+          })
       })
   },
   computed: {
@@ -81,14 +93,20 @@ export default {
         data: {station: station.station.callsign, publish: station.publish}
       })
     },
-    sortStations (a, b) {
-      if (a.station.callsign.toLowerCase() < b.station.callsign.toLowerCase()) {
-        return -1
+    sortStations (stations) {
+      console.log('---------------sortStations----------------')
+      function cmpStations (a, b) {
+        if (a.station.callsign.toLowerCase() < b.station.callsign.toLowerCase()) {
+          return -1
+        }
+        if (a.station.callsign.toLowerCase() > b.station.callsign.toLowerCase()) {
+          return 1
+        }
+        return 0
       }
-      if (a.station.callsign.toLowerCase() > b.station.callsign.toLowerCase()) {
-        return 1
-      }
-      return 0
+      const r = stations.sort(cmpStations)
+      console.log(r)
+      return r
     }
   }
 

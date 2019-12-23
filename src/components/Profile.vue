@@ -32,7 +32,7 @@
             <!-- STATUS -->
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info"
-                    @click="infoPopup='Выберите, откуда будет поступать информация о том, что станция ONLINE или OFFLINE.<br/><img src=&quot;/static/images/oo_tab.jpg&quot;><br/><br/><b>TNXLOG / QTH now</b><br/>Если на компьютере экспедиции запущен настроенный TNXLOG или на телефоне запущена QTH now, то статус - ONLINE.<br/>Данные об RDA, RAFA и т.д. задаются в программе TNXlog (вручную или автоматически).<br/><br/><b>При ручном указании</b> статуса ONLINE/OFFLNE все поля заполняются здесь, в Профиле станции.<br/>Можно выбирать данные, которые будут транслироваться на этой вкладке.<br/><br/><i>Не забудьте нажать на кнопку Save all info.</i>'">
+                    @click="infoPopup='Выберите, откуда будет поступать информация о том, что станция ONLINE или OFFLINE.<br/><img src=&quot;/static/images/oo_tab.jpg&quot;><br/><br/><b>TNXLOG / QTHnow</b><br/>Если на компьютере экспедиции запущен настроенный TNXLOG или на телефоне запущена QTH now, то статус - ONLINE.<br/>Данные об RDA, RAFA и т.д. задаются в программе TNXlog (вручную или автоматически).<br/><br/><b>При ручном указании</b> статуса ONLINE/OFFLNE все поля заполняются здесь, в Профиле станции.<br/>Можно выбирать данные, которые будут транслироваться на этой вкладке.<br/><br/><i>Не забудьте нажать на кнопку Save all info.</i>'">
                 <!--<input type="checkbox" id="checkbox_status" checked disabled/> Показывать <b>ONLINE/OFFLINE</b> вкладку на странице станции -->
                 <div class="block_settings">
                     <u>Брать ONLINE/OFFLINE статус из</u>: &nbsp;&nbsp;&nbsp;&nbsp;
@@ -41,7 +41,7 @@
                     TNXLOG &nbsp;&nbsp;&nbsp;&nbsp;
                     -->
                     <input type="radio" name="status_from" v-model="settings.status.get" value="gpslogger"/>
-                    TNXLOG / QTH now &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    TNXLOG / QTHnow &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="radio" name="status_from" v-model="settings.status.get" value="manual"/>
                     Указать вручную
                     <span id="manual_status" v-if="settings.status.get === 'manual'">
@@ -151,7 +151,7 @@
                                 <td class="note">Комментарий</td>
                             </tr>
                             <tr>
-                                <td><input type="number" v-model="status.location[0]" 
+                                <td><input type="number" v-model="status.location[0]"
                                     :disabled="settings.status.get !== 'manual'">
                                 </td>
                                 <td><input type="number" v-model="status.location[1]"
@@ -226,7 +226,7 @@
                 <div class="block_settings" v-if="settings.enable.cluster">
                 Позывные или фильтры для отслеживания <i>(разделяются пробелом или запятой)</i>:<br/>
                 <input type="text" id="setup_cluster" v-model="clusterCallsigns"
-                    @change="clusterCallsignsChange"/><br/>
+                    @change="clusterCallsignsChange" value="R*/* UA*/* UB*/* UC*/* UD*/* UE*/* UF*/* UG*/* UH*/* UI*/*"/><br/>
                 Позывные для выделения цветом <i>(разделяются пробелом или запятой)</i>:<br/>
                 <input type="text" id="highlight_calls" v-model="clusterHighlight"
                     @change="clusterHighlightChange" />
@@ -243,9 +243,9 @@
                     Позывные для выделения цветом <i>(разделяются пробелом или запятой)</i>: <br/>
                     <input type="text" id="admin_calls" v-model="chatAdmins"
                         @change="chatAdminsChange" /><br/><br/>
-                    <input type="checkbox" id="checkbox_chat_delete" 
+                    <input type="checkbox" id="checkbox_chat_delete"
                         v-model="settings.skipConfirmation.chatDelete" />
-                    Не требовать подтверждения при удалении сообщений<br/>
+                    Не требовать подтверждения при удалении сообщений<br/><br/>
                     <input type="button" id="button_clear_chat" class="btn" value="Очистить чат"
                         @click="clearChat()"/>
 
@@ -266,9 +266,9 @@
                 <input type="checkbox" id="checkbox_gallery" v-model="settings.enable.gallery" /> Показывать вкладку <b>Gallery</b> на странице вашей станции<br/>
                 <div class="block_settings" v-if="settings.enable.gallery">
                     <br/>
-                    <input type="checkbox" id="checkbox_gallery_delete" 
+                    <input type="checkbox" id="checkbox_gallery_delete"
                         v-model="settings.skipConfirmation.galleryDelete" />
-                    Не требовать подтверждения при удалении фото/видео<br/>
+                    Не требовать подтверждения при удалении фото/видео<br/><br/>
                     <input type="button" id="button_clear_photos" class="btn" value="Очистить Gallery"
                         @click="clearGallery"/>
 

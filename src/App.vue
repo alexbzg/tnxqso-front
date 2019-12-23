@@ -17,9 +17,12 @@
                         About
                     </router-link>
                     <router-link to="/qthnow" tag="div" id="tab_qthnow" class="tab">
-                        QTH now
+                        QTHnow
                     </router-link>
-                    <router-link to="/tnxlog" tag="div" id="tab_qthnow" class="tab">
+                    <router-link to="/tnxpost" tag="div" id="tab_tnxpost" class="tab">
+                        TNXpost
+                    </router-link>
+                    <router-link to="/tnxlog" tag="div" id="tab_tnxlog" class="tab">
                         TNXLOG
                     </router-link>
                     <router-link to="/contact" tag="div" id="tab_contacts" class="tab">

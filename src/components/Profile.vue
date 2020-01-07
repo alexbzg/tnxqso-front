@@ -317,6 +317,7 @@ import DatePicker from 'vue2-datepicker'
 import {mapGetters, mapActions, mapMutations} from 'vuex'
 
 import {parseCallsigns, getStationURL} from '../utils'
+import {validCallsignFull} from '../ham-radio'
 import router from '../router'
 import request from '../request'
 
@@ -453,6 +454,11 @@ export default {
       let clearAll = false
 
       this.settings.station.callsign = this.settings.station.callsign.toUpperCase()
+      if (!validCallsignFull(this.settings.station.callsign)) {
+        alert('The expedition callsign should be valid and the only one.\n' +
+            'необходимо ввести только один корректный позывной экспедициц.')
+        return
+      }
       if (this.user.stationCallsign &&
         this.user.stationCallsign !== this.settings.station.callsign) {
         if ( !window.confirm( 'The station callsign change will clear all of the station archive. ' +

@@ -1086,25 +1086,43 @@ table#chat_window td.message:hover img.delete_btn{
 
 #station_menu{
     text-align: right;
-    padding: 0 20px 20px 20px;
+    padding: 20px 20px 10px 20px;
 }
-#station_menu a{
-    text-decoration: underline;
+#station_menu input{
+    background-color: #f5f5f5;
     color: #009;
-    padding-right: 10px;
+    margin-right: 15px;
+    border: 1px solid #ccc;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2); /* Параметры тени */
 }
-#button_clear_all{
+#station_menu input#button_lng{
+    font-weight: bold;
     float: left;
+    color: #000;
 }
-#button_help_info{
+#station_menu .button_lng{
+    font-weight: bold;
     float: left;
-    color: yellow;
-    margin-left: 250px;
+    color: #000;
+    cursor: pointer;
+    margin-left: 15px;
 }
+#station_menu input#button_clear_all{
+    color: #c00;
+    font-weight: bold;
+}
+#station_menu input#button_info{
+     color: #000;
+}
+
+
+
 .icon_info{
     cursor: pointer;
     float: right;
 }
+
+
 
 #station_setup{
     text-align: left;

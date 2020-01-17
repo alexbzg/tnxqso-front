@@ -1,7 +1,6 @@
 <template>
     <div>
          <div id="station_menu">
-            <language-switch></language-switch>
             <input type="button" id="button_clear_all" class="btn"
                 :value="getString('CLEAR_ALL')" @click="clearAll()"/>
             <input type="button" id="button_info" class="btn" :value="getString('HOW_TO_TRACK_BTN')"
@@ -320,7 +319,6 @@ import {parseCallsigns, getStationURL} from '../utils'
 import {validCallsignFull} from '../ham-radio'
 import router from '../router'
 import request from '../request'
-import LanguageSwitch from './LanguageSwitch'
 import LocalizationMixin from '../localization-mixin'
 
 import {MUTATE_USER, ACTION_SAVE_SETTINGS, ACTION_POST} from '../store-user'
@@ -332,55 +330,10 @@ const STATUS_BOOL_FIELDS = [ 'online' ]
 export default {
   USER_FIELDS_COUNT: USER_FIELDS_COUNT,
   CURRENT_POSITION_ICONS_COUNT: CURRENT_POSITION_ICONS_COUNT,
-  STRINGS: {
-    CLEAR_ALL: {en: 'Clear all', ru: 'Очистить профиль'},
-    HOW_TO_TRACK_BTN: {en: 'How to upload track?', ru: 'Как загрузить маршрут?'},
-    CHANGE_EMAIL: {en: 'Change email/password', ru: 'Сменить email/пароль'},
-    POPUP_STATION: {ru: 'Поставьте отметку для публикации вашей экспедиции в списке станций на главной странице. <br/>Отметку ставьте после того, как ваш профиль по станции полностью готов.<br/><u>Ссылку на страницу станции</u> удобно использовать для распространения в соц.сетях/форумах/кластерах.',
-      en: 'Check the box to post your station on the front page. <br/> Check only if you have finished the profile editing.<br/><u>Station page link</u> is convinient for posting in social media/forums/dx clusters.'},
-    STATION_CALLSIGN: {en: 'Expedition\'s callsign', ru: 'Позывной экспедиции'},
-    STATION_LINK: {en: 'Your link', ru: 'Ваша ссылка'},
-    STATION_TITLE: {en: 'Expedition\'s title', ru: 'Название экспедиции'},
-    STATION_PERIOD: {en: 'Activity period', ru: 'Период активности'},
-    STATION_SHOW: {en: 'Show', ru: 'Показывать'},
-    STATION_VIEW: {en: 'this station on the TNXQSO.com homepage', ru: 'эту станцию на главной странице TNXQSO.com'},
-    STATUS_FROM: {en: 'Take ONLINE/OFFLINE status from', ru: 'Брать ONLINE/OFFLINE статус из'},
-    STATUS_MANUAL: {en: 'Specify manually', ru: 'Указать вручную'},
-    STATUS_VIEW: {en: 'Show on this tab', ru: 'Показывать на этой вкладке'},
-    POPUP_STATUS: {ru: 'Выберите, откуда будет поступать информация о том, что станция ONLINE или OFFLINE.<br/><img src=\"/static/images/oo_tab.jpg\"><br/><br/><b>TNXLOG / QTHnow</b><br/>Если на компьютере экспедиции запущен настроенный TNXLOG или на телефоне запущена QTH now, то статус - ONLINE.<br/>Данные об RDA, RAFA и т.д. задаются в программе TNXlog (вручную или автоматически).<br/><br/><b>При ручном указании</b> статуса ONLINE/OFFLNE все поля заполняются здесь, в Профиле станции.<br/>Можно выбирать данные, которые будут транслироваться на этой вкладке.<br/><br/><i>Не забудьте нажать на кнопку Save all info.</i>', en: 'Choose where the information that the station is ONLINE or OFFLINE will come from.<br/><img src=\"/static/images/oo_tab.jpg\"><br/><br/><b>TNXLOG/QTHnow</b><br/>If the configured TNXLOG is running on the expedition computer or QTH now is running on the phone, the status is ONLINE. <br/> RDA, RAFA data, etc are set in the TNXlog program (manually or automatically).<br/><br/><b>When marked MANUALLY</b> the ONLINE/OFFLNE status, all fields are filled here in the Station\'s Profile. <br/> You can select data that will be broadcast to this tab.<br/><br/><i>Do not foget to click on the "Save all info" button.</i>'},
-    MAP_SHOW: {en: 'Show <b>Map</b> tab on your station page', ru: 'Показывать вкладку <b>Map</b> на странице вашей станции'},
-    MAP_ICON: {en: 'Icon to display your station on the map', ru: 'Иконка для отображения вашей станции на карте'},
-    MAP_FILE: {en: 'File uploaded', ru: 'Загружен файл'},
-    MAP_UPLOAD: {en: 'Upload KML/KMZ/GPX file with expedition\'s route', ru: 'Загрузка KML/KMZ/GPX файла с маршрутом экспедиции'},
-    MAP_CLEAR: {en: 'Delete file', ru: 'Удалить файл'},
-    LOG_SHOW: {en: 'Show <b>Log</b> tab on your station page', ru: 'Показывать вкладку <b>Log</b> на странице вашей станции'},
-    LOG_POPUP: {en: 'Mark those log columns that will be broadcast to the website.', ru: 'Отметьте те колонки лога, которые будут транслироваться на сайт'},
-    LOG_COLUMNS: {en: 'Show columns in the log', ru: 'Показывать в логе колонки'},
-    LOG_CLEAR: {en: 'Clear online log', ru: 'Очистить онлайн-лог'},
-    INFO_SHOW: {en: 'Show <b>Info</b> tab on your station page', ru: 'Показывать вкладку <b>Info</b> на странице вашей станции'},
-    INFO_POPUP: {en: 'In the <b>INFO</b> tab, it is appropriate to place general information and a photo with a description of the purpose, the composition of the operators, the route of the expedition/station.', ru: 'Во вкладке <b>INFO</b> уместно разместить общую информацию и фото с описанием цели, состава операторов, маршрута экспедиции/станции.'},
-    CLUSTER_SHOW: {en: 'Show <b>Info</b> tab on your station page', ru: 'Показывать вкладку <b>Info</b> на странице вашей станции'},
-    CLUSTER_POPUP: {en: 'You can write either a specific callsign (R7AB or R7AB/M) or a group of callsigns using this mark <b>*</b><br/> <b> */P</b> - all .../P callsigns all over the world will be displayed. <br/> It is better to highlight with color only the callsign of your expedition / station.', ru: 'Указывать можно как конкретный позывной (R7AB или R7AB/M), так и группу позывных, используя &laquo;звездочку&raquo;.<br/><b>*/P</b> - будут показываться все .../P позывные в мире.<br/><b>R* UA* UB* UC* UD* UE* UF* UG* UH* UI*</b> - будут показываться все российские позывные.<br/><b>R*/* UA*/* UB*/* UC*/* UD*/* UE*/* UF*/* UG*/* UH*/* UI*/*</b> - будут показываться все российские позывные c дробью.<br/>Выделять цветом лучше только позывной своей экспедиции/станции.'},
-    CLUSTER_FILTER: {en: 'Call signs or filters for tracking <i> (separated by space or comma) </i>', ru: 'Позывные или фильтры для отслеживания <i>(разделяются пробелом или запятой)</i>'},
-    CLUSTER_CALL: {en: 'Call signs for highlighting <i> (separated by space or comma) </i>', ru: 'Позывные для выделения цветом <i>(разделяются пробелом или запятой)</i>'},
-    CHAT_SHOW: {en: 'Show <b>Chat</b> tab on your station page', ru: 'Показывать вкладку <b>Chat</b> на странице вашей станции'},
-    CHAT_POPUP: {en: 'Only a station\s administrator can delete chat messages.', ru: 'Удалять сообщения чата может только администратор станции.'},
-    CHAT_FILTER: {en: 'Call signs for highlighting <i> (separated by space or comma) </i>', ru: 'Позывные для выделения цветом <i>(разделяются пробелом или запятой)</i>'},
-    CHAT_CHECK: {en: 'Do not request confirmation for deleting messages', ru: 'Не требовать подтверждения при удалении сообщений'},
-    CHAT_CLEAR: {en: 'Clear chat', ru: 'Очистить чат/i>'},
-    STATS_SHOW: {en: 'Show <b>Stats</b> tab on your station page', ru: 'Показывать вкладку <b>Stats</b> на странице вашей станции'},
-    STATS_POPUP: {en: 'This tab will display real-time QSO statistics.', ru: 'На этой вкладке будет отображаться статистика связей в реальном времени.'},
-    GALLERY_SHOW: {en: 'Show <b>Gallery</b> tab on your station page', ru: 'Показывать вкладку <b>Gallery</b> на странице вашей станции'},
-    GALLERY_POPUP: {en: 'This tab will display photos that you can upload either from your phone using the TNXpost Android-program <br/> or in the upload form directly in the Gallery tab of your station\'s page.', ru: 'На этой вкладке будет отображаться фото, которые вы можете загрузить либо с телефона программой TNXpost,<br/>либо в форме загрузки непосредственно во вкладке Gallery страниц вашей станции.'},
-    GALLERY_CHECK: {en: 'Do not request confirmation for deleting photos/videos', ru: 'Не требовать подтверждения при удалении фото/видео'},
-    GALLERY_CLEAR: {en: 'Clear Gallery', ru: 'Очистить Gallery/i>'},
-    DONATE_SHOW: {en: 'Show <b>Support us</b> tab on your station page', ru: 'Показывать вкладку <b>Support us</b> на странице вашей станции'},
-    DONATE_CODE: {en: 'Code from payment system', ru: 'Код из платежной системы'}
-  },
   name: 'profile',
   mixins: [LocalizationMixin],
   components: {
-    VueEditor, DatePicker, LanguageSwitch
+    VueEditor, DatePicker
   },
   beforeRouteEnter ( to, from, next ) {
     next( vm => {

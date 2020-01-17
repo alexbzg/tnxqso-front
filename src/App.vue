@@ -1,6 +1,7 @@
 <template>
     <div id="app">
         <a href="/"><img id="logo_index" src="/static/images/tnxqso_logo.png" border="0" title="TNXQSO.com"></a>
+        <language-switch></language-switch>
         <table class="tabs index_tabs">
             <tr>
                 <td>
@@ -46,10 +47,13 @@
 <script>
 // import user from './user'
 // user.switchDataServiceUrlPrefix( true )
-
 import './style.css'
+
+import LanguageSwitch from './components/LanguageSwitch'
+
 export default {
   name: 'app',
+  components: {LanguageSwitch},
   data () {
     return {
 //      user: user

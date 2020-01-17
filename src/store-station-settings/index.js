@@ -4,7 +4,12 @@ const MUTATE_STATION = 'mttStation'
 export const ACTION_LOAD_STATION = 'actnLoadStation'
 
 export const storeStationSettings = {
-  state: {},
+  state: {
+    station: null,
+    enable: null,
+    log: null,
+    status: null
+  },
   mutations: {
     [MUTATE_STATION] (state, payload) {
       Object.assign(state, payload)

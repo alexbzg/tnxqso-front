@@ -13,11 +13,9 @@
                         <tr>
                             <td class="option">Calls</td><td class="value">{{csCount}}</td>
                         </tr>
-                        <tr v-for="field in fields">
-                            <td class="option">{{field}}</td><td class="value">{{fieldValuesCount[field]}}</td>
-                        </tr>
-                        <tr>
-                            <td class="option">Locators</td><td class="value">{{locatorsCount}}</td>
+                        <tr v-for="field in fields" :key="field.title">
+                            <td class="option">{{field.title}}</td>
+                            <td class="value">{{field.count}}</td>
                         </tr>
                         <tr>
                             <td class="option">Days</td><td class="value">{{daysCount}}</td>
@@ -28,7 +26,9 @@
                     Statistic filter
                     <select v-model="filter.field" @change="filter.fieldValue = null; saveFilter()">
                         <option :value="null">All</option>
-                        <option v-for="field in fields" :value="field">{{field}}</option>
+                        <option v-for="field in fields" :value="field.title" :key="field.title">
+                            {{field.title}}
+                        </option>
                     </select>
                     <select v-model="filter.fieldValue" @change="saveFilter()">
                         <option :value="null">All</option>
@@ -63,7 +63,8 @@
     </div>
 </template>
 <script>
-// import storage from '../storage'
+import {mapState} from 'vuex'
+
 import {MODES, MODES_FULL, orderedBands} from '../ham-radio'
 import storage from '../storage'
 
@@ -73,7 +74,6 @@ const STATS_FILTER_STORAGE_KEY = 'statsFilter'
 
 export default {
   name: 'StationStats',
-  props: ['stationSettings'],
   data () {
     return {
       tabId: 'stats',
@@ -95,24 +95,24 @@ export default {
     this.loadFilter()
   },
   computed: {
+    ...mapState(['stationSettings']),
     fields () {
       const fields = []
-      if (this.stationSettings) {
-        for (const field in this.stationSettings.log.columns) {
-          if (field !== 'loc' && this.stationSettings.log.columns[field]) {
-            fields.push(field)
-          }
+      if (this.stationSettings.log) {
+        if (this.stationSettings.log.columns.RDA) {
+          fields.push({title: 'RDA', count: this.uniqueFieldValues('RDA').size})
+        }
+        if (this.stationSettings.log.columns.RAFA) {
+          fields.push({title: 'RAFA', count: this.uniqueFieldValues('RAFA').size})
+        }
+        if (this.stationSettings.log.columns.loc) {
+          fields.push({title: 'Locators', count: this.uniqueFieldValues('loc').size})
         }
         if (this.stationSettings.log.userColumns[0]) {
-          fields.push(this.userFieldName)
+          fields.push({title: 'User field', count: this.userFieldCount})
         }
       }
       return fields
-    },
-    userFieldName () {
-      return (this.stationSettings
-        ? this.stationSettings.userFields[0] || 'User field'
-        : null)
     },
     qsoCount () {
       return this.data.length
@@ -120,17 +120,8 @@ export default {
     csCount () {
       return this.uniqueValues(x => x.cs).size
     },
-    fieldValuesCount () {
-      const count = {}
-      for (const field of this.fields) {
-        if (field !== this.userFieldName) {
-          count[field] = this.uniqueFieldValues(field).size
-        }
-      }
-      return count
-    },
     userFieldCount () {
-      return (this.fields.includes(this.userFieldName)
+      return (this.stationSettings.log && this.stationSettings.log.userColumns[0]
         ? this.uniqueValues(x => x.userFields[0]).size
         : 0)
     },
@@ -144,7 +135,7 @@ export default {
       if (!this.filter.field) {
         return []
       }
-      const r = (this.filter.field === this.userFieldName
+      const r = (this.filter.field === 'User field'
         ? this.uniqueValues(x => x.userFields[0])
         : this.uniqueFieldValues(this.filter.field))
       return [...r].sort()
@@ -228,7 +219,7 @@ export default {
       }
     },
     loadFilter () {
-      if (this.stationSettings) {
+      if (this.stationSettings.station) {
         const filter = storage.load(STATS_FILTER_STORAGE_KEY, 'local')
         if (filter && this.stationSettings.station.callsign in filter) {
           this.filter = filter[this.stationSettings.station.callsign]

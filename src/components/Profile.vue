@@ -195,7 +195,7 @@
                             </td>
                             <td class="setting" v-for="n in $options.USER_FIELDS_COUNT">
                                 <input type="checkbox" :id="'user_field' + n"
-                                    v-model="settings.log.userColumns[n-1].enabled"/>
+                                    v-model="settings.log.userColumns[n-1]"/>
                                 User field
                             </td>
                         </tr>

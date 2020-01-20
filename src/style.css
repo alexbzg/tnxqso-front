@@ -45,6 +45,17 @@ input, button, textarea, select{
     cursor: pointer;
 }
 
+#lng_block{
+    position: absolute;
+    top: 5px;
+    right: 10px;
+}
+#lng_block img{
+    cursor: pointer;
+}
+
+
+
 
 
  .ng-hide{
@@ -1100,19 +1111,15 @@ table#chat_window td.message:hover img.delete_btn{
     float: left;
     color: #000;
 }
-#station_menu .button_lng{
-    font-weight: bold;
-    float: left;
-    color: #000;
-    cursor: pointer;
-    margin-left: 15px;
-}
+
 #station_menu input#button_clear_all{
+    float: left;
     color: #c00;
     font-weight: bold;
 }
 #station_menu input#button_info{
      color: #000;
+     margin-right: 250px;
 }
 
 

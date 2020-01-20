@@ -11,7 +11,7 @@
             <td class="rda head" v-if="logSettings.columns.RDA">RDA</td>
             <td class="rafa head" v-if="logSettings.columns.RAFA">RAFA</td>
             <td class="locator head" v-if="logSettings.columns.loc">Locator</td>
-            <td class="user head" v-for="uc in logSettings.userColumns" v-if="uc.enabled">{{uc.column}}</td>
+            <td class="user head" v-for="uc in logSettings.userColumns" v-if="uc">User field</td>
         </tr>
         <template v-if="data">
             <tr v-for="spot in data" :class="{new_qso:spot.new}">
@@ -25,7 +25,7 @@
                 <td class="rda" v-if="logSettings.columns.RDA">{{spot.rda}}</td>
                 <td class="rafa" v-if="logSettings.columns.RAFA">{{spot.rafa}}</td>
                 <td class="locator" v-if="logSettings.columns.loc">{{spot.loc}}</td>
-                <td class="user" v-for="(uc, idx) in logSettings.userColumns" v-if="uc.enabled">
+                <td class="user" v-for="(uc, idx) in logSettings.userColumns" v-if="uc">
                     {{spot.userFields ? spot.userFields[idx] : null}}
                 </td>
            </tr>

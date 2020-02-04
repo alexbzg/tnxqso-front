@@ -17,23 +17,26 @@
 </template>
 <script>
 import _ from 'underscore'
+import {mapGetters, mapActions} from 'vuex'
+
 import {validateEmail} from '../utils'
 import router from '../router'
 import VueRecaptcha from 'vue-recaptcha'
+import {ACTION_POST} from '../store-user'
+
 export default {
   name: 'contact',
-  props: ['user'],
   components: { VueRecaptcha },
   data () {
     return {
       email: null,
       text: null,
-      loggedIn: this.user.loggedIn,
       sitekey: '6Ld4TywUAAAAAJRaC7z5GNrmn70QLwABtgkavjyY',
       recaptcha: null
     }
   },
   methods: {
+    ...mapActions([ACTION_POST]),
     submit: _.debounce(function (e) {
       if (!this.loggedIn) {
         this.$refs.invisibleRecaptcha.execute()
@@ -48,7 +51,7 @@ export default {
         data.email = this.email
         data.recaptcha = this.recaptcha
       }
-      this.user.serverPost( 'contact', data )
+      this[ACTION_POST]({path: 'contact', data: data})
         .then( function () {
           vm.text = null
           alert( 'Your message was sent succefully.' )
@@ -76,6 +79,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['user', 'loggedIn']),
     disableSubmit () {
       if (!this.loggedIn && !validateEmail( this.email ) ) {
         return true

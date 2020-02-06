@@ -29,21 +29,20 @@
         </tr>
         <tr>
             <td class="spot_text text_btns" colspan="5">
-            <input type="button" class="add_text_btn" value="RDA" 
+            <input type="button" class="add_text_btn" :value="'RDA ' + statusData.rda" 
                 v-if="stationSettings && stationSettings.status.fields.RDA && statusData && statusData.rda"
-                @click="addSpotTextField('RDA')"/> 
-            <input type="button" class="add_text_btn" value="RAFA" 
+                @click="addSpotText('RDA ' + statusData.rda)"/> 
+            <input type="button" class="add_text_btn" :value="'RAFA ' + statusData.rafa" 
                 v-if="stationSettings && stationSettings.status.fields.RAFA && statusData && statusData.rafa"
-                @click="addSpotTextField('RAFA')"/> 
-            <input type="button" class="add_text_btn" value="Locator" 
+                @click="addSpotText('RAFA ' + statusData.rafa)"/> 
+            <input type="button" class="add_text_btn" :value="statusData.loc" 
                 v-if="stationSettings && stationSettings.status.fields.loc && statusData && statusData.loc"
-                @click="addSpotTextField('loc')"/> 
+                @click="addSpotText(statusData.loc)"/> 
             <input type="button" class="add_text_btn" 
-                v-for="n in $options.USER_FIELDS_COUNT"
-                v-if="stationSettings && stationSettings.status.userFields[n-1] && statusData && 
-                    statusData.userFields[n-1]"
-                :value="stationSettings.userFields[n-1] || ( 'userField#' + n )"
-                @click="addSpotTextUserField(n-1)"/> 
+                v-if="stationSettings && stationSettings.status.userFields[0] && statusData && 
+                    statusData.userFields[0]"
+                :value="statusData.userFields[0]"
+                @click="addSpotText(statusData.userFields[0])"/> 
             </td>
         </tr>
     </table>
@@ -172,17 +171,6 @@ export default {
     clusterResultTimeout () {
       this.spot.success = false
       this.spot.error = false
-    },
-    addSpotTextField (field) {
-      let txt = ''
-      if (field === 'RDA' || field === 'RAFA') {
-        txt = field + ' '
-      }
-      txt += this.statusData[field.toLowerCase()]
-      this.addSpotText( txt )
-    },
-    addSpotTextUserField (n) {
-      this.addSpotText( this.stationSettings.userFields[n] + ' ' + this.stationStatus.userFields[n] )
     },
     onLogUpdate () {
       if (this.statusData.freqDisplay) {

@@ -8,11 +8,11 @@ export function orderedBands () {
   })
 }
 
-export const MODES = ['CW', 'SSB', 'FT8']
+export const MODES = ['CW', 'SSB', 'DIGI']
 export const MODES_FULL = {
   'CW': ['CW'],
   'SSB': ['USB', 'SSB', 'LSB', 'AM', 'FM'],
-  'FT8': ['FT8']
+  'DIGI': ['FT8', 'FT4', 'JT65']
 }
 export const ROLES = {hunter: 'Hunter', activator: 'Activator'}
 

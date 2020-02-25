@@ -5,10 +5,10 @@
         :bounds="bounds"
         :options="{zoomControl: false, attributionControl: false}">
         <l-control-layers :hide-single-base="true"/>
-        <l-tile-layer v-for="layer in baseLayers" :key="layer.id" :url="url" :options="{id: layer.id}" 
+        <l-tile-layer v-for="layer in baseLayers" :key="layer.id" :url="url" :options="{id: layer.id}"
             layer-type="base" :name="layer.name" :visible="layer.visible"/>
         <l-control-attribution prefix="Powered by <a href='https://r1cf.ru/rdaloc/' target='_blank' rel='noopener'>
-        R1CF RDA/RAFA maps</a>, <a href='https://www.openstreetmap.org/'>OpenStreeMap</a>" position="bottomright"/>
+        R1CF RDA/RAFA maps</a>, <a href='https://www.openstreetmap.org/'>OpenStreetMap</a>" position="bottomright"/>
         <l-wms-tile-layer
             v-for="(layer, idx) in overlays"
             :key="idx"
@@ -25,7 +25,7 @@
             />
         <l-geo-json :geojson="track" ref="geoJsonTrack"></l-geo-json>
         <l-marker :lat-lng="currentLocation" v-if="stationSettings && currentLocation">
-            <l-icon                 
+            <l-icon
                 :icon-url="'/static/images/icon_map_' + stationSettings.currentPositionIcon + '.png'"
                 :icon-size="[56, 56]"
                 :icon-anchor="stationSettings.currentPositionIcon ? [28, 28] : [28, 56]"
@@ -34,9 +34,9 @@
                 {{currentPopup.dateTime}}
                 <span v-if="currentPopup.speed"><br>{{currentPopup.speed}}</span>
                 <span v-if="currentPopup.comments"><br>{{currentPopup.comments}}</span><br/>
-                <a v-if="currentLocation" :href="'https://yandex.ru/maps/?ll=' + 
+                <a v-if="currentLocation" :href="'https://yandex.ru/maps/?ll=' +
                     currentLocation[1] + '%2C' + currentLocation[0] + '&pt=' +
-                    currentLocation[1] + '%2C' + currentLocation[0] + '&z=' + zoom + 
+                    currentLocation[1] + '%2C' + currentLocation[0] + '&z=' + zoom +
                     '&l=map'" target="_blank" rel="noopener">
                     Yandex maps
                 </a>

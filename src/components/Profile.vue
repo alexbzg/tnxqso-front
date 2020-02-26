@@ -142,31 +142,6 @@
                             @click="clearTrack()"/><br/><br/>
                     </div>
 
-                    <table id="manual_gps" style="display: none;">
-                            <tr>
-                                <td colspan="3"><u>Указание координат станции вручную</u></td>
-                            </tr>
-                            <tr>
-                                <td class="note">Широта</td>
-                                <td class="note">Долгота</td>
-                                <td class="note">Комментарий</td>
-                            </tr>
-                            <tr>
-                                <td><input type="number" v-model="status.location[0]"
-                                    :disabled="settings.status.get !== 'manual'">
-                                </td>
-                                <td><input type="number" v-model="status.location[1]"
-                                    :disabled="settings.status.get !== 'manual'">
-                                </td>
-                                <td><input type="text" v-model="status.comments"
-                                    :disabled="settings.status.get !== 'manual'">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="note" colspan="3">формат коодинат: &nbsp;&nbsp;&nbsp; 12,345678</td>
-                            </tr>
-                        </table>
-
                 </template>
             </div>
 
@@ -324,7 +299,7 @@ import LocalizationMixin from '../localization-mixin'
 import {MUTATE_USER, ACTION_SAVE_SETTINGS, ACTION_POST} from '../store-user'
 
 const STATUS_FIELDS = [ 'rda', 'rafa', 'wff', 'loc', 'comments' ]
-const STATUS_ARRAY_FIELDS = [ 'userFields', 'location' ]
+const STATUS_ARRAY_FIELDS = [ 'userFields' ]
 const STATUS_BOOL_FIELDS = [ 'online' ]
 
 export default {
@@ -368,7 +343,6 @@ export default {
         loc: null,
         userFields: userFields,
         online: false,
-        location: [ null, null ],
         comments: null
       },
       editorToolbar: [ [ 'bold', 'italic', 'underline' ],
@@ -478,12 +452,6 @@ export default {
           } else {
             if (this.settings.status.get === 'manual') {
               const st = JSON.parse(JSON.stringify(this.status))
-              if (st.location[0] && st.location[1]) {
-                st.location[0] = Number( st.location[0] )
-                st.location[1] = Number( st.location[1] )
-              } else {
-                st.location = null
-              }
               this[ACTION_POST]({path: 'location', data: st})
             }
           }

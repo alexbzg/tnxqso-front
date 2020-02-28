@@ -120,6 +120,13 @@ export default {
           minZomm: 8
         },
         {
+          name: 'WAIP',
+          layers: 'WAIP2',
+          styles: 'waipx',
+          visible: true,
+          minZoom: 5
+        },
+        {
           name: 'Locator',
           layers: 'QTH,GRID576F',
           styles: 'QTH,line',

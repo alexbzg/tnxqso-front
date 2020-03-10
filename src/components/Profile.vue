@@ -16,8 +16,11 @@
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info"
                     @click="infoPopup = getString('POPUP_STATION')">
+                <input type="checkbox" id="checkbox_publish" v-model="settings.publish"/> <b>{{getString('STATION_SHOW')}}</b> {{getString('STATION_VIEW')}}<br/>
+
                 {{getString('STATION_CALLSIGN')}}:
                 <input type="text" id="station_callsign" v-model="settings.station.callsign"/>
+                &nbsp; &nbsp;
                 <span id="stations_link">
                     {{getString('STATION_LINK')}}: <a :href="stationLink" target="_blank" rel="noopener">{{stationLink}}</a>
                 </span><br/>
@@ -25,88 +28,89 @@
                 {{getString('STATION_PERIOD')}}:
                     <date-picker v-model="settings.station.activityPeriod" format="dd.MM.yyyy"
                         range confirm :lang="language"></date-picker>
-                    </select><br/>
-                <input type="checkbox" id="checkbox_publish" v-model="settings.publish"/> <b>{{getString('STATION_SHOW')}}</b> {{getString('STATION_VIEW')}}
-
+                    </select>
             </div>
 
             <!-- STATUS -->
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info"
                     @click="infoPopup= getString('POPUP_STATUS')">
-                <!--<input type="checkbox" id="checkbox_status" checked disabled/> Показывать <b>ONLINE/OFFLINE</b> вкладку на странице станции -->
+                <span v-html="getString('STATUS_TAB')"/>
                 <div class="block_settings">
-                    <u>{{getString('STATUS_FROM')}}</u>: &nbsp;&nbsp;&nbsp;&nbsp;
-                    <!--
-                    <input type="radio" name="status_from" v-model="settings.status.get" value="qsoclient"/>
-                    TNXLOG &nbsp;&nbsp;&nbsp;&nbsp;
-                    -->
-                    <input type="radio" name="status_from" v-model="settings.status.get" value="gpslogger"/>
-                    TNXLOG / QTHnow &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" name="status_from" v-model="settings.status.get" value="manual"/>
-                    {{getString('STATUS_MANUAL')}}
-                    <span id="manual_status" v-if="settings.status.get === 'manual'">
-                        : &nbsp;
-                        <input type="radio" name="status_manual" v-model="status.online" :value="true">
-                        <span style="color: green; font-weight: bold;">ONLINE</span> &nbsp;
-                        <input type="radio" name="status_manual" v-model="status.online" :value="false"/>
-                        <span style="color: red; font-weight: bold;">OFFLINE</span>
-                    </span>
-                    <br/><br/>
+                    <div id="status_from">
+                        <b>{{getString('STATUS_FROM')}}</b><br/>
+
+                        <input type="radio" name="status_from" v-model="settings.status.get" value="gpslogger"/>
+                        TNXLOG (QTHnow) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        <input type="radio" name="status_from" v-model="settings.status.get" value="manual"/>
+                        {{getString('STATUS_MANUAL')}}
+                        <span id="manual_status" v-if="settings.status.get === 'manual'">
+                            : &nbsp;
+                            <input type="radio" name="status_manual" v-model="status.online" :value="true">
+                            <span style="color: green; font-weight: bold;">ONLINE</span> &nbsp;
+                            <input type="radio" name="status_manual" v-model="status.online" :value="false"/>
+                            <span style="color: red; font-weight: bold;">OFFLINE</span>
+                        </span>
+                    </div>
+
                     <table id="status_setup">
                         <tr>
-                            <td class="col1"><u>{{getString('STATUS_VIEW')}}:</u></td>
-                            <td>&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td class="col1">
-                                <input type="checkbox" id="checkbox_status_rda"
-                                    v-model="settings.status.fields.RDA"/> RDA
+                            <td id="qth_lines_titles">
+                                <select v-model="settings.qthCountry">
+                                  <option value="null">- - - - -</option>
+                                  <option v-for="(country, id) in $options.QTH_PARAMS.countries" :value="id">
+                                    {{country.title}}
+                                  </option>
+                                </select><br/>
+                                <template v-for="field in qthFieldTitles">
+                                    {{field}}<br/>
+                                </template>
+                                Locator
                             </td>
-                            <td>
-                                <input type="text" id="status_manual_rda" v-model="status.rda"
-                                    :disabled="settings.status.get === 'qsoclient' ||
-                                    settings.status.get === 'gpslogger'" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="col1">
-                                <input type="checkbox" id="checkbox_status_rafa"
-                                    v-model="settings.status.fields.RAFA"/> RAFA
-                            </td>
-                            <td>
-                                <input type="text" id="status_manual_rafa" v-model="status.rafa"
-                                    :disabled="settings.status.get === 'qsoclient' ||
-                                    settings.status.get === 'gpslogger' " />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="col1">
-                                <input type="checkbox" id="checkbox_status_loc"
-                                    v-model="settings.status.fields.loc"/> Locator
-                            </td>
-                            <td>
-                                <input type="text" id="status_manual_locator" v-model="status.loc"
-                                    :disabled="settings.status.get === 'qsoclient' ||
-                                    settings.status.get === 'gpslogger'" />
-                            </td>
-                        </tr>
-                        <tr v-for="n in $options.USER_FIELDS_COUNT">
-                            <td class="col1">
-                                <input type="checkbox" id="checkbox_status_user1"
-                                    v-model="settings.status.userFields[n-1]"/>
-                                User field
-                            </td>
-                            <td>
-                                <input type="text" id="status_manual_user1"
-                                    :disabled="settings.status.get !== 'manual'"
-                                    v-model="status.userFields[n-1]"
-                                    />
+                            <td id="qth_line_data">
+                                <br/>
+                                <template v-for="(field, idx) in qthFieldTitles">
+                                    <input type="text" :id="'qth_field' + idx" 
+                                        v-model="status.qth.fields.values[idx]"/><br/>
+                                </template>
+                                <input type="text" id="locator" v-model="status.qth.loc"/><br/>
                             </td>
                         </tr>
                     </table>
+
+                    <br/>
+
                 </div>
             </div>
+
+
+            <!-- LOG -->
+            <div class="station_setup_block">
+                <img class="icon_info" src="/static/images/icon_info.png" title="Info"
+                    @click="infoPopup = getString('LOG_POPUP')">
+                <input type="checkbox" id="checkbox_log" v-model="settings.enable.log" /> <span v-html="getString('LOG_SHOW')"/><br/>
+
+                <div class="block_settings" v-if="settings.enable.log">
+                    <table id="log_setup">
+                        <tr>
+                            <td><u>{{getString('LOG_COLUMNS')}}</u>:</td>
+                            <td class="setting" v-for="(field, idx) in qthFieldTitles">
+                                <input type="checkbox" :id="'checkbox_log' + idx" 
+                                v-model="settings.log.columns.qth[idx]" />
+                                {{field}}
+                            </td>
+                            <td class="setting">
+                                <input type="checkbox" id="checkbox_log_loc" v-model="settings.log.columns.loc" />
+                                Locator
+                            </td>
+                        </tr>
+                    </table>
+                    <input type="button" id="button_clear_log" class="btn" :value="getString('LOG_CLEAR')"
+                        :disabled="!stationCallsign"
+                        @click="clearLog()"/>
+                </div>
+            </div>
+
 
 
             <!-- MAP -->
@@ -143,42 +147,6 @@
                     </div>
 
                 </template>
-            </div>
-
-
-            <!-- LOG -->
-            <div class="station_setup_block">
-                <img class="icon_info" src="/static/images/icon_info.png" title="Info"
-                    @click="infoPopup = getString('LOG_POPUP')">
-                <input type="checkbox" id="checkbox_log" v-model="settings.enable.log" /> <span v-html="getString('LOG_SHOW')"/><br/>
-
-                <div class="block_settings" v-if="settings.enable.log">
-                    <table id="log_setup">
-                        <tr>
-                            <td><u>{{getString('LOG_COLUMNS')}}</u>:</td>
-                            <td class="setting">
-                                <input type="checkbox" id="checkbox_log_rda" v-model="settings.log.columns.RDA" />
-                                RDA
-                            </td>
-                            <td class="setting">
-                                <input type="checkbox" id="checkbox_log_rafa" v-model="settings.log.columns.RAFA" />
-                                RAFA
-                            </td>
-                            <td class="setting">
-                                <input type="checkbox" id="checkbox_log_loc" v-model="settings.log.columns.loc" />
-                                Locator
-                            </td>
-                            <td class="setting" v-for="n in $options.USER_FIELDS_COUNT">
-                                <input type="checkbox" :id="'user_field' + n"
-                                    v-model="settings.log.userColumns[n-1]"/>
-                                User field
-                            </td>
-                        </tr>
-                    </table>
-                    <input type="button" id="button_clear_log" class="btn" :value="getString('LOG_CLEAR')"
-                        :disabled="!stationCallsign"
-                        @click="clearLog()"/>
-                </div>
             </div>
 
 
@@ -284,11 +252,13 @@
 </template>
 
 <script>
-import {USER_FIELDS_COUNT, CURRENT_POSITION_ICONS_COUNT} from '../constants'
+import {CURRENT_POSITION_ICONS_COUNT} from '../constants'
 
 import {VueEditor} from 'vue2-editor'
 import DatePicker from 'vue2-datepicker'
 import {mapGetters, mapActions, mapMutations} from 'vuex'
+
+import QTH_PARAMS from '../../static/js/qthParams.json'
 
 import {parseCallsigns, getStationURL} from '../utils'
 import {validCallsignFull} from '../ham-radio'
@@ -298,13 +268,9 @@ import LocalizationMixin from '../localization-mixin'
 
 import {MUTATE_USER, ACTION_SAVE_SETTINGS, ACTION_POST} from '../store-user'
 
-const STATUS_FIELDS = [ 'rda', 'rafa', 'wff', 'loc', 'comments' ]
-const STATUS_ARRAY_FIELDS = [ 'userFields' ]
-const STATUS_BOOL_FIELDS = [ 'online' ]
-
 export default {
-  USER_FIELDS_COUNT: USER_FIELDS_COUNT,
   CURRENT_POSITION_ICONS_COUNT: CURRENT_POSITION_ICONS_COUNT,
+  QTH_PARAMS: QTH_PARAMS,
   name: 'profile',
   mixins: [LocalizationMixin],
   components: {
@@ -324,9 +290,10 @@ export default {
     } else {
       settings.station.callsign = this.$store.getters.userCallsign.toUpperCase()
     }
-    const userFields = []
-    for ( let c = 0; c < USER_FIELDS_COUNT; c++ ) {
-      userFields.push( null )
+    const qthFields = {titles: [], values: []}
+    for (let co = 0; co < QTH_PARAMS.fieldCount; co++) {
+      qthFields.titles.push(QTH_PARAMS.defaultTitle)
+      qthFields.values.push(null)
     }
     return {
       settings: settings,
@@ -337,13 +304,11 @@ export default {
       infoPopup: null,
       trackFile: null,
       status: {
-        rda: null,
-        rafa: null,
-        wff: null,
-        loc: null,
-        userFields: userFields,
         online: false,
-        comments: null
+        qth: {
+          fields: qthFields,
+          loc: null
+        }
       },
       editorToolbar: [ [ 'bold', 'italic', 'underline' ],
         [ 'image' ],
@@ -360,10 +325,23 @@ export default {
     this.loadMisc()
   },
   computed: {
-    stationLink: function () {
+    stationLink () {
       return getStationURL(this.settings.station.callsign)
     },
-    ...mapGetters(['user', 'stationCallsign', 'userCallsign', 'loggedIn'])
+    ...mapGetters(['user', 'stationCallsign', 'userCallsign', 'loggedIn']),
+    qthFieldTitles () {
+      const r = []
+      for (let co = 0; co < QTH_PARAMS.fieldCount; co++) {
+        r.push(QTH_PARAMS.defaultTitle)
+      }
+      if (this.settings.qthCountry) {
+        const countryFields = QTH_PARAMS.countries[this.settings.qthCountry].fields
+        for (let co = 0; co < countryFields.length; co++) {
+          r[co] = countryFields[co]
+        }
+      }
+      return r
+    }
   },
   watch: {
     stationCallsign () {
@@ -390,23 +368,10 @@ export default {
         request.getJSON('status', this.stationCallsign)
           .then(response => {
             const data = response.data
-            if (Object.keys(data).length !== 0) {
-              STATUS_FIELDS.forEach( f => {
-                this.$set(this.status, f, data[f])
-              })
-              STATUS_ARRAY_FIELDS.forEach(f => {
-                if (f in data) {
-                  this.$set(this.status, f, data[f])
-                } else {
-                  const l = this.status[f].length
-                  for (let c = 0; c < l; c++) {
-                    this.$set(this.status[f], c, null)
-                  }
-                }
-              })
-              STATUS_BOOL_FIELDS.forEach( f => {
-                this.status[f] = Boolean(data[f])
-              })
+            this.status.online = data.online
+            this.status.qth.loc = data.qth.loc
+            for (let co = 0; co < QTH_PARAMS.fieldCount; co++) {
+              this.status.qth.fields.values[co] = data.qth.fields.values[co]
             }
           })
       }

@@ -22,12 +22,15 @@
           <tr>
             <td>
               <log-table :data="searchResults" :log-settings="stationSettings.log" 
-              v-if="stationSettings"></log-table>
+                :qth-field-titles="qthFieldTitles" v-if="stationSettings">
+              </log-table>
             </td>
           </tr>
         </table>
 
-        <log-table :data="dataSlice" :log-settings="stationSettings.log" v-if="stationSettings"></log-table>
+        <log-table :data="dataSlice" :log-settings="stationSettings.log" 
+            :qth-field-titles="qthFieldTitles" v-if="stationSettings">
+        </log-table>
 
     </div>
 </template>
@@ -38,6 +41,7 @@ import * as moment from 'moment'
 import tabMixin from '../station-tab-mixin'
 import LogTable from './LogTable'
 import storage from '../storage'
+import {qthFieldTitles} from '../utils'
 
 const logSearchValueStorageKey = 'logSearchValue'
 const current = moment()
@@ -78,6 +82,9 @@ export default {
       const period = this.stationSettings.station.activityPeriod
       return period && period.length === 2 && moment(period[0]) < current &&
         moment(period[1]).add( 1, 'd' ) > current
+    },
+    qthFieldTitles () {
+      return qthFieldTitles(this.stationSettings.qthCountry)
     }
   }
 }

@@ -57,7 +57,7 @@
                         <tr>
                             <td id="qth_lines_titles">
                                 <select v-model="settings.qthCountry">
-                                  <option value="null">- - - - -</option>
+                                  <option :value="null">- - - - -</option>
                                   <option v-for="(country, id) in $options.QTH_PARAMS.countries" :value="id">
                                     {{country.title}}
                                   </option>
@@ -260,7 +260,7 @@ import {mapGetters, mapActions, mapMutations} from 'vuex'
 
 import QTH_PARAMS from '../../static/js/qthParams.json'
 
-import {parseCallsigns, getStationURL} from '../utils'
+import {parseCallsigns, getStationURL, qthFieldTitles} from '../utils'
 import {validCallsignFull} from '../ham-radio'
 import router from '../router'
 import request from '../request'
@@ -330,17 +330,7 @@ export default {
     },
     ...mapGetters(['user', 'stationCallsign', 'userCallsign', 'loggedIn']),
     qthFieldTitles () {
-      const r = []
-      for (let co = 0; co < QTH_PARAMS.fieldCount; co++) {
-        r.push(QTH_PARAMS.defaultTitle)
-      }
-      if (this.settings.qthCountry) {
-        const countryFields = QTH_PARAMS.countries[this.settings.qthCountry].fields
-        for (let co = 0; co < countryFields.length; co++) {
-          r[co] = countryFields[co]
-        }
-      }
-      return r
+      return qthFieldTitles(this.settings.qthCountry)
     }
   },
   watch: {
@@ -416,8 +406,11 @@ export default {
             this.trackFile = null
           } else {
             if (this.settings.status.get === 'manual') {
-              const st = JSON.parse(JSON.stringify(this.status))
-              this[ACTION_POST]({path: 'location', data: st})
+              const data = {qth: {fields: {}, loc: this.status.loc}}
+              for (let co = 0; co < QTH_PARAMS.fieldCount; co++) {
+                data.qth.fields[co] = this.status.qth.fields.values[co]
+              }
+              this[ACTION_POST]({path: 'location', data: data})
             }
           }
         })

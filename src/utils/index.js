@@ -10,6 +10,22 @@ export function debugLog (msg) {
   }
 }
 
+import QTH_PARAMS from '../../static/js/qthParams.json'
+
+export function qthFieldTitles (country) {
+  const r = []
+  for (let co = 0; co < QTH_PARAMS.fieldCount; co++) {
+    r.push(QTH_PARAMS.defaultTitle)
+  }
+  if (country) {
+    const countryFields = QTH_PARAMS.countries[country].fields
+    for (let co = 0; co < countryFields.length; co++) {
+      r[co] = countryFields[co]
+    }
+  }
+  return r
+}
+
 function validateEmail (email) {
   var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   return re.test(String(email).toLowerCase())

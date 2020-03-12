@@ -8,10 +8,11 @@
             <td class="mode head">Mode</td>
             <td class="urcall head">Callsign</td>
             <td class="rst head">RST/RST</td>
-            <td class="rda head" v-if="logSettings.columns.RDA">RDA</td>
-            <td class="rafa head" v-if="logSettings.columns.RAFA">RAFA</td>
+            <td class="qth head" v-for="(title, idx) in qthFieldTitles" 
+                v-if="logSettings.columns.qth[idx]">
+                {{title}}
+            </td>
             <td class="locator head" v-if="logSettings.columns.loc">Locator</td>
-            <td class="user head" v-for="uc in logSettings.userColumns" v-if="uc">User field</td>
         </tr>
         <template v-if="data">
             <tr v-for="spot in data" :class="{new_qso:spot.new}">
@@ -22,12 +23,9 @@
                 <td class="mode">{{spot.mode}}</td>
                 <td class="urcall">{{$options.replace0(spot.cs)}}</td>
                 <td class="rst">{{spot.rcv}}/{{spot.snt}}</td>
-                <td class="rda" v-if="logSettings.columns.RDA">{{spot.rda}}</td>
-                <td class="rafa" v-if="logSettings.columns.RAFA">{{spot.rafa}}</td>
-                <td class="locator" v-if="logSettings.columns.loc">{{spot.loc}}</td>
-                <td class="user" v-for="(uc, idx) in logSettings.userColumns" v-if="uc">
-                    {{spot.userFields ? spot.userFields[idx] : null}}
-                </td>
+                <td class="rda" v-for="(value, idx) in spot.qth.fields"
+                    v-if="logSettings.columns.qth[idx]">{{value}}</td>
+                <td class="locator" v-if="logSettings.columns.loc">{{spot.qth.loc}}</td>
            </tr>
         </template>
     </table>
@@ -38,7 +36,7 @@ import {replace0} from '../utils'
 export default {
   replace0: replace0,
   name: 'LogTable',
-  props: ['data', 'logSettings'],
+  props: ['data', 'logSettings', 'qthFieldTitles'],
   data () {
     return {
       time: null

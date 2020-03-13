@@ -406,10 +406,11 @@ export default {
             this.trackFile = null
           } else {
             if (this.settings.status.get === 'manual') {
-              const data = {qth: {fields: {}, loc: this.status.loc}}
+              const data = {qth: {fields: {}}}
               for (let co = 0; co < QTH_PARAMS.fieldCount; co++) {
                 data.qth.fields[co] = this.status.qth.fields.values[co]
               }
+              data.qth.loc = this.status.qth.loc
               this[ACTION_POST]({path: 'location', data: data})
             }
           }

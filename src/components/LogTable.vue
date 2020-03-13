@@ -23,9 +23,9 @@
                 <td class="mode">{{spot.mode}}</td>
                 <td class="urcall">{{$options.replace0(spot.cs)}}</td>
                 <td class="rst">{{spot.rcv}}/{{spot.snt}}</td>
-                <td class="rda" v-for="(value, idx) in spot.qth.fields"
-                    v-if="logSettings.columns.qth[idx]">{{value}}</td>
-                <td class="locator" v-if="logSettings.columns.loc">{{spot.qth.loc}}</td>
+                <td class="rda" v-for="(title, idx) in qthFieldTitles"
+                    v-if="logSettings.columns.qth[idx]">{{spot.qth[idx]}}</td>
+                <td class="locator" v-if="logSettings.columns.loc">{{spot.loc}}</td>
            </tr>
         </template>
     </table>

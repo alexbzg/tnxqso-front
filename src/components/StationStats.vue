@@ -13,7 +13,7 @@
                         <tr>
                             <td class="option">Calls</td><td class="value">{{csCount}}</td>
                         </tr>
-                        <tr v-for="field in fields" :key="field.title">
+                        <tr v-for="field in fields" :key="field.id">
                             <td class="option">{{field.title}}</td>
                             <td class="value">{{field.count}}</td>
                         </tr>
@@ -26,7 +26,7 @@
                     Statistic filter
                     <select v-model="filter.field" @change="filter.fieldValue = null; saveFilter()">
                         <option :value="null">All</option>
-                        <option v-for="field in fields" :value="field.title" :key="field.title">
+                        <option v-for="field in fields" :value="field.id" :key="field.id">
                             {{field.title}}
                         </option>
                     </select>
@@ -42,18 +42,18 @@
                                 </select>
                             </td>
                             <td><span>All modes</span></td>
-                            <td v-for="mode in MODES">{{mode}}</td>
+                            <td v-for="mode in $options.MODES">{{mode}}</td>
                         </tr>
                         <tr>                        
                         <tr>                        
                             <td><span>All bands</span></td>
                             <td class="data">{{statsTable.total.total}}</tda>
-                            <td v-for="mode in MODES" class="data">{{statsTable.total[mode]}}</td>
+                            <td v-for="mode in $options.MODES" class="data">{{statsTable.total[mode]}}</td>
                         </tr>
-                        <tr :class="{odd: idx % 2 === 0}" v-for="(band, idx) in BANDS">
+                        <tr :class="{odd: idx % 2 === 0}" v-for="(band, idx) in $options.BANDS">
                             <td>{{band}} <span>MHz</span></td>
                             <td class="data">{{statsTable[band].total}}</tda>
-                            <td class="data" v-for="mode in MODES">{{statsTable[band][mode]}}</td>
+                            <td class="data" v-for="mode in $options.MODES">{{statsTable[band][mode]}}</td>
                         </tr>
                     </table>
                 </td>
@@ -67,26 +67,26 @@ import {mapState} from 'vuex'
 
 import {MODES, MODES_FULL, orderedBands} from '../ham-radio'
 import storage from '../storage'
+import {qthFieldTitles, debugLog} from '../utils'
+import QTH_PARAMS from '../../static/js/qthParams.json'
 
 const STATS_FILTER_STORAGE_KEY = 'statsFilter'
 
-// const logSearchValueStorageKey = 'logSearchValue'
-
 export default {
   name: 'StationStats',
+  BANDS: orderedBands(),
+  MODES: MODES,
+  MODES_FULL: MODES_FULL,
   data () {
     return {
       tabId: 'stats',
       data: [],
       filter: {
-        field: 'RDA',
+        field: 0,
         fieldValue: null
       },
       types: ['QSO', 'Calls'],
-      type: 'QSO',
-      BANDS: orderedBands(),
-      MODES: MODES,
-      MODES_FULL: MODES_FULL
+      type: 'QSO'
     }
   },
   mounted () {
@@ -96,20 +96,25 @@ export default {
   },
   computed: {
     ...mapState(['stationSettings']),
+    qthFieldTitles () {
+      return qthFieldTitles(this.stationSettings.qthCountry)
+    },
     fields () {
       const fields = []
       if (this.stationSettings.log) {
-        if (this.stationSettings.log.columns.RDA) {
-          fields.push({title: 'RDA', count: this.uniqueFieldValues('RDA').size})
-        }
-        if (this.stationSettings.log.columns.RAFA) {
-          fields.push({title: 'RAFA', count: this.uniqueFieldValues('RAFA').size})
+        for (let co = 0; co < QTH_PARAMS.fieldCount; co++) {
+          if (this.stationSettings.log.columns.qth[co]) {
+            fields.push({title: this.qthFieldTitles[co],
+              count: this.uniqueFieldValues(co).size,
+              id: co
+            })
+          }
         }
         if (this.stationSettings.log.columns.loc) {
-          fields.push({title: 'Locators', count: this.uniqueFieldValues('loc').size})
-        }
-        if (this.stationSettings.log.userColumns[0]) {
-          fields.push({title: 'User field', count: this.userFieldCount})
+          fields.push({title: 'Locators',
+            count: this.uniqueFieldValues('loc').size,
+            id: 'loc'
+          })
         }
       }
       return fields
@@ -120,11 +125,6 @@ export default {
     csCount () {
       return this.uniqueValues(x => x.cs).size
     },
-    userFieldCount () {
-      return (this.stationSettings.log && this.stationSettings.log.userColumns[0]
-        ? this.uniqueValues(x => x.userFields[0]).size
-        : 0)
-    },
     locatorsCount () {
       return this.uniqueValues(x => x.loc).size
     },
@@ -132,16 +132,15 @@ export default {
       return this.uniqueValues(x => x.date).size
     },
     filterFieldValues () {
-      if (!this.filter.field) {
+      if (this.filter.field !== 0 && !this.filter.field) {
         return []
       }
-      const r = (this.filter.field === 'User field'
-        ? this.uniqueValues(x => x.userFields[0])
-        : this.uniqueFieldValues(this.filter.field))
+      const r = this.uniqueFieldValues(this.filter.field)
       return [...r].sort()
     },
     statsTable () {
       const r = {}
+      debugLog('Test')
 
       function initRow () {
         const row = {}
@@ -152,7 +151,7 @@ export default {
         return row
       }
 
-      for (const band of this.BANDS) {
+      for (const band of this.$options.BANDS) {
         r[band] = initRow()
       }
       r.total = initRow()
@@ -163,6 +162,10 @@ export default {
           for (const qso of qsos) {
             const mode = this.getMode(qso.mode)
             const band = qso.band.replace(',', '.')
+            debugLog(`${band} -- ${r[band]}`)
+            if (!r[band]) {
+              debugLog(`${qso.ts} ${qso.cs}`)
+            }
             r[band][mode]++
             r[band].total++
             r.total[mode]++
@@ -232,21 +235,20 @@ export default {
       storage.save(STATS_FILTER_STORAGE_KEY, filter, 'local' )
     },
     filterQso () {
-      const userFieldName = this.userFieldName
       const filter = this.filter
       return this.data.filter(qso => {
-        if (!filter.field) {
+        if (filter.field !== 0 && !filter.field) {
           return true
         }
         if (filter.fieldValue) {
-          if (((filter.field === userFieldName && filter.fieldValue === qso.userFields[0]) ||
-            (filter.field !== userFieldName && qso[filter.field.toLowerCase()] &&
-            qso[filter.field.toLowerCase()].includes(filter.fieldValue)))) {
+          if ((filter.field === 'loc' && filter.fieldValue === qso.loc) ||
+            (filter.field !== 'loc' && qso.qth[filter.field] &&
+            qso.qth[filter.field].includes(filter.fieldValue))) {
             return true
           }
         } else {
-          if ((filter.field === userFieldName && qso.userFields[0]) ||
-            (filter.field !== userFieldName && qso[filter.field.toLowerCase()])) {
+          if ((filter.field === 'loc' && qso.loc) ||
+            (filter.field !== 'loc' && qso.qth[filter.field])) {
             return true
           }
         }
@@ -257,7 +259,7 @@ export default {
       this.data = this.service.data
     },
     uniqueFieldValues (field, data) {
-      return this.uniqueValues(x => x[field.toLowerCase()], /[, \/]+/, data)
+      return this.uniqueValues(field === 'loc' ? x => x.loc : x => x.qth[field], /[, \/]+/, data)
     },
     uniqueValues (lambda, delimiter, data) {
       if (!data) {

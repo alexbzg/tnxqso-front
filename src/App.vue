@@ -39,7 +39,9 @@
             </tr>
         </table>
         <div class="list index_list">
+            <donate-block></donate-block>
             <router-view></router-view>
+
         </div>
     </div>
 </template>
@@ -50,10 +52,11 @@
 import './style.css'
 
 import LanguageSwitch from './components/LanguageSwitch'
+import DonateBlock from './components/DonateBlock.vue'
 
 export default {
   name: 'app',
-  components: {LanguageSwitch},
+  components: {LanguageSwitch, DonateBlock},
   data () {
     return {
 //      user: user

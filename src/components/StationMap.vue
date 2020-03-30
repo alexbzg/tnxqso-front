@@ -11,6 +11,7 @@
         R1CF RDA/RAFA maps</a>, <a href='https://www.openstreetmap.org/'>OpenStreetMap</a>" position="bottomright"/>
         <l-wms-tile-layer
             v-for="(layer, idx) in overlays"
+            v-if="!layer.qthCountry || (stationSettings && stationSettings.qthCountry === layer.qthCountry)"
             :key="idx"
             base-url="https://r1cf.ru/geoserver/cite/wms?"
             :layers="layer.layers"
@@ -106,6 +107,7 @@ export default {
       map: null,
       overlays: [
         {
+          qthCountry: 'RU',
           name: 'RDA',
           layers: 'RDA_2020',
           styles: 'rda',
@@ -113,6 +115,7 @@ export default {
           minZoom: 5
         },
         {
+          qthCountry: 'RU',
           name: 'RAFA',
           layers: 'AOPAF',
           styles: 'rafa',
@@ -120,6 +123,7 @@ export default {
           minZomm: 8
         },
         {
+          qthCountry: 'IT',
           name: 'WAIP',
           layers: 'WAIP2',
           styles: 'waipx',
@@ -130,6 +134,14 @@ export default {
           name: 'Locator',
           layers: 'QTH,GRID576F',
           styles: 'QTH,line',
+          visible: true,
+          minZoom: 11
+        },
+        {
+          qthCountry: 'GB',
+          name: 'WAB',
+          layers: 'WAB',
+          styles: 'WAB2',
           visible: true,
           minZoom: 11
         }

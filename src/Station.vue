@@ -5,10 +5,10 @@
         <tr>
             <td id="station_title">
                 <h1>{{stationCS}}</h1>
-                {{stationTitle}} 
-                <span class="period" v-if="stationSettings && stationSettings.station.activityPeriod && 
+                {{stationTitle}}
+                <span class="period" v-if="stationSettings && stationSettings.station.activityPeriod &&
                     stationSettings.station.activityPeriod.length == 2">
-                    ({{formatDate(stationSettings.station.activityPeriod[0])}} &mdash; 
+                    ({{formatDate(stationSettings.station.activityPeriod[0])}} &mdash;
                     {{formatDate(stationSettings.station.activityPeriod[1])}})
                 </span>
             </td>
@@ -18,27 +18,27 @@
     </tr>
     <tr>
         <td>
-            <router-link to="/info" tag="div" id="tab_info" class="tab" 
+            <router-link to="/info" tag="div" id="tab_info" class="tab"
                 v-if="enable.stationInfo">Info</router-link>
-            <router-link to="/log" tag="div" id="tab_log" class="tab" 
+            <router-link to="/log" tag="div" id="tab_log" class="tab"
                 v-if="enable.log" :class="{updated_tab: tabsUnread.log}">Log</router-link>
-            <router-link to="/map" tag="div" id="tab_map" class="tab" 
+            <router-link to="/map" tag="div" id="tab_map" class="tab"
                 v-if="enable.map">Map</router-link>
-            <router-link to="/adxcluster" tag="div" id="tab_adxc" class="tab" 
+            <router-link to="/adxcluster" tag="div" id="tab_adxc" class="tab"
                 v-if="enable.cluster">Cluster</router-link>
-            <router-link to="/stats" tag="div" id="tab_log" class="tab" 
+            <router-link to="/stats" tag="div" id="tab_log" class="tab"
                 v-if="enable.stats">Stats</router-link>
-            <router-link to="/chat" tag="div" id="tab_chat" class="tab" 
-                v-if="enable.chat" 
+            <router-link to="/chat" tag="div" id="tab_chat" class="tab"
+                v-if="enable.chat"
                 :class="{updated_tab: $store.state.services.chat && $store.state.services.chat.new}">
                 Chat
             </router-link>
-            <router-link to="/gallery" tag="div" id="tab_gallery" class="tab" 
-                v-if="enable.gallery" 
+            <router-link to="/gallery" tag="div" id="tab_gallery" class="tab"
+                v-if="enable.gallery"
                 :class="{updated_tab: $store.state.services.gallery && $store.state.services.gallery.new}">
                 Gallery
             </router-link>
-            <router-link to="/donate" tag="div" id="tab_donate" class="tab" 
+            <router-link to="/donate" tag="div" id="tab_donate" class="tab"
                 v-if="enable.donate">Support us</router-link>
             <router-link to="/stations" tag="div" id="tab_stations" class="tab">
                 Stations
@@ -50,6 +50,7 @@
         </td>
     </tr></table>
         <div class="list">
+            <div class="donate_block" :class="$route.path.split('/')[1]"></div>
             <router-view :station-settings="stationSettings"
             :status-data="statusData" :log-service="logService">
             </router-view>

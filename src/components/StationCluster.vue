@@ -29,20 +29,11 @@
         </tr>
         <tr>
             <td class="spot_text text_btns" colspan="5">
-            <input type="button" class="add_text_btn" :value="'RDA ' + statusData.rda" 
-                v-if="stationSettings && stationSettings.status.fields.RDA && statusData && statusData.rda"
-                @click="addSpotText('RDA ' + statusData.rda)"/> 
-            <input type="button" class="add_text_btn" :value="'RAFA ' + statusData.rafa" 
-                v-if="stationSettings && stationSettings.status.fields.RAFA && statusData && statusData.rafa"
-                @click="addSpotText('RAFA ' + statusData.rafa)"/> 
-            <input type="button" class="add_text_btn" :value="statusData.loc" 
-                v-if="stationSettings && stationSettings.status.fields.loc && statusData && statusData.loc"
+            <input type="button" class="add_text_btn" v-for="item in qthLines" :value="item" 
+                v-if="item" @click="addSpotText(item)"/> 
+            <input type="button" class="add_text_btn" :value="statusData.qth.loc" 
+                v-if="statusData && statusData.loc"
                 @click="addSpotText(statusData.loc)"/> 
-            <input type="button" class="add_text_btn" 
-                v-if="stationSettings && stationSettings.status.userFields[0] && statusData && 
-                    statusData.userFields[0]"
-                :value="statusData.userFields[0]"
-                @click="addSpotText(statusData.userFields[0])"/> 
             </td>
         </tr>
     </table>
@@ -84,6 +75,7 @@ import {mapActions} from 'vuex'
 import {USER_FIELDS_COUNT, CLUSTER_SPOT_TEXT_LIMIT} from '../constants'
 import StationStatus from '../station-status'
 import {ACTION_POST} from '../store-user'
+import QTH_PARAMS from '../../static/js/qthParams.json'
 
 import {replace0} from '../utils'
 import tabMixin from '../station-tab-mixin'
@@ -222,6 +214,21 @@ export default {
     sendSpotButtonDisabled () {
       return this.spot.posting || this.spot.showDisable || !this.spot.userCS || this.spot.userCS === '' ||
         !this.spot.cs || this.spot.cs === '' || !this.spot.freq
+    },
+    qthLines () {
+      const r = []
+      if (this.statusData) {
+        const qthFields = this.statusData.qth.fields
+        for (let co = 0; co < QTH_PARAMS.fieldCount; co++) {
+          if (qthFields.values[co]) {
+            r.push((qthFields.titles[co] === QTH_PARAMS.defaultFieldTitle ? '' : qthFields.titles[co] + ' ') +
+              qthFields.values[co])
+          } else {
+            r.push(null)
+          }
+        }
+      }
+      return r
     }
   }
 }

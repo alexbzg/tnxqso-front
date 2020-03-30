@@ -40,7 +40,7 @@
                     <div id="status_from">
                         <b>{{getString('STATUS_FROM')}}</b><br/>
 
-                        <input type="radio" name="status_from" v-model="settings.status.get" value="gpslogger"/>
+                        <input type="radio" name="status_from" v-model="settings.status.get" value="client"/>
                         TNXLOG (QTHnow) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <input type="radio" name="status_from" v-model="settings.status.get" value="manual"/>
                         {{getString('STATUS_MANUAL')}}
@@ -71,9 +71,12 @@
                                 <br/>
                                 <template v-for="(field, idx) in qthFieldTitles">
                                     <input type="text" :id="'qth_field' + idx" 
+                                        :disabled="settings.status.get !== 'manual'"
                                         v-model="status.qth.fields.values[idx]"/><br/>
                                 </template>
-                                <input type="text" id="locator" v-model="status.qth.loc"/><br/>
+                                <input type="text" id="locator" 
+                                    :disabled="settings.status.get !== 'manual'"
+                                    v-model="status.qth.loc"/><br/>
                             </td>
                         </tr>
                     </table>

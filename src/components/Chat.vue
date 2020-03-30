@@ -8,7 +8,7 @@
                         <input type="text" id="your_call" v-model="chatUserField" @blur="chatUserBlur"/>
                     </td>
                     <td>
-                        <input type="text" id="your_name" v-model="chatUserNameField" 
+                        <input type="text" id="your_name" v-model="chatUserNameField"
                             @blur="chatUserNameBlur"/>
                     </td>
                     <td>
@@ -25,18 +25,18 @@
                 <td class="note">&nbsp;</td>
             </tr>
         </tbody></table>
-        
+
         <table id="chat_layout">
           <tr>
             <td>
 
         <table id="chat_window">
-            <tr v-for="msg in data" :class="{admin: msg.admin && service && service.station, 
-                new_msg: msg.new}"> 
+            <tr v-for="msg in data" :class="{admin: msg.admin && service && service.station,
+                new_msg: msg.new}">
                 <td class="call">
                     <span class="call" @click="replyTo(msg.user)">{{$options.replace0(msg.user)}}</span><br/>
                     <span class="name" @click="replyTo(msg.user)" v-if="msg.name">{{msg.name}}</span>
-                    <a :href="'http://qrz.com/db/' + msg.user" target="_blank" rel="noopener" 
+                    <a :href="'http://qrz.com/db/' + msg.user" target="_blank" rel="noopener"
                         title="Link to QRZ.com">
                         <img src="/static/images/icon_qrz.png"/>
                     </a>
@@ -46,6 +46,7 @@
                 <td class="message">
                     <img class="delete_btn" src="/static/images/delete.png" v-if="isAdmin"
                         title="Delete this message" @click="deleteMsg( msg.ts )"/>
+                    <img class="translate_btn" src="/static/images/icon_translate.png" title="Translate this message" />
                     <span class="message_to" v-for="callsign in msg.to" :key="callsign"
                         :class="{personal: callsign === chatUser}">
                         &rArr; {{callsign}}
@@ -57,7 +58,7 @@
 
         </td>
         <td>
-       
+
         <div id="chat_info">
             <div class="chat_info_title">This page</div>
             <div class="chat_info_users1">
@@ -70,13 +71,13 @@
             <template v-if="'talks' in activeUsers">
                 <div class="chat_info_title">Talks</div>
                 <div class="chat_info_users2">
-                    <span v-for="user in activeUsers['talks']" 
+                    <span v-for="user in activeUsers['talks']"
                         :class="{'admin': user.admin, 'typing':user.typing}">
                         {{$options.replace0(user.cs)}}<br/>
                     </span>
                 </div>
             </template>
-           
+
             <div class="chat_info_title">Other pages</div>
             <div class="chat_info_users2">
                 <span v-for="user in activeUsers['other']"

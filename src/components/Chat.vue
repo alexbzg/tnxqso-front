@@ -46,7 +46,12 @@
                 <td class="message">
                     <img class="delete_btn" src="/static/images/delete.png" v-if="isAdmin"
                         title="Delete this message" @click="deleteMsg( msg.ts )"/>
-                    <img class="translate_btn" src="/static/images/icon_translate.png" title="Translate this message" />
+                    <a target="_blank" rel="nofollow" class="translate_lnk"
+                        :href="'https://translate.google.com/#view=home&op=translate&sl=auto&tl=en&text=' +
+                        plainText(msg.text)">
+                        <img class="translate_btn" src="/static/images/icon_translate.png" 
+                        title="Translate this message" />
+                    </a>
                     <span class="message_to" v-for="callsign in msg.to" :key="callsign"
                         :class="{personal: callsign === chatUser}">
                         &rArr; {{callsign}}
@@ -165,6 +170,11 @@ export default {
         this[MUTATE_CHAT_USER](this.chatUserField)
         this[ACTION_POST_ACTIVITY]()
       }
+    },
+    plainText (html) {
+      const temp = document.createElement('div')
+      temp.innerHTML = html
+      return temp.textContent || temp.innerText || ''
     },
     chatUserNameBlur () {
       if (this.chatUserNameField) {

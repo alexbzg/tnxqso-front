@@ -50,7 +50,7 @@
         </td>
     </tr></table>
         <div class="list">
-            <div class="donate_block" :class="$route.path.split('/')[1]"></div>
+            <donate-block></donate-block>
             <router-view :station-settings="stationSettings"
             :status-data="statusData" :log-service="logService">
             </router-view>
@@ -70,6 +70,7 @@ import clusterService from './cluster-service'
 import logService from './log-service'
 import storage from './storage'
 import StationStatus from './components/StationStatus'
+import DonateBlock from './components/DonateBlock.vue'
 
 const tabsReadStoragePfx = 'stationTabsRead_'
 const tabs = {
@@ -80,7 +81,7 @@ const tabs = {
 export default {
   USER_FIELDS_COUNT: USER_FIELDS_COUNT,
   name: 'station',
-  components: {StationStatus},
+  components: {StationStatus, DonateBlock},
   data () {
     const tabsUnread = {}
     for (const tab in tabs) {

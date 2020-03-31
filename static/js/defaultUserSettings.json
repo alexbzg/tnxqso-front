@@ -14,35 +14,25 @@
         "chat": true,
         "map": true,
         "donate": true,
-        "instagram": true,
         "stats": true,
         "gallery": true,
         "stationInfo": true
     },
     "log": {
         "columns": {
-            "RDA": true,
-            "RAFA": true,
+            "qth": [true, true, true],
             "loc": true
-        },
-        "userColumns": [ false ]
+        }
     },
     "status":{
-        "get": "qsoclient",
-        "fields": {
-            "RDA": true,
-            "RAFA": true,
-            "loc": true
-        },
-        "userFields": [ false ]
+        "get": "client"
     },
     "clusterCallsigns": [],
     "clusterHighlight": [],
     "chatAdmins": [],
-    "instagramID": "",
     "donate": {
         "text": "", 
         "code": ""
     },
-    "currentPostionIcon": 0
+    "currentPositionIcon": 0
 }

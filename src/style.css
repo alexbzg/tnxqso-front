@@ -196,7 +196,8 @@ max-width: 900px;
 .donate_block.tnxpost,
 .donate_block.about,
 .donate_block.contact,
-.donate_block.profile
+.donate_block.profile,
+.donate_block.info
 {
     display: none;
 }
@@ -220,6 +221,11 @@ max-width: 900px;
 .donate_block.map
 {
     margin-top: 45px;
+}
+
+.donate_block.stations
+{
+    margin-top: 20px;
 }
 
 
@@ -1097,6 +1103,13 @@ table#chat_window td.message{
 }
 
 table#chat_window td.message:hover img.delete_btn{
+    display: inline;
+}
+
+.translate_lnk{
+    display: none;
+}
+table#chat_window td.message:hover .translate_lnk{
     display: inline;
 }
 

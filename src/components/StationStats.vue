@@ -158,53 +158,49 @@ export default {
 
       const qsos = this.filterQso()
       if (qsos.length) {
-        if (this.type === 'QSO') {
-          for (const qso of qsos) {
-            const mode = this.getMode(qso.mode)
-            const band = qso.band.replace(',', '.')
-            debugLog(`${band} -- ${r[band]}`)
-            if (!r[band]) {
-              debugLog(`${qso.ts} ${qso.cs}`)
+        for (const qso of qsos) {
+          const mode = this.getMode(qso.mode)
+          const band = qso.band.replace(',', '.')
+          if (this.type === 'QSO') {
+            if (r[band] && mode in r[band]) {
+              r[band][mode]++
+              r[band].total++
+              r.total[mode]++
+              r.total.total++
             }
-            r[band][mode]++
-            r[band].total++
-            r.total[mode]++
-            r.total.total++
-          }
-          for (const band in r) {
-            for (const mode in r[band]) {
-              if (!r[band][mode]) {
-                r[band][mode] = null
+            for (const band in r) {
+              for (const mode in r[band]) {
+                if (!r[band][mode]) {
+                  r[band][mode] = null
+                }
               }
             }
-          }
-        } else if (this.type === 'Calls') {
-          for (const qso of qsos) {
-            const mode = this.getMode(qso.mode)
-            const band = qso.band.replace(',', '.')
-            if (!r[band][mode]) {
-              r[band][mode] = new Set()
+          } else if (this.type === 'Calls') {
+            for (const qso of qsos) {
+              if (!r[band][mode]) {
+                r[band][mode] = new Set()
+              }
+              if (!r[band].total) {
+                r[band].total = new Set()
+              }
+              if (!r.total[mode]) {
+                r.total[mode] = new Set()
+              }
+              if (!r.total.total) {
+                r.total.total = new Set()
+              }
+              r[band][mode].add(qso.cs)
+              r[band].total.add(qso.cs)
+              r.total[mode].add(qso.cs)
+              r.total.total.add(qso.cs)
             }
-            if (!r[band].total) {
-              r[band].total = new Set()
-            }
-            if (!r.total[mode]) {
-              r.total[mode] = new Set()
-            }
-            if (!r.total.total) {
-              r.total.total = new Set()
-            }
-            r[band][mode].add(qso.cs)
-            r[band].total.add(qso.cs)
-            r.total[mode].add(qso.cs)
-            r.total.total.add(qso.cs)
-          }
-          for (const band in r) {
-            for (const mode in r[band]) {
-              if (r[band][mode]) {
-                r[band][mode] = r[band][mode].size
-              } else {
-                r[band][mode] = null
+            for (const band in r) {
+              for (const mode in r[band]) {
+                if (r[band][mode]) {
+                  r[band][mode] = r[band][mode].size
+                } else {
+                  r[band][mode] = null
+                }
               }
             }
           }

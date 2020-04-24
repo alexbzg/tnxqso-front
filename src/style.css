@@ -187,6 +187,7 @@ max-width: 900px;
     padding: 0;
 }
 
+.donate_block.login,
 .donate_block.talks,
 .donate_block.chat,
 .donate_block.gallery,
@@ -203,11 +204,6 @@ max-width: 900px;
 }
 
 
-.donate_block.stats
-{
-    margin-top: 100px;
-}
-
 .donate_block.log
 {
     margin-top: 80px;
@@ -220,7 +216,7 @@ max-width: 900px;
 
 .donate_block.map
 {
-    margin-top: 45px;
+
 }
 
 .donate_block.stations
@@ -591,7 +587,7 @@ table.tabs td#login{
 
 #log #no_net{
     width: 900px;
-    margin-top: 50px;
+    margin-top: 10px;
 }
 
 
@@ -621,7 +617,7 @@ table#search_results td#icon_close img{
 
 table#log {
     border-collapse: collapse;
-    margin: 10px 0;
+    margin: 10px auto;
 }
 table#log td{
     padding: 7px;

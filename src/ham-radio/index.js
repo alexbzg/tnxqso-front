@@ -12,7 +12,7 @@ export const MODES = ['CW', 'SSB', 'DIGI']
 export const MODES_FULL = {
   'CW': ['CW'],
   'SSB': ['USB', 'SSB', 'LSB', 'AM', 'FM'],
-  'DIGI': ['FT8', 'FT4', 'JT65']
+  'DIGI': ['FT8', 'FT4', 'JT65', 'MFSK']
 }
 export const ROLES = {hunter: 'Hunter', activator: 'Activator'}
 

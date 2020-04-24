@@ -10,7 +10,7 @@
             {{$options.replace0(station.station.callsign.toUpperCase())}}
           </td>
           <td>
-            <station-status-small v-if="type == 'active'" :stationSettings="station" 
+            <station-status-small v-if="type == 'active'" :stationSettings="station"
                 :station="station.station.callsign">
             </station-status-small>
           </td>
@@ -19,8 +19,8 @@
               <a :href="stationURL + '#/info'" v-if="station.enable.stationInfo">Info</a>
               <a :href="stationURL + '#/log'" v-if="station.enable.log">Log</a>
               <a :href="stationURL + '#/map'" v-if="station.enable.map">Map</a>
-              <a :href="stationURL + '#/chat'" v-if="station.enable.chat">Chat</a>
               <a :href="stationURL + '#/stats'" v-if="station.enable.stats">Stats</a>
+              <a :href="stationURL + '#/chat'" v-if="station.enable.chat">Chat</a>
               <a :href="stationURL + '#/gallery'" v-if="station.enable.gallery">Gallery</a>
               <a :href="stationURL + '#/donate'" v-if="station.enable.donate">Support</a>
             </div>

@@ -1,6 +1,5 @@
 <template>
     <div id="map">
-    <div id="refresh_time">Auto refresh<br/><b>1 min</b></div>
       <l-map style="height: 100%; width: 100%" :zoom="zoom" :center="center"
         :bounds="bounds"
         :options="{zoomControl: false, attributionControl: false}">

@@ -12,7 +12,12 @@
                             @blur="chatUserNameBlur"/>
                     </td>
                     <td>
-                        <input type="text" id="message_text" v-model="messageText" @keyup="onTyping"/>
+                        <input type="text" id="message_text" v-model="messageText" @keyup="onTyping"
+                            ref="msgTextInput"/>
+                    </td>
+                    <td>
+                         <img id="smile_btn" src="/static/images/smiles/01.gif"
+                              @click="showSmilies = !showSmilies"/>
                     </td>
                     <td>
                         <button @click="buttonClick()" :disabled="!buttonVisible">OK</button>
@@ -25,6 +30,9 @@
                 <td class="note">&nbsp;</td>
             </tr>
         </tbody></table>
+
+        <smilies v-show="showSmilies" @hide="hideSmilies" @smilie-click="insertSmilie">
+        </smilies>
 
         <table id="chat_layout">
           <tr>
@@ -106,8 +114,11 @@ import {mapActions, mapMutations, mapGetters, mapState} from 'vuex'
 
 import _ from 'underscore'
 import sanitizeHTML from 'sanitize-html'
+import insertTextAtCursor from 'insert-text-at-cursor'
 
 import ServiceDisplay from './ServiceDisplay'
+import Smilies, {SMILIES_IMG_PATH} from './Smilies'
+
 import {replace0} from '../utils'
 
 import {ACTION_POST_ACTIVITY, MUTATE_CURRENT_ACTIVITY, MUTATE_USERS_CONSUMER, ACTION_ADD_USERS_CONSUMER}
@@ -128,8 +139,10 @@ export default {
   extends: ServiceDisplay,
   replace0: replace0,
   name: 'Chat',
+  components: {Smilies},
   data () {
     return {
+      showSmilies: false,
       chatUserField: this.$store.state.user.chatUser,
       chatUserNameField: this.$store.state.user.chatUserName,
       messageText: null,
@@ -156,6 +169,12 @@ export default {
   methods: {
     ...mapActions([ACTION_POST, ACTION_ADD_USERS_CONSUMER, ACTION_UPDATE_SERVICE, ACTION_POST_ACTIVITY]),
     ...mapMutations([MUTATE_CHAT_USER, MUTATE_CHAT_USER_NAME, MUTATE_CURRENT_ACTIVITY, MUTATE_USERS_CONSUMER]),
+    insertSmilie (smilie) {
+      insertTextAtCursor(this.$refs.msgTextInput, ':' + smilie + ':')
+    },
+    hideSmilies () {
+      this.showSmilies = false
+    },
     storeCurrentActivity () {
       if (this.service) {
         this[MUTATE_CURRENT_ACTIVITY]({chat: true, station: this.service.station})
@@ -269,6 +288,7 @@ export default {
             msg.to.shift()
             msg.to = msg.to.map(item => item.trim())
           }
+          msg.text = msg.text.replace(/:(\d\d):/g, '<image src="' + SMILIES_IMG_PATH + '$1.gif"/>')
           data.push(msg)
         }
       }

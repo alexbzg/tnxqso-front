@@ -414,6 +414,7 @@ export default {
                 data.qth.fields[co] = this.status.qth.fields.values[co]
               }
               data.qth.loc = this.status.qth.loc
+              data.online = this.status.online
               this[ACTION_POST]({path: 'location', data: data})
             }
           }

@@ -161,6 +161,9 @@ export default {
         for (const qso of qsos) {
           const mode = this.getMode(qso.mode)
           const band = qso.band.replace(',', '.')
+          if (!(band in r) || !(mode in r[band])) {
+            continue
+          }
           if (this.type === 'QSO') {
             if (r[band] && mode in r[band]) {
               r[band][mode]++
@@ -176,31 +179,31 @@ export default {
               }
             }
           } else if (this.type === 'Calls') {
-            for (const qso of qsos) {
-              if (!r[band][mode]) {
-                r[band][mode] = new Set()
-              }
-              if (!r[band].total) {
-                r[band].total = new Set()
-              }
-              if (!r.total[mode]) {
-                r.total[mode] = new Set()
-              }
-              if (!r.total.total) {
-                r.total.total = new Set()
-              }
-              r[band][mode].add(qso.cs)
-              r[band].total.add(qso.cs)
-              r.total[mode].add(qso.cs)
-              r.total.total.add(qso.cs)
+            if (!r[band][mode]) {
+              r[band][mode] = new Set()
             }
-            for (const band in r) {
-              for (const mode in r[band]) {
-                if (r[band][mode]) {
-                  r[band][mode] = r[band][mode].size
-                } else {
-                  r[band][mode] = null
-                }
+            if (!r[band].total) {
+              r[band].total = new Set()
+            }
+            if (!r.total[mode]) {
+              r.total[mode] = new Set()
+            }
+            if (!r.total.total) {
+              r.total.total = new Set()
+            }
+            r[band][mode].add(qso.cs)
+            r[band].total.add(qso.cs)
+            r.total[mode].add(qso.cs)
+            r.total.total.add(qso.cs)
+          }
+        }
+        if (this.type === 'Calls') {
+          for (const band in r) {
+            for (const mode in r[band]) {
+              if (r[band][mode]) {
+                r[band][mode] = r[band][mode].size
+              } else {
+                r[band][mode] = null
               }
             }
           }

@@ -12,6 +12,9 @@
                             @blur="chatUserNameBlur"/>
                     </td>
                     <td>
+     <!--                 <img id="admin_message" src="/static/images/icon_admin_message.png" title="*** Закреплённое сообщение / *** Pinned message"> -->
+                    </td>
+                    <td>
                         <input type="text" id="message_text" v-model="messageText" @keyup="onTyping"
                             ref="msgTextInput"/>
                     </td>
@@ -26,6 +29,7 @@
             <tr>
                 <td class="note">your callsign</td>
                 <td class="note">your name</td>
+                <td></td>
                 <td class="note">your message</td>
                 <td class="note">&nbsp;</td>
             </tr>
@@ -37,6 +41,62 @@
         <table id="chat_layout">
           <tr>
             <td>
+
+
+<!--
+
+      <table id="admins_window">
+        <tr>
+          <td class="call">
+            <span class="call">R7CL</span><br/>
+            <span class="date_time">9 января 15:30</span>
+          </td>
+          <td class="message">
+            <img class="delete_btn" src="/static/images/delete.png"/>
+            <a target="_blank" rel="nofollow" class="translate_lnk">
+              <img class="translate_btn" src="/static/images/icon_translate.png"
+              title="Translate this message" />
+            </a>
+            <span class="message_to">
+            </span>
+            <span class="message_text">Через 5 минут переходим на 30 м</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="call">
+            <span class="call">R7CL</span><br/>
+            <span class="date_time">9 января 15:00</span>
+          </td>
+          <td class="message">
+            <img class="delete_btn" src="/static/images/delete.png"/>
+            <a target="_blank" rel="nofollow" class="translate_lnk">
+              <img class="translate_btn" src="/static/images/icon_translate.png"
+              title="Translate this message" />
+            </a>
+            <span class="message_to">
+            </span>
+            <span class="message_text"><b>14033.0</b></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="call">
+            <span class="call">R7CL</span><br/>
+            <span class="date_time">9 января 12:00</span>
+          </td>
+          <td class="message">
+            <img class="delete_btn" src="/static/images/delete.png"/>
+            <a target="_blank" rel="nofollow" class="translate_lnk">
+              <img class="translate_btn" src="/static/images/icon_translate.png"
+              title="Translate this message" />
+            </a>
+            <span class="message_to">
+            </span>
+            <span class="message_text">Добрались. Здесь будем ночевать.</b></span>
+          </td>
+        </tr>
+      </table>
+
+-->
 
         <table id="chat_window">
             <tr v-for="msg in data" :class="{admin: msg.admin && service && service.station,
@@ -57,7 +117,7 @@
                     <a target="_blank" rel="nofollow" class="translate_lnk"
                         :href="'https://translate.google.com/#view=home&op=translate&sl=auto&tl=en&text=' +
                         plainText(msg.text)">
-                        <img class="translate_btn" src="/static/images/icon_translate.png" 
+                        <img class="translate_btn" src="/static/images/icon_translate.png"
                         title="Translate this message" />
                     </a>
                     <span class="message_to" v-for="callsign in msg.to" :key="callsign"

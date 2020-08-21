@@ -221,7 +221,7 @@ export default {
         const qthFields = this.statusData.qth.fields
         for (let co = 0; co < QTH_PARAMS.fieldCount; co++) {
           if (qthFields.values[co]) {
-            r.push((qthFields.titles[co] === QTH_PARAMS.defaultFieldTitle ? '' : qthFields.titles[co] + ' ') +
+            r.push((qthFields.titles[co] === QTH_PARAMS.defaultTitle ? '' : qthFields.titles[co] + ' ') +
               qthFields.values[co])
           } else {
             r.push(null)

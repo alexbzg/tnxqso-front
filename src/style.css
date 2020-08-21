@@ -1015,6 +1015,16 @@ table#message_form #smile_btn{
     text-decoration: none;
 }
 
+#admin_message{
+    display: inline-block;
+    margin-top: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+    height: 24px;
+}
+
+
+
 
 
 
@@ -1076,6 +1086,47 @@ table#chat_layout .personal{
     background: #fff url("/static/images/icon_typing.gif") 1px 5px no-repeat;
 }
 
+
+
+
+
+table#admins_window{
+    width: 1000px;
+    padding: 0px;
+    margin: 20px 20px 20px 20px;
+    font-size: 16px;
+    border-collapse: collapse;
+}
+table#admins_window td{
+    padding: 5px 5px;
+    text-align: left;
+    vertical-align: top;
+    background-color: #fffff5;
+}
+table#admins_window tr{
+    border: 1px solid  #fbb;
+}
+table#admins_window td.call{
+    font-weight: bold;
+    width: 150px;
+    line-height: 14px;
+    color: #009;
+}
+table#admins_window td.call span.date_time{
+    font-size: 12px;
+    font-weight: normal;
+    color: #999;
+}
+table#admins_window td.call span.call{
+    color: #A00;
+    cursor: pointer;
+}
+table#admins_window td.message{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    line-height: 1.7em;
+    color: #000;
+}
 
 
 

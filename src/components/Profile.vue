@@ -70,11 +70,11 @@
                             <td id="qth_line_data">
                                 <br/>
                                 <template v-for="(field, idx) in qthFieldTitles">
-                                    <input type="text" :id="'qth_field' + idx" 
+                                    <input type="text" :id="'qth_field' + idx"
                                         :disabled="settings.status.get !== 'manual'"
                                         v-model="status.qth.fields.values[idx]"/><br/>
                                 </template>
-                                <input type="text" id="locator" 
+                                <input type="text" id="locator"
                                     :disabled="settings.status.get !== 'manual'"
                                     v-model="status.qth.loc"/><br/>
                             </td>
@@ -98,7 +98,7 @@
                         <tr>
                             <td><u>{{getString('LOG_COLUMNS')}}</u>:</td>
                             <td class="setting" v-for="(field, idx) in qthFieldTitles">
-                                <input type="checkbox" :id="'checkbox_log' + idx" 
+                                <input type="checkbox" :id="'checkbox_log' + idx"
                                 v-model="settings.log.columns.qth[idx]" />
                                 {{field}}
                             </td>
@@ -126,7 +126,7 @@
                 <template v-if="settings.enable.map">
                         <table id="custom_mark">
                             <tr>
-                                <td colspan="10"><u>{{getString('MAP_ICON')}}</u></td>
+                                <td colspan="15"><u>{{getString('MAP_ICON')}}</u></td>
                             </tr>
                             <tr>
                                 <td v-for="n in $options.CURRENT_POSITION_ICONS_COUNT">

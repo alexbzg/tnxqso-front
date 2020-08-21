@@ -1,6 +1,6 @@
 <template>
     <div id="map">
-      <l-map style="height: 100%; width: 100%" :zoom="zoom" :center="center"
+      <l-map style="height: 100%; width: 100%" :zoom="zoom" :center.sync="center"
         :bounds="bounds"
         :options="{zoomControl: false, attributionControl: false}">
         <l-control-layers :hide-single-base="true"/>
@@ -43,6 +43,9 @@
             </l-popup>
         </l-marker>
       </l-map>
+
+      <input type="checkbox" v-model="centerLocationFlag" @change="centerLocation"/> Center map to station
+
     </div>
 </template>
 
@@ -104,6 +107,7 @@ export default {
       center: [60, 60],
       bounds: null,
       map: null,
+      centerLocationFlag: true,
       overlays: [
         {
           qthCountry: 'RU',
@@ -177,15 +181,20 @@ export default {
           })
       }
     },
-    updateLocation () {
-      if (this.statusData && this.statusData.location) {
-        const dt = this.statusData
+    centerLocation () {
+      if (this.centerLocationFlag) {
         if (!this.currentLocation) {
           this.zoom = DEFAULT_ZOOM
         }
-        this.currentLocation = dt.location
         this.bounds = null
-        this.center = dt.location
+        this.center = [...this.currentLocation]
+      }
+    },
+    updateLocation () {
+      if (this.statusData && this.statusData.location) {
+        const dt = this.statusData
+        this.currentLocation = dt.location
+        this.centerLocation()
         this.currentPopup.dateTime = dt.date + ' ' + dt.time
         this.currentPopup.speed = dt.speed ? 'speed: ' + dt.speed.toFixed( 1 ) + ' km/h' : null
         this.currentPopup.comments = dt.comments ? dt.comments : null

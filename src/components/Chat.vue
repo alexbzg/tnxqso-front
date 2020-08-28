@@ -12,7 +12,8 @@
                             @blur="chatUserNameBlur"/>
                     </td>
                     <td>
-                        <img id="admin_message" v-show="isAdmin"
+                        <img id="admin_message" 
+                            v-show="isAdmin && service && service.station "
                             src="/static/images/icon_admin_message.png"
                             title="*** Закреплённое сообщение / *** Pinned message"
                             @click="pinMsg">
@@ -228,7 +229,7 @@ export default {
         this.serverPost( { 'from': this.chatUserField,
           'text': this.messageText,
           'name': this.chatUserName } )
-          .then(() => { this.messageText = null } )
+          .then(() => { this.messageText = '' } )
       }
     },
     serverPost (data) {
@@ -310,7 +311,7 @@ export default {
             msg.to = msg.to.map(item => item.trim())
           }
           msg.text = msg.text.replace(/:(\d\d):/g, '<image src="' + SMILIES_IMG_PATH + '$1.gif"/>')
-          if (msg.text.startsWith('***')) {
+          if (msg.text.startsWith('***') && msg.admin && this.service && this.service.station) {
             msg.text = msg.text.replace(/^\*+\s+/, '')
             data[0].msg.push(msg)
           } else {

@@ -1122,6 +1122,12 @@ table#admins_window td.call span.call{
     color: #A00;
     cursor: pointer;
 }
+table#admins_window td.call span.name{
+    font-size: 14px;
+    color: #333;
+    font-weight: normal;
+    cursor: pointer;
+}
 table#admins_window td.message{
     padding-top: 5px;
     padding-bottom: 5px;

@@ -39,7 +39,7 @@
                 Gallery
             </router-link>
             <router-link to="/donate" tag="div" id="tab_donate" class="tab"
-                v-if="enable.donate">Support us</router-link>
+                v-if="enable.donate">Donate</router-link>
             <router-link to="/stations" tag="div" id="tab_stations" class="tab">
                 Stations
             </router-link>

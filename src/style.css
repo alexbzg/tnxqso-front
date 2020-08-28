@@ -256,7 +256,8 @@ max-width: 900px;
 }
 
 .one_station{
-    padding-left: 100px;
+    margin-top: 10px;
+    padding-left: 20px;
     text-align: left;
 }
 
@@ -1194,18 +1195,16 @@ table#chat_window td.message{
     float: right;
 }
 
-table#chat_window td.message:hover img.delete_btn{
+table#chat_window td.message:hover img.delete_btn, table#admins_window td.message:hover img.delete_btn{
     display: inline;
 }
 
 .translate_lnk{
     display: none;
 }
-table#chat_window td.message:hover .translate_lnk{
+table#chat_window td.message:hover .translate_lnk, table#admins_window td.message:hover .translate_lnk{
     display: inline;
 }
-
-
 
 
 
@@ -1376,7 +1375,6 @@ table#status_setup input{
 
 
 table#custom_mark{
-    width: 90%;
     margin: 30px auto 30px auto;
     padding: 0;
     border-collapse: collapse;
@@ -1384,6 +1382,7 @@ table#custom_mark{
 table#custom_mark td{
     text-align: center;
     line-height: 1em;
+    padding: 0 5px;
 }
 table#custom_mark td img{
     padding-top: 5px;

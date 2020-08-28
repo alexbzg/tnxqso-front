@@ -12,7 +12,10 @@
                             @blur="chatUserNameBlur"/>
                     </td>
                     <td>
-     <!--                 <img id="admin_message" src="/static/images/icon_admin_message.png" title="*** Закреплённое сообщение / *** Pinned message"> -->
+                        <img id="admin_message" v-show="isAdmin"
+                            src="/static/images/icon_admin_message.png"
+                            title="*** Закреплённое сообщение / *** Pinned message"
+                            @click="pinMsg">
                     </td>
                     <td>
                         <input type="text" id="message_text" v-model="messageText" @keyup="onTyping"
@@ -43,63 +46,8 @@
             <td>
 
 
-<!--
-
-      <table id="admins_window">
-        <tr>
-          <td class="call">
-            <span class="call">R7CL</span><br/>
-            <span class="date_time">9 января 15:30</span>
-          </td>
-          <td class="message">
-            <img class="delete_btn" src="/static/images/delete.png"/>
-            <a target="_blank" rel="nofollow" class="translate_lnk">
-              <img class="translate_btn" src="/static/images/icon_translate.png"
-              title="Translate this message" />
-            </a>
-            <span class="message_to">
-            </span>
-            <span class="message_text">Через 5 минут переходим на 30 м</span>
-          </td>
-        </tr>
-        <tr>
-          <td class="call">
-            <span class="call">R7CL</span><br/>
-            <span class="date_time">9 января 15:00</span>
-          </td>
-          <td class="message">
-            <img class="delete_btn" src="/static/images/delete.png"/>
-            <a target="_blank" rel="nofollow" class="translate_lnk">
-              <img class="translate_btn" src="/static/images/icon_translate.png"
-              title="Translate this message" />
-            </a>
-            <span class="message_to">
-            </span>
-            <span class="message_text"><b>14033.0</b></span>
-          </td>
-        </tr>
-        <tr>
-          <td class="call">
-            <span class="call">R7CL</span><br/>
-            <span class="date_time">9 января 12:00</span>
-          </td>
-          <td class="message">
-            <img class="delete_btn" src="/static/images/delete.png"/>
-            <a target="_blank" rel="nofollow" class="translate_lnk">
-              <img class="translate_btn" src="/static/images/icon_translate.png"
-              title="Translate this message" />
-            </a>
-            <span class="message_to">
-            </span>
-            <span class="message_text">Добрались. Здесь будем ночевать.</b></span>
-          </td>
-        </tr>
-      </table>
-
--->
-
-        <table id="chat_window">
-            <tr v-for="msg in data" :class="{admin: msg.admin && service && service.station,
+        <table v-for="entry in data" :key="entry.id" :id="entry.id">
+            <tr v-for="msg in entry.msg" :class="{admin: msg.admin && service && service.station,
                 new_msg: msg.new}">
                 <td class="call">
                     <span class="call" @click="replyTo(msg.user)">{{$options.replace0(msg.user)}}</span><br/>
@@ -208,7 +156,7 @@ export default {
       showSmilies: false,
       chatUserField: this.$store.state.user.chatUser,
       chatUserNameField: this.$store.state.user.chatUserName,
-      messageText: null,
+      messageText: '',
       typingTs: null,
       posting: false
     }
@@ -237,6 +185,11 @@ export default {
     },
     hideSmilies () {
       this.showSmilies = false
+    },
+    pinMsg () {
+      if (!this.messageText.startsWith('***')) {
+        this.messageText = '*** ' + this.messageText
+      }
     },
     storeCurrentActivity () {
       if (this.service) {
@@ -340,9 +293,13 @@ export default {
         this.$store.state.stationSettings.admin === this.userCallsign)
     },
     data () {
-      const data = []
+      const data = [
+        {id: 'admins_window', msg: []},
+        {id: 'chat_window', msg: []}
+      ]
       if (this.serviceData) {
-        for (const msg of this.serviceData) {
+        for (const _msg of this.serviceData) {
+          const msg = {..._msg}
           msg.text = sanitizeHTML(msg.text, MSG_SANITIZE_HTML_SETTINGS)
           let match = null
           if (match = RE_MSG_TO.exec(msg.text)) {
@@ -353,7 +310,12 @@ export default {
             msg.to = msg.to.map(item => item.trim())
           }
           msg.text = msg.text.replace(/:(\d\d):/g, '<image src="' + SMILIES_IMG_PATH + '$1.gif"/>')
-          data.push(msg)
+          if (msg.text.startsWith('***')) {
+            msg.text = msg.text.replace(/^\*+\s+/, '')
+            data[0].msg.push(msg)
+          } else {
+            data[1].msg.push(msg)
+          }
         }
       }
       return data

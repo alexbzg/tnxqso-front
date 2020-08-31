@@ -40,7 +40,8 @@
             </router-link>
             <router-link to="/donate" tag="div" id="tab_donate" class="tab"
                 v-if="enable.donate">Donate</router-link>
-            <router-link to="/stations" tag="div" id="tab_stations" class="tab">
+            <router-link to="/stations" tag="div" id="tab_stations" class="tab"
+                :class="{updated_tab: !$store.state.activeStations.read}">
                 Stations
             </router-link>
             <router-link to="/talks" tag="div" id="tab_chat" class="tab"
@@ -51,9 +52,11 @@
     </tr></table>
         <div class="list">
             <donate-block></donate-block>
-            <router-view :station-settings="stationSettings"
-            :status-data="statusData" :log-service="logService">
-            </router-view>
+            <keep-alive include="activeStations">
+                <router-view :station-settings="stationSettings"
+                    :status-data="statusData" :log-service="logService">
+                </router-view>
+            </keep-alive>
         </div>
     </div>
 

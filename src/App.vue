@@ -5,7 +5,8 @@
         <table class="tabs index_tabs">
             <tr>
                 <td>
-                    <router-link to="/stations" tag="div" id="tab_stations" class="tab">
+                    <router-link to="/stations" tag="div" id="tab_stations" class="tab"
+                        :class="{updated_tab: !$store.state.activeStations.read}">
                         Stations
                     </router-link>
                     <router-link to="/talks" tag="div" id="tab_talks" class="tab"
@@ -40,8 +41,9 @@
         </table>
         <div class="list index_list">
             <donate-block></donate-block>
-            <router-view></router-view>
-
+            <keep-alive include="activeStations">
+                <router-view></router-view>
+            </keep-alive>
         </div>
     </div>
 </template>

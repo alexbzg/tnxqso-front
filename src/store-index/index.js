@@ -7,6 +7,7 @@ import {storeUser, ACTION_UPDATE_USER} from '../store-user'
 import {storeServices} from '../store-services'
 import {storeActivity, activityInit} from '../store-activity'
 import {storeLanguage} from '../store-language'
+import {storeActiveStations} from '../store-active-stations'
 import talksInit from '../talks-init'
 
 const store = new Vuex.Store({
@@ -14,7 +15,8 @@ const store = new Vuex.Store({
     user: storeUser,
     services: storeServices,
     activity: storeActivity,
-    language: storeLanguage
+    language: storeLanguage,
+    activeStations: storeActiveStations
   }
 })
 

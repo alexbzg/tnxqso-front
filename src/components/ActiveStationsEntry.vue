@@ -11,7 +11,7 @@
           </td>
           <td>
             <station-status-small v-if="type == 'active'" :stationSettings="station"
-                :station="station.station.callsign">
+                :station="station.station.callsign" @update-status="updateStatus">
             </station-status-small>
           </td>
           <td>
@@ -36,9 +36,11 @@
 
 <script>
 import * as moment from 'moment'
+import {mapMutations} from 'vuex'
 
 import {replace0, urlCallsign} from '../utils'
 import StationStatusSmall from './StationStatusSmall'
+import {MUTATE_ACTIVE_STATIONS_READ} from '../store-active-stations'
 
 export default {
   replace0: replace0,
@@ -48,6 +50,9 @@ export default {
   data () {
     return {
     }
+  },
+  activated () {
+    this[MUTATE_ACTIVE_STATIONS_READ](true)
   },
   computed: {
     period () {
@@ -71,11 +76,17 @@ export default {
     }
   },
   methods: {
+    ...mapMutations([MUTATE_ACTIVE_STATIONS_READ]),
     publishChange (station) {
       this.$emit( 'publish-change' )
     },
     formatDate (dt) {
       return moment(dt).format( 'DD MMM YYYY' ).toLowerCase()
+    },
+    updateStatus () {
+      if (this._inactive) {
+        this[MUTATE_ACTIVE_STATIONS_READ](false)
+      }
     }
   }
 }

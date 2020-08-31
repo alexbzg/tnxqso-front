@@ -8,13 +8,15 @@ import {storeServices, MUTATE_SERVICE, ACTION_UPDATE_SERVICE, RELOAD_INT_SRVC} f
 import {storeActivity, activityInit} from '../store-activity'
 import {storeStationSettings, ACTION_LOAD_STATION} from '../store-station-settings'
 import talksInit from '../talks-init'
+import {storeActiveStations} from '../store-active-stations'
 
 const store = new Vuex.Store({
   modules: {
     user: storeUser,
     services: storeServices,
     activity: storeActivity,
-    stationSettings: storeStationSettings
+    stationSettings: storeStationSettings,
+    activeStations: storeActiveStations
   }
 })
 

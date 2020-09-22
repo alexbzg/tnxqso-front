@@ -1,0 +1,38 @@
+{
+    "publish": true,
+    "station": { 
+        "callsign": "",
+        "title": "",
+        "info": "",
+        "activityPeriod": []
+    },
+    "enable": {
+        "news": true,
+        "log": true,
+        "stats": true,
+        "cluster": true,
+        "chat": true,
+        "map": true,
+        "donate": true,
+        "stats": true,
+        "gallery": true,
+        "stationInfo": true
+    },
+    "log": {
+        "columns": {
+            "qth": [true, true, true],
+            "loc": true
+        }
+    },
+    "status":{
+        "get": "client"
+    },
+    "clusterCallsigns": [],
+    "clusterHighlight": [],
+    "chatAdmins": [],
+    "donate": {
+        "text": "", 
+        "code": ""
+    },
+    "currentPositionIcon": 0
+}

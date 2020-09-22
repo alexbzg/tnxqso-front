@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     ...mapActions([ACTION_POST]),
-    submit: _.debounce(function (e) {
+    submit: _.debounce(function () {
       if (!this.loggedIn) {
         this.$refs.invisibleRecaptcha.execute()
         return

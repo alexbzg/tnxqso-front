@@ -6,10 +6,8 @@
             <td id="station_title">
                 <h1>{{stationCS}}</h1>
                 {{stationTitle}}
-                <span class="period" v-if="stationSettings && stationSettings.station.activityPeriod &&
-                    stationSettings.station.activityPeriod.length == 2">
-                    ({{formatDate(stationSettings.station.activityPeriod[0])}} &mdash;
-                    {{formatDate(stationSettings.station.activityPeriod[1])}})
+                <span class="period" v-if="period !==''">
+                    ({{period}})
                 </span>
             </td>
         <td rowspan="2" id="status">
@@ -65,13 +63,13 @@
 <script>
 import {USER_FIELDS_COUNT} from './constants'
 
-import * as moment from 'moment'
 
 import './style.css'
 import stationSettings from './station-settings-service'
 import clusterService from './cluster-service'
 import logService from './log-service'
 import storage from './storage'
+import {formatPeriod} from './utils'
 import StationStatus from './components/StationStatus'
 import DonateBlock from './components/DonateBlock.vue'
 
@@ -152,12 +150,18 @@ export default {
   },
   watch: {
     tabsUnread: {
-      handler:
-        function (oldV, newV) {
-     //     console.log( oldV )
-     //     console.log( newV )
-        },
+      handler: function () {},
       deep: true
+    }
+  },
+  computed: {
+    period () {
+      if (this.stationSettings.station.activityPeriod && this.stationSettings.station.activityPeriod.length) {
+        return formatPeriod(this.stationSettings.station.activityPeriod)
+      }
+      else {
+        return ''
+      }
     }
   },
   methods: {
@@ -182,9 +186,6 @@ export default {
     },
     onStatusChange (statusData) {
       this.$set(this, 'statusData', statusData)
-    },
-    formatDate (dt) {
-      return moment(dt).format( 'DD MMM YYYY' ).toLowerCase()
     }
   }
 }

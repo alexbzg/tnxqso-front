@@ -10,7 +10,7 @@ export function debugLog (msg) {
   }
 }
 
-import QTH_PARAMS from '../../static/js/qthParams.json'
+import QTH_PARAMS from '../../public/static/js/qthParams.json'
 
 export function qthFieldTitles (country) {
   const r = []
@@ -26,8 +26,19 @@ export function qthFieldTitles (country) {
   return r
 }
 
+import * as moment from 'moment'
+
+export function formatPeriod (period) {
+  const fdt = period.map(item => moment(item, 'DD.MM.YYYY').format( 'DD MMM YYYY' ).toLowerCase())
+  if (fdt[0] === fdt[1]) {
+    return fdt[0]
+  } else {
+    return fdt[0] + ' \u2014 ' + fdt[1]
+  }
+}
+
 function validateEmail (email) {
-  var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   return re.test(String(email).toLowerCase())
 }
 

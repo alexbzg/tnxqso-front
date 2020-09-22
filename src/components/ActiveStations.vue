@@ -59,9 +59,9 @@ export default {
                 const settings = response.data
                 if (settings.station && settings.station.callsign) {
                   settings.publish = { user: settings.publish, admin: publishData[station]['admin'] }
-                  const period = settings.station.activityPeriod
-                  if ( period && period.length === 2 && moment(period[0]) < current &&
-                    moment(period[1]).add( 1, 'd' ) > current ) {
+                  const period = settings.station.activityPeriod.map(item => moment(item, 'DD.MM.YYYY'))
+                  if ( period && period.length === 2 && period[0] < current &&
+                    period[1].add( 1, 'd' ) > current ) {
                     active.push( settings )
                   } else if ( period && period.length === 2 && moment(period[0]) > current ) {
                     future.push( settings )

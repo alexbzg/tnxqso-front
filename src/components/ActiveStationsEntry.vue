@@ -38,7 +38,7 @@
 import * as moment from 'moment'
 import {mapMutations} from 'vuex'
 
-import {replace0, urlCallsign} from '../utils'
+import {replace0, urlCallsign, formatPeriod} from '../utils'
 import StationStatusSmall from './StationStatusSmall'
 import {MUTATE_ACTIVE_STATIONS_READ} from '../store-active-stations'
 
@@ -61,12 +61,7 @@ export default {
         if (this.station.station.activityPeriod.length < 2) {
           return this.formatDate(this.station.station.activityPeriod[0])
         } else {
-          const fdt = this.station.station.activityPeriod.map(item => this.formatDate(item))
-          if (fdt[0] === fdt[1]) {
-            return fdt[0]
-          } else {
-            return fdt[0] + ' \u2014 ' + fdt[1]
-          }
+          return formatPeriod(this.station.station.activityPeriod)
         }
       }
       return ''
@@ -77,11 +72,11 @@ export default {
   },
   methods: {
     ...mapMutations([MUTATE_ACTIVE_STATIONS_READ]),
-    publishChange (station) {
+    publishChange () {
       this.$emit( 'publish-change' )
     },
     formatDate (dt) {
-      return moment(dt).format( 'DD MMM YYYY' ).toLowerCase()
+      return moment(dt, 'DD.MM.YYYY').format( 'DD MMM YYYY' ).toLowerCase()
     },
     updateStatus () {
       if (this._inactive) {

@@ -7,24 +7,20 @@
             <td class="band head">Freq</td>
             <td class="mode head">Mode</td>
             <td class="urcall head">Callsign</td>
-<!--            <td class="rst head">RST/RST</td>  -->
-            <td class="qth head" v-for="(title, idx) in qthFieldTitles"
-                v-if="logSettings.columns.qth[idx]">
-                {{title}}
+            <td class="qth head" v-for="idx in qthColumns" :key="idx">
+                {{qthFieldTitles[idx]}}
             </td>
             <td class="locator head" v-if="logSettings.columns.loc">Locator</td>
         </tr>
         <template v-if="data">
-            <tr v-for="spot in data" :class="{new_qso:spot.new}">
+            <tr v-for="(spot, idx) in data" :class="{new_qso:spot.new}" :key="idx">
                 <td class="mycall">{{$options.replace0(spot.myCS)}}</td>
                 <td class="date">{{spot.date}}</td>
                 <td class="time">{{spot.time}}</td>
                 <td class="band">{{spot.freq}}</td>
                 <td class="mode">{{spot.mode}}</td>
                 <td class="urcall">{{$options.replace0(spot.cs)}}</td>
-<!--                <td class="rst">{{spot.rcv}}/{{spot.snt}}</td>  -->
-                <td class="rda" v-for="(title, idx) in qthFieldTitles"
-                    v-if="logSettings.columns.qth[idx]">{{spot.qth[idx]}}</td>
+                <td class="rda" v-for="idx in qthColumns" :key="idx">{{spot.qth[idx]}}</td>
                 <td class="locator" v-if="logSettings.columns.loc">{{spot.loc}}</td>
            </tr>
         </template>
@@ -44,6 +40,18 @@ export default {
   },
   mounted () {
     this.updateTime()
+  },
+  computed: {
+    qthColumns () {
+      const qthCount = this.logSettings.columns.qth.length
+      const r = []
+      for (let c = 0; c < qthCount; c++) {
+        if (this.logSettings.columns.qth[c]) {
+          r.push(c)
+        }
+      }
+      return r
+    }
   },
   beforeDestroy () {
     clearTimeout( this.updateTimeTimeout )

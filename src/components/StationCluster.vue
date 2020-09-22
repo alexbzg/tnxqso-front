@@ -29,8 +29,8 @@
         </tr>
         <tr>
             <td class="spot_text text_btns" colspan="5">
-            <input type="button" class="add_text_btn" v-for="item in qthLines" :value="item" 
-                v-if="item" @click="addSpotText(item)"/> 
+            <input type="button" class="add_text_btn" v-for="(item, idx) in qthLines" :value="item" 
+                @click="addSpotText(item)" :key="idx"/> 
             <input type="button" class="add_text_btn" :value="statusData.qth.loc" 
                 v-if="statusData && statusData.loc"
                 @click="addSpotText(statusData.loc)"/> 
@@ -53,7 +53,7 @@
 
 
         <table id="cluster">
-            <tr v-for="spot in data" :class="{new: spot.new, highlight: spot.highlight}">
+            <tr v-for="(spot, idx) in data" :class="{new: spot.new, highlight: spot.highlight}" :key="idx">
                 <td class="time">{{spot.time}}z</td>
                 <td class="band">{{spot.freq}}</td>
                 <td class="mode">{{spot.subMode ? spot.subMode : spot.mode}}</td>
@@ -75,7 +75,7 @@ import {mapActions} from 'vuex'
 import {USER_FIELDS_COUNT, CLUSTER_SPOT_TEXT_LIMIT} from '../constants'
 import StationStatus from '../station-status'
 import {ACTION_POST} from '../store-user'
-import QTH_PARAMS from '../../static/js/qthParams.json'
+import QTH_PARAMS from '../../public/static/js/qthParams.json'
 
 import {replace0} from '../utils'
 import tabMixin from '../station-tab-mixin'
@@ -190,7 +190,7 @@ export default {
         this.spot.showDisable = false
       }
     },
-    setSpotDisableTimeout (val) {
+    setSpotDisableTimeout () {
       this.$spotDisableTimeout = setTimeout( this.updateSpotDisable, 1000 )
     }
   },
@@ -223,8 +223,6 @@ export default {
           if (qthFields.values[co]) {
             r.push((qthFields.titles[co] === QTH_PARAMS.defaultTitle ? '' : qthFields.titles[co] + ' ') +
               qthFields.values[co])
-          } else {
-            r.push(null)
           }
         }
       }

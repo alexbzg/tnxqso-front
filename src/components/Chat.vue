@@ -48,8 +48,8 @@
 
 
         <table v-for="entry in data" :key="entry.id" :id="entry.id">
-            <tr v-for="msg in entry.msg" :class="{admin: msg.admin && service && service.station,
-                new_msg: msg.new}">
+            <tr v-for="(msg, idx) in entry.msg" :class="{admin: msg.admin && service && service.station,
+                new_msg: msg.new}" :key="idx">
                 <td class="call">
                     <span class="call" @click="replyTo(msg.user)">{{$options.replace0(msg.user)}}</span><br/>
                     <span class="name" @click="replyTo(msg.user)" v-if="msg.name">{{msg.name}}</span>
@@ -84,8 +84,8 @@
         <div id="chat_info">
             <div class="chat_info_title">This page</div>
             <div class="chat_info_users1">
-                <span v-for="user in activeUsers['thisPage']"
-                    :class="{'admin': user.admin, 'typing':user.typing}">
+                <span v-for="(user, idx) in activeUsers['thisPage']"
+                    :class="{'admin': user.admin, 'typing':user.typing}" :key="idx">
                     {{$options.replace0(user.cs)}}<br/>
                 </span>
             </div>
@@ -93,8 +93,8 @@
             <template v-if="'talks' in activeUsers">
                 <div class="chat_info_title">Talks</div>
                 <div class="chat_info_users2">
-                    <span v-for="user in activeUsers['talks']"
-                        :class="{'admin': user.admin, 'typing':user.typing}">
+                    <span v-for="(user, idx) in activeUsers['talks']"
+                        :class="{'admin': user.admin, 'typing':user.typing}" :key="idx">
                         {{$options.replace0(user.cs)}}<br/>
                     </span>
                 </div>
@@ -102,8 +102,8 @@
 
             <div class="chat_info_title">Other pages</div>
             <div class="chat_info_users2">
-                <span v-for="user in activeUsers['other']"
-                    :class="{'admin': user.admin}">
+                <span v-for="(user, idx) in activeUsers['other']"
+                    :class="{'admin': user.admin}" :key="idx">
                     {{$options.replace0(user.cs)}}<br/>
                 </span>
             </div>
@@ -302,8 +302,8 @@ export default {
         for (const _msg of this.serviceData) {
           const msg = {..._msg}
           msg.text = sanitizeHTML(msg.text, MSG_SANITIZE_HTML_SETTINGS)
-          let match = null
-          if (match = RE_MSG_TO.exec(msg.text)) {
+          let match = RE_MSG_TO.exec(msg.text)
+          if (match) {
             const to = match[0]
             msg.text = msg.text.substring(to.length, msg.text.length)
             msg.to = to.split(/\s?\u21d2\s?/)

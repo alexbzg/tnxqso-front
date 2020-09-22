@@ -68,7 +68,7 @@ import {mapState} from 'vuex'
 import {MODES, MODES_FULL, orderedBands} from '../ham-radio'
 import storage from '../storage'
 import {qthFieldTitles, debugLog} from '../utils'
-import QTH_PARAMS from '../../static/js/qthParams.json'
+import QTH_PARAMS from '../../public/static/js/qthParams.json'
 
 const STATS_FILTER_STORAGE_KEY = 'statsFilter'
 

@@ -26,9 +26,8 @@
                 </span><br/>
                 {{getString('STATION_TITLE')}}: <input type="text" id="station_name" v-model="settings.station.title"/><br/>
                 {{getString('STATION_PERIOD')}}:
-                    <date-picker v-model="settings.station.activityPeriod" format="dd.MM.yyyy"
-                        range confirm :lang="language"></date-picker>
-                    </select>
+                    <date-picker v-model="settings.station.activityPeriod" format="DD.MM.YYYY"
+                        value-type="format" range confirm :lang="language"></date-picker>
             </div>
 
             <!-- STATUS -->
@@ -58,22 +57,22 @@
                             <td id="qth_lines_titles">
                                 <select v-model="settings.qthCountry">
                                   <option :value="null">- - - - -</option>
-                                  <option v-for="(country, id) in $options.QTH_PARAMS.countries" :value="id">
+                                  <option v-for="(country, id) in $options.QTH_PARAMS.countries" :value="id" :key="id">
                                     {{country.title}}
                                   </option>
                                 </select><br/>
-                                <template v-for="field in qthFieldTitles">
+                                <span v-for="field in qthFieldTitles" :key="field">
                                     {{field}}<br/>
-                                </template>
+                                </span>
                                 Locator
                             </td>
                             <td id="qth_line_data">
                                 <br/>
-                                <template v-for="(field, idx) in qthFieldTitles">
+                                <span v-for="(field, idx) in qthFieldTitles" :key="field">
                                     <input type="text" :id="'qth_field' + idx"
                                         :disabled="settings.status.get !== 'manual'"
                                         v-model="status.qth.fields.values[idx]"/><br/>
-                                </template>
+                                </span>
                                 <input type="text" id="locator"
                                     :disabled="settings.status.get !== 'manual'"
                                     v-model="status.qth.loc"/><br/>
@@ -97,7 +96,7 @@
                     <table id="log_setup">
                         <tr>
                             <td><u>{{getString('LOG_COLUMNS')}}</u>:</td>
-                            <td class="setting" v-for="(field, idx) in qthFieldTitles">
+                            <td class="setting" v-for="(field, idx) in qthFieldTitles" :key="field">
                                 <input type="checkbox" :id="'checkbox_log' + idx"
                                 v-model="settings.log.columns.qth[idx]" />
                                 {{field}}
@@ -129,7 +128,7 @@
                                 <td colspan="15"><u>{{getString('MAP_ICON')}}</u></td>
                             </tr>
                             <tr>
-                                <td v-for="n in $options.CURRENT_POSITION_ICONS_COUNT">
+                                <td v-for="n in $options.CURRENT_POSITION_ICONS_COUNT" :key="n">
                                     <img :src="'/static/images/icon_map_' + ( n - 1 ) + '.png'"
                                         @click="settings.currentPositionIcon = n - 1"/><br/>
                                     <input type="radio" v-model="settings.currentPositionIcon"
@@ -172,7 +171,7 @@
                 <div class="block_settings" v-if="settings.enable.cluster"><span v-html="getString('CLUSTER_FILTER')"/>:<br/>
                 <input type="text" id="setup_cluster" v-model="clusterCallsigns"
                     @change="clusterCallsignsChange" value="R*/* UA*/* UB*/* UC*/* UD*/* UE*/* UF*/* UG*/* UH*/* UI*/*"/><br/>
-                <span v-html="getString('CLUSTER_CALL')"/></i>:<br/>
+                <span v-html="getString('CLUSTER_CALL')"/>:<br/>
                 <input type="text" id="highlight_calls" v-model="clusterHighlight"
                     @change="clusterHighlightChange" />
                 </div>
@@ -259,9 +258,10 @@ import {CURRENT_POSITION_ICONS_COUNT} from '../constants'
 
 import {VueEditor} from 'vue2-editor'
 import DatePicker from 'vue2-datepicker'
+import 'vue2-datepicker/index.css'
 import {mapGetters, mapActions, mapMutations} from 'vuex'
 
-import QTH_PARAMS from '../../static/js/qthParams.json'
+import QTH_PARAMS from '../../public/static/js/qthParams.json'
 
 import {parseCallsigns, getStationURL, qthFieldTitles} from '../utils'
 import {validCallsignFull} from '../ham-radio'

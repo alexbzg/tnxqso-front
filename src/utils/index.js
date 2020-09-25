@@ -29,7 +29,7 @@ export function qthFieldTitles (country) {
 import * as moment from 'moment'
 
 export function formatPeriod (period) {
-  const fdt = period.map(item => moment(item, 'DD.MM.YYYY').format( 'DD MMM YYYY' ).toLowerCase())
+  const fdt = period.map(item => item ? moment(item, 'DD.MM.YYYY').format( 'DD MMM YYYY' ).toLowerCase() : '')
   if (fdt[0] === fdt[1]) {
     return fdt[0]
   } else {

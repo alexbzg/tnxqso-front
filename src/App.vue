@@ -9,6 +9,9 @@
                         :class="{updated_tab: !$store.state.activeStations.read}">
                         Stations
                     </router-link>
+                    <router-link to="/qthnowmap" tag="div" id="tab_qthnowmap" class="tab">
+                        Map
+                    </router-link>
                     <router-link to="/talks" tag="div" id="tab_talks" class="tab"
                         :class="{updated_tab: $store.state.services.talks.new}">
                         Talks
@@ -41,7 +44,7 @@
         </table>
         <div class="list index_list">
             <donate-block></donate-block>
-            <keep-alive include="activeStations">
+            <keep-alive include="activeStations,QthNowMap">
                 <router-view></router-view>
             </keep-alive>
         </div>

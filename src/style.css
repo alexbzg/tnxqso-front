@@ -754,6 +754,7 @@ table#send_spot_layout td input#spot_spotter{
 
 table#send_spot_layout td input.add_text_btn{
     margin-top: 3px;
+    margin-right: 10px;
     padding: 1px 15px;
     font-size: 12px;
     background-color: #9fb4cc;
@@ -1417,6 +1418,12 @@ table#manual_gps input{
 
 
 
+input#button_clear_log, input#button_clear_track{
+    margin-left: 50px;
+}
+input#button_clear_log, input#button_clear_chat, input#button_clear_photos, input#button_clear_track{
+    background-color: #c15454;
+}
 
 
 
@@ -1690,6 +1697,7 @@ table#filter_data .data{
 .media input#upload_file {
     box-shadow: 3px 3px 6px rgba(0,0,0,0.3); /* Параметры тени */
 }
+
 
 
 

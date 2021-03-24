@@ -19,7 +19,11 @@
                 <td class="time">{{spot.time}}</td>
                 <td class="band">{{spot.freq}}</td>
                 <td class="mode">{{spot.mode}}</td>
-                <td class="urcall">{{$options.replace0(spot.cs)}}</td>
+                <td class="urcall">
+                    <a :href="'https://cfmrda.ru/#?callsign=' + spot.cs">
+                        {{$options.replace0(spot.cs)}}
+                    </a>
+                </td>
                 <td class="rda" v-for="idx in qthColumns" :key="idx">{{spot.qth[idx]}}</td>
                 <td class="locator" v-if="logSettings.columns.loc">{{spot.loc}}</td>
            </tr>

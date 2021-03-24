@@ -107,6 +107,10 @@
                             </td>
                         </tr>
                     </table>
+                    <input type="button" id="button_export_log" class="btn" :value="getString('LOG_DOWNLOAD')"
+                        :disabled="!stationCallsign"
+                        @click="downloadLog()"/>
+                    &nbsp;
                     <input type="button" id="button_clear_log" class="btn" :value="getString('LOG_CLEAR')"
                         :disabled="!stationCallsign"
                         @click="clearLog()"/>
@@ -489,6 +493,9 @@ export default {
     },
     chatAdminsChange () {
       this.settings.chatAdmins = parseCallsigns(this.chatAdmins)
+    },
+    downloadLog () {
+      window.open(`/aiohttp/adif/${this.userCallsign}`)
     },
     clearAll () {
       if (window.confirm( 'Do you really want to reset all station settings?') ) {

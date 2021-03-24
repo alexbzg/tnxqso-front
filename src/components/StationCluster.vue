@@ -29,11 +29,15 @@
         </tr>
         <tr>
             <td class="spot_text text_btns" colspan="5">
-            <input type="button" class="add_text_btn" v-for="(item, idx) in qthLines" :value="item" 
-                @click="addSpotText(item)" :key="idx"/> 
-            <input type="button" class="add_text_btn" :value="statusData.qth.loc" 
-                v-if="statusData && statusData.loc"
-                @click="addSpotText(statusData.loc)"/> 
+                <input type="button" class="add_text_btn" v-for="(item, idx) in qthLines" :value="item" 
+                    @click="addSpotText(item)" :key="idx"/> 
+                <input type="button" class="add_text_btn" :value="statusData.qth.loc" 
+                    v-if="statusData && statusData.qth.loc"
+                    @click="addSpotText(statusData.qth.loc)"/> 
+                <input type="button" class="add_text_btn" value="UP" 
+                    @click="addSpotText('UP', true)"/> 
+                <input type="button" class="add_text_btn" value="FT8" 
+                    @click="addSpotText('FT8', true)"/> 
             </td>
         </tr>
     </table>
@@ -143,22 +147,26 @@ export default {
         })
         .finally( function () { vm.spot.posting = false } )
     },
-    addSpotText (txt) {
+    addSpotText (txt, start) {
       let info = this.spot.info
       if ( !info.includes( txt ) ) {
-        if ( info.includes( 'TNXQSO.com' ) ) {
-          info = info.replace( /(\s)?(www\.)?(TNXQSO\.com)$/, '$1' + txt + ' $2$3' )
+        if (start) {
+          info = txt + ( info ? ' ' : '' ) + info
         } else {
-          info += ( info ? ' ' : '' ) + txt
+          if (info.includes('TNXQSO.com')) {
+            info = info.replace( /(\s)?(www\.)?(TNXQSO\.com)$/, '$1' + txt + ' $2$3' )
+          } else {
+            info += ( info ? ' ' : '' ) + txt
+          }
         }
-        if (info.length > CLUSTER_SPOT_TEXT_LIMIT) {
-          info = info.replace( 'www.', '' )
-        }
-        if (info.length > CLUSTER_SPOT_TEXT_LIMIT) {
-          info = info.replace( ' TNXQSO.com', '' )
-        }
-        this.spot.info = info
       }
+      if (info.length > CLUSTER_SPOT_TEXT_LIMIT) {
+        info = info.replace( 'www.', '' )
+      }
+      if (info.length > CLUSTER_SPOT_TEXT_LIMIT) {
+        info = info.replace( ' TNXQSO.com', '' )
+      }
+      this.spot.info = info
     },
     clusterResultTimeout () {
       this.spot.success = false

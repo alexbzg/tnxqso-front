@@ -640,11 +640,19 @@ table#log td.mycall{
     color: #555;
 }
 table#log td.urcall{
-    background-color: #f9ffec;
+    background-color: #fbfff3;
     font-weight: bold;
     width: 100px;
     font-size: 16px;
 }
+table#log td.urcall a{
+    text-decoration: none;
+    color: #339;
+    }
+table#log td.urcall a:hover{
+    text-decoration: underline;
+    color: #00c;
+    }
 table#log td.head{
     background-color: #aaa;
     color: #fff;

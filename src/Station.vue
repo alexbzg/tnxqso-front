@@ -156,7 +156,8 @@ export default {
   },
   computed: {
     period () {
-      if (this.stationSettings.station.activityPeriod && this.stationSettings.station.activityPeriod.length) {
+      if (this.stationSettings && 
+        this.stationSettings.station.activityPeriod && this.stationSettings.station.activityPeriod.length) {
         return formatPeriod(this.stationSettings.station.activityPeriod)
       }
       else {

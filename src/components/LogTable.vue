@@ -20,7 +20,7 @@
                 <td class="band">{{spot.freq}}</td>
                 <td class="mode">{{spot.mode}}</td>
                 <td class="urcall">
-                    <a :href="'https://cfmrda.ru/#?callsign=' + spot.cs">
+                    <a :href="'https://cfmrda.ru/#?callsign=' + spot.cs" target="_blank" rel="noopener">
                         {{$options.replace0(spot.cs)}}
                     </a>
                 </td>

@@ -446,7 +446,7 @@ table#status_block_info td#current_loc{
     padding: 0 0 5px 0;
 }
 
-table#status_block_info span{
+table#status_block_info span.datetime{
     display: inline-block;
     margin-bottom: 5px;
     font-size: 10px;

@@ -79,7 +79,7 @@ export default {
       if ( !this.stationSettings ) {
         return false
       }
-      const period = this.stationSettings.station.activityPeriod
+      const period = this.stationSettings.station.activityPeriod.map(item => moment(item, 'DD.MM.YYYY'))
       return period && period.length === 2 && moment(period[0]) < current &&
         moment(period[1]).add( 1, 'd' ) > current
     },

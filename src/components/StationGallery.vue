@@ -1,26 +1,26 @@
 <template>
     <div id="gallery">
         <div id="add_image" v-if="isAdmin" @click="showUpload = !showUpload">
-        		<img src="/static/images/icon_add_image.png" width='50' />
+            <img src="/static/images/icon_add_image.png" width='50' />
         </div>
 
         <div class="media media_upload_form" v-if="isAdmin && showUpload">
             <input type="file" @change="uploadFileChange" style="display:none"
                 id="upload_file" ref="fileInput" />
 
-            <label for="upload_file" id="select_file">Выбрать файл</label><br/>
+            <label for="upload_file" id="select_file">File - Файл</label><br/>
             <div id="selected_filename">{{upload.file ? upload.file.name : "\xa0"}}</div>
-        	Подпись к файлу<br/>
-        	<textarea type="text" id="caption" v-model="upload.caption"></textarea><br/>
-        	<input type="button" id="upload_file" value="Загрузить в Gallery"
+            Сomment - Комментарий<br/>
+            <textarea type="text" id="caption" v-model="upload.caption"></textarea><br/>
+            <input type="button" id="upload_file" value="Upload - Загрузить"
                 :disabled="posting || !upload.file" @click="uploadPost"/>
         </div>
 
-        <div class="media" v-for="(item, idx) in serviceData">
+        <div class="media" v-for="(item, idx) in serviceData" :key="idx">
             <img class="delete" src="/static/images/delete.png" width='30' v-if="isAdmin"
                 @click="deleteItem(item.id)"/>
 
-			<img class="icon_video" src="/static/images/icon_video.png" width='80' 
+			<img class="icon_video" src="/static/images/icon_video.png" width='80'
                 v-if="item.type === 'video'"  @click="openLightbox(idx)"/>
 
             <img :src="stationPath + item.thumb" @click="openLightbox(idx)"/>
@@ -99,7 +99,7 @@ export default {
   },
   methods: {
     ...mapActions([ACTION_POST, ACTION_UPDATE_SERVICE]),
-    uploadFileChange (e) {
+    uploadFileChange () {
       this.upload.file = this.$refs.fileInput.files[0]
     },
     openLightbox (idx) {

@@ -76,7 +76,7 @@ export default {
       return Array.isArray( this.data ) ? this.data.slice( 0, 50 ) : []
     },
     stationActive () {
-      if ( !this.stationSettings ) {
+      if ( !this.stationSettings.station ) {
         return false
       }
       const period = this.stationSettings.station.activityPeriod.map(item => moment(item, 'DD.MM.YYYY'))

@@ -37,7 +37,10 @@
                 Gallery
             </router-link>
             <router-link to="/donate" tag="div" id="tab_donate" class="tab"
-                v-if="enable.donate">Donate</router-link>
+                v-if="enable.donate"
+                :class="{updated_tab: stationSettings && stationSettings.new.donate}">
+                Donate
+            </router-link>
             <router-link to="/stations" tag="div" id="tab_stations" class="tab"
                 :class="{updated_tab: !$store.state.activeStations.read}">
                 Stations
@@ -61,11 +64,12 @@
 </template>
 
 <script>
-import {USER_FIELDS_COUNT} from './constants'
+import {mapState, mapActions} from 'vuex'
 
+import {USER_FIELDS_COUNT} from './constants'
+import {ACTION_LOAD_STATION} from './store-station-settings'
 
 import './style.css'
-import stationSettings from './station-settings-service'
 import clusterService from './cluster-service'
 import logService from './log-service'
 import storage from './storage'
@@ -78,6 +82,7 @@ const tabs = {
   cluster: { service: clusterService, interval: 60000 },
   log: { service: logService, interval: 60000 }
 }
+const STATION_SETTINGS_RELOAD = 60000
 
 export default {
   USER_FIELDS_COUNT: USER_FIELDS_COUNT,
@@ -97,7 +102,6 @@ export default {
       stationCS: null,
       stationTitle: null,
       stationInfo: null,
-      stationSettings: null,
       statusData: {},
       logService: logService,
       freq: null
@@ -105,17 +109,9 @@ export default {
   },
   mounted () {
     const vm = this
-    stationSettings.load()
+    this[ACTION_LOAD_STATION]()
       .then( function () {
-        document.title = stationSettings.data.station.callsign + ' - TNXQSO.com'
-        vm.stationCS = stationSettings.data.station.callsign
-        vm.stationTitle = stationSettings.data.station.title
-        vm.enable = stationSettings.data.enable
-        vm.stationSettings = stationSettings.data
-        if ( stationSettings.data.enable.stationInfo ) {
-          vm.stationInfo = stationSettings.data.station.info
-        }
-        const tabsRead = storage.load( tabsReadStoragePfx + vm.stationCS, 'local' )
+       const tabsRead = storage.load( tabsReadStoragePfx + vm.stationCS, 'local' )
         if (!tabsRead || typeof tabsRead !== 'object') {
           vm.tabsRead = {}
         } else {
@@ -141,6 +137,7 @@ export default {
         vm.tabUnread( id )
       })
     }
+    setInterval(this[ACTION_LOAD_STATION], STATION_SETTINGS_RELOAD)
   },
   beforeDestroy () {
     for (const id in this.tabs) {
@@ -150,13 +147,26 @@ export default {
   },
   watch: {
     tabsUnread: {
-      handler: function () {},
+      handler() {},
       deep: true
-    }
+    },
+    stationSettings: {
+      handler () {
+        document.title = this.stationSettings.station.callsign + ' - TNXQSO.com'
+        this.stationCS = this.stationSettings.station.callsign
+        this.stationTitle = this.stationSettings.station.title
+        this.enable = this.stationSettings.enable
+        if ( this.stationSettings.enable.stationInfo ) {
+          this.stationInfo = this.stationSettings.station.info
+        }
+      },
+      deep: true
+    } 
   },
   computed: {
+    ...mapState(['stationSettings']),
     period () {
-      if (this.stationSettings && 
+      if (this.stationSettings.station &&
         this.stationSettings.station.activityPeriod && this.stationSettings.station.activityPeriod.length) {
         return formatPeriod(this.stationSettings.station.activityPeriod)
       }
@@ -166,6 +176,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions([ACTION_LOAD_STATION]),
     tabRead ( id ) {
       if ( id ) {
         const tab = this.tabs[id]

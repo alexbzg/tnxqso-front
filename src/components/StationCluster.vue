@@ -10,7 +10,7 @@
     <table id="send_spot_layout" v-if="spot.show">
         <tr>
             <td class="spot_call" style="color: #aaa;">DX call</td>
-            <td class="spot_band" style="color: #aaa;">MHz</td>
+            <td class="spot_band" style="color: #aaa;">kHz</td>
             <td class="spot_text" style="color: #aaa;">Info</td>
             <td class="spot_spotter" style="color: #aaa;">Your call</td>
             <td class="spot_btn"></td>

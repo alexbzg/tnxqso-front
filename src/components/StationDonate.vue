@@ -8,11 +8,26 @@
 </template>
 
 <script>
+import {mapMutations} from 'vuex'
+
+import {MUTATE_STATION_READ} from '../store-station-settings'
+
 export default {
   name: 'StationDonate',
   props: ['stationSettings'],
   data () {
     return {
+    }
+  },
+  beforeRouteEnter ( to, from, next ) {
+    next(vm => {
+      vm.setStationDataRead()
+    })
+  },
+  methods: {
+    ...mapMutations([MUTATE_STATION_READ]),
+    setStationDataRead () {
+      this[MUTATE_STATION_READ]('donate')
     }
   }
 }

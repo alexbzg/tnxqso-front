@@ -37,6 +37,20 @@ export function formatPeriod (period) {
   }
 }
 
+export function hash(str) {
+  let hash = 5381
+  let i = str.length
+
+  while (i) {
+    hash = (hash * 33) ^ str.charCodeAt(--i)
+  }
+
+  /* JavaScript does bitwise operations (like XOR, above) on 32-bit signed
+   * integers. Since we want the results to be always positive, convert the
+   * signed int to an unsigned by doing an unsigned bitshift. */
+  return hash >>> 0
+}
+
 function validateEmail (email) {
   var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   return re.test(String(email).toLowerCase())

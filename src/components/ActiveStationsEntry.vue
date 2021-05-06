@@ -1,36 +1,42 @@
 <template>
-    <div v-if="station.publish || siteAdmin" class="one_station">
-      <table>
-        <tr>
-          <td class="callsign">
+    <div v-if="station.publish || siteAdmin" class="one_station" 
+        :class="{compact: compactView, offline: !online}">
+        <span class="callsign">
             <template v-if="siteAdmin">
                 <input type="checkbox" v-model="station.publish.admin" @change="publishChange()"/>
                 <input type="checkbox" v-model="station.publish.user" @change="publishChange()"/>
             </template>
-            {{$options.replace0(station.station.callsign.toUpperCase())}}
-          </td>
-          <td>
-            <station-status-small v-if="type == 'active'" :stationSettings="station"
-                :station="station.station.callsign" @update-status="updateStatus">
-            </station-status-small>
-          </td>
-          <td>
-            <div class="station_internal_links">
-              <a :href="stationURL + '#/info'" v-if="station.enable.stationInfo">Info</a>
-              <a :href="stationURL + '#/log'" v-if="station.enable.log">Log</a>
-              <a :href="stationURL + '#/map'" v-if="station.enable.map">Map</a>
-              <a :href="stationURL + '#/adxcluster'" v-if="station.enable.cluster">Cluster</a>
-              <a :href="stationURL + '#/stats'" v-if="station.enable.stats">Stats</a>
-              <a :href="stationURL + '#/chat'" v-if="station.enable.chat">Chat</a>
-              <a :href="stationURL + '#/gallery'" v-if="station.enable.gallery">Gallery</a>
-              <a :href="stationURL + '#/donate'" v-if="station.enable.donate">Donate</a>
+            {{stationDisplayCallsign}}
+        </span>
+
+        <station-status-small v-if="type === 'active'" :stationSettings="station"
+            :station="station.station.callsign" @update-status="updateStatus"
+            :compactView="compactView" :stationURL="stationURL"
+            @update:online="$emit('update:online', $event)">
+            <template v-if="compactView" v-slot:footer>
+                <span class="links">
+                    <a :href="stationURL + '#/log'" v-if="station.enable.log">LOG</a>
+                    <a :href="stationURL + '#/map'" v-if="station.enable.map">MAP</a>
+                    <a :href="stationURL + '#/chat'" v-if="station.enable.chat">CHAT</a>
+                </span>
+            </template>
+        </station-status-small>
+
+        <span class="station_full_info" v-if="!compactView">
+            <div class="links">
+                <a :href="stationURL + '#/info'" v-if="station.enable.stationInfo">Info</a>
+                <a :href="stationURL + '#/log'" v-if="station.enable.log">Log</a>
+                <a :href="stationURL + '#/map'" v-if="station.enable.map">Map</a>
+                <a :href="stationURL + '#/adxcluster'" v-if="station.enable.cluster">Cluster</a>
+                <a :href="stationURL + '#/stats'" v-if="station.enable.stats">Stats</a>
+                <a :href="stationURL + '#/chat'" v-if="station.enable.chat">Chat</a>
+                <a :href="stationURL + '#/gallery'" v-if="station.enable.gallery">Gallery</a>
+                <a :href="stationURL + '#/donate'" v-if="station.enable.donate">Donate</a>
             </div>
             <div class="title">{{station.station.title}}</div>
             <div class="period" v-if="period">{{period}}</div>
-          </td>
-        </tr>
-      </table>
-<!--        <a :href="stationURL"></a>   Это так надо? -->
+        </span>
+
     </div>
 </template>
 
@@ -43,10 +49,9 @@ import StationStatusSmall from './StationStatusSmall'
 import {MUTATE_ACTIVE_STATIONS_READ} from '../store-active-stations'
 
 export default {
-  replace0: replace0,
   name: 'ActiveStationsEntry',
   components: {StationStatusSmall},
-  props: ['siteAdmin', 'station', 'type'],
+  props: ['siteAdmin', 'station', 'type', 'compactView', 'online'],
   data () {
     return {
     }
@@ -68,6 +73,9 @@ export default {
     },
     stationURL () {
       return '/' + urlCallsign(this.station.station.callsign)
+    },
+    stationDisplayCallsign () {
+      return replace0(this.station.station.callsign.toUpperCase())
     }
   },
   methods: {
@@ -82,6 +90,11 @@ export default {
       if (this._inactive) {
         this[MUTATE_ACTIVE_STATIONS_READ](false)
       }
+    }
+  },
+  watch: {
+    online() {
+      this.$emit('update:online', this.online)
     }
   }
 }

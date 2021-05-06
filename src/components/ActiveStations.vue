@@ -1,23 +1,33 @@
 <template>
     <div>
+        <div id="view" @click="toggleCompactView">
+           <img v-if="compactView"  id="view_full" src="/static/images/icon_view_full.png" />
+           <img v-else id="view_compact" src="/static/images/icon_view_compact.png" />
+        </div>
+
         <div id="active_stations" class="stations_list">
-            <div class="stations_block">Active now</div>
-            <active-stations-entry v-for="(station, index) in activeStations" 
-                :station="station" :site-admin="siteAdmin" type="active"
-                @publish-change="publishChange(station)" :key="index">
-            </active-stations-entry>
+            <template v-for="idx0 in [0, 1]">
+                <active-stations-entry v-for="(item, index) in activeStations[idx0]"
+                    :station="item.station" :site-admin="siteAdmin" type="active"
+                    :online.sync="item.online"
+                    :compactView="compactView"
+                    @publish-change="publishChange(item.station)" :key="idx0 + '_' + index">
+                </active-stations-entry>
+            </template>
         </div>
-        <div id="arch_stations" class="stations_list">
+        <div id="future_stations" class="stations_list">
             <div class="stations_block">Coming soon</div>
-            <active-stations-entry v-for="(station, index) in futureStations" 
+            <active-stations-entry v-for="(station, index) in futureStations"
                 :station="station" :site-admin="siteAdmin" type="inactive"
+                :compactView="compactView"
                 @publish-change="publishChange(station)" :key="index">
             </active-stations-entry>
         </div>
-        <div id="ended_stations" class="stations_list">
+        <div id="archive_stations" class="stations_list">
             <div class="stations_block">Archive</div>
-            <active-stations-entry v-for="(station, index) in archStations" 
+            <active-stations-entry v-for="(station, index) in archStations"
                 :station="station" :site-admin="siteAdmin" type="archive"
+                :compactView="compactView"
                 @publish-change="publishChange(station)" :key="index">
             </active-stations-entry>
        </div>
@@ -28,17 +38,21 @@
 import {mapActions, mapGetters} from 'vuex'
 import * as moment from 'moment'
 
+import storage from '../storage'
 import request from '../request'
 import {ACTION_POST} from '../store-user'
 
 import ActiveStationsEntry from './ActiveStationsEntry'
+
+const STORAGE_KEY_COMPACT_VIEW = 'activeStationsCompactView'
 
 export default {
   name: 'activeStations',
   components: {ActiveStationsEntry},
   data () {
     return {
-      activeStations: [],
+      compactView: storage.load(STORAGE_KEY_COMPACT_VIEW, 'local'),
+      activeStationsAll: [],
       archStations: [],
       futureStations: []
     }
@@ -49,7 +63,6 @@ export default {
         const publishData = response.data
         const current = moment()
         const promises = []
-        const active = []
         const arch = []
         const future = []
         for ( const station in publishData ) {
@@ -62,7 +75,7 @@ export default {
                   const period = settings.station.activityPeriod.map(item => moment(item, 'DD.MM.YYYY'))
                   if ( period && period.length === 2 && period[0] < current &&
                     period[1].add( 1, 'd' ) > current ) {
-                    active.push( settings )
+                    this.activeStationsAll.push( {station: settings, online: false} )
                   } else if ( period && period.length === 2 && moment(period[0]) > current ) {
                     future.push( settings )
                   } else {
@@ -76,17 +89,24 @@ export default {
         Promise.all(promises)
           .then(() => {
             console.log(this)
-            this.activeStations = this.sortStations(active)
             this.archStations = this.sortStations(arch)
             this.futureStations = this.sortStations(future)
           })
       })
   },
   computed: {
-    ...mapGetters(['siteAdmin'])
+    ...mapGetters(['siteAdmin']),
+    activeStations () {
+      return [true, false].map(value => 
+        this.sortStations(this.activeStationsAll.filter(item => item.online === value)))
+    }
   },
   methods: {
     ...mapActions([ACTION_POST]),
+    toggleCompactView () {
+      this.compactView = !this.compactView
+      storage.save(STORAGE_KEY_COMPACT_VIEW, this.compactView, 'local')
+    },
     publishChange (station) {
       this[ACTION_POST]({
         path: 'publish',
@@ -94,7 +114,6 @@ export default {
       })
     },
     sortStations (stations) {
-      console.log('---------------sortStations----------------')
       function cmpStations (a, b) {
         if (a.station.callsign.toLowerCase() < b.station.callsign.toLowerCase()) {
           return -1
@@ -105,11 +124,10 @@ export default {
         return 0
       }
       const r = stations.sort(cmpStations)
-      console.log(r)
       return r
     }
   }
-
+  
 }
 </script>
 

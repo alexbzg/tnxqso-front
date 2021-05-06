@@ -230,129 +230,187 @@ max-width: 900px;
 
 
 
-
+#view{
+    text-align: right;
+}
+#view img{
+    margin-right: 10px;
+    cursor: pointer;
+}
 
 
 
 .stations_list{
-    width: 900px;
-    margin: 20px 0 70px 250px;
+
+    margin: 0px 50px 70px 250px;
     padding: 0;
     text-align: left;
-    border-top: 1px solid #eee;
     text-align: center;
-    color: #999;
+    color: #777;
     line-height: 1.6em;
 }
-
-.stations_list .stations_block{
-    width: 100px;
-    padding: 0;
-    margin: 0;
-    text-align: center;
+.stations_block{
+    width: 90%;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    color: #aaa;
     font-size: 12px;
-    background-color: #eee;
-
+    line-height: 12px;
 }
 
 .one_station{
-    margin-top: 10px;
-    padding-left: 20px;
+    display: block;
+    margin: 0 20px 30px 20px;
+    padding: 0px;
     text-align: left;
+    color: #333;
 }
-
-.one_station table{
-    border-collapse: collapse;
-    margin: 0 0 30px 0;
+.one_station.compact{
+    display: inline-block;
+    vertical-align: top;
+    width: 120px;
+    text-align: center;
+    line-height: 14px;
+    cursor: pointer;
 }
-.one_station table td{
-    padding: 0;
+.one_station span{
+    display: inline-block;
+    font-size: 10px;
+    font-weight: normal;
     vertical-align: top;
 }
-.one_station table td.callsign{
+.one_station .callsign{
     font-size: 20px;
     font-weight: bold;
-    text-align: left;
-    width: 130px;
+    width: 150px;
     color: #000;
-
+    margin-bottom: 3px;
 }
-.one_station table td.status{
-    width: 120px;
+.one_station.compact .callsign{
+    width: 100%;
+    font-size: 18px;
 }
 .one_station .status{
     width: 120px;
-    padding: 4px;
-    font-size: 18px;
-    line-height: 18px;
-    font-weight: bold;
-    color: #fff;
-    text-align: center;
-}
-.one_station .status.status_online{
-    background-color: #4ab54a;
-    border-top-right-radius: 10px;
-    border-top-left-radius: 10px;
-    border: 1px solid #4ab54a;
-    padding: 1px 4px;
-}
-.one_station .status.status_offline{
-    background-color: #ff4949;
-    border-radius: 7px;
-    font-size: 10px;
-    line-height: 12px;
-    font-weight: normal;
-    letter-spacing: 5px;
-}
-.one_station .status_info{
-    width: 120px;
-    text-align: center;
-    font-size: 12px;
-    background-color: #e3f9e3;
-    color: #555;
+    padding: 0;
     line-height: 14px;
-    padding: 4px;
-    border: 1px solid #aef2ae;
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
+    text-align: center;
+    background-color: #e8fae8;
+    border-radius: 10px;
+    border: 1px solid #6ec36e;
+    min-height: 15px;
 }
-.one_station .status_info span{
+.one_station .status span{
+    display: block;
+}
+.one_station.offline .status{
+    padding-top: 3px;
+    background-color: #fff;
+    border-radius: 10px;
+    border: 1px solid #ff4949;
+    min-height: 15px;
+}
+
+.one_station .offline_text{
+    font-size: 10px;
+    color: #ff4949;
+    letter-spacing: 2px;
+    display: inline-block;
+}
+
+.one_station .status .freq{
+    padding: 0px 5px 3px 5px;
+    font-size: 14px;
+    letter-spacing: 1px;
+    background-color: #4ab54a;
+    color: #fff;
+    border-top-right-radius: 7px;
+    border-top-left-radius: 7px;
+}
+.one_station .status .qth_info {
+    font-size: 11px;
+    padding-top: 3px;
+    font-weight: bold;
+}
+.one_station.compact .status .qth_info {
+    font-size: 10px;
+    font-weight: normal;
     color: #333;
-    font-weight: bold;
 }
 
-.one_station .station_internal_links{
-    padding-left: 30px;
+.one_station .status .links{
+    padding: 3px;
 }
-.one_station .station_internal_links a{
-    font-weight: bold;
-    font-size: 18px;
-    margin-right: 20px;
+.one_station .status .links a{
+    margin: 0 5px;
+    text-decoration: underline;
+    color: #42a242;
 }
-.one_station .title{
-    padding-left: 30px;
-    color: #888;
-}
-.one_station .period{
-    padding-left: 30px;
-    color: #555;
-    font-weight: bold;
-}
-
-
-
-
-
-
-#ended_stations.stations_list .callsign {
-    color: #555;
-}
-#ended_stations.stations_list .title {
-    color: #999;
-}
-#ended_stations .station_internal_links a{
+.one_station.offline .status .links a{
     color: #777;
 }
+.one_station .status .links a:hover{
+    color: #009;
+}
+
+
+.one_station .station_full_info{
+    padding: 0 0 0 30px;
+    font-size: 16px;
+    line-height: 20px;
+}
+.one_station .station_full_info a{
+    padding-right: 20px;
+    font-weight: bold;
+    color: #070;
+}
+.one_station.offline .station_full_info a{
+    color: #777;
+}
+.one_station .title{
+    color: #777;
+}
+.one_station .period{
+    color: #555;
+    font-size: 12px;
+}
+
+
+
+
+
+.one_station .status .offline_text,
+.one_station .status .links,
+.one_station.offline .status .freq,
+.one_station.offline .status .qth_info,
+.one_station.compact .station_full_info,
+.one_station .status .freq.hide {
+    display: none;
+}
+.one_station.offline .offline_text,
+.one_station.compact .status .links {
+    display: block;
+}
+
+
+
+
+
+
+#archive_stations .callsign {
+    color: #777;
+}
+#archive_stations .station_full_info .title,#archive_stations .station_full_info .period {
+    color: #999;
+}
+#archive_stations .station_full_info a{
+    color: #999;
+}
+
+
+
+
+
 
 
 
@@ -491,8 +549,7 @@ table.tabs td#login{
     cursor: pointer;
 }
 #tab_donate{
-    font-weight: bold;
-    color: #555;
+
 }
 .updated_tab{
     background: #f5f5f5  url("/static/images/tabs_background.jpg") bottom right no-repeat;

@@ -6,12 +6,12 @@
         </div>
 
         <div id="active_stations" class="stations_list">
-            <template v-for="idx0 in [0, 1]">
-                <active-stations-entry v-for="(item, index) in activeStations[idx0]"
+            <template v-for="stations in activeStations">
+                <active-stations-entry v-for="(item, index) in stations"
                     :station="item.station" :site-admin="siteAdmin" type="active"
                     :online.sync="item.online"
                     :compactView="compactView"
-                    @publish-change="publishChange(item.station)" :key="idx0 + '_' + index">
+                    @publish-change="publishChange(item.station)" :key="index">
                 </active-stations-entry>
             </template>
         </div>
@@ -63,8 +63,6 @@ export default {
         const publishData = response.data
         const current = moment()
         const promises = []
-        const arch = []
-        const future = []
         for ( const station in publishData ) {
           if ( ( publishData[station]['user'] && publishData[station]['admin'] ) || this.siteAdmin ) {
             promises.push(request.getJSON('settings', station)
@@ -75,11 +73,11 @@ export default {
                   const period = settings.station.activityPeriod.map(item => moment(item, 'DD.MM.YYYY'))
                   if ( period && period.length === 2 && period[0] < current &&
                     period[1].add( 1, 'd' ) > current ) {
-                    this.activeStationsAll.push( {station: settings, online: false} )
+                    this.activeStationsAll.push( settings )
                   } else if ( period && period.length === 2 && moment(period[0]) > current ) {
-                    future.push( settings )
+                    this.futureStations.push( settings )
                   } else {
-                    arch.push( settings )
+                    this.archStations.push( settings )
                   }
                 }
               })
@@ -89,16 +87,22 @@ export default {
         Promise.all(promises)
           .then(() => {
             console.log(this)
-            this.archStations = this.sortStations(arch)
-            this.futureStations = this.sortStations(future)
+            this.activeStationsAll = this.sortStations(this.activeStationsAll).map(item => {
+              return {station: item, online: false}
+            })
+            this.archStations = this.sortStations(this.archStations)
+            this.futureStations = this.sortStations(this.futureStations)
           })
       })
   },
   computed: {
     ...mapGetters(['siteAdmin']),
     activeStations () {
-      return [true, false].map(value => 
-        this.sortStations(this.activeStationsAll.filter(item => item.online === value)))
+      const r = [[], []]
+      for (const station of this.activeStationsAll) {
+        r[station.online ? 0 : 1].push(station)
+      }
+      return r
     }
   },
   methods: {

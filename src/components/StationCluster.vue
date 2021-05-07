@@ -100,7 +100,7 @@ export default {
         userCS: this.$store.state.user.chatUser,
         info: 'www.TNXQSO.com',
         freq: null,
-        cs: this.stationSettings === null ? '' : this.stationSettings.station.callsign,
+        cs: !this.stationSettings || !this.stationSettings.station ? '' : this.stationSettings.station.callsign,
         disable: null,
         showDisable: false,
         success: false,

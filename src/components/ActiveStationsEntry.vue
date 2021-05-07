@@ -6,10 +6,12 @@
                 <input type="checkbox" v-model="station.publish.admin" @change="publishChange()"/>
                 <input type="checkbox" v-model="station.publish.user" @change="publishChange()"/>
             </template>
-            {{stationDisplayCallsign}}
+            <component :is="compactView ? 'a' : 'span'" :href="stationURL + '#/info'">
+                {{stationDisplayCallsign}}
+            </component>
         </span>
 
-        <station-status-small v-if="type === 'active'" :stationSettings="station"
+        <station-status-small v-if="type === 'active' || compactView" :stationSettings="station"
             :station="station.station.callsign" @update-status="updateStatus"
             :compactView="compactView" :stationURL="stationURL"
             @update:online="$emit('update:online', $event)">

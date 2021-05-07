@@ -250,10 +250,11 @@ max-width: 900px;
     line-height: 1.6em;
 }
 .stations_block{
-    width: 90%;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #ccc;
-    color: #aaa;
+    width: 100%;
+    margin: 20px auto 10px auto;
+    padding: 3px;
+    background-color: #ddd;
+    color: #777;
     font-size: 12px;
     line-height: 12px;
 }
@@ -279,7 +280,7 @@ max-width: 900px;
     font-weight: normal;
     vertical-align: top;
 }
-.one_station .callsign{
+.one_station .callsign, .one_station .callsign span{
     font-size: 20px;
     font-weight: bold;
     width: 150px;
@@ -289,6 +290,10 @@ max-width: 900px;
 .one_station.compact .callsign{
     width: 100%;
     font-size: 18px;
+}
+.one_station.compact .callsign a{
+    text-decoration: none;
+    color: #000;
 }
 .one_station .status{
     width: 120px;
@@ -346,10 +351,13 @@ max-width: 900px;
     text-decoration: underline;
     color: #42a242;
 }
-.one_station.offline .status .links a{
+.one_station.offline .status .links a,
+.one_station .station_full_info a,
+.one_station .title{
     color: #777;
 }
-.one_station .status .links a:hover{
+.one_station .status .links a:hover,
+.one_station .station_full_info .links a:hover{
     color: #009;
 }
 
@@ -363,12 +371,6 @@ max-width: 900px;
     padding-right: 20px;
     font-weight: bold;
     color: #070;
-}
-.one_station.offline .station_full_info a{
-    color: #777;
-}
-.one_station .title{
-    color: #777;
 }
 .one_station .period{
     color: #555;
@@ -384,7 +386,9 @@ max-width: 900px;
 .one_station.offline .status .freq,
 .one_station.offline .status .qth_info,
 .one_station.compact .station_full_info,
-.one_station .status .freq.hide {
+.one_station .status .freq.hide,
+#future_stations .one_station .offline_text,
+#archive_stations .one_station .offline_text {
     display: none;
 }
 .one_station.offline .offline_text,
@@ -393,23 +397,30 @@ max-width: 900px;
 }
 
 
-
-
-
-
 #archive_stations .callsign {
     color: #777;
 }
-#archive_stations .station_full_info .title,#archive_stations .station_full_info .period {
+#archive_stations .station_full_info .title,
+#archive_stations .station_full_info .period,
+#archive_stations .one_station.compact .callsign a,
+#archive_stations .one_station .callsign span{
     color: #999;
+}
+#future_stations .one_station .status,
+#archive_stations .one_station .status{
+    border: 1px solid #999;
+}
+
+#future_stations .station_full_info a{
+    color: #555;
 }
 #archive_stations .station_full_info a{
-    color: #999;
+    color: #777;
 }
-
-
-
-
+#future_stations .station_full_info a:hover,
+#archive_stations .station_full_info a:hover{
+    color: #009;
+}
 
 
 

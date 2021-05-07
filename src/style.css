@@ -253,7 +253,7 @@ max-width: 900px;
     width: 100%;
     margin: 20px auto 10px auto;
     padding: 3px;
-    background-color: #ddd;
+    background-color: #eee;
     color: #777;
     font-size: 12px;
     line-height: 12px;
@@ -363,6 +363,7 @@ max-width: 900px;
 
 
 .one_station .station_full_info{
+    width: 550px;
     padding: 0 0 0 30px;
     font-size: 16px;
     line-height: 20px;
@@ -370,7 +371,7 @@ max-width: 900px;
 .one_station .station_full_info a{
     padding-right: 20px;
     font-weight: bold;
-    color: #070;
+    color: #050;
 }
 .one_station .period{
     color: #555;
@@ -397,26 +398,24 @@ max-width: 900px;
 }
 
 
-#archive_stations .callsign {
-    color: #777;
-}
+#archive_stations .callsign,
 #archive_stations .station_full_info .title,
 #archive_stations .station_full_info .period,
 #archive_stations .one_station.compact .callsign a,
-#archive_stations .one_station .callsign span{
-    color: #999;
+#archive_stations .one_station .callsign span,
+#archive_stations .station_full_info a{
+    color: #777;
 }
 #future_stations .one_station .status,
 #archive_stations .one_station .status{
-    border: 1px solid #999;
+    border: 1px solid #ddd;
+    padding: 0;
 }
 
 #future_stations .station_full_info a{
     color: #555;
 }
-#archive_stations .station_full_info a{
-    color: #777;
-}
+
 #future_stations .station_full_info a:hover,
 #archive_stations .station_full_info a:hover{
     color: #009;

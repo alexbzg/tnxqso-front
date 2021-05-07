@@ -14,7 +14,7 @@
         <station-status-small v-if="type === 'active' || compactView" :stationSettings="station"
             :station="station.station.callsign" @update-status="updateStatus"
             :compactView="compactView" :stationURL="stationURL"
-            @update:online="$emit('update:online', $event)">
+            @update:online="$emit('update:online', station.station.callsign, $event)">
             <template v-if="compactView" v-slot:footer>
                 <span class="links">
                     <a :href="stationURL + '#/log'" v-if="station.enable.log">LOG</a>

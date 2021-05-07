@@ -6,12 +6,12 @@
         </div>
 
         <div id="active_stations" class="stations_list">
-            <template v-for="stations in activeStations">
-                <active-stations-entry v-for="(item, index) in stations"
+            <template v-for="(stations, idx0) in activeStations">
+                <active-stations-entry v-for="(item, idx) in stations"
                     :station="item.station" :site-admin="siteAdmin" type="active"
-                    :online.sync="item.online"
+                    :online="item.online" @update:online="updateOnline"
                     :compactView="compactView"
-                    @publish-change="publishChange(item.station)" :key="index">
+                    @publish-change="publishChange(item.station)" :key="idx0 + '_' + idx">
                 </active-stations-entry>
             </template>
         </div>
@@ -63,6 +63,9 @@ export default {
         const publishData = response.data
         const current = moment()
         const promises = []
+        const active = []
+        const future = []
+        const arch = []
         for ( const station in publishData ) {
           if ( ( publishData[station]['user'] && publishData[station]['admin'] ) || this.siteAdmin ) {
             promises.push(request.getJSON('settings', station)
@@ -73,11 +76,11 @@ export default {
                   const period = settings.station.activityPeriod.map(item => moment(item, 'DD.MM.YYYY'))
                   if ( period && period.length === 2 && period[0] < current &&
                     period[1].add( 1, 'd' ) > current ) {
-                    this.activeStationsAll.push( settings )
+                    active.push( settings )
                   } else if ( period && period.length === 2 && moment(period[0]) > current ) {
-                    this.futureStations.push( settings )
+                    future.push( settings )
                   } else {
-                    this.archStations.push( settings )
+                    arch.push( settings )
                   }
                 }
               })
@@ -86,12 +89,11 @@ export default {
         }
         Promise.all(promises)
           .then(() => {
-            console.log(this)
-            this.activeStationsAll = this.sortStations(this.activeStationsAll).map(item => {
+            this.activeStationsAll = this.sortStations(active).map(item => {
               return {station: item, online: false}
             })
-            this.archStations = this.sortStations(this.archStations)
-            this.futureStations = this.sortStations(this.futureStations)
+            this.archStations = this.sortStations(arch)
+            this.futureStations = this.sortStations(future)
           })
       })
   },
@@ -107,6 +109,12 @@ export default {
   },
   methods: {
     ...mapActions([ACTION_POST]),
+    updateOnline(callsign, value) {
+      const asIdx = this.activeStationsAll.findIndex(entry => entry.station.station.callsign === callsign)
+      if (asIdx !== -1) {
+        this.$set(this.activeStationsAll[asIdx], 'online', value)
+      }
+    },
     toggleCompactView () {
       this.compactView = !this.compactView
       storage.save(STORAGE_KEY_COMPACT_VIEW, this.compactView, 'local')

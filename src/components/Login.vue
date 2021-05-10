@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     ...mapActions([ACTION_LOGIN, ACTION_POST]),
-    onSubmit: _.debounce(function (e) {
+    onSubmit: _.debounce(function () {
       if ((this.newUser || this.passwordRecovery) && !this.recaptcha) {
         this.$refs.invisibleRecaptcha.execute()
         return

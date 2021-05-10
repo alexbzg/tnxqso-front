@@ -14,14 +14,16 @@ export default function () {
     data: null,
     url: null,
     eventName: null,
-    processData: function () {},
+    processData: null,
     onUpdate: onUpdate }
 
   return s
 
-  function onUpdate ( callback ) {
-    bus.$on( s.eventName, callback )
-    if (s.data) {
+  function onUpdate (callback) {
+    if (s.eventName && callback) {
+      bus.$on(s.eventName, callback)
+    }
+    if (s.data && callback) {
       callback()
     }
   }
@@ -36,7 +38,9 @@ export default function () {
       if (s.lastModified !== response.headers['last-modified']) {
         s.lastModified = response.headers['last-modified']
         s.data = response.data
-        s.processData()
+        if (s.processData) {
+          s.processData()
+        }
         if (s.eventName) {
           bus.$emit(s.eventName)
         }

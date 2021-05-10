@@ -6,113 +6,67 @@
         </div>
 
         <div id="active_stations" class="stations_list">
-            <template v-for="(stations, idx0) in activeStations">
-                <active-stations-entry v-for="(item, idx) in stations"
-                    :station="item.station" :site-admin="siteAdmin" type="active"
-                    :online="item.online" @update:online="updateOnline"
+            <template v-for="(stations, idx0) in activeStationsStatus">
+                <active-station-entry v-for="(item, idx) in stations"
+                    :station-settings="item" :site-admin="siteAdmin" type="active"
                     :compactView="compactView"
-                    @publish-change="publishChange(item.station)" :key="idx0 + '_' + idx">
-                </active-stations-entry>
+                    @publish-change="publishChange(item)" :key="idx0 + '_' + idx">
+                </active-station-entry>
             </template>
         </div>
         <div id="future_stations" class="stations_list">
             <div class="stations_block">Coming soon</div>
-            <active-stations-entry v-for="(station, index) in futureStations"
-                :station="station" :site-admin="siteAdmin" type="inactive"
+            <active-station-entry v-for="(station, index) in $store.state.activeStations.stations.future"
+                :station-settings="station" :site-admin="siteAdmin" type="inactive"
                 :compactView="compactView"
                 @publish-change="publishChange(station)" :key="index">
-            </active-stations-entry>
+            </active-station-entry>
         </div>
         <div id="archive_stations" class="stations_list">
             <div class="stations_block">Archive</div>
-            <active-stations-entry v-for="(station, index) in archStations"
-                :station="station" :site-admin="siteAdmin" type="archive"
+            <active-station-entry v-for="(station, index) in $store.state.activeStations.stations.archive"
+                :station-settings="station" :site-admin="siteAdmin" type="archive"
                 :compactView="compactView"
                 @publish-change="publishChange(station)" :key="index">
-            </active-stations-entry>
+            </active-station-entry>
        </div>
     </div>
 </template>
 
 <script>
-import {mapActions, mapGetters} from 'vuex'
-import * as moment from 'moment'
+import {mapActions, mapGetters, mapMutations} from 'vuex'
 
 import storage from '../storage'
-import request from '../request'
 import {ACTION_POST} from '../store-user'
+import {MUTATE_ACTIVE_STATIONS_READ} from '../store-active-stations'
 
-import ActiveStationsEntry from './ActiveStationsEntry'
+import ActiveStationEntry from './ActiveStationEntry'
 
 const STORAGE_KEY_COMPACT_VIEW = 'activeStationsCompactView'
 
 export default {
   name: 'activeStations',
-  components: {ActiveStationsEntry},
+  components: {ActiveStationEntry},
   data () {
     return {
-      compactView: storage.load(STORAGE_KEY_COMPACT_VIEW, 'local'),
-      activeStationsAll: [],
-      archStations: [],
-      futureStations: []
+      compactView: storage.load(STORAGE_KEY_COMPACT_VIEW, 'local')
     }
+  },
+  activated () {
+    this.markRead()
   },
   mounted () {
-    request.get( '/static/js/publish.json' )
-      .then(response => {
-        const publishData = response.data
-        const current = moment()
-        const promises = []
-        const active = []
-        const future = []
-        const arch = []
-        for ( const station in publishData ) {
-          if ( ( publishData[station]['user'] && publishData[station]['admin'] ) || this.siteAdmin ) {
-            promises.push(request.getJSON('settings', station)
-              .then(response => {
-                const settings = response.data
-                if (settings.station && settings.station.callsign) {
-                  settings.publish = { user: settings.publish, admin: publishData[station]['admin'] }
-                  const period = settings.station.activityPeriod.map(item => moment(item, 'DD.MM.YYYY'))
-                  if ( period && period.length === 2 && period[0] < current &&
-                    period[1].add( 1, 'd' ) > current ) {
-                    active.push( settings )
-                  } else if ( period && period.length === 2 && moment(period[0]) > current ) {
-                    future.push( settings )
-                  } else {
-                    arch.push( settings )
-                  }
-                }
-              })
-              .catch( e => e))
-          }
-        }
-        Promise.all(promises)
-          .then(() => {
-            this.activeStationsAll = this.sortStations(active).map(item => {
-              return {station: item, online: false}
-            })
-            this.archStations = this.sortStations(arch)
-            this.futureStations = this.sortStations(future)
-          })
-      })
+    this.markRead()
   },
   computed: {
-    ...mapGetters(['siteAdmin']),
-    activeStations () {
-      const r = [[], []]
-      for (const station of this.activeStationsAll) {
-        r[station.online ? 0 : 1].push(station)
-      }
-      return r
-    }
+    ...mapGetters(['siteAdmin', 'activeStationsRead', 'activeStationsStatus']),
   },
   methods: {
+    ...mapMutations([MUTATE_ACTIVE_STATIONS_READ]),
     ...mapActions([ACTION_POST]),
-    updateOnline(callsign, value) {
-      const asIdx = this.activeStationsAll.findIndex(entry => entry.station.station.callsign === callsign)
-      if (asIdx !== -1) {
-        this.$set(this.activeStationsAll[asIdx], 'online', value)
+    markRead () {
+      if (!this.activeStationsRead) {
+        this[MUTATE_ACTIVE_STATIONS_READ](true)
       }
     },
     toggleCompactView () {
@@ -124,22 +78,13 @@ export default {
         path: 'publish',
         data: {station: station.station.callsign, publish: station.publish}
       })
-    },
-    sortStations (stations) {
-      function cmpStations (a, b) {
-        if (a.station.callsign.toLowerCase() < b.station.callsign.toLowerCase()) {
-          return -1
-        }
-        if (a.station.callsign.toLowerCase() > b.station.callsign.toLowerCase()) {
-          return 1
-        }
-        return 0
-      }
-      const r = stations.sort(cmpStations)
-      return r
+    }
+  },
+  watch: {
+    activeStationsRead () {
     }
   }
-  
+ 
 }
 </script>
 

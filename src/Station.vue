@@ -54,8 +54,7 @@
         <div class="list">
             <donate-block></donate-block>
             <keep-alive include="activeStations">
-                <router-view :station-settings="stationSettings"
-                    :status-data="statusData" :log-service="logService">
+                <router-view :station-settings="stationSettings" :log-service="logService">
                 </router-view>
             </keep-alive>
         </div>

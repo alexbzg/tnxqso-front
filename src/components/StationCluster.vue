@@ -89,7 +89,7 @@ export default {
   $clusterResultTimeout: null,
   mixins: [tabMixin],
   name: 'StationCluster',
-  props: ['stationSettings', 'logService', 'statusData'],
+  props: ['stationSettings', 'logService'],
   data () {
     return {
       tabId: 'cluster',
@@ -219,6 +219,13 @@ export default {
     }
   },
   computed: {
+    stationCallsign () {
+      return this.stationSettings.station ? this.stationSettings.station.callsign : null
+    },
+    statusData () {
+      return this.stationCallsign && this.stationCallsign in this.$store.state.activeStations.stations.active ? 
+        this.$store.state.activeStations.stations.active[this.stationCallsign].status : {}
+    },
     sendSpotButtonDisabled () {
       return this.spot.posting || this.spot.showDisable || !this.spot.userCS || this.spot.userCS === '' ||
         !this.spot.cs || this.spot.cs === '' || !this.spot.freq

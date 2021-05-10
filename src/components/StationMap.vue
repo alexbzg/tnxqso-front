@@ -9,8 +9,7 @@
         <l-control-attribution prefix="Powered by <a href='https://r1cf.ru/rdaloc/' target='_blank' rel='noopener'>
         R1CF RDA/RAFA maps</a>, <a href='https://www.openstreetmap.org/'>OpenStreetMap</a>" position="bottomright"/>
         <l-wms-tile-layer
-            v-for="(layer, idx) in overlays"
-            v-if="!layer.qthCountry || (stationSettings && stationSettings.qthCountry === layer.qthCountry)"
+            v-for="(layer, idx) in countryOverlays"
             :key="idx"
             base-url="https://r1cf.ru/geoserver/cite/wms?"
             :layers="layer.layers"
@@ -72,7 +71,7 @@ const DEFAULT_ZOOM = 13
 
 export default {
   name: 'StationMap',
-  props: ['statusData', 'stationSettings'],
+  props: ['stationSettings'],
   components: {
     LMap,
     LTileLayer,
@@ -199,6 +198,19 @@ export default {
         this.currentPopup.speed = dt.speed ? 'speed: ' + dt.speed.toFixed( 1 ) + ' km/h' : null
         this.currentPopup.comments = dt.comments ? dt.comments : null
       }
+    }
+  },
+  computed: {
+    stationCallsign () {
+      return this.stationSettings.station ? this.stationSettings.station.callsign : null
+    },
+    statusData () {
+      return this.stationCallsign && this.stationCallsign in this.$store.state.activeStations.stations.active ? 
+        this.$store.state.activeStations.stations.active[this.stationCallsign].status : {}
+    },
+    countryOverlays () {
+      return this.overlays.filter(layer => 
+        !layer.qthCountry || (this.stationSettings && this.stationSettings.qthCountry === layer.qthCountry))
     }
   },
   watch: {

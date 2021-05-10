@@ -8,7 +8,8 @@ import {storeServices, MUTATE_SERVICE, ACTION_UPDATE_SERVICE, RELOAD_INT_SRVC} f
 import {storeActivity, activityInit} from '../store-activity'
 import {storeStationSettings, ACTION_LOAD_STATION} from '../store-station-settings'
 import talksInit from '../talks-init'
-import {storeActiveStations} from '../store-active-stations'
+import {storeActiveStations, activeStationsInit, createStationStatusService, MUTATE_ADD_ACTIVE_STATION} 
+  from '../store-active-stations'
 
 const store = new Vuex.Store({
   modules: {
@@ -33,6 +34,13 @@ store.dispatch(ACTION_LOAD_STATION)
     }
     updateGallery()
     setInterval(updateGallery, RELOAD_INT_SRVC)
+    activeStationsInit(store)
+      .then(() => {
+        if (!(stationCs in store.state.activeStations.stations.active)) {
+          store.commit(MUTATE_ADD_ACTIVE_STATION, store.state.stationSettings)
+          createStationStatusService(store.commit, store.state.stationSettings)
+        }
+      })
   })
 talksInit(store)
 activityInit(store)

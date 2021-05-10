@@ -7,7 +7,7 @@ import {storeUser, ACTION_UPDATE_USER} from '../store-user'
 import {storeServices} from '../store-services'
 import {storeActivity, activityInit} from '../store-activity'
 import {storeLanguage} from '../store-language'
-import {storeActiveStations} from '../store-active-stations'
+import {storeActiveStations, activeStationsInit} from '../store-active-stations'
 import talksInit from '../talks-init'
 
 const store = new Vuex.Store({
@@ -26,5 +26,6 @@ if (store.getters.userToken) {
 
 talksInit(store)
 activityInit(store)
+activeStationsInit(store)
 
 export default store

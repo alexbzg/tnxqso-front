@@ -49,7 +49,7 @@ const current = moment()
 export default {
   mixins: [tabMixin],
   name: 'StationLog',
-  props: ['stationSettings', 'statusData'],
+  props: ['stationSettings'],
   components: { LogTable },
   data () {
     return {
@@ -72,6 +72,13 @@ export default {
     }
   },
   computed: {
+    stationCallsign () {
+      return this.stationSettings.station ? this.stationSettings.station.callsign : null
+    },
+    statusData () {
+      return this.stationCallsign && this.stationCallsign in this.$store.state.activeStations.stations.active ? 
+        this.$store.state.activeStations.stations.active[this.stationCallsign].status : {}
+    },
     dataSlice () {
       return Array.isArray( this.data ) ? this.data.slice( 0, 50 ) : []
     },

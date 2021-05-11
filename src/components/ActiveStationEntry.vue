@@ -12,7 +12,7 @@
         </span>
 
         <component :is="compactView ? 'a' : 'span'" :href="stationURL + '#/info'">
-            <span class="status">
+            <span class="status" v-if="type == 'active' || compactView">
                 <span class="offline_text">OFFLINE</span>
                 <span class="freq" v-if="statusData.freqDisplay">{{statusData.freqDisplay}}</span>
                 <span class="qth_info">

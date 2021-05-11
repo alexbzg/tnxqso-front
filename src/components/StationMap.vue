@@ -9,8 +9,8 @@
         <l-control-attribution prefix="Powered by <a href='https://r1cf.ru/rdaloc/' target='_blank' rel='noopener'>
         R1CF RDA/RAFA maps</a>, <a href='https://www.openstreetmap.org/'>OpenStreetMap</a>" position="bottomright"/>
         <l-wms-tile-layer
-            v-for="(layer, idx) in countryOverlays"
-            :key="idx"
+            v-for="layer in overlays"
+            :key="layer.name"
             base-url="https://r1cf.ru/geoserver/cite/wms?"
             :layers="layer.layers"
             :name="layer.name"
@@ -68,46 +68,7 @@ import request from '../request'
 // const currentMarkerOptions = { preset: 'islands#dotIcon', iconColor: '#ff0000' }
 
 const DEFAULT_ZOOM = 13
-
-export default {
-  name: 'StationMap',
-  props: ['stationSettings'],
-  components: {
-    LMap,
-    LTileLayer,
-    'l-wms-tile-layer': LWMSTileLayer,
-    LControlLayers,
-    LGeoJson,
-    LMarker,
-    LIcon,
-    LPopup,
-    LControlAttribution
-  },
-  data () {
-    return {
-      tabId: 'news',
-      currentLocation: null,
-      currentPopup: {
-        dateTime: null,
-        speed: null,
-        comments: null
-      },
-      data: {},
-      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      baseLayers: [
-        {
-          id: '',
-          name: 'Map',
-          visible: true
-        }
-      ],
-      track: null,
-      zoom: DEFAULT_ZOOM,
-      center: [60, 60],
-      bounds: null,
-      map: null,
-      centerLocationFlag: true,
-      overlays: [
+const OVERLAYS = [
         {
           qthCountry: 'RU',
           name: 'RDA',
@@ -148,6 +109,45 @@ export default {
           minZoom: 11
         }
       ]
+
+export default {
+  name: 'StationMap',
+  props: ['stationSettings'],
+  components: {
+    LMap,
+    LTileLayer,
+    'l-wms-tile-layer': LWMSTileLayer,
+    LControlLayers,
+    LGeoJson,
+    LMarker,
+    LIcon,
+    LPopup,
+    LControlAttribution
+  },
+  data () {
+    return {
+      tabId: 'news',
+      currentLocation: null,
+      currentPopup: {
+        dateTime: null,
+        speed: null,
+        comments: null
+      },
+      data: {},
+      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      baseLayers: [
+        {
+          id: '',
+          name: 'Map',
+          visible: true
+        }
+      ],
+      track: null,
+      zoom: DEFAULT_ZOOM,
+      center: [60, 60],
+      bounds: null,
+      map: null,
+      centerLocationFlag: true
     }
   },
   mounted () {
@@ -198,7 +198,8 @@ export default {
         this.currentPopup.speed = dt.speed ? 'speed: ' + dt.speed.toFixed( 1 ) + ' km/h' : null
         this.currentPopup.comments = dt.comments ? dt.comments : null
       }
-    }
+    },
+
   },
   computed: {
     stationCallsign () {
@@ -208,8 +209,8 @@ export default {
       return this.stationCallsign && this.stationCallsign in this.$store.state.activeStations.stations.active ? 
         this.$store.state.activeStations.stations.active[this.stationCallsign].status : {}
     },
-    countryOverlays () {
-      return this.overlays.filter(layer => 
+    overlays () {
+      return OVERLAYS.filter(layer => 
         !layer.qthCountry || (this.stationSettings && this.stationSettings.qthCountry === layer.qthCountry))
     }
   },

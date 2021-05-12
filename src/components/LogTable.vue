@@ -47,11 +47,13 @@ export default {
   },
   computed: {
     qthColumns () {
-      const qthCount = this.logSettings.columns.qth.length
       const r = []
-      for (let c = 0; c < qthCount; c++) {
-        if (this.logSettings.columns.qth[c]) {
-          r.push(c)
+      if (this.logSettings) {
+        const qthCount = this.logSettings.columns.qth.length
+        for (let c = 0; c < qthCount; c++) {
+          if (this.logSettings.columns.qth[c]) {
+            r.push(c)
+          }
         }
       }
       return r

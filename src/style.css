@@ -271,7 +271,7 @@ max-width: 900px;
     vertical-align: top;
     width: 120px;
     text-align: center;
-    line-height: 14px;
+    line-height: 10px;
     cursor: pointer;
 }
 .one_station span{
@@ -298,7 +298,7 @@ max-width: 900px;
 .one_station .status{
     width: 120px;
     padding: 0;
-    line-height: 14px;
+    line-height: 12px;
     text-align: center;
     background-color: #e8fae8;
     border-radius: 10px;
@@ -324,7 +324,7 @@ max-width: 900px;
 }
 
 .one_station .status .freq{
-    padding: 0px 5px 3px 5px;
+    padding: 3px 5px;
     font-size: 14px;
     letter-spacing: 1px;
     background-color: #4ab54a;

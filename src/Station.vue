@@ -38,7 +38,8 @@
             </router-link>
             <router-link to="/donate" tag="div" id="tab_donate" class="tab"
                 v-if="enable.donate"
-                :class="{updated_tab: stationSettings && stationSettings.new.donate}">
+                :class="{updated_tab: stationSettings && stationSettings.new.donate && 
+                    stationSettings.read.donate}">
                 Donate
             </router-link>
             <router-link to="/stations" tag="div" id="tab_stations" class="tab"

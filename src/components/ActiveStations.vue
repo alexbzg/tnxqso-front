@@ -65,9 +65,7 @@ export default {
     ...mapMutations([MUTATE_ACTIVE_STATIONS_READ]),
     ...mapActions([ACTION_POST]),
     markRead () {
-      if (!this.activeStationsRead) {
-        this[MUTATE_ACTIVE_STATIONS_READ](true)
-      }
+      this[MUTATE_ACTIVE_STATIONS_READ]()
     },
     toggleCompactView () {
       this.compactView = !this.compactView

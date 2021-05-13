@@ -80,6 +80,9 @@ export default {
   },
   watch: {
     activeStationsRead () {
+      if (!this._inactive) {
+        this.markRead()
+      }
     }
   }
  

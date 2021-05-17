@@ -25,7 +25,7 @@
                     </a>
                 </td>
                 <td class="rda" v-for="idx in qthColumns" :key="idx">{{spot.qth[idx]}}</td>
-                <td class="locator" v-if="logSettings.columns.loc">{{spot.loc}}</td>
+                <td class="locator" v-if="logSettings && logSettings.columns.loc">{{spot.loc}}</td>
            </tr>
         </template>
     </table>

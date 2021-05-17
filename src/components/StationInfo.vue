@@ -1,5 +1,5 @@
 <template>
-    <div id="info" v-html="stationSettings.station.info">
+    <div id="info" v-html="stationSettings.station && stationSettings.station.info">
     </div>
 </template>
 

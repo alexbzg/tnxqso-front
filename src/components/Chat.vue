@@ -82,7 +82,7 @@
         <td>
 
         <div id="chat_info">
-            <div class="chat_info_title">This page</div>
+            <div class="chat_info_title">This page: {{activeUsers['thisPage'].length}}</div>
             <div class="chat_info_users1">
                 <span v-for="(user, idx) in activeUsers['thisPage']"
                     :class="{'admin': user.admin, 'typing':user.typing}" :key="idx">
@@ -91,7 +91,7 @@
             </div>
 
             <template v-if="'talks' in activeUsers">
-                <div class="chat_info_title">Talks</div>
+                <div class="chat_info_title">Talks: {{activeUsers['talks'].length}}</div>
                 <div class="chat_info_users2">
                     <span v-for="(user, idx) in activeUsers['talks']"
                         :class="{'admin': user.admin, 'typing':user.typing}" :key="idx">
@@ -100,7 +100,7 @@
                 </div>
             </template>
 
-            <div class="chat_info_title">Other pages</div>
+            <div class="chat_info_title">Other pages: {{activeUsers['other'].length}}</div>
             <div class="chat_info_users2">
                 <span v-for="(user, idx) in activeUsers['other']"
                     :class="{'admin': user.admin}" :key="idx">

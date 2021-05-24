@@ -1136,6 +1136,7 @@ table#chat_layout .personal{
     background-color: #eee;
     text-align: center;
     color: #777;
+    font-size: 12px;
 }
 .chat_info_users1{
     padding: 10px 0 10px 0px;

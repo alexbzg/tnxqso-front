@@ -1699,7 +1699,7 @@ table#filter_data .data{
     overflow: hidden;
     padding: 0 0 20px 0;
     font-size: 12px;
-
+    line-height: 12px;
 }
 
 .media img{
@@ -1722,8 +1722,22 @@ table#filter_data .data{
     border: none;
     display: none;
 }
-.media:hover .delete{
+.media:hover .delete, .media:hover .date{
     display: block;
+}
+
+.media .date{
+    padding: 2px 5px;
+    font-size: 10px;
+    text-align: right;
+    color: #333;
+    background: url('/static/images/background_white_80.png') top left;
+    position: absolute;
+    top: 186px;
+    right: 0px;
+    display: none;
+    width: 200px;
+    text-align: center;
 }
 
 .media .caption{

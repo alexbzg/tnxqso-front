@@ -20,10 +20,13 @@
             <img class="delete" src="/static/images/delete.png" width='30' v-if="isAdmin"
                 @click="deleteItem(item.id)"/>
 
+
 			<img class="icon_video" src="/static/images/icon_video.png" width='80'
                 v-if="item.type === 'video'"  @click="openLightbox(idx)"/>
 
             <img :src="stationPath + item.thumb" @click="openLightbox(idx)"/>
+
+            <div class="date" v-if="item.datetime">{{item.datetime}}</div>
 
             <div class="caption">{{item.caption}}</div>
         </div>

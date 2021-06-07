@@ -396,8 +396,8 @@ export default {
             'необходимо ввести только один корректный позывной экспедициц.')
         return
       }
-      if (this.user.stationCallsign &&
-        this.user.stationCallsign !== this.settings.station.callsign) {
+      if (this.stationCallsign &&
+        this.stationCallsign !== this.settings.station.callsign) {
         if ( !window.confirm( 'The station callsign change will clear all of the station archive. ' +
           'No recovery will be possible. Do you really want to continue?\n' +
           'При смене позывного станции будут удалены все архивы станции без возможности ' +

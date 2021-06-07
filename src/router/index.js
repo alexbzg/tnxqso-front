@@ -26,6 +26,12 @@ const router = new Router({
       props: false
     },
     {
+      path: '/qthnowsecret',
+      name: 'QthNowMap',
+      component: QthNowMap,
+      props: {secret: true}
+    },
+    {
       path: '/stations',
       name: 'Stations',
       component: ActiveStations,

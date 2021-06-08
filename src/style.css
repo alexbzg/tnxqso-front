@@ -576,6 +576,9 @@ table.tabs td#login{
     text-decoration: none;
 }
 
+.tabs #tab_donate{
+    margin-right: 30px;
+}
 
 
 

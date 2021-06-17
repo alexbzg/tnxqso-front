@@ -5,6 +5,9 @@ import App from './App'
 import router from './router'
 import store from './store-index/index.js'
 
+import capitalizeDirective from './capitalize-directive'
+capitalizeDirective()
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

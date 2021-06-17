@@ -61,7 +61,7 @@ export default {
     return {
       newUser: false,
       passwordRecovery: false,
-      remember: false,
+      remember: true,
       login: null,
       password: null,
       email: null,

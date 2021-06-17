@@ -97,6 +97,7 @@ img#logo{
     margin-bottom: 50px;
     box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
     text-align: center;
+    min-height: 800px;
 }
 .list a {
     color: #009;
@@ -576,8 +577,11 @@ table.tabs td#login{
     text-decoration: none;
 }
 
-.tabs #tab_donate{
-    margin-right: 30px;
+.tabs #tab_stations{
+    margin-left: 30px;
+}
+.tabs.index_tabs #tab_stations{
+    margin-left: 0px;
 }
 
 

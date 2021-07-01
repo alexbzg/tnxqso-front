@@ -11,11 +11,15 @@ export const MUTATE_SETTINGS = 'mutateSettings'
 export const MUTATE_USER = 'mutateUser'
 export const MUTATE_CHAT_USER = 'mutateChatUser'
 export const MUTATE_CHAT_USER_NAME = 'mutateChatUserName'
+export const MUTATE_INSTANT_MESSAGE = 'mutateInstantMessage'
 
 export const ACTION_UPDATE_USER = 'actionUpdateUser'
 export const ACTION_LOGIN = 'actionLogin'
 export const ACTION_POST = 'actionPost'
 export const ACTION_SAVE_SETTINGS = 'actionSaveSettings'
+const ACTION_CHECK_INSTANT_MESSAGE = 'actionCheckInstantMessage'
+
+const CHECK_IM_INT = 30000
 
 const EMPTY_USER = {
   settings: {
@@ -31,7 +35,8 @@ export const storeUser = {
   state: {
     user: user,
     chatUser: storage.load(STORAGE_KEY_CHAT_USER, 'local') || (user ? user.callsign : null),
-    chatUserName: storage.load(STORAGE_KEY_CHAT_USER_NAME, 'local')
+    chatUserName: storage.load(STORAGE_KEY_CHAT_USER_NAME, 'local'),
+    instantMessage: null
   },
   getters: {
     userCallsign: state => {
@@ -51,6 +56,9 @@ export const storeUser = {
     },
     user: state => {
       return JSON.parse(JSON.stringify(state.user))
+    },
+    instantMessage: state => {
+      return state.instantMessage
     }
   },
   mutations: {
@@ -90,6 +98,9 @@ export const storeUser = {
       if (payload && payload.user) {
         storage.save(STORAGE_KEY_USER, state.user, remember ? 'local' : 'session')
       }
+    },
+    [MUTATE_INSTANT_MESSAGE] (state, payload) {
+      state.instantMessage = payload
     }
   },
   actions: {
@@ -115,7 +126,7 @@ export const storeUser = {
         })
     },
     [ACTION_POST] ({commit, state}, payload) {
-      if (!payload.data.token) {
+      if (!payload.data.token && !payload.skipToken) {
         payload.data.token = state.user.token
       }
       return request.post(payload.path, payload.data, payload.multipart)
@@ -136,6 +147,25 @@ export const storeUser = {
           }
           throw error
         })
+    },
+    [ACTION_CHECK_INSTANT_MESSAGE] ({commit, dispatch, state}) {
+      if (state.chatUser) {
+        return dispatch(ACTION_POST, {
+          path: 'instantMessage',
+          data: {user: state.chatUser},
+          skipToken: true,
+          supressAlert: true
+        })
+          .then(response => {
+            if (response.data) {
+              commit(MUTATE_INSTANT_MESSAGE, response.data)
+            }
+          })
+      }
     }
   }
+}
+
+export function checkImInit (store) {
+  setInterval(() => { store.dispatch(ACTION_CHECK_INSTANT_MESSAGE) }, CHECK_IM_INT)
 }

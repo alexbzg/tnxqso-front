@@ -1017,6 +1017,51 @@ table#cluster td.spotter{
 #chat{
     position: relative;
 }
+#personal_chat_message{
+    position: absolute;
+    top: 70px;
+    left: 400px;
+    width: 300px;
+    padding: 5px 20px 20px 20px;
+    background-color: #fffff5;
+    border: 5px solid #4ab54a;
+    border-radius: 20px;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.5); /* Параметры тени */
+    text-align: left;
+}
+#personal_chat_message #close_personal_message{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+#personal_chat_message #from_to{
+    position: absolute;
+    top: 20px;
+    left: 100px;
+    padding: 0;
+    text-align: center;
+    line-height: 14px;
+}
+#personal_chat_message #from_to #date_time{
+    font-size: 12px;
+    color: #777;
+}
+#personal_chat_message #from{
+    font-weight: bold;
+    color: #c70000;
+    padding-right: 10px;
+}
+#personal_chat_message #to{
+    font-weight: bold;
+    color: #009;
+}
+#personal_chat_message #text{
+    padding-top: 10px;
+    text-align: center;
+}
+
+
 table#message_form{
     width: 1010px;
     padding: 0px;

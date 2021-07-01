@@ -1,5 +1,17 @@
 <template>
     <div id="chat">
+
+    <div id="personal_chat_message" v-if="instantMessage">
+      <img id="close_personal_message" src="/static/images/icon_close.png" width="20" 
+        title="Close this personal message" @click="closeInstantMessage">
+      <img src="/static/images/icon_secret.png" />
+      <div id="from_to">
+          from <span id="from">{{instantMessage.user}}</span> to <span id="to">{{chatUser}}</span><br/>
+          <span id="date_time">{{instantMessage.date}} {{instantMessage.time}}</span>
+      </div>
+      <div id="text" v-html="instantMessageText"></div>
+    </div>
+
     <div id="refresh_time">Auto refresh<br/><b>5 sec</b></div>
         <table id="message_form">
             <tbody>
@@ -12,7 +24,7 @@
                             @blur="chatUserNameBlur"/>
                     </td>
                     <td>
-                        <img id="admin_message" 
+                        <img id="admin_message"
                             v-show="isAdmin && service && service.station "
                             src="/static/images/icon_admin_message.png"
                             title="*** Закреплённое сообщение / *** Pinned message"
@@ -132,7 +144,7 @@ import {replace0} from '../utils'
 
 import {ACTION_POST_ACTIVITY, MUTATE_CURRENT_ACTIVITY, MUTATE_USERS_CONSUMER, ACTION_ADD_USERS_CONSUMER}
   from '../store-activity'
-import {ACTION_POST, MUTATE_CHAT_USER, MUTATE_CHAT_USER_NAME} from '../store-user'
+import {ACTION_POST, MUTATE_CHAT_USER, MUTATE_CHAT_USER_NAME, MUTATE_INSTANT_MESSAGE} from '../store-user'
 import {ACTION_UPDATE_SERVICE} from '../store-services'
 
 const typingInt = 5 * 60
@@ -145,6 +157,11 @@ const MSG_SANITIZE_HTML_SETTINGS = {
   allowedAttributes: {
     image: ['src']
   }
+}
+
+function transformText (text) {
+  return sanitizeHTML(text, MSG_SANITIZE_HTML_SETTINGS)
+    .replace(/:(\d\d):/g, '<image src="' + SMILIES_IMG_PATH + '$1.gif"/>')
 }
 
 export default {
@@ -180,9 +197,13 @@ export default {
   },
   methods: {
     ...mapActions([ACTION_POST, ACTION_ADD_USERS_CONSUMER, ACTION_UPDATE_SERVICE, ACTION_POST_ACTIVITY]),
-    ...mapMutations([MUTATE_CHAT_USER, MUTATE_CHAT_USER_NAME, MUTATE_CURRENT_ACTIVITY, MUTATE_USERS_CONSUMER]),
+    ...mapMutations([MUTATE_CHAT_USER, MUTATE_CHAT_USER_NAME, MUTATE_CURRENT_ACTIVITY, MUTATE_USERS_CONSUMER,
+      MUTATE_INSTANT_MESSAGE]),
     insertSmilie (smilie) {
       insertTextAtCursor(this.$refs.msgTextInput, ':' + smilie + ':')
+    },
+    closeInstantMessage () {
+      this[MUTATE_INSTANT_MESSAGE](null)
     },
     hideSmilies () {
       this.showSmilies = false
@@ -280,7 +301,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['siteAdmin', 'loggedIn', 'userCallsign']),
+    ...mapGetters(['siteAdmin', 'loggedIn', 'userCallsign', 'instantMessage']),
     ...mapState({
       chatUser: state => state.user.chatUser,
       chatUserName: state => state.user.chatUserName,
@@ -293,6 +314,9 @@ export default {
       return this.siteAdmin || (this.service.station &&
         this.$store.state.stationSettings.admin === this.userCallsign)
     },
+    instantMessageText () {
+      return this.instantMessage ? transformText(this.instantMessage.text) : null
+    },
     data () {
       const data = [
         {id: 'admins_window', msg: []},
@@ -301,7 +325,7 @@ export default {
       if (this.serviceData) {
         for (const _msg of this.serviceData) {
           const msg = {..._msg}
-          msg.text = sanitizeHTML(msg.text, MSG_SANITIZE_HTML_SETTINGS)
+          msg.text = transformText(msg.text)
           let match = RE_MSG_TO.exec(msg.text)
           if (match) {
             const to = match[0]
@@ -310,7 +334,6 @@ export default {
             msg.to.shift()
             msg.to = msg.to.map(item => item.trim())
           }
-          msg.text = msg.text.replace(/:(\d\d):/g, '<image src="' + SMILIES_IMG_PATH + '$1.gif"/>')
           if (msg.text.startsWith('***') && msg.admin && this.service && this.service.station) {
             msg.text = msg.text.replace(/^\*+\s+/, '')
             data[0].msg.push(msg)

@@ -19,7 +19,7 @@ export const ACTION_POST = 'actionPost'
 export const ACTION_SAVE_SETTINGS = 'actionSaveSettings'
 const ACTION_CHECK_INSTANT_MESSAGE = 'actionCheckInstantMessage'
 
-const CHECK_IM_INT = 30000
+const CHECK_IM_INT = 600000
 
 const EMPTY_USER = {
   settings: {

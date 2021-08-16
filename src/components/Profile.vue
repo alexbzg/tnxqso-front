@@ -267,7 +267,7 @@ import {mapGetters, mapActions, mapMutations} from 'vuex'
 
 import QTH_PARAMS from '../../public/static/js/qthParams.json'
 
-import {parseCallsigns, getStationURL, qthFieldTitles} from '../utils'
+import {parseCallsigns, urlCallsign, getStationURL, qthFieldTitles} from '../utils'
 import {validCallsignFull} from '../ham-radio'
 import router from '../router'
 import request from '../request'
@@ -495,7 +495,7 @@ export default {
       this.settings.chatAdmins = parseCallsigns(this.chatAdmins)
     },
     downloadLog () {
-      window.open(`/aiohttp/adif/${this.userCallsign}`)
+      window.open(`/aiohttp/adif/${urlCallsign(this.userCallsign)}`)
     },
     clearAll () {
       if (window.confirm( 'Do you really want to reset all station settings?') ) {

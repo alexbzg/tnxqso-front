@@ -1,8 +1,10 @@
 <template>
     <div id="map">
-      <l-map style="height: 100%; width: 100%" :zoom="zoom" :center.sync="center"
+      <l-map style="height: 100%; width: 100%" :zoom="map_settings.zoom" :center.sync="center"
         :bounds="bounds"
-        :options="{zoomControl: false, attributionControl: false}">
+        :options="{zoomControl: false, attributionControl: false}"
+        @update:zoom="update_zoom"
+        >
         <l-control-layers :hide-single-base="true"/>
         <l-tile-layer v-for="layer in baseLayers" :key="layer.id" :url="url" :options="{id: layer.id}"
             layer-type="base" :name="layer.name" :visible="layer.visible"/>
@@ -19,8 +21,9 @@
             format="image/png"
             version="1.3.0"
             :styles="layer.styles"
-            :visible="layer.visible"
+            :visible="overlay_visible(layer.name)"
             :options="{minZoom: layer.minZoom, maxZoom: layer.maxZoom}"
+            @update:visible="update_overlay(layer.name, $event)"
             />
         <l-geo-json :geojson="track" ref="geoJsonTrack"></l-geo-json>
         <l-marker :lat-lng="currentLocation" v-if="stationSettings && currentLocation">
@@ -66,6 +69,9 @@ import toGeoJson from '@mapbox/togeojson'
 import trackService from '../track-service'
 import request from '../request'
 // const currentMarkerOptions = { preset: 'islands#dotIcon', iconColor: '#ff0000' }
+import storage from '../storage'
+
+const MAP_SETTINGS_STORAGE_KEY = 'mapSettings'
 
 const DEFAULT_ZOOM = 13
 const OVERLAYS = [
@@ -82,6 +88,14 @@ const OVERLAYS = [
           name: 'RAFA',
           layers: 'AOPAF',
           styles: 'rafa',
+          visible: true,
+          minZomm: 8
+        },
+        {
+          qthCountry: 'RU',
+          name: 'RRNA',
+          layers: 'RRNA_LIST',
+          styles: 'river',
           visible: true,
           minZomm: 8
         },
@@ -125,6 +139,8 @@ export default {
     LControlAttribution
   },
   data () {
+    const map_settings = storage.load(MAP_SETTINGS_STORAGE_KEY, 'local') || {overlays: {}, zoom: DEFAULT_ZOOM}
+
     return {
       tabId: 'news',
       currentLocation: null,
@@ -142,8 +158,8 @@ export default {
           visible: true
         }
       ],
+      map_settings: map_settings,
       track: null,
-      zoom: DEFAULT_ZOOM,
       center: [60, 60],
       bounds: null,
       map: null,
@@ -180,6 +196,13 @@ export default {
           })
       }
     },
+    overlay_visible (name) {
+      if (name in this.map_settings.overlays && 
+        typeof this.map_settings.overlays[name] !== 'undefined') {
+        return this.map_settings.overlays[name]
+      }
+      return this.overlays.find(item => item.name === name).visible
+    },
     centerLocation () {
       if (this.centerLocationFlag) {
         if (!this.currentLocation) {
@@ -199,6 +222,14 @@ export default {
         this.currentPopup.comments = dt.comments ? dt.comments : null
       }
     },
+    update_zoom (zoom) {
+      this.map_settings.zoom = zoom
+      storage.save(MAP_SETTINGS_STORAGE_KEY, this.map_settings, 'local' )
+    },
+    update_overlay (overlay_name, visible) {
+      this.map_settings.overlays[overlay_name] = visible
+      storage.save(MAP_SETTINGS_STORAGE_KEY, this.map_settings, 'local' )
+    }
 
   },
   computed: {

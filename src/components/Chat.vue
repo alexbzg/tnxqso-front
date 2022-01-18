@@ -329,7 +329,7 @@ export default {
           let match = RE_MSG_TO.exec(msg.text)
           if (match) {
             const to = match[0]
-            msg.text = msg.text.substring(to.length, msg.text.length)
+            msg.text = msg.text.replace(to, '')
             msg.to = to.split(/\s?\u21d2\s?/)
             msg.to.shift()
             msg.to = msg.to.map(item => item.trim())

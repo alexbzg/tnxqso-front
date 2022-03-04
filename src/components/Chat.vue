@@ -65,7 +65,7 @@
                 <td class="call">
                     <span class="call" @click="replyTo(msg.user)">{{$options.replace0(msg.user)}}</span><br/>
                     <span class="name" @click="replyTo(msg.user)" v-if="msg.name">{{msg.name}}</span>
-                    <a :href="'http://qrz.com/db/' + msg.user" target="_blank" rel="noopener"
+                    <a :href="'http://qrz.ru/db/' + msg.user" target="_blank" rel="noopener"
                         title="Link to QRZ.com">
                         <img src="/static/images/icon_qrz.png"/>
                     </a>

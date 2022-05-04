@@ -55,6 +55,8 @@
 // import user from './user'
 // user.switchDataServiceUrlPrefix( true )
 import './style.css'
+import capitalizeDirective from './capitalize-directive'
+capitalizeDirective()
 
 import LanguageSwitch from './components/LanguageSwitch'
 import DonateBlock from './components/DonateBlock.vue'

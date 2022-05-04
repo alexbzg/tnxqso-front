@@ -2,7 +2,7 @@ module.exports = {
     runtimeCompiler: true,
     devServer: {
 	disableHostCheck: true,
-        public: 'test.tnxqso.com',
+        public: 'dev.tnxqso.com',
 	port: 8081,
 	watchOptions: {
 	    ignored: /static/

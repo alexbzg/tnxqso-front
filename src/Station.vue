@@ -22,7 +22,7 @@
                 v-if="enable.log" :class="{updated_tab: tabsUnread.log}">Log</router-link>
             <router-link to="/map" tag="div" id="tab_map" class="tab"
                 v-if="enable.map">Map</router-link>
-            <router-link to="/adxcluster" tag="div" id="tab_adxc" class="tab"
+            <router-link to="/cluster" tag="div" id="tab_adxc" class="tab"
                 v-if="enable.cluster">Cluster</router-link>
             <router-link to="/stats" tag="div" id="tab_log" class="tab"
                 v-if="enable.stats">Stats</router-link>

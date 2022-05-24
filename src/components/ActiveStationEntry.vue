@@ -66,7 +66,7 @@ export default {
         this.statusData.qth.fields.values.filter(item => item) : []
     },
     period () {
-      if (this.type !== 'archive' && this.stationSettings.station.activityPeriod &&
+      if (this.stationSettings.station.activityPeriod &&
         this.stationSettings.station.activityPeriod.length) {
         if (this.stationSettings.station.activityPeriod.length < 2) {
           return this.formatDate(this.stationSettings.station.activityPeriod[0])

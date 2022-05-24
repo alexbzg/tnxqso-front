@@ -69,7 +69,6 @@
                 <td class="spotter">{{spot.de}}</td>
             </tr>
         </table>
-        <a href="http://adxcluster.com" target="_blank" rel="noopener">adxcluster.com</a>                   
     </div>
 </template>
 

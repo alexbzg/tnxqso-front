@@ -38,6 +38,9 @@
                     @click="addSpotText('UP', true)"/> 
                 <input type="button" class="add_text_btn" value="FT8" 
                     @click="addSpotText('FT8', true)"/> 
+                <input type="button" class="add_text_btn" value="FT4" 
+                    @click="addSpotText('FT4', true)"/> 
+
             </td>
         </tr>
     </table>

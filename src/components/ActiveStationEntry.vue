@@ -36,7 +36,7 @@
                 <a :href="stationURL + '#/info'" v-if="stationSettings.enable.stationInfo">Info</a>
                 <a :href="stationURL + '#/log'" v-if="stationSettings.enable.log">Log</a>
                 <a :href="stationURL + '#/map'" v-if="stationSettings.enable.map">Map</a>
-                <a :href="stationURL + '#/adxcluster'" v-if="stationSettings.enable.cluster">Cluster</a>
+                <a :href="stationURL + '#/cluster'" v-if="stationSettings.enable.cluster">Cluster</a>
                 <a :href="stationURL + '#/stats'" v-if="stationSettings.enable.stats">Stats</a>
                 <a :href="stationURL + '#/chat'" v-if="stationSettings.enable.chat">Chat</a>
                 <a :href="stationURL + '#/gallery'" v-if="stationSettings.enable.gallery">Gallery</a>

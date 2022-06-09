@@ -315,7 +315,7 @@ export default {
         this.$store.state.stationSettings.admin === this.userCallsign)
     },
     chatAccess() {
-      return !this.service.station || !this.$store.state.stationSettings.chatAccess ||
+      return !this.serve || !this.service.station || !this.$store.state.stationSettings.chatAccess ||
         (this.$store.state.stationSettings.chatAccess === 'users' && this.loggedIn) ||
         (this.$store.state.stationSettings.chatAccess === 'admins' && this.isAdmin)
     },

@@ -33,7 +33,7 @@
             <!-- STATUS -->
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info"
-                    @click="infoPopup= getString('POPUP_STATUS')">
+                    @click="infoPopup = getString('POPUP_STATUS')">
                 <span v-html="getString('STATUS_TAB')"/>
                 <div class="block_settings">
                     <div id="status_from">
@@ -188,9 +188,17 @@
                     @click="infoPopup= getString('CHAT_POPUP')">
                 <input type="checkbox" id="checkbox_chat" v-model="settings.enable.chat" /> <span v-html="getString('CHAT_SHOW')"/><br/>
                 <div class="block_settings" v-if="settings.enable.chat">
+                    <span v-html="getString('CHAT_ACCESS')"/>&nbsp;
+                    <select id="chat_access_select" v-model="settings.chatAccess">
+                        <option :value="null">{{getString('CHAT_ACCESS_EVERYBODY')}}</option>
+                        <option :value="'users'">{{getString('CHAT_ACCESS_USERS')}}</option>
+                        <option :value="'admins'">{{getString('CHAT_ACCESS_ADMINS')}}</option>
+                    </select>
+                    <br/>
+                   
                     <span v-html="getString('CHAT_FILTER')"/>: <br/>
                     <input type="text" id="admin_calls" v-model="chatAdmins"
-                        @change="chatAdminsChange" /><br/><br/>
+                        @change="chatAdminsChange" /><br/>
                     <input type="checkbox" id="checkbox_chat_delete"
                         v-model="settings.skipConfirmation.chatDelete" />
                     <span v-html="getString('CHAT_CHECK')"/><br/><br/>
@@ -292,6 +300,7 @@ export default {
   },
   data () {
     const settings = this.$store.getters.user.settings
+    settings.chatAccess = settings.chatAccess || null
     if (this.$store.getters.stationCallsign) {
       settings.station.callsign = this.$store.getters.stationCallsign.toUpperCase()
     } else {

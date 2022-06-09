@@ -13,7 +13,7 @@
     </div>
 
     <div id="refresh_time">Auto refresh<br/><b>5 sec</b></div>
-        <table id="message_form">
+        <table id="message_form" v-if="chatAccess">
             <tbody>
                 <tr>
                     <td>
@@ -313,6 +313,11 @@ export default {
       }
       return this.siteAdmin || (this.service.station &&
         this.$store.state.stationSettings.admin === this.userCallsign)
+    },
+    chatAccess() {
+      return !this.$store.state.stationSettings.chatAccess ||
+        (this.$store.state.stationSettings.chatAccess === 'users' && this.loggedIn) ||
+        (this.$store.state.stationSettings.chatAccess === 'admins' && this.isAdmin)
     },
     instantMessageText () {
       return this.instantMessage ? transformText(this.instantMessage.text) : null

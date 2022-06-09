@@ -133,7 +133,7 @@ export const storeUser = {
         .catch(error => {
           let msg = ''
           debugLog(error)
-          if (error.status === 400 || error.status === 403 ) {
+          if (error.status === 400 || error.status === 403 || error.status == 401) {
             if ( error.message === 'Login expired' || error.message === 'Not logged in' ) {
               commit(MUTATE_USER, null)
               return

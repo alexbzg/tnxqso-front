@@ -14,10 +14,8 @@ export default {
       debugLog(error.response.data)
       debugLog(error.response.status)
       debugLog(error.response.headers)
-      if (error.response.status === 400) {
-        e.status = 400
-        e.message = error.response.data
-      }
+      e.message = error.response.data
+      e.status = error.response.status
     } else if (error.request) {
       // The request was made but no response was received
       // `error.request` is an instance of XMLHttpRequest in the browser and an instance of

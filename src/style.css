@@ -532,7 +532,7 @@ table.tabs td#logo{
     padding: 10px 0 20px 0;
 }
 
-table.tabs td#login{
+table.tabs td#website_links{
     text-align: right;
 }
 
@@ -560,7 +560,7 @@ table.tabs td#login{
     cursor: pointer;
 }
 #tab_donate{
-
+ margin-right: 30px;
 }
 .updated_tab{
     background: #f5f5f5  url("/static/images/tabs_background.jpg") bottom right no-repeat;
@@ -578,7 +578,7 @@ table.tabs td#login{
 }
 
 .tabs #tab_stations{
-    margin-left: 30px;
+
 }
 .tabs.index_tabs #tab_stations{
     margin-left: 0px;
@@ -1017,6 +1017,19 @@ table#cluster td.spotter{
 #chat{
     position: relative;
 }
+#div_no_login{
+    color: #777;
+    margin-top: 20px;
+    font-size: 14px;
+    font-style: italic;
+}
+#div_no_login a{
+    color: #777;
+}
+#div_no_login a:hover{
+    color: #009;
+}
+
 #personal_chat_message{
     position: absolute;
     top: 70px;
@@ -1223,7 +1236,7 @@ table#chat_layout .personal{
 table#admins_window{
     width: 1000px;
     padding: 0px;
-    margin: 20px 20px 20px 20px;
+    margin: 20px 20px 0 20px;
     font-size: 16px;
     border-collapse: collapse;
 }
@@ -1310,6 +1323,9 @@ table#chat_window td.call span.name{
 table#chat_window tr.admin td.call span.call{
     color: #A00;
 }
+table#chat_window td.call a img, table#admins_window td.call a img{
+    display: none;
+}
 table#chat_window td.message{
     line-height: 1.5em;
     padding-top: 5px;
@@ -1347,7 +1363,7 @@ table#chat_window td.message:hover .translate_lnk, table#admins_window td.messag
 
 /* ===========================   L O G I N   /    R E G I S T E R  ==================================*/
 #login_register{
-    padding: 0px 20px 100px 20px;
+    padding: 100px 20px 100px 20px;
     line-height: 1.2em;
 }
 #login_register span{
@@ -1385,31 +1401,67 @@ table#chat_window td.message:hover .translate_lnk, table#admins_window td.messag
 
 /* ===========================   S E T U P  ==================================*/
 
+#user_menu{
+    text-align: center;
+    padding: 30px 30px;
+    border-bottom: 1px solid #ccc;
+}
+#user_menu input{
+    background-color: #f5f5f5;
+    color: #009;
+    margin-right: 15px;
+    border: 1px solid #ccc;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1); /* Параметры тени */
+}
+#user_menu input#view_setup{
+    float: left;
+}
+#user_menu input#logout{
+    float: right;
+    margin-right: 0;
+}
+
+
+
+#change_password{
+    margin-top: 100px;
+}
+#change_password span{
+    font-size: 12px;
+    color: #999;
+}
+#change_password input#email, #change_password input#password_input{
+    margin: 0 0 20px 0;
+    border: 1px solid #ccc;
+}
+
+
+
+
+
+
+
+
+
 #station_menu{
     text-align: right;
-    padding: 20px 20px 10px 20px;
+    padding: 10px 0px;
 }
 #station_menu input{
     background-color: #f5f5f5;
     color: #009;
     margin-right: 15px;
     border: 1px solid #ccc;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.2); /* Параметры тени */
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1); /* Параметры тени */
 }
-#station_menu input#button_lng{
-    font-weight: bold;
-    float: left;
-    color: #000;
-}
-
 #station_menu input#button_clear_all{
     float: left;
     color: #c00;
     font-weight: bold;
 }
 #station_menu input#button_info{
-     color: #000;
-     margin-right: 250px;
+    color: #000;
+    margin-right: 0;
 }
 
 
@@ -1426,6 +1478,7 @@ table#chat_window td.message:hover .translate_lnk, table#admins_window td.messag
     padding: 10px 30px;
     font-size: 16px;
     line-height: 2em;
+    border-top: 1px solid #ccc;
 }
 #station_setup textarea{
     width: 1080px;

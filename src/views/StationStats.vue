@@ -32,28 +32,28 @@
                     </select>
                     <select v-model="filter.fieldValue" @change="saveFilter()">
                         <option :value="null">All</option>
-                        <option v-for="value in filterFieldValues" :value="value">{{value}}</option>
+                        <option v-for="value in filterFieldValues" :value="value" :key="value">{{value}}</option>
                     </select>
                     <table id="filter_data">
                         <tr>
                             <td id="qso_calls">
                                 <select class="data" v-model="type">
-                                    <option v-for="_type in types" :value="_type">{{_type}}</option>
+                                    <option v-for="_type in types" :value="_type" :key="_type">{{_type}}</option>
                                 </select>
                             </td>
                             <td><span>All modes</span></td>
-                            <td v-for="mode in $options.MODES">{{mode}}</td>
+                            <td v-for="mode in $options.MODES" :key="mode">{{mode}}</td>
                         </tr>
                         <tr>                        
                         <tr>                        
                             <td><span>All bands</span></td>
-                            <td class="data">{{statsTable.total.total}}</tda>
-                            <td v-for="mode in $options.MODES" class="data">{{statsTable.total[mode]}}</td>
+                            <td class="data">{{statsTable.total.total}}</td>
+                            <td v-for="mode in $options.MODES" class="data" :key="mode">{{statsTable.total[mode]}}</td>
                         </tr>
-                        <tr :class="{odd: idx % 2 === 0}" v-for="(band, idx) in $options.BANDS">
+                        <tr :class="{odd: idx % 2 === 0}" v-for="(band, idx) in $options.BANDS" :key="band">
                             <td>{{band}} <span>MHz</span></td>
-                            <td class="data">{{statsTable[band].total}}</tda>
-                            <td class="data" v-for="mode in $options.MODES">{{statsTable[band][mode]}}</td>
+                            <td class="data">{{statsTable[band].total}}</td>
+                            <td class="data" v-for="mode in $options.MODES" :key="mode">{{statsTable[band][mode]}}</td>
                         </tr>
                     </table>
                 </td>
@@ -258,7 +258,7 @@ export default {
       this.data = this.service.data
     },
     uniqueFieldValues (field, data) {
-      return this.uniqueValues(field === 'loc' ? x => x.loc : x => x.qth[field], /[, \/]+/, data)
+      return this.uniqueValues(field === 'loc' ? x => x.loc : x => x.qth[field], /[, ]+/, data)
     },
     uniqueValues (lambda, delimiter, data) {
       if (!data) {

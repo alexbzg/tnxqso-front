@@ -1,5 +1,6 @@
  {
-    "CLEAR_ALL": {"en": "Clear all", "ru": "Очистить профиль"},
+    "STATION_SETUP": {"en": "Station settings", "ru": "Настройки станции"},
+    "CLEAR_ALL": {"en": "Clear station settings", "ru": "Очистить настройки станции"},
     "HOW_TO_TRACK_BTN": {"en": "How to upload track?", "ru": "Как загрузить маршрут?"},
     "CHANGE_EMAIL": {"en": "Change email/password", "ru": "Сменить email/пароль"},
     "POPUP_STATION": {"ru": "Поставьте отметку для публикации вашей экспедиции в списке станций на главной странице. <br/>Отметку ставьте после того, как ваш профиль по станции полностью готов.<br/><u>Ссылку на страницу станции</u> удобно использовать для распространения в соц.сетях/форумах/кластерах.", "en": "Check the box to post your station on the front page. <br/> Check only if you have finished the profile editing.<br/><u>Station page link</u> is convinient for posting in social media/forums/dx clusters."},

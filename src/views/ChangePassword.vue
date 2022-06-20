@@ -9,6 +9,8 @@
         <input type="button" id="button_submit" class="btn" 
             :disabled="disableSubmit"
             value="Save" @click="submit"/>
+        <input type="button" id="button_cancel" class="btn" v-if="loggedIn"
+            value="Cancel" @click="cancel"/>
     </div>
 </template>
 
@@ -20,6 +22,13 @@ import {validateEmail} from '../utils'
 
 export default {
   name: 'changePassword',
+  beforeRouteEnter ( to, from, next ) {
+    next( vm => {
+      if ( !vm.$store.getters.loggedIn && !vm.token ) {
+        vm.$router.push( '/login' )
+      }
+    } )
+  },
   data () {
     return {
       pending: false,
@@ -45,14 +54,17 @@ export default {
       this[ACTION_EDIT_USER](data)
         .then(() => {
           if (this.loggedIn) {
-            this.$emit('password-changed')
+            this.$router.push( '/profile' )
           } else {
-            this.$router.push('/login')
+            this.$router.push( '/login' )
           }
         })
         .finally(() => {
           this.pending = false
         })
+    },
+    cancel () {
+      this.$router.push( '/profile' )
     }
   },
   computed: {

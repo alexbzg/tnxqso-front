@@ -39,7 +39,7 @@
 import * as moment from 'moment'
 
 import tabMixin from '../station-tab-mixin'
-import LogTable from './LogTable'
+import LogTable from '../components/LogTable'
 import storage from '../storage'
 import {qthFieldTitles} from '../utils'
 

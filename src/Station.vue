@@ -1,7 +1,8 @@
 <template>
     <div id="app">
     <a href="/"><img id="logo" src="/static/images/tnxqso_logo.png" border="0" title="TNXQSO.com"></a>
-     <table class="tabs">
+    <language-switch v-if="languageSwitchEnabled"></language-switch>
+    <table class="tabs">
         <tr>
             <td id="station_title">
                 <h1>{{stationCS}}</h1>
@@ -42,6 +43,12 @@
                     stationSettings.read.donate}">
                 Donate
             </router-link>
+            <router-link to="/login" tag="div" id="tab_login" class="tab" v-if="!loggedIn">
+                Login
+            </router-link>
+            <router-link to="/profile" tag="div" id="tab_login" class="tab" v-else>
+                Profile
+            </router-link>
             <router-link to="/stations" tag="div" id="tab_stations" class="tab"
                 :class="{updated_tab: !$store.state.activeStations.read}">
                 Stations
@@ -76,6 +83,7 @@ import storage from './storage'
 import {formatPeriod} from './utils'
 import StationStatus from './components/StationStatus'
 import DonateBlock from './components/DonateBlock.vue'
+import LanguageSwitch from './components/LanguageSwitch'
 
 const tabsReadStoragePfx = 'stationTabsRead_'
 const tabs = {
@@ -87,7 +95,7 @@ const STATION_SETTINGS_RELOAD = 60000
 export default {
   USER_FIELDS_COUNT: USER_FIELDS_COUNT,
   name: 'station',
-  components: {StationStatus, DonateBlock},
+  components: {StationStatus, DonateBlock, LanguageSwitch},
   data () {
     const tabsUnread = {}
     for (const tab in tabs) {
@@ -165,6 +173,9 @@ export default {
   },
   computed: {
     ...mapState(['stationSettings']),
+    languageSwitchEnabled () {
+      return this.$route.name === 'Profile'
+    },
     period () {
       if (this.stationSettings.station &&
         this.stationSettings.station.activityPeriod && this.stationSettings.station.activityPeriod.length) {
@@ -173,7 +184,11 @@ export default {
       else {
         return ''
       }
+    },
+    loggedIn: function () {
+      return this.$store.getters.loggedIn
     }
+
   },
   methods: {
     ...mapActions([ACTION_LOAD_STATION]),
@@ -200,6 +215,7 @@ export default {
       this.$set(this, 'statusData', statusData)
     }
   }
+
 }
 </script>
 

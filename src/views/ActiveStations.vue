@@ -40,7 +40,7 @@ import storage from '../storage'
 import {ACTION_POST} from '../store-user'
 import {MUTATE_ACTIVE_STATIONS_READ} from '../store-active-stations'
 
-import ActiveStationEntry from './ActiveStationEntry'
+import ActiveStationEntry from '../components/ActiveStationEntry'
 
 const STORAGE_KEY_COMPACT_VIEW = 'activeStationsCompactView'
 

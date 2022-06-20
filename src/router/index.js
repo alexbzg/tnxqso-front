@@ -1,16 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import About from './../components/About'
-import Login from './../components/Login'
-import Profile from './../components/Profile'
-import ActiveStations from './../components/ActiveStations'
-import ChangePassword from '../components/ChangePassword'
-import Contact from '../components/Contact'
-import Chat from '../components/Chat'
-import QthNow from '../components/Qthnow'
-import Tnxlog from '../components/Tnxlog'
-import Tnxpost from '../components/Tnxpost'
-import QthNowMap from '../components/QthNowMap'
+import About from './../views/About'
+import Login from './../views/Login'
+import Profile from './../views/Profile'
+import ActiveStations from './../views/ActiveStations'
+import Contact from '../views/Contact'
+import Chat from '../views/Chat'
+import QthNow from '../views/Qthnow'
+import Tnxlog from '../views/Tnxlog'
+import Tnxpost from '../views/Tnxpost'
+import QthNowMap from '../views/QthNowMap'
 
 Vue.use(Router)
 
@@ -73,12 +72,6 @@ const router = new Router({
       path: '/profile',
       name: 'Profile',
       component: Profile,
-      props: true
-    },
-    {
-      path: '/changePassword',
-      name: 'ChangePassword',
-      component: ChangePassword,
       props: true
     },
     {

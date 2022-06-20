@@ -1,16 +1,30 @@
 <template>
     <div>
-         <div id="station_menu">
-            <input type="button" id="button_clear_all" class="btn"
-                :value="getString('CLEAR_ALL')" @click="clearAll()"/>
-            <input type="button" id="button_info" class="btn" :value="getString('HOW_TO_TRACK_BTN')"
-                @click="openMap()"/>
-            <router-link to="/changePassword" tag="input" type="button" id="button_change_email"
+         <div id="user_menu">
+
+            <input type="button" id="view_setup" class="btn" :value="getString('STATION_SETUP')"
+                @click="showSettingsClick"/>
+
+            <input type="button" id="button_change_email" @click="showChangePasswordClick"
                 class="btn" :value="getString('CHANGE_EMAIL')"/>
-            <input type="button" id="button_change_email" class="btn" value="Logout" @click="logout()"/>
+            <input type="button" id="logout" class="btn" value="Logout" @click="logout()"/>
         </div>
 
-        <div id="station_setup">
+        <change-password v-if="showChangePassword" @password-changed="showChangePasswordClick"></change-password>
+
+        <div id="station_setup" v-show="showSettings" v-if="stationCallsign">
+
+
+            <div id="station_menu">
+
+                <input type="button" id="button_clear_all" class="btn"
+                :value="getString('CLEAR_ALL')" @click="clearAll()"/>
+
+                <input type="button" id="button_info" class="btn" :value="getString('HOW_TO_TRACK_BTN')"
+                @click="openMap()"/>
+
+            </div>
+
 
             <!-- STATION -->
             <div class="station_setup_block">
@@ -195,7 +209,7 @@
                         <option :value="'admins'">{{getString('CHAT_ACCESS_ADMINS')}}</option>
                     </select>
                     <br/>
-                   
+
                     <span v-html="getString('CHAT_FILTER')"/>: <br/>
                     <input type="text" id="admin_calls" v-model="chatAdmins"
                         @change="chatAdminsChange" /><br/>
@@ -277,11 +291,12 @@ import QTH_PARAMS from '../../public/static/js/qthParams.json'
 
 import {parseCallsigns, urlCallsign, getStationURL, qthFieldTitles} from '../utils'
 import {validCallsignFull} from '../ham-radio'
-import router from '../router'
 import request from '../request'
 import LocalizationMixin from '../localization-mixin'
 
-import {MUTATE_USER, ACTION_SAVE_SETTINGS, ACTION_POST} from '../store-user'
+import ChangePassword from '../components/ChangePassword'
+
+import {MUTATE_USER, ACTION_EDIT_USER, ACTION_POST} from '../store-user'
 
 export default {
   CURRENT_POSITION_ICONS_COUNT: CURRENT_POSITION_ICONS_COUNT,
@@ -289,40 +304,30 @@ export default {
   name: 'profile',
   mixins: [LocalizationMixin],
   components: {
-    VueEditor, DatePicker
+    VueEditor, DatePicker, ChangePassword
   },
   beforeRouteEnter ( to, from, next ) {
     next( vm => {
       if ( !vm.$store.getters.loggedIn ) {
-        router.push( '/login' )
+        vm.$router.push( '/login' )
       }
     } )
   },
   data () {
-    const settings = this.$store.getters.user.settings
-    settings.chatAccess = settings.chatAccess || null
-    if (this.$store.getters.stationCallsign) {
-      settings.station.callsign = this.$store.getters.stationCallsign.toUpperCase()
-    } else {
-      settings.station.callsign = this.$store.getters.userCallsign.toUpperCase()
-    }
-    const qthFields = {titles: [], values: []}
-    for (let co = 0; co < QTH_PARAMS.fieldCount; co++) {
-      qthFields.titles.push(QTH_PARAMS.defaultTitle)
-      qthFields.values.push(null)
-    }
     return {
-      settings: settings,
+      settings: null,
+      showSettings: false,
+      showChangePassword: false,
       newsItem: '',
-      clusterCallsigns: settings.clusterCallsigns != null ? settings.clusterCallsigns.join(' ') : null,
-      clusterHighlight: settings.clusterHighlight != null ? settings.clusterHighlight.join(' ') : null,
-      chatAdmins: settings.chatAdmins.join(' '),
+      clusterCallsigns: null,
+      clusterHighlight: null,
+      chatAdmins: null,
       infoPopup: null,
       trackFile: null,
       status: {
         online: false,
         qth: {
-          fields: qthFields,
+          fields: null,
           loc: null
         }
       },
@@ -339,6 +344,7 @@ export default {
   },
   mounted () {
     this.loadMisc()
+    this.initSettings()
   },
   computed: {
     stationLink () {
@@ -352,11 +358,47 @@ export default {
   watch: {
     stationCallsign () {
       this.loadMisc()
+      this.initSettings()
     }
   },
   methods: {
-    ...mapActions([ACTION_POST, ACTION_SAVE_SETTINGS]),
+    ...mapActions([ACTION_POST, ACTION_EDIT_USER]),
     ...mapMutations([MUTATE_USER]),
+    initSettings () {
+      const settings = this.$store.getters.user.settings
+      settings.chatAccess = settings.chatAccess || 'users'
+      if (this.$store.getters.stationCallsign) {
+        settings.station.callsign = this.$store.getters.stationCallsign.toUpperCase()
+      } else if (this.$store.getters.userCallsign){
+        settings.station.callsign = this.$store.getters.userCallsign.toUpperCase()
+      }
+      const qthFields = {titles: [], values: []}
+      for (let co = 0; co < QTH_PARAMS.fieldCount; co++) {
+        qthFields.titles.push(QTH_PARAMS.defaultTitle)
+        qthFields.values.push(null)
+      }
+      this.status.qth.fields = qthFields
+      this.settings = settings
+      this.clusterCallsigns = settings.clusterCallsigns != null ? settings.clusterCallsigns.join(' ') : null
+      this.clusterHighlight = settings.clusterHighlight != null ? settings.clusterHighlight.join(' ') : null
+      this.chatAccess = settings.chatAccess
+    },
+    showSettingsClick () {
+      if (this.showSettings) {
+        this.showSettings = false
+      } else {
+        this.showChangePassword = false
+        this.showSettings = true
+      }
+    },
+    showChangePasswordClick () {
+      if (this.showChangePassword) {
+        this.showChangePassword = false
+      } else {
+        this.showSettings = false
+        this.showChangePassword = true
+      }
+    },
     loadMisc () {
       this.loadStatus()
       this.loadTrack()
@@ -415,7 +457,7 @@ export default {
         }
         clearAll = true
       }
-      this[ACTION_SAVE_SETTINGS](this.settings)
+      this[ACTION_EDIT_USER]({settings: this.settings})
         .then(() => {
           window.alert( 'Your settings were saved.' )
           if (clearAll) {

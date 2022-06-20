@@ -17,11 +17,11 @@
             <tbody>
                 <tr>
                     <td>
-                        <input type="text" id="your_call" v-model="chatUserField" @blur="chatUserBlur"/>
+                        <input type="text" id="your_call" v-model="chatCallsignField" @blur="chatCallsignBlur"/>
                     </td>
                     <td>
-                        <input type="text" id="your_name" v-model="chatUserNameField"
-                            @blur="chatUserNameBlur"/>
+                        <input type="text" id="your_name" v-model="userNameField"
+                            @blur="userNameBlur"/>
                     </td>
                     <td>
                         <img id="admin_message"
@@ -41,15 +41,20 @@
                     <td>
                         <button @click="buttonClick()" :disabled="!buttonVisible">OK</button>
                     </td>
-            </tr>
-            <tr>
-                <td class="note">your callsign</td>
-                <td class="note">your name</td>
-                <td></td>
-                <td class="note">your message</td>
-                <td class="note">&nbsp;</td>
-            </tr>
-        </tbody></table>
+                </tr>
+                <tr>
+                    <td class="note">your callsign</td>
+                    <td class="note">your name</td>
+                    <td></td>
+                    <td class="note">your message</td>
+                    <td class="note">&nbsp;</td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="div_no_login" v-if="!loggedIn">
+            Please <router-link to="/login">login</router-link> to post messages.
+            Пожалуйста, <router-link to="/login">залогиньтесь</router-link> чтобы отправлять сообщения.
+        </div>
 
         <smilies v-show="showSmilies" @hide="hideSmilies" @smilie-click="insertSmilie">
         </smilies>
@@ -138,13 +143,13 @@ import sanitizeHTML from 'sanitize-html'
 import insertTextAtCursor from 'insert-text-at-cursor'
 
 import ServiceDisplay from './ServiceDisplay'
-import Smilies, {SMILIES_IMG_PATH} from './Smilies'
+import Smilies, {SMILIES_IMG_PATH} from '../components/Smilies'
 
 import {replace0} from '../utils'
 
 import {ACTION_POST_ACTIVITY, MUTATE_CURRENT_ACTIVITY, MUTATE_USERS_CONSUMER, ACTION_ADD_USERS_CONSUMER}
   from '../store-activity'
-import {ACTION_POST, MUTATE_CHAT_USER, MUTATE_CHAT_USER_NAME, MUTATE_INSTANT_MESSAGE} from '../store-user'
+import {ACTION_POST, ACTION_EDIT_USER, MUTATE_INSTANT_MESSAGE} from '../store-user'
 import {ACTION_UPDATE_SERVICE} from '../store-services'
 
 const typingInt = 5 * 60
@@ -172,8 +177,8 @@ export default {
   data () {
     return {
       showSmilies: false,
-      chatUserField: this.$store.state.user.chatUser,
-      chatUserNameField: this.$store.state.user.chatUserName,
+      chatCallsignField: this.$store.state.user.chatCallsign,
+      userNameField: this.$store.state.user.name,
       messageText: '',
       typingTs: null,
       posting: false
@@ -196,9 +201,8 @@ export default {
     next()
   },
   methods: {
-    ...mapActions([ACTION_POST, ACTION_ADD_USERS_CONSUMER, ACTION_UPDATE_SERVICE, ACTION_POST_ACTIVITY]),
-    ...mapMutations([MUTATE_CHAT_USER, MUTATE_CHAT_USER_NAME, MUTATE_CURRENT_ACTIVITY, MUTATE_USERS_CONSUMER,
-      MUTATE_INSTANT_MESSAGE]),
+    ...mapActions([ACTION_POST, ACTION_EDIT_USER, ACTION_ADD_USERS_CONSUMER, ACTION_UPDATE_SERVICE, ACTION_POST_ACTIVITY]),
+    ...mapMutations([MUTATE_CURRENT_ACTIVITY, MUTATE_USERS_CONSUMER, MUTATE_INSTANT_MESSAGE]),
     insertSmilie (smilie) {
       insertTextAtCursor(this.$refs.msgTextInput, ':' + smilie + ':')
     },
@@ -219,12 +223,12 @@ export default {
         this[ACTION_POST_ACTIVITY]()
       }
     },
-    chatUserBlur () {
-      if (this.chatUserField) {
-        this.chatUserField = this.chatUserField.toUpperCase().trim()
+    chatCallsignBlur () {
+      if (this.chatCallsignField) {
+        this.chatCallsignField = this.chatCallsignField.toUpperCase().trim()
       }
-      if (this.chatUser !== this.chatUserField) {
-        this[MUTATE_CHAT_USER](this.chatUserField)
+      if (this.chatCallsign !== this.chatCallsignField) {
+        this[ACTION_EDIT_USER]({chat_callsign: this.chatCallsignField})
         this[ACTION_POST_ACTIVITY]()
       }
     },
@@ -233,12 +237,12 @@ export default {
       temp.innerHTML = html
       return temp.textContent || temp.innerText || ''
     },
-    chatUserNameBlur () {
-      if (this.chatUserNameField) {
-        this.chatUserNameField = this.chatUserNameField.trim()
+    userNameBlur () {
+      if (this.userNameField) {
+        this.userNameField = this.userNameField.trim()
       }
-      if (this.chatUserName !== this.chatUserNameField) {
-        this[MUTATE_CHAT_USER_NAME](this.chatUserNameField)
+      if (this.userName !== this.userNameField) {
+        this[ACTION_EDIT_USER]({name: this.userNameField})
       }
     },
     buttonClick () {
@@ -315,9 +319,9 @@ export default {
         this.$store.state.stationSettings.admin === this.userCallsign)
     },
     chatAccess() {
-      return !this.serve || !this.service.station || !this.$store.state.stationSettings.chatAccess ||
-        (this.$store.state.stationSettings.chatAccess === 'users' && this.loggedIn) ||
-        (this.$store.state.stationSettings.chatAccess === 'admins' && this.isAdmin)
+      return this.loggedIn && (!this.service || !this.service.station || !this.$store.state.stationSettings.chatAccess ||
+        this.$store.state.stationSettings.chatAccess !== 'admins' ||
+        (this.$store.state.stationSettings.chatAccess === 'admins' && this.isAdmin))
     },
     instantMessageText () {
       return this.instantMessage ? transformText(this.instantMessage.text) : null

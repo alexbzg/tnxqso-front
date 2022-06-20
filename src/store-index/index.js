@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-import {storeUser, ACTION_UPDATE_USER, checkImInit} from '../store-user'
+import {storeUser, ACTION_LOAD_USER, checkImInit} from '../store-user'
 import {storeServices} from '../store-services'
 import {storeActivity, activityInit} from '../store-activity'
 import {storeLanguage} from '../store-language'
@@ -21,7 +21,7 @@ const store = new Vuex.Store({
 })
 
 if (store.getters.userToken) {
-  store.dispatch(ACTION_UPDATE_USER)
+  store.dispatch(ACTION_LOAD_USER)
 }
 
 talksInit(store)

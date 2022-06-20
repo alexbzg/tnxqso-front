@@ -5,6 +5,12 @@
         <table class="tabs index_tabs">
             <tr>
                 <td>
+                    <router-link to="/login" tag="div" id="tab_login" class="tab" v-if="!loggedIn">
+                        Login
+                    </router-link>
+                    <router-link to="/profile" tag="div" id="tab_login" class="tab" v-else>
+                        Profile
+                    </router-link>
                     <router-link to="/stations" tag="div" id="tab_stations" class="tab"
                         :class="{updated_tab: !$store.state.activeStations.read}">
                         Stations
@@ -17,7 +23,7 @@
                         Talks
                     </router-link>
                 </td>
-                <td id="login">
+                <td id="website_links">
                     <router-link to="/about" tag="div" id="tab_about" class="tab">
                         About
                     </router-link>
@@ -32,12 +38,6 @@
                     </router-link>
                     <router-link to="/contact" tag="div" id="tab_contacts" class="tab">
                         Contact
-                    </router-link>
-                    <router-link to="/login" tag="div" id="tab_login" class="tab" v-if="!loggedIn">
-                        For administrators
-                    </router-link>
-                    <router-link to="/profile" tag="div" id="tab_login" class="tab" v-else>
-                        Profile
                     </router-link>
                 </td>
             </tr>

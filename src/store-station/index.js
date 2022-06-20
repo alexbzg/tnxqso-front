@@ -3,9 +3,10 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-import {storeUser, ACTION_UPDATE_USER, checkImInit} from '../store-user'
+import {storeUser, ACTION_LOAD_USER, checkImInit} from '../store-user'
 import {storeServices, MUTATE_SERVICE, ACTION_UPDATE_SERVICE, RELOAD_INT_SRVC} from '../store-services'
 import {storeActivity, activityInit} from '../store-activity'
+import {storeLanguage} from '../store-language'
 import {storeStationSettings, ACTION_LOAD_STATION} from '../store-station-settings'
 import talksInit from '../talks-init'
 import {storeActiveStations, activeStationsInit, createStationStatusService, MUTATE_ADD_ACTIVE_STATION} 
@@ -16,13 +17,14 @@ const store = new Vuex.Store({
     user: storeUser,
     services: storeServices,
     activity: storeActivity,
+    language: storeLanguage,
     stationSettings: storeStationSettings,
     activeStations: storeActiveStations
   }
 })
 
 if (store.getters.userToken) {
-  store.dispatch(ACTION_UPDATE_USER)
+  store.dispatch(ACTION_LOAD_USER)
 }
 store.dispatch(ACTION_LOAD_STATION)
   .then(() => {

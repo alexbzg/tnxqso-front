@@ -52,19 +52,11 @@ export default {
       return r
     }
 
-    if ( storageN ) {
-      try {
-        return testStorage(storage(storageN))
-      } catch (err) {
-        return null
-      }
+    if (storageN) {
+      return testStorage(storage(storageN))
     }
 
-    var r = testStorage(storage('local'))
-    if (!r) {
-      r = testStorage(storage('session'))
-    }
-    return r
+    return testStorage(storage('local')) || testStorage(storage('session'))
   },
 
   save (key, data, storageN) {

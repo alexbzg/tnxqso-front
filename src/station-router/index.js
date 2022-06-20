@@ -1,16 +1,18 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import StationCluster from '../components/StationCluster'
-import StationGallery from '../components/StationGallery'
-import StationInfo from '../components/StationInfo'
-import StationMap from '../components/StationMap'
-import StationLog from '../components/StationLog'
-import StationStats from '../components/StationStats'
-import StationInstagram from '../components/StationInstagram'
-import StationDonate from '../components/StationDonate'
-import Chat from '../components/Chat'
-import ActiveStations from './../components/ActiveStations'
+import StationCluster from '../views/StationCluster'
+import StationGallery from '../views/StationGallery'
+import StationInfo from '../views/StationInfo'
+import StationMap from '../views/StationMap'
+import StationLog from '../views/StationLog'
+import StationStats from '../views/StationStats'
+import StationInstagram from '../views/StationInstagram'
+import StationDonate from '../views/StationDonate'
+import Chat from '../views/Chat'
+import ActiveStations from './../views/ActiveStations'
+import Login from './../views/Login'
+import Profile from './../views/Profile'
 
 Vue.use(Router)
 
@@ -85,6 +87,19 @@ const router = new Router({
       component: StationDonate,
       props: true
     },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login,
+      props: {after: '/chat'}
+    },
+    {
+      path: '/profile',
+      name: 'Profile',
+      component: Profile,
+      props: true
+    },
+
     { path: '*',
       redirect: '/log'
     }

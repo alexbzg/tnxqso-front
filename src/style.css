@@ -743,6 +743,7 @@ table#log tr.new_qso{
     width: 100px;
     float: right;
     color: #999;
+    display: none;
 }
 
 
@@ -1078,45 +1079,45 @@ table#cluster td.spotter{
 table#message_form{
     width: 1010px;
     padding: 0px;
-    margin: 10px 0 0 10px;
+    margin: 10px 0 20px 10px;
     border: none;
     border-collapse: collapse;
     text-align: center;
 }
 table#message_form tr, table#message_form td{
     padding: 0;
-}
-table#message_form td.note{
-    font-size: 12px;
     vertical-align: top;
-    color: #999;
-    line-height: 12px;
 }
 table#message_form input#your_call, table#message_form input#your_name{
-    width: 130px;
-    font-weight: bold;
-    font-size: 18px;
-    padding: 3px;
-    margin: 0 10px;
-    border: 1px solid #999;
+    width: 140px;
+    padding: 5px 5px 2px 5px;
+    margin: 0 10px 0px 10px;
+    border: none;
+    border-bottom: 1px solid #ccc;
 }
 table#message_form input#your_call{
+    font-size: 18px;
     color: #009;
+    font-weight: bold;
 }
 table#message_form input#your_name{
-    font-size: 16px;
-    font-weight: normal;
+    font-size: 12px;
+    color: #666;
+    border-top: none;
 }
 table#message_form input#message_text{
-    width: 600px;
+    width: 800px;
     text-align: left;
-    border: 1px solid #999;
+    border: none;
+    border-bottom: 1px solid #ccc;
     font-size: 16px;
-    padding: 3px;
+    padding: 5px 10px;
+    margin: 0;
 }
 table#message_form button{
-    width: 50px;
+    width: 80px;
     padding: 3px;
+    margin: 0;
 }
 table#message_form #smile_btn{
     margin: 0 30px 0 10px;
@@ -1193,7 +1194,7 @@ table#chat_layout .personal{
 
 #chat_info{
     width: 130px;
-    margin: 20px 0 0 0;
+    margin: 0px 0 0 0;
     border: 1px solid #eee;
     text-align: left;
 }
@@ -1236,7 +1237,7 @@ table#chat_layout .personal{
 table#admins_window{
     width: 1000px;
     padding: 0px;
-    margin: 20px 20px 0 20px;
+    margin: 0px 20px 0 20px;
     font-size: 16px;
     border-collapse: collapse;
 }
@@ -1253,7 +1254,7 @@ table#admins_window td.call{
     font-weight: bold;
     width: 150px;
     line-height: 14px;
-    color: #009;
+    color: #007;
 }
 table#admins_window td.call span.date_time{
     font-size: 12px;
@@ -1286,7 +1287,7 @@ table#admins_window td.message{
 table#chat_window{
     width: 1000px;
     padding: 0px;
-    margin: 20px 20px 20px 20px;
+    margin: 0px 20px 20px 20px;
     border: 1px solid #ccc;
     font-size: 16px;
     border-collapse: collapse;
@@ -1302,29 +1303,42 @@ table#chat_window tr{
 table#chat_window td.call{
     font-weight: bold;
     width: 150px;
-    line-height: 14px;
-    color: #009;
+    line-height: 16px;
+    padding-bottom: 7px;
 }
 table#chat_window td.call span.date_time{
-    font-size: 12px;
+    font-size: 10px;
+    margin-bottom: 3px;
     font-weight: normal;
-    color: #999;
+    color: #aaa;
+    display: block;
 }
+table#chat_window td.call:hover span.date_time{
+    display: none;
+}
+table#chat_window td.call span.icon_block{
+    display: none;
+}
+table#chat_window td.call:hover span.icon_block{
+    display: block;
+}
+table#chat_window td.call span.icon_block img{
+    margin-right: 7px;
+    cursor: pointer;
+}
+
 table#chat_window td.call span.call{
-    color: #00A;
+    color: #009;
     cursor: pointer;
 }
 table#chat_window td.call span.name{
-    font-size: 14px;
-    color: #333;
+    font-size: 12px;
+    color: #666;
     font-weight: normal;
     cursor: pointer;
 }
 table#chat_window tr.admin td.call span.call{
     color: #A00;
-}
-table#chat_window td.call a img, table#admins_window td.call a img{
-    display: none;
 }
 table#chat_window td.message{
     line-height: 1.5em;

@@ -1,9 +1,7 @@
 <template>
     <div id="login_register">
         <template v-if="userToken">
-            Your email address is not confirmed. Click on the link in the confirmation message then refresh this page.
-             <input type="button" id="button_login" class="btn"
-                value="Repeat message" @click="sendConfirmationMessage"/>          
+            <b>Your email address is not confirmed.</b><br/><br/>We sent an email with verification link. Click on the link in the confirmation message then refresh this page.<br/>If you don't see it in your inbox, please check your spam folder or resend the email.<br/><br/><input type="button" id="button_login" class="btn" value="Resend the email again" @click="onSubmit"/>
         </template>
         <template v-else>
             <vue-recaptcha v-if="newUser || passwordRecovery"
@@ -48,19 +46,18 @@ import {mapActions, mapGetters} from 'vuex'
 import _ from 'underscore'
 import VueRecaptcha from 'vue-recaptcha'
 
-import router from '../router'
 import {validateEmail, debugLog} from '../utils'
 import {ACTION_LOGIN, ACTION_POST} from '../store-user'
 
 export default {
   name: 'login',
   props: ['after'],
-  beforeRouteEnter ( to, from, next ) {
-    next( vm => {
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
       if ( vm.$store.getters.loggedIn ) {
-        router.push( '/profile' )
+        vm.loggedInRedirect()
       }
-    } )
+    })
   },
   data () {
     return {
@@ -83,13 +80,30 @@ export default {
       }
       if (this.passwordRecovery) {
         this.passwordRecoveryRequest()
+      } else if (this.userToken) {
+        this.emailConfirmationRequest()
       } else {
         this.doLogin()
       }
     }, 300, true),
-    sendConfirmationMessage: _.debounce(function () {
-      this[ACTION_POST]({path: 'confirmEmailRequest'})
-    }, 60000, true),
+    emailConfirmationRequest () {
+      this[ACTION_POST]({
+        path: 'confirmEmailRequest',
+        data: {
+          login: this.login,
+          recaptcha: this.recaptcha
+        }
+      })
+        .then(() => {
+          alert( 'Your request was accepted. Please check your email.' )
+          this.passwordRecovery = false
+          this.resetRecaptcha()
+        })
+        .catch(() => {
+          this.resetRecaptcha()
+        })
+
+    },
     doLogin () {
       this[ACTION_LOGIN](
         {
@@ -102,7 +116,7 @@ export default {
           remember: this.remember
         })
         .then(() => {
-          this.$router.push(this.after || '/profile')
+          this.loggedInRedirect()
         })
         .catch(error => {
           var msg = ''
@@ -149,17 +163,28 @@ export default {
         this.$refs.invisibleRecaptcha.reset() // Direct call reset method
       }
       this.recaptcha = null
+    },
+    loggedInRedirect () {
+      this.$router.push(this.after || '/profile')
     }
   },
   components: { VueRecaptcha },
   computed: {
-    ...mapGetters(['userToken']),
+    ...mapGetters(['userToken', 'loggedIn']),
     disableSubmit () {
       return !(this.login && this.login.length > 2 &&
         (this.passwordRecovery || ( this.password && this.password.length > 7 ) ) &&
         (!this.newUser || validateEmail( this.email )))
     }
+  },
+  watch: {
+    loggedIn () {
+      if (this.loggedIn) {
+        this.loggedInRedirect()
+      }
+    }
   }
+
 }
 </script>
 

@@ -50,7 +50,7 @@ export const storeUser = {
       return state.user.chat_callsign
     },
     siteAdmin: state => {
-      return (state.userType == 'admin') && Boolean(state.user.siteAdmin)
+      return Boolean(state.user.siteAdmin)
     },
     loggedIn: state => {
       return Boolean(state.user.token) && state.user.email_confirmed

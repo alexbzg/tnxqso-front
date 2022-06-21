@@ -2,7 +2,7 @@
     <div id="chat">
 
     <div id="personal_chat_message" v-if="instantMessage">
-      <img id="close_personal_message" src="/static/images/icon_close.png" width="20" 
+      <img id="close_personal_message" src="/static/images/icon_close.png" width="20"
         title="Close this personal message" @click="closeInstantMessage">
       <img src="/static/images/icon_secret.png" />
       <div id="from_to">
@@ -17,11 +17,10 @@
             <tbody>
                 <tr>
                     <td>
-                        <input type="text" id="your_call" v-model="chatCallsignField" @blur="chatCallsignBlur"/>
-                    </td>
-                    <td>
-                        <input type="text" id="your_name" v-model="userNameField"
-                            @blur="userNameBlur"/>
+                        <input type="text" id="your_call" placeholder="Callsign"
+                          v-model="chatCallsignField" @blur="chatCallsignBlur"/><br/>
+                        <input type="text" id="your_name" placeholder="Name"
+                          v-model="userNameField" @blur="userNameBlur"/>
                     </td>
                     <td>
                         <img id="admin_message"
@@ -31,23 +30,16 @@
                             @click="pinMsg">
                     </td>
                     <td>
-                        <input type="text" id="message_text" v-model="messageText" @keyup="onTyping"
-                            ref="msgTextInput"/>
+                        <input type="text" id="message_text"
+                          v-model="messageText" @keyup="onTyping" ref="msgTextInput"/>
                     </td>
                     <td>
                          <img id="smile_btn" src="/static/images/smiles/01.gif"
                               @click="showSmilies = !showSmilies"/>
                     </td>
                     <td>
-                        <button @click="buttonClick()" :disabled="!buttonVisible">OK</button>
+                        <button @click="buttonClick()" :disabled="!postButtonEnabled">OK</button>
                     </td>
-                </tr>
-                <tr>
-                    <td class="note">your callsign</td>
-                    <td class="note">your name</td>
-                    <td></td>
-                    <td class="note">your message</td>
-                    <td class="note">&nbsp;</td>
                 </tr>
             </tbody>
         </table>
@@ -70,12 +62,18 @@
                 <td class="call">
                     <span class="call" @click="replyTo(msg.user)">{{$options.replace0(msg.user)}}</span><br/>
                     <span class="name" @click="replyTo(msg.user)" v-if="msg.name">{{msg.name}}</span>
-                    <a :href="'http://qrz.com/db/' + msg.user" target="_blank" rel="noopener"
-                        title="Link to QRZ.com">
-                        <img src="/static/images/icon_qrz.png"/>
-                    </a>
                     <br/>
                     <span class="date_time">{{msg.date}} {{msg.time}}</span>
+                    <span class="icon_block">
+                      <a :href="'http://qrz.com/db/' + msg.user" target="_blank" rel="noopener"
+                        title="Link to QRZ.com"><img src="/static/images/icon_qrz.png" title="QRZ.com link"/></a>
+                      <img  @click="replyTo(msg.user)" src="/static/images/icon_message.png" title="Personal message to chat / Персональное сообщение в чат"/>
+<!--
+<img class="icon_ban" src="/static/images/icon_message_private.png" title="Private message outside the chat / Персональное сообщение вне чата"/>
+-->
+                      <img class="icon_ban" src="/static/images/icon_ban.png" title="Заблокировать пользователя"
+                        v-if="siteAdmin" @click="banQuery(msg.cs)"/>
+                    </span>
                 </td>
                 <td class="message">
                     <img class="delete_btn" src="/static/images/delete.png" v-if="isAdmin"
@@ -146,6 +144,7 @@ import ServiceDisplay from './ServiceDisplay'
 import Smilies, {SMILIES_IMG_PATH} from '../components/Smilies'
 
 import {replace0} from '../utils'
+import messageBox from '../message-box'
 
 import {ACTION_POST_ACTIVITY, MUTATE_CURRENT_ACTIVITY, MUTATE_USERS_CONSUMER, ACTION_ADD_USERS_CONSUMER}
   from '../store-activity'
@@ -177,8 +176,8 @@ export default {
   data () {
     return {
       showSmilies: false,
-      chatCallsignField: this.$store.state.user.chatCallsign,
-      userNameField: this.$store.state.user.name,
+      chatCallsignField: this.$store.getters.chatCallsign,
+      userNameField: this.$store.getters.userName,
       messageText: '',
       typingTs: null,
       posting: false
@@ -246,23 +245,31 @@ export default {
       }
     },
     buttonClick () {
-      if (!this.buttonVisible) {
+      if (!this.postButtonEnabled) {
         return
       }
       this.showSmilies = false
       if (this.messageText) {
-        this.serverPost( { 'from': this.chatUserField,
-          'text': this.messageText,
-          'name': this.chatUserName } )
-          .then(() => { this.messageText = '' } )
+        this.serverPost({
+          from: this.chatCallsignField,
+          text: this.messageText,
+          name: this.userName
+        })
+          .then(() => {
+            this.messageText = ''
+          })
       }
     },
     serverPost (data) {
       this.posting = true
       data.station = this.service.station
       return this[ACTION_POST]({path: 'chat', data: data})
-        .then(() => { this[ACTION_UPDATE_SERVICE](this.serviceName) })
-        .finally(() => { this.posting = false })
+        .then(() => {
+            this[ACTION_UPDATE_SERVICE](this.serviceName)
+        })
+        .finally(() => {
+            this.posting = false
+        })
     },
     adminCS (cs) {
       return cs === this.stationSettings.admin
@@ -297,15 +304,48 @@ export default {
       if ( !this.messageText || this.messageText.indexOf(txt) === -1 ) {
         this.messageText = txt + ' ' + (this.messageText ? this.messageText : '')
       }
-    }
+    },
+    banQuery (callsign) {
+      this[ACTION_POST]({
+        path: 'banUser',
+        data: {
+          user: callsign,
+          query: true
+        }
+      })
+        .then(rsp => {
+          const data = rsp.data
+          let alt = ''
+          if (data.alts.length) {
+            alt = `<br/>cвязанные логины: ${data.alts.join(', ')}`
+          }
+          messageBox(
+            'Заблокировать пользователя?',
+            `логин: ${data.login}<br/> email: ${data.email}${alt}`,
+            true)
+            .then(() => {
+              this[ACTION_POST]({
+                path: 'banUser',
+                data: {
+                  user: callsign
+                }
+              })
+                .then(alert('Пользователь заблокирован.'))
+            })
+        })
+      }
   },
   watch: {
     service () {
       this.storeCurrentActivity()
+    },
+    loggedIn () {
+      this.chatCallsignField = this.chatCallsign
+      this.userNameField = this.user.name
     }
   },
   computed: {
-    ...mapGetters(['siteAdmin', 'loggedIn', 'userCallsign', 'instantMessage']),
+    ...mapGetters(['siteAdmin', 'loggedIn', 'userCallsign', 'chatCallsign', 'userName', 'instantMessage']),
     ...mapState({
       chatUser: state => state.user.chatUser,
       chatUserName: state => state.user.chatUserName,
@@ -397,8 +437,8 @@ export default {
       }
       return au
     },
-    buttonVisible: function () {
-      return !this.posting && Boolean( this.messageText ) && Boolean( this.chatUserField )
+    postButtonEnabled: function () {
+      return !this.posting && Boolean(this.messageText) && Boolean(this.chatCallsignField)
     }
   }
 }

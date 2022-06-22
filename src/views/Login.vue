@@ -1,42 +1,36 @@
 <template>
     <div id="login_register">
-        <template v-if="userToken">
-            <b>Your email address is not confirmed.</b><br/><br/>We sent an email with verification link. Click on the link in the confirmation message then refresh this page.<br/>If you don't see it in your inbox, please check your spam folder or resend the email.<br/><br/><input type="button" id="button_login" class="btn" value="Resend the email again" @click="onSubmit"/>
+        <vue-recaptcha v-if="newUser || passwordRecovery"
+            ref="invisibleRecaptcha"
+            @verify="onVerify"
+            @expired="onExpired"
+            size="invisible"
+            :sitekey="sitekey">
+        </vue-recaptcha>
+        Login <span>(user callsign)</span><br/>
+        <input type="text" id="login_input" v-model="login"/><br/>
+        <template v-if="newUser">
+            E-mail<br/>
+            <input type="text" id="email_input" v-model="email"/><br/>
         </template>
-        <template v-else>
-            <vue-recaptcha v-if="newUser || passwordRecovery"
-                ref="invisibleRecaptcha"
-                @verify="onVerify"
-                @expired="onExpired"
-                size="invisible"
-                :sitekey="sitekey">
-            </vue-recaptcha>
-            Login <span>(user callsign)</span><br/>
-            <input type="text" id="login_input" v-model="login"/><br/>
-            <template v-if="newUser">
-                E-mail<br/>
-                <input type="text" id="email_input" v-model="email"/><br/>
-            </template>
-            <template v-if="!passwordRecovery">
-                Password <span>(min. 8 symbols)</span><br/>
-                <input type="password" id="password_input" v-model="password"/><br/>
-                <input type="checkbox" id="login_remember" v-model="remember"/> Remember me<br/>
-            </template>
-            <input type="button" id="button_login" class="btn"
-                :class="{btn2: newUser}"
-                :value="passwordRecovery ? 'Send Request' : (newUser ? 'Register': 'Login')"
-                :disabled="disableSubmit"
-                @click="onSubmit"/>
-            <br/><br/>
-            <input type="button" id="button_register" class="btn"
-                v-if="!passwordRecovery"
-                :value="newUser ? 'Login' : 'Register new user'"
-                @click="newUser = !newUser" :class="{btn2: !newUser}"/>
-            <input type="button" id="button_recovery" class="btn btn3"
-                :value="!passwordRecovery ? 'Password recovery' : 'Login'"
-                @click="passwordRecovery = !passwordRecovery"/>
+        <template v-if="!passwordRecovery">
+            Password <span>(min. 8 symbols)</span><br/>
+            <input type="password" id="password_input" v-model="password"/><br/>
+            <input type="checkbox" id="login_remember" v-model="remember"/> Remember me<br/>
         </template>
-
+        <input type="button" id="button_login" class="btn"
+            :class="{btn2: newUser}"
+            :value="passwordRecovery ? 'Send Request' : (newUser ? 'Register': 'Login')"
+            :disabled="disableSubmit"
+            @click="onSubmit"/>
+        <br/><br/>
+        <input type="button" id="button_register" class="btn"
+            v-if="!passwordRecovery"
+            :value="newUser ? 'Login' : 'Register new user'"
+            @click="newUser = !newUser" :class="{btn2: !newUser}"/>
+        <input type="button" id="button_recovery" class="btn btn3"
+            :value="!passwordRecovery ? 'Password recovery' : 'Login'"
+            @click="passwordRecovery = !passwordRecovery"/>
     </div>
 </template>
 

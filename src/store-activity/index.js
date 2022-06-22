@@ -2,6 +2,8 @@ import Vue from 'vue'
 
 import request from '../request'
 
+import {ACTION_POST} from '../store-user'
+
 export const MUTATE_CURRENT_ACTIVITY = 'mttCurrentActivity'
 const MUTATE_ACTIVE_USERS = 'mttActiveUsers'
 export const MUTATE_USERS_CONSUMER = 'mttUsersConsumer'
@@ -48,14 +50,18 @@ export const storeActivity = {
     }
   },
   actions: {
-    [ACTION_POST_ACTIVITY] ({state, rootState}, payload) {
-      return request.post('activeUsers',
-        {
-          station: state.current.station,
-          chat: state.current.chat,
-          user: rootState.user.chatUser,
-          typing: Boolean(payload)
+    [ACTION_POST_ACTIVITY] ({state, rootState, dispatch}, payload) {
+      if (rootState.user.user.chat_callsign) {
+        return dispatch(ACTION_POST, {
+          path: 'activeUsers',
+          data: {
+            station: state.current.station,
+            chat: state.current.chat,
+            user: rootState.user.user.chat_callsign,
+            typing: Boolean(payload)
+            }
         })
+      }
     },
     [ACTION_LOAD_ACTIVE_USERS] ({commit}) {
       return request.getJSON('activeUsers')

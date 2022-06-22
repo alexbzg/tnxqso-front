@@ -38,7 +38,7 @@
                 <span v-if="currentPopup.comments"><br>{{currentPopup.comments}}</span><br/>
                 <a v-if="currentLocation" :href="'https://yandex.ru/maps/?ll=' +
                     currentLocation[1] + '%2C' + currentLocation[0] + '&pt=' +
-                    currentLocation[1] + '%2C' + currentLocation[0] + '&z=' + zoom +
+                    currentLocation[1] + '%2C' + currentLocation[0] + '&z=17' + zoom +
                     '&l=map'" target="_blank" rel="noopener">
                     Yandex maps
                 </a>
@@ -197,7 +197,7 @@ export default {
       }
     },
     overlay_visible (name) {
-      if (name in this.map_settings.overlays && 
+      if (name in this.map_settings.overlays &&
         typeof this.map_settings.overlays[name] !== 'undefined') {
         return this.map_settings.overlays[name]
       }
@@ -237,11 +237,11 @@ export default {
       return this.stationSettings.station ? this.stationSettings.station.callsign : null
     },
     statusData () {
-      return this.stationCallsign && this.stationCallsign in this.$store.state.activeStations.stations.active ? 
+      return this.stationCallsign && this.stationCallsign in this.$store.state.activeStations.stations.active ?
         this.$store.state.activeStations.stations.active[this.stationCallsign].status : {}
     },
     overlays () {
-      return OVERLAYS.filter(layer => 
+      return OVERLAYS.filter(layer =>
         !layer.qthCountry || (this.stationSettings && this.stationSettings.qthCountry === layer.qthCountry))
     }
   },

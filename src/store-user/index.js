@@ -23,6 +23,13 @@ const EMPTY_USER = {
   }
 }
 
+const LOGIN_ERRORS = {
+  'Login is expired': 'Please log in. Пожалуйста, залогиньтесь.',
+  'Not logged in': 'Please log in. Пожалуйста, залогиньтесь.',
+  'Account is banned': 'Your account is banned. Ваша учетная запись заблокирована.',
+  'Token is expired': 'Link is expired. Please repeat your request. Ссылка устарела, пожалуйста, повторите запрос.'
+}
+
 const user = JSON.parse(JSON.stringify(EMPTY_USER))
 user.token = storage.load(STORAGE_KEY_USER_TOKEN, 'local')
 if (user.token) {
@@ -53,7 +60,10 @@ export const storeUser = {
       return Boolean(state.user.siteAdmin)
     },
     loggedIn: state => {
-      return Boolean(state.user.token) && state.user.email_confirmed
+      return Boolean(state.user.token)
+    },
+    emailConfirmed: state => {
+      return state.user.email_confirmed
     },
     stationCallsign: state => {
       return state.user.settings.station.callsign
@@ -128,8 +138,9 @@ export const storeUser = {
           let msg = ''
           debugLog(error)
           if (error.status === 400 || error.status === 403 || error.status == 401) {
-            if ( error.message === 'Login expired' || error.message === 'Not logged in' ) {
+            if (error.message in LOGIN_ERRORS) {
               commit(MUTATE_USER, null)
+              msg = LOGIN_ERRORS[error.message]
               return
             }
             msg = error.message

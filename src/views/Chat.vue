@@ -17,36 +17,33 @@
             <tbody>
                 <tr>
                     <td>
-                        <input type="text" id="your_call" placeholder="Callsign"
-                          v-model="chatCallsignField" @blur="chatCallsignBlur"/><br/>
-                        <input type="text" id="your_name" placeholder="Name"
+                        <input type="text" id="your_call" placeholder="Chat callsign"
+                          v-model="chatCallsignField" @blur="chatCallsignBlur"/>
+                        <input type="text" id="your_name" placeholder="Chat name"
                           v-model="userNameField" @blur="userNameBlur"/>
-                    </td>
-                    <td>
                         <img id="admin_message"
                             v-show="isAdmin && service && service.station "
                             src="/static/images/icon_admin_message.png"
                             title="*** Закреплённое сообщение / *** Pinned message"
                             @click="pinMsg">
-                    </td>
-                    <td>
                         <input type="text" id="message_text"
                           v-model="messageText" @keyup="onTyping" ref="msgTextInput"/>
-                    </td>
-                    <td>
-                         <img id="smile_btn" src="/static/images/smiles/01.gif"
+                        <img id="smile_btn" src="/static/images/smiles/01.gif"
                               @click="showSmilies = !showSmilies"/>
-                    </td>
-                    <td>
                         <button @click="buttonClick()" :disabled="!postButtonEnabled">OK</button>
                     </td>
                 </tr>
             </tbody>
         </table>
         <div id="div_no_login" v-if="!loggedIn">
-            Please <router-link to="/login">login</router-link> to post messages.
-            Пожалуйста, <router-link to="/login">залогиньтесь</router-link> чтобы отправлять сообщения.
+            <router-link to="/login">Login</router-link> to post messages. &nbsp;&nbsp;
+            <router-link to="/login">Залогиньтесь</router-link>, чтобы отправлять сообщения.
         </div>
+        <div id="div_no_email" v-if="loggedIn && !emailConfirmed">
+            Confirm your email address to post messages. &nbsp;&nbsp;
+            Подтвердите ваш email, чтобы отправлять сообщения.
+        </div>
+
 
         <smilies v-show="showSmilies" @hide="hideSmilies" @smilie-click="insertSmilie">
         </smilies>
@@ -67,8 +64,11 @@
                     <span class="icon_block">
                       <a :href="'http://qrz.com/db/' + msg.user" target="_blank" rel="noopener"
                         title="Link to QRZ.com"><img src="/static/images/icon_qrz.png" title="QRZ.com link"/></a>
-                      <img  @click="replyTo(msg.user)" src="/static/images/icon_message.png" title="Personal message to chat / Персональное сообщение в чат"/>
+                      <a :href="'http://qrz.ru/db/' + msg.user" target="_blank" rel="noopener"
+                        title="Link to QRZ.ru"><img src="/static/images/icon_qrzru.png" title="QRZ.ru link"/></a>
 <!--
+<img  @click="replyTo(msg.user)" src="/static/images/icon_message.png" title="Personal message to chat / Персональное сообщение в чат"/>
+
 <img class="icon_ban" src="/static/images/icon_message_private.png" title="Private message outside the chat / Персональное сообщение вне чата"/>
 -->
                       <img class="icon_ban" src="/static/images/icon_ban.png" title="Заблокировать пользователя"
@@ -339,13 +339,13 @@ export default {
     service () {
       this.storeCurrentActivity()
     },
-    loggedIn () {
+    userCallsign () {
       this.chatCallsignField = this.chatCallsign
-      this.userNameField = this.user.name
+      this.userNameField = this.userName
     }
   },
   computed: {
-    ...mapGetters(['siteAdmin', 'loggedIn', 'userCallsign', 'chatCallsign', 'userName', 'instantMessage']),
+    ...mapGetters(['siteAdmin', 'loggedIn', 'userCallsign', 'chatCallsign', 'userName', 'instantMessage', 'emailConfirmed']),
     ...mapState({
       chatUser: state => state.user.chatUser,
       chatUserName: state => state.user.chatUserName,
@@ -355,11 +355,12 @@ export default {
       if (!this.service || !this.loggedIn) {
         return false
       }
-      return this.siteAdmin || (this.service.station &&
+      return this.siteAdmin || (this.service.station && this.emailConfirmed &&
         this.$store.state.stationSettings.admin === this.userCallsign)
     },
     chatAccess() {
-      return this.loggedIn && (!this.service || !this.service.station || !this.$store.state.stationSettings.chatAccess ||
+      return this.loggedIn && this.emailConfirmed && 
+        (!this.service || !this.service.station || !this.$store.state.stationSettings.chatAccess ||
         this.$store.state.stationSettings.chatAccess !== 'admins' ||
         (this.$store.state.stationSettings.chatAccess === 'admins' && this.isAdmin))
     },

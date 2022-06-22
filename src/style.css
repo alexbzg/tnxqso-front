@@ -559,9 +559,6 @@ table.tabs td#website_links{
     border-radius: 10px 10px 0px 0px;
     cursor: pointer;
 }
-#tab_donate{
- margin-right: 30px;
-}
 .updated_tab{
     background: #f5f5f5  url("/static/images/tabs_background.jpg") bottom right no-repeat;
     padding-right: 35px;
@@ -577,10 +574,11 @@ table.tabs td#website_links{
     text-decoration: none;
 }
 
-.tabs #tab_stations{
 
+#tab_login{
+    margin-left: 30px;
 }
-.tabs.index_tabs #tab_stations{
+.tabs.index_tabs #tab_login{
     margin-left: 0px;
 }
 
@@ -1018,9 +1016,9 @@ table#cluster td.spotter{
 #chat{
     position: relative;
 }
-#div_no_login{
+#div_no_login, #div_no_email{
     color: #777;
-    margin-top: 20px;
+    margin: 20px 0;
     font-size: 14px;
     font-style: italic;
 }
@@ -1077,9 +1075,8 @@ table#cluster td.spotter{
 
 
 table#message_form{
-    width: 1010px;
     padding: 0px;
-    margin: 10px 0 20px 10px;
+    margin: 20px 0px 20px 10px;
     border: none;
     border-collapse: collapse;
     text-align: center;
@@ -1092,27 +1089,25 @@ table#message_form input#your_call, table#message_form input#your_name{
     width: 140px;
     padding: 5px 5px 2px 5px;
     margin: 0 10px 0px 10px;
+    font-size: 16px;
     border: none;
-    border-bottom: 1px solid #ccc;
+    text-align: center;
+    border-bottom: 1px solid #aaa;
 }
 table#message_form input#your_call{
-    font-size: 18px;
     color: #009;
     font-weight: bold;
 }
 table#message_form input#your_name{
-    font-size: 12px;
     color: #666;
-    border-top: none;
 }
 table#message_form input#message_text{
-    width: 800px;
+    width: 650px;
+    padding: 5px 5px 2px 5px;
     text-align: left;
-    border: none;
-    border-bottom: 1px solid #ccc;
     font-size: 16px;
-    padding: 5px 10px;
-    margin: 0;
+    border: none;
+    border-bottom: 1px solid #aaa;
 }
 table#message_form button{
     width: 80px;
@@ -1120,7 +1115,7 @@ table#message_form button{
     margin: 0;
 }
 table#message_form #smile_btn{
-    margin: 0 30px 0 10px;
+    margin: 0px 30px 0 10px;
     cursor: pointer;
 }
 
@@ -1237,7 +1232,7 @@ table#chat_layout .personal{
 table#admins_window{
     width: 1000px;
     padding: 0px;
-    margin: 0px 20px 0 20px;
+    margin: 0px 20px 20px 20px;
     font-size: 16px;
     border-collapse: collapse;
 }
@@ -1277,6 +1272,9 @@ table#admins_window td.message{
     line-height: 1.7em;
     color: #000;
 }
+table#admins_window .icon_block{
+    display: none;
+}
 
 
 
@@ -1288,16 +1286,16 @@ table#chat_window{
     width: 1000px;
     padding: 0px;
     margin: 0px 20px 20px 20px;
-    border: 1px solid #ccc;
     font-size: 16px;
     border-collapse: collapse;
 }
 table#chat_window td{
-    padding: 5px 5px;
+    padding: 7px 5px;
     text-align: left;
     vertical-align: top;
 }
 table#chat_window tr{
+    border: none;
     border: 1px solid #eee;
 }
 table#chat_window td.call{
@@ -1350,10 +1348,11 @@ table#chat_window td.message{
 
 .delete_btn{
     cursor: pointer;
-    float: right;
+    float: left;
     width: 20px;
     height: 20px;
     display: none;
+    margin-right: 10px;
 }
 .translate_btn{
     cursor: pointer;
@@ -1387,7 +1386,7 @@ table#chat_window td.message:hover .translate_lnk, table#admins_window td.messag
 #login_register input{
     margin: 0 0 20px 0;
 }
-#button_login, #button_register, #button_recovery{
+#button_register, #button_recovery{
     width: 200px;
 }
 #button_register{
@@ -1408,8 +1407,13 @@ table#chat_window td.message:hover .translate_lnk, table#admins_window td.messag
 
 
 
-
-
+#confirm_email{
+    margin-top: 50px;
+}
+#confirm_email span{
+    font-size: 12px;
+    color: #999;
+}
 
 
 

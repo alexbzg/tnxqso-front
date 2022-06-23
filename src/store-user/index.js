@@ -27,7 +27,7 @@ const LOGIN_ERRORS = {
   'Login is expired': 'Please log in. Пожалуйста, залогиньтесь.',
   'Not logged in': 'Please log in. Пожалуйста, залогиньтесь.',
   'Account is banned': 'Your account is banned. Ваша учетная запись заблокирована.',
-  'Token is expired': 'Link is expired. Please repeat your request. Ссылка устарела, пожалуйста, повторите запрос.'
+  'Token is expired': 'Link is expired. Please repeat your request. Ссылка устарела. Пожалуйста, повторите запрос.'
 }
 
 const user = JSON.parse(JSON.stringify(EMPTY_USER))
@@ -124,9 +124,10 @@ export const storeUser = {
       for (const field in payload) {
         data[field] = JSON.parse(JSON.stringify(payload[field]))
       }
+      const tmpToken = Boolean(payload.token)
       return dispatch(ACTION_POST, {path: 'userSettings', data: payload})
         .then(() => {
-          commit(MUTATE_USER, {user: data, remember: state.user.remember})
+          commit(MUTATE_USER, tmpToken ? null : {user: data, remember: state.user.remember})
         })
     },
     [ACTION_POST] ({commit, state}, payload) {

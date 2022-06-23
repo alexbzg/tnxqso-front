@@ -36,10 +36,11 @@
                 {{currentPopup.dateTime}}
                 <span v-if="currentPopup.speed"><br>{{currentPopup.speed}}</span>
                 <span v-if="currentPopup.comments"><br>{{currentPopup.comments}}</span><br/>
-                <a v-if="currentLocation" :href="'https://yandex.ru/maps/?ll=' +
-                    currentLocation[1] + '%2C' + currentLocation[0] + '&pt=' +
-                    currentLocation[1] + '%2C' + currentLocation[0] + '&z=17' + zoom +
-                    '&l=map'" target="_blank" rel="noopener">
+                <a v-if="currentLocation" :href="'https://yandex.ru/maps/?l=sat%2Cskl' +
+                    '&ll=' + currentLocation[1] + '%2C' + currentLocation[0] + 
+                    '&pt=' + currentLocation[1] + '%2C' + currentLocation[0] + 
+                    '&z=17'" 
+                    target="_blank" rel="noopener">
                     Yandex maps
                 </a>
             </l-popup>

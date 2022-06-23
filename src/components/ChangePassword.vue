@@ -20,12 +20,12 @@ import {validateEmail} from '../utils'
 
 export default {
   name: 'changePassword',
+  props: ['token'],
   data () {
     return {
       pending: false,
       email: this.$store.getters.user.email,
       password: null,
-      token: this.$route.query.token
     }
   },
   methods: {

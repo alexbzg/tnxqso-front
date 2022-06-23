@@ -38,7 +38,7 @@
 import {mapActions, mapGetters} from 'vuex'
 
 import _ from 'underscore'
-import VueRecaptcha from 'vue-recaptcha'
+import {VueRecaptcha} from 'vue-recaptcha'
 
 import {validateEmail, debugLog} from '../utils'
 import {ACTION_LOGIN, ACTION_POST} from '../store-user'

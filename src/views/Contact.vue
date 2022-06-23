@@ -21,7 +21,7 @@ import {mapGetters, mapActions} from 'vuex'
 
 import {validateEmail} from '../utils'
 import router from '../router'
-import VueRecaptcha from 'vue-recaptcha'
+import {VueRecaptcha} from 'vue-recaptcha'
 import {ACTION_POST} from '../store-user'
 
 export default {

@@ -10,6 +10,7 @@ import QthNow from '../views/Qthnow'
 import Tnxlog from '../views/Tnxlog'
 import Tnxpost from '../views/Tnxpost'
 import QthNowMap from '../views/QthNowMap'
+import ChangePasswordView from '../views/ChangePassword'
 
 Vue.use(Router)
 
@@ -78,6 +79,12 @@ const router = new Router({
       path: '/contact',
       name: 'Contact',
       component: Contact,
+      props: true
+    },
+    {
+      path: '/changePassword',
+      name: 'ChangePassword',
+      component: ChangePasswordView,
       props: true
     },
     { path: '*',

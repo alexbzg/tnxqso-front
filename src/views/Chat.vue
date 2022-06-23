@@ -12,7 +12,6 @@
       <div id="text" v-html="instantMessageText"></div>
     </div>
 
-    <div id="refresh_time">Auto refresh<br/><b>5 sec</b></div>
         <table id="message_form" v-if="chatAccess">
             <tbody>
                 <tr>
@@ -65,10 +64,9 @@
                       <a :href="'http://qrz.com/db/' + msg.user" target="_blank" rel="noopener"
                         title="Link to QRZ.com"><img src="/static/images/icon_qrz.png" title="QRZ.com link"/></a>
                       <a :href="'http://qrz.ru/db/' + msg.user" target="_blank" rel="noopener"
-                        title="Link to QRZ.ru"><img src="/static/images/icon_qrzru.png" title="QRZ.ru link"/></a>
+                        title="Link to QRZ.ru"><img src="/static/images/icon_qrz_ru.png" title="QRZ.ru link"/></a>
+                      <img  @click="replyTo(msg.user)" src="/static/images/icon_message.png" title="Personal message to chat / Персональное сообщение в чат"/>
 <!--
-<img  @click="replyTo(msg.user)" src="/static/images/icon_message.png" title="Personal message to chat / Персональное сообщение в чат"/>
-
 <img class="icon_ban" src="/static/images/icon_message_private.png" title="Private message outside the chat / Персональное сообщение вне чата"/>
 -->
                       <img class="icon_ban" src="/static/images/icon_ban.png" title="Заблокировать пользователя"
@@ -85,7 +83,7 @@
                         title="Translate this message" />
                     </a>
                     <span class="message_to" v-for="callsign in msg.to" :key="callsign"
-                        :class="{personal: callsign === chatUser}">
+                        :class="{personal: callsign === chatCallsign}">
                         &rArr; {{callsign}}
                     </span>
                     <span class="message_text" v-html="msg.text"></span>
@@ -359,7 +357,7 @@ export default {
         this.$store.state.stationSettings.admin === this.userCallsign)
     },
     chatAccess() {
-      return this.loggedIn && this.emailConfirmed && 
+      return this.loggedIn && this.emailConfirmed &&
         (!this.service || !this.service.station || !this.$store.state.stationSettings.chatAccess ||
         this.$store.state.stationSettings.chatAccess !== 'admins' ||
         (this.$store.state.stationSettings.chatAccess === 'admins' && this.isAdmin))
@@ -392,7 +390,7 @@ export default {
           }
         }
       }
-      return data
+      return data.filter(entry => entry.msg.length > 0)
     },
     activeUsers () {
       const au = {

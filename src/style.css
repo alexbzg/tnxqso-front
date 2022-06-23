@@ -1083,11 +1083,10 @@ table#message_form{
 }
 table#message_form tr, table#message_form td{
     padding: 0;
-    vertical-align: top;
 }
 table#message_form input#your_call, table#message_form input#your_name{
     width: 140px;
-    padding: 5px 5px 2px 5px;
+    padding: 0px 5px 2px 5px;
     margin: 0 10px 0px 10px;
     font-size: 16px;
     border: none;
@@ -1103,7 +1102,8 @@ table#message_form input#your_name{
 }
 table#message_form input#message_text{
     width: 650px;
-    padding: 5px 5px 2px 5px;
+    padding: 0px 5px 2px 5px;
+    margin: 0;
     text-align: left;
     font-size: 16px;
     border: none;
@@ -1117,6 +1117,7 @@ table#message_form button{
 table#message_form #smile_btn{
     margin: 0px 30px 0 10px;
     cursor: pointer;
+    vertical-align: text-bottom;
 }
 
 #smiles{
@@ -1154,11 +1155,11 @@ table#message_form #smile_btn{
 }
 
 #admin_message{
-    display: inline-block;
-    margin-top: 5px;
     cursor: pointer;
     margin-right: 10px;
     height: 24px;
+    display: inline-block;
+    vertical-align: text-top;
 }
 
 
@@ -1306,7 +1307,7 @@ table#chat_window td.call{
 }
 table#chat_window td.call span.date_time{
     font-size: 10px;
-    margin-bottom: 3px;
+    margin-bottom: 4px;
     font-weight: normal;
     color: #aaa;
     display: block;
@@ -1321,7 +1322,7 @@ table#chat_window td.call:hover span.icon_block{
     display: block;
 }
 table#chat_window td.call span.icon_block img{
-    margin-right: 7px;
+    margin-right: 10px;
     cursor: pointer;
 }
 

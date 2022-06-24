@@ -2,7 +2,7 @@
 
     <div id="cluster">
       
-    <div id="view_send_form" v-if="!spot.show">
+    <div id="view_send_form" v-if="!spot.show && emailConfirmed">
         <input type="button" class="btn4" value="Send spot" 
             @click="spot.show = !spot.show">
     </div>
@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 
 import {USER_FIELDS_COUNT, CLUSTER_SPOT_TEXT_LIMIT} from '../constants'
 import StationStatus from '../station-status'
@@ -99,7 +99,7 @@ export default {
       stationStatus: new StationStatus(),
       spot: {
         show: false,
-        userCS: this.$store.state.user.chatUser,
+        userCS: this.$store.getters.chatCallsign,
         info: 'www.TNXQSO.com',
         freq: null,
         cs: !this.stationSettings || !this.stationSettings.station ? '' : this.stationSettings.station.callsign,
@@ -221,6 +221,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['chatCallsign', 'emailConfirmed']),
     stationCallsign () {
       return this.stationSettings.station ? this.stationSettings.station.callsign : null
     },

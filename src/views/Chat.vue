@@ -390,7 +390,10 @@ export default {
           }
         }
       }
-      return data.filter(entry => entry.msg.length > 0)
+      if (data[0].msg.length == 0) {
+        data.shift()
+      }
+      return data
     },
     activeUsers () {
       const au = {

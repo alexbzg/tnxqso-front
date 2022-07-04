@@ -2,7 +2,7 @@
     <div>
          <div id="user_menu">
 
-           Вы залогинены как <span id="login">r7cl</span><br/><br/>
+           Вы залогинены как <span id="login">{{userCallsign}}</span><br/><br/>
 
             <input type="button" id="view_setup" class="btn" :value="getString('STATION_SETUP')"
                 v-if="emailConfirmed" @click="showSettingsClick"/>

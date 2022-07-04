@@ -12,6 +12,7 @@
       <div id="text" v-html="instantMessageText"></div>
     </div>
 
+
         <table id="message_form" v-if="chatAccess">
             <tbody>
                 <tr>
@@ -20,7 +21,7 @@
                           v-model="chatCallsignField" @blur="chatCallsignBlur"/>
                         <input type="text" id="your_name" placeholder="Chat name"
                           v-model="userNameField" @blur="userNameBlur"/>
-                        <img id="admin_message"
+                        <img id="admin_message" class="admin_button"
                             v-show="isAdmin && service && service.station "
                             src="/static/images/icon_admin_message.png"
                             title="*** Закреплённое сообщение / *** Pinned message"
@@ -56,8 +57,11 @@
             <tr v-for="(msg, idx) in entry.msg" :class="{admin: msg.admin && service && service.station,
                 new_msg: msg.new}" :key="idx">
                 <td class="call">
-                    <span class="call" @click="replyTo(msg.user)">{{$options.replace0(msg.user)}}</span><br/>
-                    <span class="name" @click="replyTo(msg.user)" v-if="msg.name">{{msg.name}}</span>
+                    <img class="icon_ban" src="/static/images/icon_ban.png" title="Ban / Заблокировать"
+                        v-if="siteAdmin" @click="banQuery(msg.cs)"/>
+                        <span class="call">{{$options.replace0(msg.user)}}</span>
+                    <br/>
+                    <span class="name">{{msg.name}}</span>
                     <br/>
                     <span class="date_time">{{msg.date}} {{msg.time}}</span>
                     <span class="icon_block">
@@ -66,11 +70,8 @@
                       <a :href="'http://qrz.ru/db/' + msg.user" target="_blank" rel="noopener"
                         title="Link to QRZ.ru"><img src="/static/images/icon_qrz_ru.png" title="QRZ.ru link"/></a>
                       <img  @click="replyTo(msg.user)" src="/static/images/icon_message.png" title="Personal message to chat / Персональное сообщение в чат"/>
-<!--
-<img class="icon_ban" src="/static/images/icon_message_private.png" title="Private message outside the chat / Персональное сообщение вне чата"/>
--->
-                      <img class="icon_ban" src="/static/images/icon_ban.png" title="Заблокировать пользователя"
-                        v-if="siteAdmin" @click="banQuery(msg.cs)"/>
+                      <img src="/static/images/icon_message_private.png" title="Private message outside the chat / Персональное сообщение вне чата"/>
+
                     </span>
                 </td>
                 <td class="message">
@@ -99,8 +100,21 @@
             <div class="chat_info_users1">
                 <span v-for="(user, idx) in activeUsers['thisPage']"
                     :class="{'admin': user.admin, 'typing':user.typing}" :key="idx">
-                    {{$options.replace0(user.cs)}}<br/>
+                    {{$options.replace0(user.cs)}}
+                    <img class="icon_ban" src="/static/images/icon_ban.png" title="Ban / Заблокировать"
+                        v-if="siteAdmin" @click="banQuery(msg.cs)"/><br/>
                 </span>
+
+                <div class="icon_block">
+                      <a :href="'http://qrz.com/db/'" target="_blank" rel="noopener"
+                        title="Link to QRZ.com"><img src="/static/images/icon_qrz.png" title="QRZ.com link"/></a>
+                      <a :href="'http://qrz.ru/db/'" target="_blank" rel="noopener"
+                        title="Link to QRZ.ru"><img src="/static/images/icon_qrz_ru.png" title="QRZ.ru link"/></a>
+                      <img  @click="replyTo(user.cs)" src="/static/images/icon_message.png" title="Personal message to chat / Персональное сообщение в чат"/>
+                      <img src="/static/images/icon_message_private.png" title="Private message outside the chat / Персональное сообщение вне чата"/>
+
+                    </div>
+
             </div>
 
             <template v-if="'talks' in activeUsers">
@@ -125,6 +139,23 @@
         </td>
       </tr>
     </table>
+
+
+
+
+
+
+    <div id="private_message_layout" style="display: none;">
+      <div id="private_message_form">
+        <div id="replay_text">Предыдущее сообщение... Предыдущее сообщение... Предыдущее сообщение... Предыдущее сообщение...</div>
+        <div id="from_to">From R7CL to RM8W</div>
+        <textarea></textarea><br/>
+        <input type="button" id="btn_cancel" value="Cancel" /><input type="button" id="btn_ok" value="OK" />
+      </div>
+    </div>
+
+
+
 
 
 

@@ -221,10 +221,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['chatCallsign', 'emailConfirmed']),
-    stationCallsign () {
-      return this.stationSettings.station ? this.stationSettings.station.callsign : null
-    },
+    ...mapGetters(['chatCallsign', 'emailConfirmed', 'stationCallsign']),
     statusData () {
       return this.stationCallsign && this.stationCallsign in this.$store.state.activeStations.stations.active ? 
         this.$store.state.activeStations.stations.active[this.stationCallsign].status : {}

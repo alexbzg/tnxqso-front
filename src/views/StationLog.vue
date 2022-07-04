@@ -1,52 +1,75 @@
 <template>
     <div id="log">
-        <div id="refresh_time">Auto refresh<br/><b>1 min</b></div>
+
         <div id="no_net" v-if="stationActive && !statusData.online" class="warning">
           <div id="warning_border">
             <span>There is no Internet connection to the station.</span> The data will be updated after the connection is restored.
           </div>
         </div>
         <div id="call_search">
-            Callsign: 
-            <input type="text" id="input_call" v-model="searchValue"> 
+            Callsign:
+            <input type="text" id="input_call" v-model="searchValue">
             <button @click="search()">Search</button>
         </div>
 
-        <table id="search_results" v-if="searchResults && searchResults.length > 0">
-          <tr>
-            <td id="icon_close">
-              <img src="/static/images/icon_close.png" title="Close search results"
-                @click="clearSearch()">
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <log-table :data="searchResults" :log-settings="stationSettings.log" 
-                :qth-field-titles="qthFieldTitles" v-if="stationSettings">
-              </log-table>
-            </td>
-          </tr>
-        </table>
+        <div id="log_block">
 
-        <log-table :data="dataSlice" :log-settings="stationSettings.log" 
-            :qth-field-titles="qthFieldTitles" v-if="stationSettings">
-        </log-table>
+          <div id="search_result">
+            <img id="icon_close" src="/static/images/icon_close.png" title="Close search results"
+                v-if="searchResults" @click="clearSearch()">
+
+            <template v-if="searchResultsRDA">
+                <table id="rda_result" v-for="entry, idx in searchResultsRDA" :key="idx">
+                <tr>
+                    <th>RDA</th>
+                    <th v-for="band in $options.BANDS" :key="band">{{band}}</th>
+                </tr>
+                <tr>
+                    <td class="rda">{{searchRDA[idx]}}</td>
+                    <td v-for="band in $options.BANDS" :key="band">
+                        <span v-for="mode in $options.MODES" :key="mode" v-show="entry[band][mode]">
+                            {{mode}}
+                        </span>
+                    </td>
+                </tr>
+                </table>
+            </template>
+
+
+            <div v-if="searchResults && searchResults.length > 0">
+                  <log-table :data="searchResults" :log-settings="stationSettings.log"
+                    :qth-field-titles="qthFieldTitles" v-if="stationSettings">
+                  </log-table>
+            </div>
+
+          </div>
+
+
+          <log-table :data="dataSlice" :log-settings="stationSettings.log"
+              :qth-field-titles="qthFieldTitles" v-if="stationSettings">
+          </log-table>
+
+        </div>
 
     </div>
 </template>
 
 <script>
 import * as moment from 'moment'
+import {mapGetters} from 'vuex'
 
 import tabMixin from '../station-tab-mixin'
 import LogTable from '../components/LogTable'
 import storage from '../storage'
 import {qthFieldTitles} from '../utils'
+import {MODES, orderedBands} from '../ham-radio'
 
 const logSearchValueStorageKey = 'logSearchValue'
 const current = moment()
 
 export default {
+  BANDS: orderedBands(),
+  MODES: MODES,
   mixins: [tabMixin],
   name: 'StationLog',
   props: ['stationSettings'],
@@ -55,7 +78,8 @@ export default {
     return {
       tabId: 'log',
       searchValue: storage.load( logSearchValueStorageKey, 'local' ),
-      searchResults: null
+      searchResults: null,
+      searchResultsRDA: null
     }
   },
   methods: {
@@ -66,18 +90,43 @@ export default {
       if ( this.searchResults.length === 0 ) {
         window.alert( 'Nothing was found.' )
       }
+      if (this.searchRDA) {
+        const rda_count = this.searchRDA.length
+        if (rda_count > 0) {
+          this.searchResultsRDA = []
+          for (let i = 0; i < rda_count; i++) {
+            const entry = {}
+            for (const band of this.$options.BANDS) {
+              entry[band] = {}
+              for (const mode of MODES) {
+                entry[band][mode] = false
+              }
+            }
+            this.searchResultsRDA.push(entry)
+          }
+          for (const qso of this.searchResults) {
+            for (let rda_i = 0; rda_i < rda_count; rda_i++) {
+              if (qso.qth[this.qthFieldRDA].includes(this.searchRDA[rda_i])) {
+                this.searchResultsRDA[rda_i][qso.band][qso.mode] = true
+              }
+            }
+          }
+        }
+      }
     },
     clearSearch () {
       this.searchResults = null
+      this.searchResultsRDA = null
     }
   },
   computed: {
-    stationCallsign () {
-      return this.stationSettings.station ? this.stationSettings.station.callsign : null
-    },
-    statusData () {
-      return this.stationCallsign && this.stationCallsign in this.$store.state.activeStations.stations.active ? 
-        this.$store.state.activeStations.stations.active[this.stationCallsign].status : {}
+    ...mapGetters(['statusData', 'stationCallsign']),
+    searchRDA () {
+      let r = null
+      if (this.qthFieldRDA != -1 && this.statusData && this.statusData.qth) {
+        r = this.statusData.qth.fields.values[this.qthFieldRDA].trim().split(' ')
+      }
+      return r
     },
     dataSlice () {
       return Array.isArray( this.data ) ? this.data.slice( 0, 50 ) : []
@@ -92,6 +141,13 @@ export default {
     },
     qthFieldTitles () {
       return qthFieldTitles(this.stationSettings.qthCountry)
+    },
+    qthFieldRDA () {
+      let r = -1
+      if (this.stationSettings.qthCountry === 'RU') {
+        r = this.qthFieldTitles.indexOf('RDA')
+      }
+      return r
     }
   }
 }

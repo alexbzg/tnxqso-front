@@ -53,6 +53,8 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
+
 import {LMap, LTileLayer, LWMSTileLayer, LControlLayers, LGeoJson, LMarker, LIcon, LPopup, LControlAttribution} from 'vue2-leaflet'
 import {Icon} from 'leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -234,13 +236,7 @@ export default {
 
   },
   computed: {
-    stationCallsign () {
-      return this.stationSettings.station ? this.stationSettings.station.callsign : null
-    },
-    statusData () {
-      return this.stationCallsign && this.stationCallsign in this.$store.state.activeStations.stations.active ?
-        this.$store.state.activeStations.stations.active[this.stationCallsign].status : {}
-    },
+    ...mapGetters(['stationCallsign', 'statusData']),
     overlays () {
       return OVERLAYS.filter(layer =>
         !layer.qthCountry || (this.stationSettings && this.stationSettings.qthCountry === layer.qthCountry))

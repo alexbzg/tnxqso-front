@@ -65,7 +65,7 @@ export const storeUser = {
     emailConfirmed: state => {
       return state.user.email_confirmed
     },
-    stationCallsign: state => {
+    userStationCallsign: state => {
       return state.user.settings.station.callsign
     },
     user: state => {

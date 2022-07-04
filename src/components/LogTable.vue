@@ -10,7 +10,7 @@
             <td class="qth head" v-for="idx in qthColumns" :key="idx">
                 {{qthFieldTitles[idx]}}
             </td>
-            <td class="locator head" v-if="logSettings.columns.loc">Locator</td>
+            <td class="locator head" v-if="logSettings && logSettings.columns.loc">Locator</td>
         </tr>
         <template v-if="data">
             <tr v-for="(spot, idx) in data" :class="{new_qso:spot.new}" :key="idx">

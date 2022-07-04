@@ -20,6 +20,11 @@ export const storeStationSettings = {
     read: {'donate': null},
     new: {'donate':null}
   },
+  getters: {
+    stationCallsign: state => {
+      return state.station ? state.station.callsign : null
+    }
+  },
   mutations: {
     [MUTATE_STATION] (state, payload) {
       const init = !state.station

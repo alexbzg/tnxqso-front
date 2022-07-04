@@ -20,6 +20,15 @@ const store = new Vuex.Store({
     language: storeLanguage,
     stationSettings: storeStationSettings,
     activeStations: storeActiveStations
+  },
+  getters: {
+    statusData: (state, getters) => {
+      let r = {}
+      if (getters.stationCallsign && getters.stationCallsign in state.activeStations.stations.active) {
+        r = state.activeStations.stations.active[getters.stationCallsign].status
+      }
+      return r
+    }
   }
 })
 

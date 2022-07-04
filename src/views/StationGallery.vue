@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import {mapActions, mapState} from 'vuex'
+import {mapActions, mapState, mapGetters} from 'vuex'
 
 import VuePureLightbox from 'vue-pure-lightbox'
 import 'vue-pure-lightbox/dist/VuePureLightbox.css'
@@ -76,8 +76,8 @@ export default {
   computed: {
     ...mapState({
       skipConfirmation: state => state.user.user.settings.skipConfirmation,
-      stationCallsign: state => state.stationSettings.station.callsign
     }),
+    ...mapGetters(['stationCallsign']),
     stationPath () {
       return '/static/stations/' + urlCallsign(this.stationCallsign) + '/'
     },

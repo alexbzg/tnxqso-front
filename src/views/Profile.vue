@@ -2,6 +2,8 @@
     <div>
          <div id="user_menu">
 
+           Вы залогинены как <span id="login">r7cl</span><br/><br/>
+
             <input type="button" id="view_setup" class="btn" :value="getString('STATION_SETUP')"
                 v-if="emailConfirmed" @click="showSettingsClick"/>
 
@@ -14,7 +16,7 @@
 
         <div id="confirm_email" v-if="!emailConfirmed && !showChangePassword">
             <b>Your email address is not confirmed.</b><br/><span>We sent an email with verification link. Click on the link in the confirmation message then refresh this page.<br/>If you don't see it in your inbox, please check your spam folder or resend the email.</span><br/><br/><b>Ваш email адрес не подтверждён.</b><br/><span>Мы отправили вам письмо с подтверждающей ссылкой. Нажмите на неё и затем обновите эту страницу.<br/>Если письмо долго не приходи, поищите его папке Спам или отправьте его ещё раз.</span><br/><br/>
-            <input type="button" id="button_login" class="btn" value="Resend the email again - Отправить письмо ещё раз" 
+            <input type="button" id="button_login" class="btn" value="Resend the email again - Отправить письмо ещё раз"
                 @click="emailConfirmationRequest"/>
         </div>
 
@@ -128,11 +130,11 @@
                         </tr>
                     </table>
                     <input type="button" id="button_export_log" class="btn" :value="getString('LOG_DOWNLOAD')"
-                        :disabled="!stationCallsign"
+                        :disabled="!userStationCallsign"
                         @click="downloadLog()"/>
                     &nbsp;
                     <input type="button" id="button_clear_log" class="btn" :value="getString('LOG_CLEAR')"
-                        :disabled="!stationCallsign"
+                        :disabled="!userStationCallsign"
                         @click="clearLog()"/>
                 </div>
             </div>
@@ -164,11 +166,11 @@
                     <b>{{getString('MAP_FILE')}}</b>: {{trackFile ? trackFile : '...'}}<br/>
                     <div class="block_settings">
                         <input type="file" id="fileTrack" style="display:none" @change="uploadTrack">
-                        <label class="btn" for="fileTrack" :disabled="!user.stationCallsign">
+                        <label class="btn" for="fileTrack" :disabled="!userStationCallsign">
                             {{getString('MAP_UPLOAD')}}
                         </label> &nbsp;
                         <input type="button" id="button_clear_track" class="btn" :value="getString('MAP_CLEAR')"
-                            v-if="stationCallsign && trackFile"
+                            v-if="userStationCallsign && trackFile"
                             @click="clearTrack()"/><br/><br/>
                     </div>
 
@@ -356,13 +358,13 @@ export default {
     stationLink () {
       return getStationURL(this.settings.station.callsign)
     },
-    ...mapGetters(['user', 'stationCallsign', 'userCallsign', 'loggedIn', 'emailConfirmed']),
+    ...mapGetters(['user', 'userStationCallsign', 'userCallsign', 'loggedIn', 'emailConfirmed']),
     qthFieldTitles () {
       return qthFieldTitles(this.settings.qthCountry)
     }
   },
   watch: {
-    stationCallsign () {
+    userStationCallsign () {
       this.loadMisc()
       this.initSettings()
     }
@@ -373,8 +375,8 @@ export default {
     initSettings () {
       const settings = this.$store.getters.user.settings
       settings.chatAccess = settings.chatAccess || 'users'
-      if (this.$store.getters.stationCallsign) {
-        settings.station.callsign = this.$store.getters.stationCallsign.toUpperCase()
+      if (this.$store.getters.userStationCallsign) {
+        settings.station.callsign = this.$store.getters.userStationCallsign.toUpperCase()
       } else if (this.$store.getters.userCallsign){
         settings.station.callsign = this.$store.getters.userCallsign.toUpperCase()
       }
@@ -410,16 +412,16 @@ export default {
       this.loadTrack()
     },
     loadTrack () {
-      if (this.stationCallsign) {
-        request.getJSON('track', this.stationCallsign)
+      if (this.userStationCallsign) {
+        request.getJSON('track', this.userStationCallsign)
           .then(response => {
             this.trackFile = response.data.filename
           })
       }
     },
     loadStatus () {
-      if (this.stationCallsign) {
-        request.getJSON('status', this.stationCallsign)
+      if (this.userStationCallsign) {
+        request.getJSON('status', this.userStationCallsign)
           .then(response => {
             const data = response.data
             this.status.online = data.online
@@ -453,8 +455,8 @@ export default {
             'необходимо ввести только один корректный позывной экспедициц.')
         return
       }
-      if (this.stationCallsign &&
-        this.stationCallsign !== this.settings.station.callsign) {
+      if (this.userStationCallsign &&
+        this.userStationCallsign !== this.settings.station.callsign) {
         if ( !window.confirm( 'The station callsign change will clear all of the station archive. ' +
           'No recovery will be possible. Do you really want to continue?\n' +
           'При смене позывного станции будут удалены все архивы станции без возможности ' +
@@ -483,7 +485,7 @@ export default {
     },
     clearChat () {
       if (window.confirm( 'Do you really want to delete all chat messages?') ) {
-        this[ACTION_POST]({path: 'chat', data: {station: this.stationCallsign, clear: 1}})
+        this[ACTION_POST]({path: 'chat', data: {station: this.userStationCallsign, clear: 1}})
       }
     },
     clearGallery () {
@@ -527,14 +529,14 @@ export default {
     },
     clearNews () {
       if (window.confirm( 'Do you really want to delete all news entries?') ) {
-        this[ACTION_POST]({path: 'news', data: {station: this.user.stationCallsign, clear: 1}})
+        this[ACTION_POST]({path: 'news', data: {station: this.userStationCallsign, clear: 1}})
       }
     },
     postNewsItem () {
       this[ACTION_POST]({
         path: 'news',
         data: {
-          station: this.stationCallsign,
+          station: this.userStationCallsign,
           add: this.newsItem
         }
       })

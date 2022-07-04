@@ -9,6 +9,7 @@ import Chat from '../views/Chat'
 import QthNow from '../views/Qthnow'
 import Tnxlog from '../views/Tnxlog'
 import Tnxpost from '../views/Tnxpost'
+import Post from '../views/Post'
 import QthNowMap from '../views/QthNowMap'
 import ChangePasswordView from '../views/ChangePassword'
 
@@ -43,6 +44,13 @@ const router = new Router({
       component: Chat,
       props: {serviceName: 'talks'}
     },
+    {
+      path: '/post',
+      name: 'Post',
+      component: Post,
+      props: false
+    },
+
     {
       path: '/about',
       name: 'About',

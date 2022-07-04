@@ -1,5 +1,6 @@
 <template>
     <div id="app">
+
     <a href="/"><img id="logo" src="/static/images/tnxqso_logo.png" border="0" title="TNXQSO.com"></a>
     <language-switch v-if="languageSwitchEnabled"></language-switch>
     <table class="tabs">
@@ -39,7 +40,7 @@
             </router-link>
             <router-link to="/donate" tag="div" id="tab_donate" class="tab"
                 v-if="enable.donate"
-                :class="{updated_tab: stationSettings && stationSettings.new.donate && 
+                :class="{updated_tab: stationSettings && stationSettings.new.donate &&
                     stationSettings.read.donate}">
                 Donate
             </router-link>
@@ -49,6 +50,9 @@
             <router-link to="/profile" tag="div" id="tab_login" class="tab" v-else>
                 Profile
             </router-link>
+            <!--router-link to="/post" tag="div" id="tab_post" class="tab tab_envelope">
+                <img src="/static/images/icon_envelope.gif" />
+            </router-link-->
             <router-link to="/stations" tag="div" id="tab_stations" class="tab"
                 :class="{updated_tab: !$store.state.activeStations.read}">
                 Stations
@@ -66,6 +70,10 @@
                 </router-view>
             </keep-alive>
         </div>
+
+
+
+
     </div>
 
 </template>
@@ -84,6 +92,8 @@ import {formatPeriod} from './utils'
 import StationStatus from './components/StationStatus'
 import DonateBlock from './components/DonateBlock.vue'
 import LanguageSwitch from './components/LanguageSwitch'
+
+//import StompClient from './stomp-client'
 
 const tabsReadStoragePfx = 'stationTabsRead_'
 const tabs = {
@@ -146,6 +156,7 @@ export default {
       })
     }
     setInterval(this[ACTION_LOAD_STATION], STATION_SETTINGS_RELOAD)
+    //StompClient.connect()
   },
   beforeDestroy () {
     for (const id in this.tabs) {
@@ -169,7 +180,7 @@ export default {
         }
       },
       deep: true
-    } 
+    }
   },
   computed: {
     ...mapState(['stationSettings']),

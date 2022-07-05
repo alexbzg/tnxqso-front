@@ -15,8 +15,8 @@
         <change-password v-if="showChangePassword" @password-changed="showChangePasswordClick"></change-password>
 
         <div id="confirm_email" v-if="!emailConfirmed && !showChangePassword">
-            <b>Your email address is not confirmed.</b><br/><span>We sent an email with verification link. Click on the link in the confirmation message then refresh this page.<br/>If you don't see it in your inbox, please check your spam folder or resend the email.</span><br/><br/><b>Ваш email адрес не подтверждён.</b><br/><span>Мы отправили вам письмо с подтверждающей ссылкой. Нажмите на неё и затем обновите эту страницу.<br/>Если письмо долго не приходи, поищите его папке Спам или отправьте его ещё раз.</span><br/><br/>
-            <input type="button" id="button_login" class="btn" value="Resend the email again - Отправить письмо ещё раз"
+            <p v-html="getString('CONFIRM_EMAIL_WARNING')"/>
+            <input type="button" id="button_login" class="btn" :value="getString('CONFIRM_EMAIL_BUTTON')"
                 @click="emailConfirmationRequest"/>
         </div>
 

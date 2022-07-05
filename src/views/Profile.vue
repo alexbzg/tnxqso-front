@@ -390,6 +390,7 @@ export default {
       this.clusterCallsigns = settings.clusterCallsigns != null ? settings.clusterCallsigns.join(' ') : null
       this.clusterHighlight = settings.clusterHighlight != null ? settings.clusterHighlight.join(' ') : null
       this.chatAccess = settings.chatAccess
+      this.chatAdmins = settings.chatAdmins != null ? settings.chatAdmins.join(' ') : null
     },
     showSettingsClick () {
       if (this.showSettings) {

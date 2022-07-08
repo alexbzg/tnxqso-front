@@ -9,6 +9,7 @@ import {storeActivity, activityInit} from '../store-activity'
 import {storeLanguage} from '../store-language'
 import {storeActiveStations, activeStationsInit} from '../store-active-stations'
 import talksInit from '../talks-init'
+import stompClient from '../stomp-client'
 
 const store = new Vuex.Store({
   modules: {
@@ -19,6 +20,8 @@ const store = new Vuex.Store({
     activeStations: storeActiveStations
   }
 })
+
+stompClient.store = store
 
 if (store.getters.userToken) {
   store.dispatch(ACTION_LOAD_USER)

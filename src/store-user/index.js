@@ -1,5 +1,6 @@
 import storage from '../storage'
 import request from '../request'
+import stompClient from '../stomp-client'
 import {debugLog} from '../utils'
 
 const STORAGE_KEY_USER_TOKEN = 'userToken'
@@ -16,6 +17,8 @@ const ACTION_CHECK_INSTANT_MESSAGE = 'actionCheckInstantMessage'
 const CHECK_IM_INT = 600000
 
 const EMPTY_USER = {
+  callsign: null,
+  token: null,
   settings: {
     enable: {},
     station: {},
@@ -98,8 +101,10 @@ export const storeUser = {
       storage.remove(STORAGE_KEY_USER_TOKEN, 'local')
       storage.remove(STORAGE_KEY_USER_TOKEN, 'session')
       if (payload && payload.user) {
-        storage.save(STORAGE_KEY_USER_TOKEN, state.user.token, remember ? 'local' : 'session')
+        storage.save(STORAGE_KEY_USER_TOKEN, state.user.token,
+            remember ? 'local' : 'session')
       }
+      stompClient.init()
     },
     [MUTATE_INSTANT_MESSAGE] (state, payload) {
       state.instantMessage = payload

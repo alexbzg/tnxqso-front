@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@mapbox/togeojson": "^0.16.0",
+    "@stomp/stompjs": "^6.1.2",
     "@vue/composition-api": "^1.6.2",
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
@@ -18,8 +19,6 @@
     "sanitize-html": "^1.27.4",
     "sockjs": "^0.3.24",
     "sockjs-client": "^1.6.1",
-    "stomp": "^0.1.1",
-    "stompjs": "^2.3.3",
     "underscore": "^1.11.0",
     "vue": "^2.6.11",
     "vue-core-video-player": "^0.2.0",

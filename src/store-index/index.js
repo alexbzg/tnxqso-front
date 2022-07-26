@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-import {storeUser, ACTION_LOAD_USER, checkImInit} from '../store-user'
+import {storeUser, ACTION_LOAD_USER} from '../store-user'
 import {storeServices} from '../store-services'
 import {storeActivity, activityInit} from '../store-activity'
 import {storeLanguage} from '../store-language'
@@ -30,6 +30,5 @@ if (store.getters.userToken) {
 talksInit(store)
 activityInit(store)
 activeStationsInit(store)
-checkImInit(store)
 
 export default store

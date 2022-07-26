@@ -6,15 +6,11 @@ import {debugLog} from '../utils'
 const STORAGE_KEY_USER_TOKEN = 'userToken'
 
 export const MUTATE_USER = 'mutateUser'
-export const MUTATE_INSTANT_MESSAGE = 'mutateInstantMessage'
 
 export const ACTION_POST = 'actionPost'
 export const ACTION_LOGIN = 'actionLogin'
 export const ACTION_LOAD_USER = 'actionLoadUser'
 export const ACTION_EDIT_USER = 'actionEditUser'
-const ACTION_CHECK_INSTANT_MESSAGE = 'actionCheckInstantMessage'
-
-const CHECK_IM_INT = 600000
 
 const EMPTY_USER = {
   callsign: null,
@@ -103,11 +99,10 @@ export const storeUser = {
       if (payload && payload.user) {
         storage.save(STORAGE_KEY_USER_TOKEN, state.user.token,
             remember ? 'local' : 'session')
+        stompClient.init()
+      } else {
+        stompClient.stop()
       }
-      stompClient.init()
-    },
-    [MUTATE_INSTANT_MESSAGE] (state, payload) {
-      state.instantMessage = payload
     }
   },
   actions: {
@@ -158,25 +153,7 @@ export const storeUser = {
           }
           throw error
         })
-    },
-    [ACTION_CHECK_INSTANT_MESSAGE] ({commit, dispatch, state}) {
-      if (state.chatUser) {
-        return dispatch(ACTION_POST, {
-          path: 'instantMessage',
-          data: {user: state.chatUser.callsign},
-          skipToken: true,
-          supressAlert: true
-        })
-          .then(response => {
-            if (response.data) {
-              commit(MUTATE_INSTANT_MESSAGE, response.data)
-            }
-          })
-      }
     }
   }
 }
 
-export function checkImInit (store) {
-  setInterval(() => { store.dispatch(ACTION_CHECK_INSTANT_MESSAGE) }, CHECK_IM_INT)
-}

@@ -1,15 +1,12 @@
 <template>
     <div>
          <div id="user_menu">
-
-           Вы залогинены как <span id="login">{{userCallsign}}</span><br/><br/>
-
             <input type="button" id="view_setup" class="btn" :value="getString('STATION_SETUP')"
                 v-if="emailConfirmed" @click="showSettingsClick"/>
 
             <input type="button" id="button_change_email" @click="showChangePasswordClick"
                 class="btn" :value="getString('CHANGE_EMAIL')"/>
-            <input type="button" id="logout" class="btn" value="Logout" @click="logout()"/>
+            <input type="button" id="logout" class="btn" :value="'Logout - ' + userCallsign" @click="logout()"/>
         </div>
 
         <change-password v-if="showChangePassword" @password-changed="showChangePasswordClick"></change-password>

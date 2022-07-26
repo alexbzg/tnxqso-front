@@ -57,9 +57,9 @@
             <tr v-for="(msg, idx) in entry.msg" :class="{admin: msg.admin && service && service.station,
                 new_msg: msg.new}" :key="idx">
                 <td class="call">
-                    <img class="icon_ban" src="/static/images/icon_ban.png" title="Ban / Заблокировать"
+                    <img class="icon_ban" src="/static/images/icon_ban.png" title="Ban? / Забанить?"
                         v-if="siteAdmin" @click="banQuery(msg.cs)"/>
-                        <span class="call">{{$options.replace0(msg.user)}}</span>
+                    <span class="call">{{$options.replace0(msg.user)}}</span>
                     <br/>
                     <span class="name">{{msg.name}}</span>
                     <br/>
@@ -69,8 +69,8 @@
                         title="Link to QRZ.com"><img src="/static/images/icon_qrz.png" title="QRZ.com link"/></a>
                       <a :href="'http://qrz.ru/db/' + msg.user" target="_blank" rel="noopener"
                         title="Link to QRZ.ru"><img src="/static/images/icon_qrz_ru.png" title="QRZ.ru link"/></a>
-                      <img  @click="replyTo(msg.user)" src="/static/images/icon_message.png" title="Personal message to chat / Персональное сообщение в чат"/>
-                      <img src="/static/images/icon_message_private.png" title="Private message outside the chat / Персональное сообщение вне чата"/>
+                      <img  @click="replyTo(msg.user)" src="/static/images/icon_message.png" title="Personal message to the chat / Персональное сообщение в чат"/>
+                      <img src="/static/images/icon_message_sms.png" title="Personal message / Персональное сообщение"/>
 
                     </span>
                 </td>
@@ -95,44 +95,63 @@
         </td>
         <td>
 
-        <div id="chat_info">
-            <div class="chat_info_title">This page: {{activeUsers['thisPage'].length}}</div>
-            <div class="chat_info_users1">
-                <span v-for="(user, idx) in activeUsers['thisPage']"
+        <div id="list_users">
+            <div class="list_users_title">This page: {{activeUsers['thisPage'].length}}</div>
+            <div class="list_users list_users_here">
+                <div class="user" v-for="(user, idx) in activeUsers['thisPage']"
                     :class="{'admin': user.admin, 'typing':user.typing}" :key="idx">
                     {{$options.replace0(user.cs)}}
-                    <img class="icon_ban" src="/static/images/icon_ban.png" title="Ban / Заблокировать"
-                        v-if="siteAdmin" @click="banQuery(msg.cs)"/><br/>
-                </span>
-
-                <div class="icon_block">
+                  <div class="icon_block">
+                      <img class="icon_ban" src="/static/images/icon_ban.png" title="Ban? / Забанить?"
+                        v-if="siteAdmin" @click="banQuery(msg.cs)"/>
                       <a :href="'http://qrz.com/db/'" target="_blank" rel="noopener"
                         title="Link to QRZ.com"><img src="/static/images/icon_qrz.png" title="QRZ.com link"/></a>
                       <a :href="'http://qrz.ru/db/'" target="_blank" rel="noopener"
                         title="Link to QRZ.ru"><img src="/static/images/icon_qrz_ru.png" title="QRZ.ru link"/></a>
-                      <img  @click="replyTo(user.cs)" src="/static/images/icon_message.png" title="Personal message to chat / Персональное сообщение в чат"/>
-                      <img src="/static/images/icon_message_private.png" title="Private message outside the chat / Персональное сообщение вне чата"/>
-
-                    </div>
-
+                      <img  @click="replyTo(user.cs)" src="/static/images/icon_message.png" title="Personal message to the chat / Персональное сообщение в чат"/>
+                      <img src="/static/images/icon_message_sms.png" title="Personal message / Персональное сообщение"/>
+                  </div>
+                </div>
             </div>
 
             <template v-if="'talks' in activeUsers">
-                <div class="chat_info_title">Talks: {{activeUsers['talks'].length}}</div>
-                <div class="chat_info_users2">
-                    <span v-for="(user, idx) in activeUsers['talks']"
+                <div class="list_users_title">Talks: {{activeUsers['talks'].length}}</div>
+                <div class="list_users list_users_other">
+                    <div class="user"  v-for="(user, idx) in activeUsers['talks']"
                         :class="{'admin': user.admin, 'typing':user.typing}" :key="idx">
-                        {{$options.replace0(user.cs)}}<br/>
-                    </span>
+                        {{$options.replace0(user.cs)}}
+
+                      <div class="icon_block">
+                      <img class="icon_ban" src="/static/images/icon_ban.png" title="Ban? / Забанить?"
+                        v-if="siteAdmin" @click="banQuery(msg.cs)"/>
+                      <a :href="'http://qrz.com/db/'" target="_blank" rel="noopener"
+                        title="Link to QRZ.com"><img src="/static/images/icon_qrz.png" title="QRZ.com link"/></a>
+                      <a :href="'http://qrz.ru/db/'" target="_blank" rel="noopener"
+                        title="Link to QRZ.ru"><img src="/static/images/icon_qrz_ru.png" title="QRZ.ru link"/></a>
+                      <img  @click="replyTo(user.cs)" src="/static/images/icon_message.png" title="Personal message to the chat / Персональное сообщение в чат"/>
+                      <img src="/static/images/icon_message_sms.png" title="Personal message / Персональное сообщение"/>
+                  </div>
+                    </div>
                 </div>
             </template>
 
-            <div class="chat_info_title">Other pages: {{activeUsers['other'].length}}</div>
-            <div class="chat_info_users2">
-                <span v-for="(user, idx) in activeUsers['other']"
+            <div class="list_users_title">Other pages: {{activeUsers['other'].length}}</div>
+            <div class="list_users list_users_other">
+                <div class="user"  v-for="(user, idx) in activeUsers['other']"
                     :class="{'admin': user.admin}" :key="idx">
-                    {{$options.replace0(user.cs)}}<br/>
-                </span>
+                    {{$options.replace0(user.cs)}}
+
+                    <div class="icon_block">
+                      <img class="icon_ban" src="/static/images/icon_ban.png" title="Ban? / Забанить?"
+                        v-if="siteAdmin" @click="banQuery(msg.cs)"/>
+                      <a :href="'http://qrz.com/db/'" target="_blank" rel="noopener"
+                        title="Link to QRZ.com"><img src="/static/images/icon_qrz.png" title="QRZ.com link"/></a>
+                      <a :href="'http://qrz.ru/db/'" target="_blank" rel="noopener"
+                        title="Link to QRZ.ru"><img src="/static/images/icon_qrz_ru.png" title="QRZ.ru link"/></a>
+                      <img  @click="replyTo(user.cs)" src="/static/images/icon_message.png" title="Personal message to the chat / Персональное сообщение в чат"/>
+                      <img src="/static/images/icon_message_sms.png" title="Personal message / Персональное сообщение"/>
+                  </div>
+                </div>
             </div>
         </div>
 
@@ -144,15 +163,6 @@
 
 
 
-
-    <div id="private_message_layout" style="display: none;">
-      <div id="private_message_form">
-        <div id="replay_text">Предыдущее сообщение... Предыдущее сообщение... Предыдущее сообщение... Предыдущее сообщение...</div>
-        <div id="from_to">From R7CL to RM8W</div>
-        <textarea></textarea><br/>
-        <input type="button" id="btn_cancel" value="Cancel" /><input type="button" id="btn_ok" value="OK" />
-      </div>
-    </div>
 
 
 

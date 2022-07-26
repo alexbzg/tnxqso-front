@@ -13,7 +13,7 @@ export default {
   subscribePrivateMessages () {
     if (this.store.getters.userCallsign) {
       this.subsrciptionPrivateMessages = 
-        _client.subscribe(`/queue/${this.store.getters.userCallsign}`,
+        _client.subscribe(`/exchange/pm/${this.store.getters.userCallsign}`,
             this.onPrivateMessage)
     }
   },
@@ -37,9 +37,7 @@ export default {
   },
 
   init () {
-    if (_client) {
-      _client.deactivate()
-    }
+    this.stop()
     _client = new Client({
       brokerURL: `wss://${location.host}/ws`,
       connectHeaders: {
@@ -54,6 +52,12 @@ export default {
     })
     _client.onConnect = () => this.onConnect()
     _client.activate()
+  },
+
+  stop () {
+    if (_client) {
+      _client.deactivate()
+    }
   }
 
 }

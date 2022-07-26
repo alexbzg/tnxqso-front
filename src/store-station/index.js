@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-import {storeUser, ACTION_LOAD_USER, checkImInit} from '../store-user'
+import {storeUser, ACTION_LOAD_USER} from '../store-user'
 import {storeServices, MUTATE_SERVICE, ACTION_UPDATE_SERVICE, RELOAD_INT_SRVC} from '../store-services'
 import {storeActivity, activityInit} from '../store-activity'
 import {storeLanguage} from '../store-language'
@@ -55,7 +55,6 @@ store.dispatch(ACTION_LOAD_STATION)
   })
 talksInit(store)
 activityInit(store)
-checkImInit(store)
 
 export function isAdmin () {
   if (!store.getters.loggedIn) {

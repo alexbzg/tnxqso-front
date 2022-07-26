@@ -227,6 +227,11 @@ max-width: 900px;
     margin-top: 20px;
 }
 
+.donate_block.post
+{
+    margin-top: 40px;
+}
+
 
 
 
@@ -245,7 +250,7 @@ max-width: 900px;
 
 .stations_list{
 
-    margin: 0px 50px 70px 250px;
+    margin: 0px 50px 50px 250px;
     padding: 0;
     text-align: left;
     text-align: center;
@@ -254,7 +259,7 @@ max-width: 900px;
 }
 .stations_block{
     width: 100%;
-    margin: 20px auto 10px auto;
+    margin: 20px auto;
     padding: 3px;
     background-color: #eee;
     color: #777;
@@ -315,8 +320,13 @@ max-width: 900px;
     padding-top: 3px;
     background-color: #fff;
     border-radius: 10px;
-    border: 1px solid #ff4949;
+    border: 1px solid #777;
     min-height: 15px;
+    display: none;
+}
+.one_station.offline .callsign a{
+    text-decoration: underline;
+    color: #777;
 }
 
 .one_station .offline_text{
@@ -374,11 +384,15 @@ max-width: 900px;
 .one_station .station_full_info a{
     padding-right: 20px;
     font-weight: bold;
-    color: #050;
+    color: #337;
 }
 .one_station .period{
     color: #555;
     font-size: 12px;
+}
+
+.one_station .main_block{
+    display: none;
 }
 
 
@@ -399,7 +413,9 @@ max-width: 900px;
 .one_station.compact .status .links {
     display: block;
 }
-
+.one_station.compact.offline .offline_text{
+    display: none;
+}
 
 #archive_stations .callsign,
 #archive_stations .station_full_info .title,
@@ -577,10 +593,10 @@ table.tabs td#website_links{
 }
 
 
-#tab_login{
+#tab_stations{
     margin-left: 30px;
 }
-.tabs.index_tabs #tab_login{
+.tabs.index_tabs #tab_stations{
     margin-left: 0px;
 }
 
@@ -609,6 +625,7 @@ table.tabs td#website_links{
 #post_switch{
     font-size: 18px;
     color :#333;
+    margin-right: 190px;
 }
 #post_switch img{
     margin-right: 10px;
@@ -616,55 +633,67 @@ table.tabs td#website_links{
     cursor: pointer;
 }
 #post .message{
+    display: inline-block;
     width: 600px;
-    margin: 50px auto;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
+    margin: 50px auto 0px auto;
     text-align: left;
-    background-color: #ffffe0;
 }
-#post .message img{
-    float: right;
-    cursor: pointer;
-}
-
 #post .message .from{
-    margin-left: 30px;
-    line-height: 1.1em;
+    margin-left: 20px;
     font-weight: bold;
     font-size: 18px;
-    color: #009;
+    color: #339;
+    line-height: 1em;
 }
-#post .message span.name{
+#post .message .name{
     font-size: 14px;
-    margin-left: 5px;
+    margin-left: 10px;
     font-weight: normal;
 }
 #post .message .date_time{
-    line-height: 1.2em;
-    margin-left: 30px;
+    margin-left: 10px;
     font-size: 12px;
     color: #777;
+    font-weight: normal;
 }
 
-#post .message p{
-    padding: 20px;
-    margin: 10px 30px;
-    background-color: #fff;
-    border: 1px solid #eee;
+#post .message .message_text{
+    padding: 20px 20px 5px 20px;
+    margin: 0px;
+    background-color:#fffeef;
+    border: 1px solid #bbb;
     border-radius: 10px;
+    position: relative;
+    color: #000;
+}
+#post .message  .message_text img{
+    height: 20px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
 }
 
 #post .message .replay{
     font-size: 12px;
     text-align: right;
+}
+#post .message .replay span{
     text-decoration: underline;
-    color: #777;
-    margin-right: 30px;
+    color: #333;
     cursor: pointer;
 }
+#post .message .replay span:hover{
+    color: #00d;
+}
 
+#post #users_list{
+    float: right;
+    width: 160px;
+    height: 800px;
+    border: 1px solid #ccc;
+    margin-right: 30px;
+}
 
 
 
@@ -1200,7 +1229,7 @@ table#message_form input#your_call, table#message_form input#your_name{
     font-size: 16px;
     border: none;
     text-align: center;
-    border-bottom: 1px solid #aaa;
+    border-bottom: 1px solid #ccc;
 }
 table#message_form input#your_call{
     color: #009;
@@ -1216,7 +1245,7 @@ table#message_form input#message_text{
     text-align: left;
     font-size: 16px;
     border: none;
-    border-bottom: 1px solid #aaa;
+    border-bottom: 1px solid #ccc;
 }
 table#message_form button{
     width: 80px;
@@ -1296,59 +1325,52 @@ table#chat_layout .personal{
 
 
 
-#chat_info{
+#list_users{
     width: 140px;
     margin: 0px 0 0 0;
     border: 1px solid #eee;
     text-align: left;
 }
-.chat_info_title{
+.list_users_title{
     background-color: #eee;
     text-align: center;
     color: #777;
     font-size: 12px;
 }
-.chat_info_users1{
+.list_users{
     padding: 10px 0 10px 0px;
     font-weight: bold;
     line-height: 1.5em;
     color: #777;
     font-size: 16px;
     cursor: pointer;
-    position: relative;
 }
-#chat_info .icon_block{
-    display: none;
-    padding-left: 22px;
-}
-#chat_info .chat_info_users1:hover .icon_block, #chat_info .chat_info_users1:hover .icon_ban{
-    display: inline-block;
-}
-#chat_info .chat_info_users1:hover .icon_block img{
-    margin: 2px 5px 2px 0;
-}
-#chat_info .chat_info_users1 img.icon_ban{
-    right: 10px;
-    top: 12px;
-}
+.list_users_here{    color: #777;}
+.list_users_other{   color: #999;}
+.list_users span.admin{    color: #b24c4c;}
 
 
-.chat_info_users2{
-    padding: 10px 0 10px 0px;
-    font-weight: bold;
-    line-height: 1.5em;
-    color: #999;
-    font-size: 16px;
-    cursor: pointer;
-}
-.chat_info_users1 span.admin, .chat_info_users2 span.admin{
-    color: #b24c4c;
-}
-.chat_info_users1 span, .chat_info_users2 span{
+.list_users .user{
     display: block;
     padding-left: 22px;
+    cursor: pointer;
 }
-.chat_info_users1 span.typing{
+
+.list_users .user .icon_block{
+    position: relative;
+    display: none;
+}
+.list_users .user:hover .icon_block,
+#list_users .list_users .user img.icon_ban{     display: inline-block;}
+
+#list_users .icon_block img{    margin: 2px 5px 5px 0; }
+
+#list_users .list_users .user img.icon_ban{
+    top: 0;
+    left: -20px;
+}
+
+.list_users .user .typing{
     background: #fff url("/static/images/icon_typing.gif") 1px 5px no-repeat;
 }
 
@@ -1635,7 +1657,7 @@ table#chat_window td.message:hover .translate_lnk, table#admins_window td.messag
 
 #user_menu{
     text-align: center;
-    padding: 10px 30px 30px 30px;
+    padding: 30px 30px 30px 30px;
     border-bottom: 1px solid #ccc;
 }
 #user_menu input{
@@ -1653,16 +1675,18 @@ table#chat_window td.message:hover .translate_lnk, table#admins_window td.messag
     margin-right: 0;
 }
 
-#user_menu #login{
+#user_menu #logged{
+    display: block;
+    text-align: right;
     font-size: 24px;
     font-weight: bold;
-    margin-left: 10px;
+    margin: 0 20px 10px 0;
 }
 
 
 
 #change_password{
-    margin-top: 100px;
+    margin-top: 70px;
 }
 #change_password span{
     font-size: 12px;

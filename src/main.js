@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import store from './store-index/index.js'
+import store from './store-index'
 
 import capitalizeDirective from './capitalize-directive'
 capitalizeDirective()

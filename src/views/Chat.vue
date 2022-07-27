@@ -64,15 +64,10 @@
                     <span class="name">{{msg.name}}</span>
                     <br/>
                     <span class="date_time">{{msg.date}} {{msg.time}}</span>
-                    <span class="icon_block">
-                      <a :href="'http://qrz.com/db/' + msg.user" target="_blank" rel="noopener"
-                        title="Link to QRZ.com"><img src="/static/images/icon_qrz.png" title="QRZ.com link"/></a>
-                      <a :href="'http://qrz.ru/db/' + msg.user" target="_blank" rel="noopener"
-                        title="Link to QRZ.ru"><img src="/static/images/icon_qrz_ru.png" title="QRZ.ru link"/></a>
-                      <img  @click="replyTo(msg.user)" src="/static/images/icon_message.png" title="Personal message to the chat / Персональное сообщение в чат"/>
-                      <img src="/static/images/icon_message_sms.png" title="Personal message / Персональное сообщение"/>
-
-                    </span>
+                    <user-communication-buttons 
+                        :chat-callsign="msg.user" :callsign="msg.cs"
+                        @chat-reply="replyTo">
+                    </user-communication-buttons>
                 </td>
                 <td class="message">
                     <img class="delete_btn" src="/static/images/delete.png" v-if="isAdmin"
@@ -181,13 +176,14 @@ import insertTextAtCursor from 'insert-text-at-cursor'
 
 import ServiceDisplay from './ServiceDisplay'
 import Smilies, {SMILIES_IMG_PATH} from '../components/Smilies'
+import UserCommunicationButtons from '../components/UserCommunicationButtons'
 
 import {replace0} from '../utils'
 import messageBox from '../message-box'
 
 import {ACTION_POST_ACTIVITY, MUTATE_CURRENT_ACTIVITY, MUTATE_USERS_CONSUMER, ACTION_ADD_USERS_CONSUMER}
   from '../store-activity'
-import {ACTION_POST, ACTION_EDIT_USER, MUTATE_INSTANT_MESSAGE} from '../store-user'
+import {ACTION_POST, ACTION_EDIT_USER} from '../store-user'
 import {ACTION_UPDATE_SERVICE} from '../store-services'
 
 const typingInt = 5 * 60
@@ -211,7 +207,7 @@ export default {
   extends: ServiceDisplay,
   replace0: replace0,
   name: 'Chat',
-  components: {Smilies},
+  components: {Smilies, UserCommunicationButtons},
   data () {
     return {
       showSmilies: false,
@@ -240,12 +236,9 @@ export default {
   },
   methods: {
     ...mapActions([ACTION_POST, ACTION_EDIT_USER, ACTION_ADD_USERS_CONSUMER, ACTION_UPDATE_SERVICE, ACTION_POST_ACTIVITY]),
-    ...mapMutations([MUTATE_CURRENT_ACTIVITY, MUTATE_USERS_CONSUMER, MUTATE_INSTANT_MESSAGE]),
+    ...mapMutations([MUTATE_CURRENT_ACTIVITY, MUTATE_USERS_CONSUMER]),
     insertSmilie (smilie) {
       insertTextAtCursor(this.$refs.msgTextInput, ':' + smilie + ':')
-    },
-    closeInstantMessage () {
-      this[MUTATE_INSTANT_MESSAGE](null)
     },
     hideSmilies () {
       this.showSmilies = false

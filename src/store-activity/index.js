@@ -57,6 +57,8 @@ export const storeActivity = {
           data: {
             station: state.current.station,
             chat: state.current.chat,
+            callsign: rootState.user.user.callsign,
+            name: rootState.user.user.name,
             user: rootState.user.user.chat_callsign,
             typing: Boolean(payload)
             }

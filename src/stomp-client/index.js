@@ -14,7 +14,7 @@ export default {
     if (this.store.getters.userCallsign) {
       this.subsrciptionPrivateMessages = 
         _client.subscribe(`/exchange/pm/${this.store.getters.userCallsign}`,
-            this.onPrivateMessage)
+            msg => this.onPrivateMessage(msg))
     }
   },
 
@@ -31,7 +31,7 @@ export default {
 
   onPrivateMessage(msg) {
     this.logMessage(msg)
-    if (this.processProcessPrivateMssage) {
+    if (this.processPrivateMssage) {
       this.processPrivateMessage(msg)
     }
   },
@@ -42,7 +42,7 @@ export default {
       brokerURL: `wss://${location.host}/ws`,
       connectHeaders: {
         host: VIRTUAL_HOST,
-        login: "tnxqso_web",
+        login: this.store.getters.userCallsign,
         passcode: this.store.getters.userToken
       },
       debug: function (str) {

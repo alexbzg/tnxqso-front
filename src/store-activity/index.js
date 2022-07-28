@@ -59,7 +59,7 @@ export const storeActivity = {
             chat: state.current.chat,
             callsign: rootState.user.user.callsign,
             name: rootState.user.user.name,
-            user: rootState.user.user.chat_callsign,
+            chat_callsign: rootState.user.user.chat_callsign,
             typing: Boolean(payload)
             }
         })

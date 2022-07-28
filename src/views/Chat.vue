@@ -57,15 +57,14 @@
             <tr v-for="(msg, idx) in entry.msg" :class="{admin: msg.admin && service && service.station,
                 new_msg: msg.new}" :key="idx">
                 <td class="call">
-                    <img class="icon_ban" src="/static/images/icon_ban.png" title="Ban? / Забанить?"
-                        v-if="siteAdmin" @click="banQuery(msg.cs)"/>
+                    <user-ban-button :callsign="msg.cs"></user-ban-button>
                     <span class="call">{{$options.replace0(msg.user)}}</span>
                     <br/>
                     <span class="name">{{msg.name}}</span>
                     <br/>
                     <span class="date_time">{{msg.date}} {{msg.time}}</span>
-                    <user-communication-buttons 
-                        :chat-callsign="msg.user" :callsign="msg.cs"
+                    <user-communication-buttons
+                        :chat-callsign="msg.user" :callsign="msg.cs" :chat="true"
                         @chat-reply="replyTo">
                     </user-communication-buttons>
                 </td>
@@ -88,81 +87,15 @@
         </table>
 
         </td>
+
         <td>
-
-        <div id="list_users">
-            <div class="list_users_title">This page: {{activeUsers['thisPage'].length}}</div>
-            <div class="list_users list_users_here">
-                <div class="user" v-for="(user, idx) in activeUsers['thisPage']"
-                    :class="{'admin': user.admin, 'typing':user.typing}" :key="idx">
-                    {{$options.replace0(user.cs)}}
-                  <div class="icon_block">
-                      <img class="icon_ban" src="/static/images/icon_ban.png" title="Ban? / Забанить?"
-                        v-if="siteAdmin" @click="banQuery(msg.cs)"/>
-                      <a :href="'http://qrz.com/db/'" target="_blank" rel="noopener"
-                        title="Link to QRZ.com"><img src="/static/images/icon_qrz.png" title="QRZ.com link"/></a>
-                      <a :href="'http://qrz.ru/db/'" target="_blank" rel="noopener"
-                        title="Link to QRZ.ru"><img src="/static/images/icon_qrz_ru.png" title="QRZ.ru link"/></a>
-                      <img  @click="replyTo(user.cs)" src="/static/images/icon_message.png" title="Personal message to the chat / Персональное сообщение в чат"/>
-                      <img src="/static/images/icon_message_sms.png" title="Personal message / Персональное сообщение"/>
-                  </div>
-                </div>
-            </div>
-
-            <template v-if="'talks' in activeUsers">
-                <div class="list_users_title">Talks: {{activeUsers['talks'].length}}</div>
-                <div class="list_users list_users_other">
-                    <div class="user"  v-for="(user, idx) in activeUsers['talks']"
-                        :class="{'admin': user.admin, 'typing':user.typing}" :key="idx">
-                        {{$options.replace0(user.cs)}}
-
-                      <div class="icon_block">
-                      <img class="icon_ban" src="/static/images/icon_ban.png" title="Ban? / Забанить?"
-                        v-if="siteAdmin" @click="banQuery(msg.cs)"/>
-                      <a :href="'http://qrz.com/db/'" target="_blank" rel="noopener"
-                        title="Link to QRZ.com"><img src="/static/images/icon_qrz.png" title="QRZ.com link"/></a>
-                      <a :href="'http://qrz.ru/db/'" target="_blank" rel="noopener"
-                        title="Link to QRZ.ru"><img src="/static/images/icon_qrz_ru.png" title="QRZ.ru link"/></a>
-                      <img  @click="replyTo(user.cs)" src="/static/images/icon_message.png" title="Personal message to the chat / Персональное сообщение в чат"/>
-                      <img src="/static/images/icon_message_sms.png" title="Personal message / Персональное сообщение"/>
-                  </div>
-                    </div>
-                </div>
-            </template>
-
-            <div class="list_users_title">Other pages: {{activeUsers['other'].length}}</div>
-            <div class="list_users list_users_other">
-                <div class="user"  v-for="(user, idx) in activeUsers['other']"
-                    :class="{'admin': user.admin}" :key="idx">
-                    {{$options.replace0(user.cs)}}
-
-                    <div class="icon_block">
-                      <img class="icon_ban" src="/static/images/icon_ban.png" title="Ban? / Забанить?"
-                        v-if="siteAdmin" @click="banQuery(msg.cs)"/>
-                      <a :href="'http://qrz.com/db/'" target="_blank" rel="noopener"
-                        title="Link to QRZ.com"><img src="/static/images/icon_qrz.png" title="QRZ.com link"/></a>
-                      <a :href="'http://qrz.ru/db/'" target="_blank" rel="noopener"
-                        title="Link to QRZ.ru"><img src="/static/images/icon_qrz_ru.png" title="QRZ.ru link"/></a>
-                      <img  @click="replyTo(user.cs)" src="/static/images/icon_message.png" title="Personal message to the chat / Персональное сообщение в чат"/>
-                      <img src="/static/images/icon_message_sms.png" title="Personal message / Персональное сообщение"/>
-                  </div>
-                </div>
-            </div>
-        </div>
-
+            <active-users :chat="true" :station="service.station"
+                @chat-reply="replyTo">
+            </active-users>
         </td>
+
       </tr>
     </table>
-
-
-
-
-
-
-
-
-
-
 
     </div>
 </template>
@@ -177,16 +110,16 @@ import insertTextAtCursor from 'insert-text-at-cursor'
 import ServiceDisplay from './ServiceDisplay'
 import Smilies, {SMILIES_IMG_PATH} from '../components/Smilies'
 import UserCommunicationButtons from '../components/UserCommunicationButtons'
+import UserBanButton from '../components/UserBanButton'
+import ActiveUsers from '../components/ActiveUsers'
 
 import {replace0} from '../utils'
-import messageBox from '../message-box'
 
 import {ACTION_POST_ACTIVITY, MUTATE_CURRENT_ACTIVITY, MUTATE_USERS_CONSUMER, ACTION_ADD_USERS_CONSUMER}
   from '../store-activity'
 import {ACTION_POST, ACTION_EDIT_USER} from '../store-user'
 import {ACTION_UPDATE_SERVICE} from '../store-services'
 
-const typingInt = 5 * 60
 const RE_MSG_TO = /(:?\u21d2\s?\w+(:?\/\w+)*\s?)+(:?\s|$)/
 
 const MSG_SANITIZE_HTML_SETTINGS = {
@@ -207,7 +140,7 @@ export default {
   extends: ServiceDisplay,
   replace0: replace0,
   name: 'Chat',
-  components: {Smilies, UserCommunicationButtons},
+  components: {Smilies, UserCommunicationButtons, UserBanButton, ActiveUsers},
   data () {
     return {
       showSmilies: false,
@@ -336,36 +269,7 @@ export default {
       if ( !this.messageText || this.messageText.indexOf(txt) === -1 ) {
         this.messageText = txt + ' ' + (this.messageText ? this.messageText : '')
       }
-    },
-    banQuery (callsign) {
-      this[ACTION_POST]({
-        path: 'banUser',
-        data: {
-          user: callsign,
-          query: true
-        }
-      })
-        .then(rsp => {
-          const data = rsp.data
-          let alt = ''
-          if (data.alts.length) {
-            alt = `<br/>cвязанные логины: ${data.alts.join(', ')}`
-          }
-          messageBox(
-            'Заблокировать пользователя?',
-            `логин: ${data.login}<br/> email: ${data.email}${alt}`,
-            true)
-            .then(() => {
-              this[ACTION_POST]({
-                path: 'banUser',
-                data: {
-                  user: callsign
-                }
-              })
-                .then(alert('Пользователь заблокирован.'))
-            })
-        })
-      }
+    }
   },
   watch: {
     service () {
@@ -428,50 +332,6 @@ export default {
         data.shift()
       }
       return data
-    },
-    activeUsers () {
-      const au = {
-        'thisPage': [],
-        'other': []
-      }
-      if (!this.service) {
-        return au
-      }
-      if (this.service.station) {
-        au['talks'] = []
-      }
-      const stationSettings = this.service.station ? this.$store.state.stationSettings : null
-      const data = this.$store.state.activity.users
-      const ts = Date.now() / 1000
-      for (const cs in data) {
-        const u = JSON.parse(JSON.stringify(data[cs]))
-        if (u.typing && ts - u.ts > typingInt) {
-          u.typing = false
-        }
-        u.cs = cs
-        if (this.service.station) {
-          u.admin = u.cs === stationSettings.admin || stationSettings.chatAdmins.includes(cs)
-        } else {
-          u.admin = false
-        }
-        if (u.chat && ((u.station && u.station === this.service.station) ||
-          (!u.station && !this.service.station))) {
-          au['thisPage'].push(u)
-        } else if (!u.station && u.chat) {
-          au['talks'].push(u)
-        } else {
-          au['other'].push(u)
-        }
-      }
-      for (const type in au) {
-        au[type].sort(
-            function ( a, b ) {
-              if ( a.cs < b.cs ) { return -1 }
-              if ( b.cs < a.cs ) { return 1 }
-              return 0
-            })
-      }
-      return au
     },
     postButtonEnabled: function () {
       return !this.posting && Boolean(this.messageText) && Boolean(this.chatCallsignField)

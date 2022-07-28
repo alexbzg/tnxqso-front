@@ -15,7 +15,8 @@
             <img src="/static/images/icon_qrz_ru.png" title="QRZ.ru link"/>
         </a>
         <template v-if="userToken">
-            <img  
+            <img 
+                v-if="chat"
                 @click="$emit('chat-reply', chatCallsign)" 
                 src="/static/images/icon_message.png" 
                 title="Personal message to the chat / Персональное сообщение в чат"/>
@@ -34,7 +35,7 @@ import postPrivateMessage from './PostPrivateMessage'
 
 export default {
   name: 'userCommunicationButtons',
-  props: ['callsign', 'chatCallsign'],
+  props: ['callsign', 'chatCallsign', 'chat'],
   data () {
     return {
     }

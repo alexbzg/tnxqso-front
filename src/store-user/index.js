@@ -1,7 +1,6 @@
 import storage from '../storage'
 import request from '../request'
 import stompClient from '../stomp-client'
-import {debugLog} from '../utils'
 
 const STORAGE_KEY_USER_TOKEN = 'userToken'
 
@@ -11,6 +10,15 @@ export const ACTION_POST = 'actionPost'
 export const ACTION_LOGIN = 'actionLogin'
 export const ACTION_LOAD_USER = 'actionLoadUser'
 export const ACTION_EDIT_USER = 'actionEditUser'
+
+export const MUTATE_GET_MESSAGES = 'mttPrivateMessages'
+const MUTATE_ADD_MESSAGE = 'mttAddMessage'
+const MUTATE_DELETE_MESSAGE = 'mttDeleteMessage'
+const MUTATE_READ_MESSAGES = 'mttReadMessages'
+
+export const ACTION_DELETE_MESSAGE = 'actnDeleteMessage'
+export const ACTION_GET_MESSAGES = 'actnGetMessages'
+export const ACTION_READ_MESSAGES = 'actnReadMessages'
 
 const EMPTY_USER = {
   callsign: null,
@@ -37,10 +45,18 @@ if (user.token) {
   user.token = storage.load(STORAGE_KEY_USER_TOKEN, 'session')
 }
 
+function userInit(commit, dispatch) {
+  dispatch(ACTION_GET_MESSAGES)
+  stompClient.init()
+  stompClient.processPrivateMessage = msg => {
+    commit(MUTATE_ADD_MESSAGE, JSON.parse(msg))
+  }
+}
+
 export const storeUser = {
   state: {
     user: user,
-    instantMessage: null
+    messages: []
   },
   getters: {
     userCallsign: state => {
@@ -70,8 +86,8 @@ export const storeUser = {
     user: state => {
       return JSON.parse(JSON.stringify(state.user))
     },
-    instantMessage: state => {
-      return state.instantMessage
+    unreadMessages: state => {
+      return state.messages.filter(msg => msg.unread)
     }
   },
   mutations: {
@@ -99,17 +115,35 @@ export const storeUser = {
       if (payload && payload.user) {
         storage.save(STORAGE_KEY_USER_TOKEN, state.user.token,
             remember ? 'local' : 'session')
-        stompClient.init()
       } else {
         stompClient.stop()
       }
+    },
+    [MUTATE_GET_MESSAGES] (state, payload) {
+      state.messages = payload
+    },
+    [MUTATE_ADD_MESSAGE] (state, payload) {
+      state.messages.push(payload)
+    },
+    [MUTATE_DELETE_MESSAGE] (state, payload) {
+      const idx = state.messages.findIndex(message => message.id === payload)
+      state.messages.splice(idx, 1)
+    },
+    [MUTATE_READ_MESSAGES] (state, payload) {
+      for (const message of state.messages) {
+        if (payload.includes(message.id)) {
+          message.unread = false
+        }
+      }
     }
+
   },
   actions: {
-    [ACTION_LOGIN] ({commit}, payload) {
+    [ACTION_LOGIN] ({commit, dispatch}, payload) {
       return request.post('login', payload.data)
         .then(response => {
           commit(MUTATE_USER, {user: response.data, remember: payload.remember})
+          userInit(commit, dispatch)
         })
     },
     [ACTION_LOAD_USER] ({commit, state, dispatch}) {
@@ -117,6 +151,7 @@ export const storeUser = {
         .then(response => {
           response.data.token = state.user.token
           commit(MUTATE_USER, {user: response.data})
+          userInit(commit, dispatch)
         })
     },
     [ACTION_EDIT_USER] ({commit, state, dispatch, getters}, payload) {
@@ -130,6 +165,27 @@ export const storeUser = {
           commit(MUTATE_USER, tmpToken ? null : {user: data, remember: state.user.remember})
         })
     },
+    [ACTION_DELETE_MESSAGE] ({dispatch, commit}, payload) {
+      return dispatch(ACTION_POST, {
+        path: 'privateMessages/delete',
+        data: {id: payload}
+      })
+        .then(() => {commit(MUTATE_DELETE_MESSAGE, payload)})
+    },
+    [ACTION_GET_MESSAGES] ({dispatch, commit}) {
+      return dispatch(ACTION_POST, {
+        path: 'privateMessages/get',
+        data: {}
+      })
+        .then(data => {commit(MUTATE_GET_MESSAGES, data)})
+    },
+    [ACTION_READ_MESSAGES] ({dispatch, commit}, payload) {
+      return dispatch(ACTION_POST, {
+        path: 'privateMessages/read',
+        data: {ids: payload}
+      })
+        .then(data => {commit(MUTATE_READ_MESSAGES, data)})
+    },
     [ACTION_POST] ({commit, state}, payload) {
       if (!payload.data.token && !payload.skipToken) {
         payload.data.token = state.user.token
@@ -137,7 +193,6 @@ export const storeUser = {
       return request.post(payload.path, payload.data, payload.multipart)
         .catch(error => {
           let msg = ''
-          debugLog(error)
           if (error.status === 400 || error.status === 403 || error.status == 401) {
             if (error.message in LOGIN_ERRORS) {
               commit(MUTATE_USER, null)

@@ -616,7 +616,7 @@ table.tabs td#website_links{
 
 
 
-/*             P  O  S  T          */
+/*             P O S T          */
 
 
 #post{
@@ -687,15 +687,12 @@ table.tabs td#website_links{
     color: #00d;
 }
 
-#post #users_list{
+#post #list_users{
     float: right;
-    width: 160px;
-    height: 800px;
-    border: 1px solid #ccc;
     margin-right: 30px;
 }
 
-
+#post #list_users .icon_block img{    margin-right: 10px; }
 
 
 
@@ -1537,7 +1534,7 @@ table#chat_window td.message:hover .translate_lnk, table#admins_window td.messag
     left: 0;
     width: 100%;
     height: 100%;
-    background: url(/static/images/background_black_75.png) top left;
+    background: url(/static/images/background_black_50.png) top left;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1545,28 +1542,29 @@ table#chat_window td.message:hover .translate_lnk, table#admins_window td.messag
 
 
 #private_message_form{
-    width: 400px;
-    padding: 20px 50px;
+    width: 600px;
+    padding: 20px 30px 10px 30px;
     border-radius: 10px;
-    background-color: #eee;
+    background-color: #fff;
     box-shadow: 5px 5px 7px rgba(0,0,0,0.5); /* Параметры тени */
+    position: relative;
 }
 #private_message_form textarea{
-    width: 350px;
+    width: 550px;
     height: 80px;
-    padding: 10px 20px;
-    background-color: #fff;
+    padding: 20px;
+    background-color: #fffeef;
     border: 1px solid #ddd;
     border-radius: 10px;
-    color: #555;
+    color: #000;
     resize: none;
+    line-height: 1.5em;
+    font-size: 16px;
 }
 #private_message_form textarea:focus{
     outline: none !important;
-    border:1px solid #aaa;
 }
 #private_message_form #replay_text{
-    margin-bottom: 20px;
     font-size: 14px;
     color: #999;
     font-style: italic;
@@ -1574,22 +1572,28 @@ table#chat_window td.message:hover .translate_lnk, table#admins_window td.messag
     line-height: 16px;
 }
 #private_message_form #from_to{
-    font-size: 14px;
+    font-size: 16px;
     font-weight: bold;
+    color: #009;
+}
+#private_message_form #from_to span{
+    font-weight: normal;
 }
 #private_message_form input{
-    border-radius: 10px;
-    padding: 5px 20px;
-    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px 30px;
+    border: 1px solid #ddd;
     cursor: pointer;
-    background-color: #ddd;
-    color: #333;
+    background-color: #eee;
+    color: #000;
 }
 #private_message_form #btn_cancel{
-    float: left;
-}
-#private_message_form #btn_ok{
-    float: right;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    height: 25px;
+    cursor: pointer;
+    opacity: 0.7;
 }
 
 

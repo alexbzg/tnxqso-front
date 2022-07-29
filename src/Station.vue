@@ -58,9 +58,9 @@
             <router-link to="/profile" tag="div" id="tab_login" class="tab" v-else>
                 Profile
             </router-link>
-            <!--router-link to="/post" tag="div" id="tab_post" class="tab tab_envelope">
-                <img src="/static/images/icon_envelope.gif" />
-            </router-link-->
+            <router-link to="/post" tag="div" id="tab_post" class="tab tab_envelope" v-if="loggedIn">
+                <img :src="'/static/images/icon_envelope' + (unreadMessages.length ? '_flash' : '') + '.gif'" />
+            </router-link>
         </td>
     </tr></table>
         <div class="list">
@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import {mapState, mapActions} from 'vuex'
+import {mapState, mapActions, mapGetters} from 'vuex'
 
 import {USER_FIELDS_COUNT} from './constants'
 import {ACTION_LOAD_STATION} from './store-station-settings'
@@ -184,6 +184,7 @@ export default {
   },
   computed: {
     ...mapState(['stationSettings']),
+    ...mapGetters(['loggedIn', 'unreadMessages']),
     languageSwitchEnabled () {
       return this.$route.name === 'Profile'
     },
@@ -195,11 +196,7 @@ export default {
       else {
         return ''
       }
-    },
-    loggedIn: function () {
-      return this.$store.getters.loggedIn
     }
-
   },
   methods: {
     ...mapActions([ACTION_LOAD_STATION]),

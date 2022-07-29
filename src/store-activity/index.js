@@ -60,6 +60,7 @@ export const storeActivity = {
             callsign: rootState.user.user.callsign,
             name: rootState.user.user.name,
             chat_callsign: rootState.user.user.chat_callsign,
+            pm_enabled: rootState.user.user.pm_enabled,
             typing: Boolean(payload)
             }
         })

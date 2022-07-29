@@ -621,11 +621,15 @@ table.tabs td#website_links{
 
 #post{
     margin:20px 0 0 220px;
+    padding-right: 160px;
+    position: relative;
 }
 #post_switch{
+    width: 600px;
+    margin: 0 auto;
     font-size: 18px;
     color :#333;
-    margin-right: 190px;
+    text-align: left;
 }
 #post_switch img{
     margin-right: 10px;
@@ -658,7 +662,7 @@ table.tabs td#website_links{
 }
 
 #post .message .message_text{
-    padding: 20px 20px 5px 20px;
+    padding: 20px 20px 20px 20px;
     margin: 0px;
     background-color:#fffeef;
     border: 1px solid #bbb;
@@ -670,31 +674,114 @@ table.tabs td#website_links{
     height: 20px;
     position: absolute;
     top: 5px;
-    right: 5px;
+    right: 10px;
     cursor: pointer;
 }
 
 #post .message .replay{
+    position: absolute;
+    bottom: 0px;
+    right: 5px;
     font-size: 12px;
     text-align: right;
 }
 #post .message .replay span{
-    text-decoration: underline;
-    color: #333;
+    color: #777;
     cursor: pointer;
 }
 #post .message .replay span:hover{
     color: #00d;
+    text-decoration: underline;
 }
 
 #post #list_users{
-    float: right;
+    position: absolute;
+    top: 40px;
+    right: 0;
     margin-right: 30px;
 }
 
 #post #list_users .icon_block img{    margin-right: 10px; }
 
 
+
+
+
+
+#private_message_layout{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url(/static/images/background_black_50.png) top left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#private_message_back{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+#private_message_form{
+    width: 600px;
+    padding: 10px 30px 10px 30px;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 5px 5px 7px rgba(0,0,0,0.5); /* Параметры тени */
+    position: relative;
+}
+#private_message_form textarea{
+    width: 550px;
+    height: 80px;
+    padding: 20px;
+    background-color: #fffeef;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    color: #000;
+    resize: none;
+    line-height: 1.5em;
+    font-size: 16px;
+}
+#private_message_form textarea:focus{
+    outline: none !important;
+}
+#private_message_form #replay_text{
+    padding: 0px 30px;
+    font-size: 14px;
+    color: #999;
+    font-style: italic;
+    text-align: left;
+    line-height: 16px;
+}
+#private_message_form #from_to{
+    font-size: 16px;
+    font-weight: bold;
+    color: #009;
+}
+#private_message_form #from_to img{
+    display: inline-block;
+    vertical-align: text-top;
+}
+#private_message_form input{
+    border-radius: 5px;
+    padding: 5px 30px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    background-color: #eee;
+    color: #000;
+}
+#private_message_form #btn_cancel{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    height: 25px;
+    cursor: pointer;
+    opacity: 0.7;
+}
 
 
 
@@ -1340,7 +1427,6 @@ table#chat_layout .personal{
     line-height: 1.5em;
     color: #777;
     font-size: 16px;
-    cursor: pointer;
 }
 .list_users_here{    color: #777;}
 .list_users_other{   color: #999;}
@@ -1350,7 +1436,6 @@ table#chat_layout .personal{
 .list_users .user{
     display: block;
     padding-left: 22px;
-    cursor: pointer;
 }
 
 .list_users .user .icon_block{
@@ -1358,9 +1443,14 @@ table#chat_layout .personal{
     display: none;
 }
 .list_users .user:hover .icon_block,
-#list_users .list_users .user img.icon_ban{     display: inline-block;}
+#list_users .list_users .user img.icon_ban{
+    display: block;
+}
 
-#list_users .icon_block img{    margin: 2px 5px 5px 0; }
+#list_users .icon_block img{
+    margin: 2px 5px 5px 0;
+    cursor: pointer;
+}
 
 #list_users .list_users .user img.icon_ban{
     top: 0;
@@ -1524,77 +1614,6 @@ table#chat_window td.message:hover .translate_lnk, table#admins_window td.messag
     display: inline;
 }
 
-
-
-
-
-#private_message_layout{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: url(/static/images/background_black_50.png) top left;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-
-#private_message_form{
-    width: 600px;
-    padding: 20px 30px 10px 30px;
-    border-radius: 10px;
-    background-color: #fff;
-    box-shadow: 5px 5px 7px rgba(0,0,0,0.5); /* Параметры тени */
-    position: relative;
-}
-#private_message_form textarea{
-    width: 550px;
-    height: 80px;
-    padding: 20px;
-    background-color: #fffeef;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    color: #000;
-    resize: none;
-    line-height: 1.5em;
-    font-size: 16px;
-}
-#private_message_form textarea:focus{
-    outline: none !important;
-}
-#private_message_form #replay_text{
-    font-size: 14px;
-    color: #999;
-    font-style: italic;
-    text-align: left;
-    line-height: 16px;
-}
-#private_message_form #from_to{
-    font-size: 16px;
-    font-weight: bold;
-    color: #009;
-}
-#private_message_form #from_to span{
-    font-weight: normal;
-}
-#private_message_form input{
-    border-radius: 5px;
-    padding: 5px 30px;
-    border: 1px solid #ddd;
-    cursor: pointer;
-    background-color: #eee;
-    color: #000;
-}
-#private_message_form #btn_cancel{
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    height: 25px;
-    cursor: pointer;
-    opacity: 0.7;
-}
 
 
 

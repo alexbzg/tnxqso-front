@@ -1,9 +1,10 @@
 <template>
     <div id="private_message_layout">
+      <div id="private_message_back" @click="$emit('close')"></div>
       <div id="private_message_form">
         <img id="btn_cancel" src="/static/images/icon_close.png" title="Cancel / Отмена" @click="$emit('close')"/>
         <div id="replay_text" v-html="replyTo"></div>
-        <div id="from_to"><!--<span>from</span> {{$options.replace0(chatCallsign)}} to--><span>to</span> {{$options.replace0(chatCallsignTo)}}</div>
+        <div id="from_to"><img src="/static/images/icon_message_sms.png" /> <span>⇒</span> {{$options.replace0(chatCallsignTo)}}</div>
         <textarea v-model="messageText"></textarea><br/>
         <input type="button" id="btn_ok" value="OK" @click="post" :disabled="pending || messageText.length < 1"/>
       </div>

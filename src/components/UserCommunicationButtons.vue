@@ -19,23 +19,26 @@
                 v-if="chat"
                 @click="$emit('chat-reply', chatCallsign)" 
                 src="/static/images/icon_message.png" 
-                title="Personal message to the chat / Персональное сообщение в чат"/>
-            <img 
+                :title="getString('PERSONAL_CHAT_MESSAGE')"/>
+            <img v-if="pmEnabled"
                 src="/static/images/icon_message_sms.png" 
-                title="Personal message / Персональное сообщение"
+                :title="getString('PERSONAL_MESSAGE')"
                 @click="postPrivateMessage"/>
         </template>
     </span>
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import {mapGetters, mapState} from 'vuex'
+
+import LocalizationMixin from '../localization-mixin'
 
 import postPrivateMessage from './PostPrivateMessage'
 
 export default {
   name: 'userCommunicationButtons',
-  props: ['callsign', 'chatCallsign', 'chat'],
+  props: ['callsign', 'chatCallsign', 'chat', 'pm_enabled_fallback'],
+  mixins: [LocalizationMixin],
   data () {
     return {
     }
@@ -46,7 +49,19 @@ export default {
     }
   }, 
   computed: {
-    ...mapGetters(['userToken'])
+    ...mapGetters(['userToken', 'user']),
+    ...mapState({
+      activeUsers: state => state.activity.users
+    }),
+    pmEnabled () {
+      if (!this.user.pm_enabled) {
+        return false
+      }
+      if (this.callsign in this.activeUsers) {
+        return this.activeUsers[this.callsign].pm_enabled
+      }
+      return this.pm_enabled_fallback
+    }
   }
 }
 </script>

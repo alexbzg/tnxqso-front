@@ -1,18 +1,6 @@
 <template>
     <div id="chat">
 
-    <div id="personal_chat_message" v-if="instantMessage">
-      <img id="close_personal_message" src="/static/images/icon_close.png" width="20"
-        title="Close this personal message" @click="closeInstantMessage">
-      <img src="/static/images/icon_secret.png" />
-      <div id="from_to">
-          from <span id="from">{{instantMessage.user}}</span> to <span id="to">{{chatUser}}</span><br/>
-          <span id="date_time">{{instantMessage.date}} {{instantMessage.time}}</span>
-      </div>
-      <div id="text" v-html="instantMessageText"></div>
-    </div>
-
-
         <table id="message_form" v-if="chatAccess">
             <tbody>
                 <tr>
@@ -65,6 +53,7 @@
                     <span class="date_time">{{msg.date}} {{msg.time}}</span>
                     <user-communication-buttons
                         :chat-callsign="msg.user" :callsign="msg.cs" :chat="true"
+                        :pm_enabled_fallback="msg.pm_enabled"
                         @chat-reply="replyTo">
                     </user-communication-buttons>
                 </td>
@@ -218,7 +207,8 @@ export default {
         this.serverPost({
           from: this.chatCallsignField,
           text: this.messageText,
-          name: this.userName
+          name: this.userName,
+          pm_enabled: this.pm_enabled
         })
           .then(() => {
             this.messageText = ''
@@ -281,10 +271,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['siteAdmin', 'loggedIn', 'userCallsign', 'chatCallsign', 'userName', 'instantMessage', 'emailConfirmed']),
+    ...mapGetters(['siteAdmin', 'loggedIn', 'userCallsign', 'chatCallsign', 'userName', 'emailConfirmed']),
     ...mapState({
-      chatUser: state => state.user.chatUser,
-      chatUserName: state => state.user.chatUserName,
       skipConfirmation: state => state.user.user.settings.skipConfirmation
     }),
     isAdmin () {
@@ -299,9 +287,6 @@ export default {
         (!this.service || !this.service.station || !this.$store.state.stationSettings.chatAccess ||
         this.$store.state.stationSettings.chatAccess !== 'admins' ||
         (this.$store.state.stationSettings.chatAccess === 'admins' && this.isAdmin))
-    },
-    instantMessageText () {
-      return this.instantMessage ? transformText(this.instantMessage.text) : null
     },
     data () {
       const data = [

@@ -312,11 +312,11 @@ export default {
     VueEditor, DatePicker, ChangePassword
   },
   beforeRouteEnter ( to, from, next ) {
-    next( vm => {
-      if ( !vm.$store.getters.loggedIn ) {
-        vm.$router.push( '/login' )
+    next(vm => {
+      if (!vm.$store.getters.loggedIn) {
+        vm.$router.push('/login')
       }
-    } )
+    })
   },
   data () {
     return {

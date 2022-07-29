@@ -123,7 +123,7 @@ export const storeUser = {
       state.messages = payload
     },
     [MUTATE_ADD_MESSAGE] (state, payload) {
-      state.messages.push(payload)
+      state.messages.unshift(payload)
     },
     [MUTATE_DELETE_MESSAGE] (state, payload) {
       const idx = state.messages.findIndex(message => message.id === payload)
@@ -177,14 +177,14 @@ export const storeUser = {
         path: 'privateMessages/get',
         data: {}
       })
-        .then(data => {commit(MUTATE_GET_MESSAGES, data)})
+        .then(response => {commit(MUTATE_GET_MESSAGES, response.data)})
     },
     [ACTION_READ_MESSAGES] ({dispatch, commit}, payload) {
       return dispatch(ACTION_POST, {
         path: 'privateMessages/read',
         data: {ids: payload}
       })
-        .then(data => {commit(MUTATE_READ_MESSAGES, data)})
+        .then(() => {commit(MUTATE_READ_MESSAGES, payload)})
     },
     [ACTION_POST] ({commit, state}, payload) {
       if (!payload.data.token && !payload.skipToken) {

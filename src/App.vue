@@ -23,7 +23,7 @@
                         Profile
                     </router-link>
                     <router-link to="/post" tag="div" id="tab_post" class="tab tab_envelope" v-if="loggedIn">
-                        <img src="/static/images/icon_envelope.gif" />
+                        <img :src="'/static/images/icon_envelope' + (unreadMessages.length ? '_flash' : '') + '.gif'" />
                     </router-link>
                 </td>
                 <td id="website_links">
@@ -57,6 +57,8 @@
 <script>
 // import user from './user'
 // user.switchDataServiceUrlPrefix( true )
+import {mapGetters} from 'vuex'
+
 import './style.css'
 import capitalizeDirective from './capitalize-directive'
 capitalizeDirective()
@@ -74,9 +76,7 @@ export default {
     }
   },
   computed: {
-    loggedIn: function () {
-      return this.$store.getters.loggedIn
-    }
+    ...mapGetters(['loggedIn', 'unreadMessages'])
   }
 }
 </script>

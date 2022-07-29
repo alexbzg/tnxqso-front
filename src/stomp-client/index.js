@@ -31,8 +31,8 @@ export default {
 
   onPrivateMessage(msg) {
     this.logMessage(msg)
-    if (this.processPrivateMssage) {
-      this.processPrivateMessage(msg)
+    if (this.processPrivateMessage) {
+      this.processPrivateMessage(msg.body)
     }
   },
 

@@ -19,12 +19,12 @@
                 v-if="searchResults" @click="clearSearch()">
 
             <template v-if="searchResultsRDA">
-                <table id="rda_result" v-for="entry, idx in searchResultsRDA" :key="idx">
+                <table id="rda_result">
                 <tr>
                     <th>RDA</th>
                     <th v-for="band in $options.BANDS" :key="band">{{band}}</th>
                 </tr>
-                <tr>
+                <tr v-for="entry, idx in searchResultsRDA" :key="idx">
                     <td class="rda">{{searchRDA[idx]}}</td>
                     <td v-for="band in $options.BANDS" :key="band">
                         <span v-for="mode in $options.MODES" :key="mode" v-show="entry[band][mode]">

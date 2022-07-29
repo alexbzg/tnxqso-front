@@ -13,6 +13,7 @@ import Chat from '../views/Chat'
 import ActiveStations from './../views/ActiveStations'
 import Login from './../views/Login'
 import Profile from './../views/Profile'
+import Post from '../views/Post'
 
 Vue.use(Router)
 
@@ -50,6 +51,12 @@ const router = new Router({
       name: 'StationStats',
       component: StationStats,
       props: true
+    },
+    {
+      path: '/post',
+      name: 'Post',
+      component: Post,
+      props: false
     },
     {
       path: '/gallery',

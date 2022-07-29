@@ -11,6 +11,7 @@ import {storeStationSettings, ACTION_LOAD_STATION} from '../store-station-settin
 import talksInit from '../talks-init'
 import {storeActiveStations, activeStationsInit, createStationStatusService, MUTATE_ADD_ACTIVE_STATION} 
   from '../store-active-stations'
+import stompClient from '../stomp-client'
 
 const store = new Vuex.Store({
   modules: {
@@ -31,6 +32,8 @@ const store = new Vuex.Store({
     }
   }
 })
+
+stompClient.store = store
 
 if (store.getters.userToken) {
   store.dispatch(ACTION_LOAD_USER)

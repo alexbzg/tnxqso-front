@@ -11,12 +11,20 @@
                     class="list_users"
                     :class="{list_users_here: usersType === 'thisPage', list_users_other: usersType !== 'thisPage'}"
                     :key="usersType + 'List'">
-                    <active-users-entry 
+                    <div
                         v-for="user, idx in users[usersType]"
-                        :user="user" :chat="chat"
-                        @chat-reply="$emit('chat-reply', user.chat_callsign)"
+                        class="user" 
+                        :class="{'admin': user.admin, 'typing':user.typing}"
                         :key="idx">
-                    </active-users-entry>
+                        {{$options.replace0(user.chat_callsign)}}
+                        <div class="icon_block">
+                            <user-ban-button :callsign="user.callsign"></user-ban-button>
+                            <user-communication-buttons
+                                :chat-callsign="user.chat_callsign" :callsign="user.callsign" :chat='chat'
+                                @chat-reply="$emit('chat-reply', user.chat_callsign)">
+                            </user-communication-buttons>
+                        </div>
+                    </div>
                 </div>
             </template>
         </template>
@@ -24,19 +32,24 @@
 </template>
 
 <script>
-import ActiveUsersEntry from './ActiveUsersEntry'
+import UserCommunicationButtons from './UserCommunicationButtons'
+import UserBanButton from './UserBanButton'
+
+import {replace0} from '../utils'
+
 
 const TYPING_INT = 5 * 60
 
 export default {
   name: 'ActiveUsers',
   props: ['chat', 'station'],
+  replace0: replace0,
   titles: {
     thisPage: 'This page',
     talks: 'Talks',
     other: 'Other pages'
   },
-  components: {ActiveUsersEntry},
+  components: {UserCommunicationButtons, UserBanButton},
   data () {
     return {
     }

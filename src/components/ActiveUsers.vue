@@ -77,7 +77,7 @@ export default {
         }
         u.cs = cs
         if (stationSettings) {
-          u.admin = u.cs === stationSettings.admin || stationSettings.chatAdmins.includes(cs)
+          u.admin = u.cs === stationSettings.admin || stationSettings.chatAdmins.includes(u.chat_callsign)
         } else {
           u.admin = false
         }

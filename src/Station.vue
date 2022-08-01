@@ -101,7 +101,9 @@ const tabs = {
   log: { service: logService, interval: 60000 }
 }
 const STATION_SETTINGS_RELOAD = 60000
-const LOCALIZED_ROUTES = ['Profile', 'Post', 'Chat', 'Talks']
+//const LOCALIZED_ROUTES = ['Profile', 'Post', 'Chat', 'Talks']
+const LOCALIZED_ROUTES = []
+
 
 export default {
   USER_FIELDS_COUNT: USER_FIELDS_COUNT,
@@ -187,6 +189,7 @@ export default {
     ...mapState(['stationSettings']),
     ...mapGetters(['loggedIn', 'unreadMessages']),
     languageSwitchEnabled () {
+      //return false
       return LOCALIZED_ROUTES.includes(this.$route.name)
     },
     period () {

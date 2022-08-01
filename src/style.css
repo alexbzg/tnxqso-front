@@ -1421,7 +1421,7 @@ table#chat_layout .personal{
 }
 .list_users_here{    color: #777;}
 .list_users_other{   color: #999;}
-.list_users span.admin{    color: #b24c4c;}
+.list_users .admin{    color: #b24c4c;}
 
 
 .list_users .user{

@@ -4,10 +4,10 @@ import {debugLog} from '../utils'
 debugLog(Vue.$store)
 import PrivateMessageForm from "./PrivateMessageForm.vue"
 
-export default async function (parent_cmp, chatCallsignTo, callsignTo, replyTo) {
+export default async function (chatCallsignTo, callsignTo, replyTo) {
   return new Promise((resolve) => {
     const dialog = new Vue({
-      parent: parent_cmp,
+      parent: window.app,
       methods: {
         closeHandler(fn, arg) {
           return function() {

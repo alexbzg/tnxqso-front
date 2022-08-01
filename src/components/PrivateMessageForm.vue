@@ -42,7 +42,6 @@ export default {
         path: 'privateMessages/post',
         data: data})
         .then(() => {
-          alert('Сообщение отправлено.')
           this.$emit('close')
         })
         .catch(error => {

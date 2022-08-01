@@ -206,31 +206,10 @@ max-width: 900px;
     display: none;
 }
 
-
-.donate_block.log
-{
-    margin-top: 80px;
-}
-
-.donate_block.adxcluster
-{
-    margin-top: 60px;
-}
-
-.donate_block.map
-{
-
-}
-
-.donate_block.stations
-{
-    margin-top: 20px;
-}
-
-.donate_block.post
-{
-    margin-top: 40px;
-}
+.donate_block.log{    margin-top: 80px;}
+.donate_block.adxcluster{    margin-top: 60px;}
+.donate_block.stations{    margin-top: 20px;}
+.donate_block.post{    margin-top: 20px;}
 
 
 
@@ -620,12 +599,12 @@ table.tabs td#website_links{
 
 
 #post{
-    margin:20px 0 0 220px;
+    margin:10px 0 0 220px;
     padding-right: 160px;
     position: relative;
 }
 #post_switch{
-    width: 600px;
+    width: 400px;
     margin: 0 auto;
     font-size: 18px;
     color :#333;
@@ -636,12 +615,43 @@ table.tabs td#website_links{
     vertical-align: -20%;
     cursor: pointer;
 }
+
+#post #delete_all_messages{
+    width: 170px;
+    margin: 20px auto 0 auto;
+    font-size: 12px;
+    padding: 3px;
+    line-height: 12px;
+    background-color: #eee;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    cursor: pointer;
+}
+#post #delete_all_messages:hover{
+    background-color: #f5d3d5;
+    border-color: #f87075;
+}
+
+
+
+
 #post .message{
     display: inline-block;
     width: 600px;
-    margin: 50px auto 0px auto;
+    margin: 40px auto 0px auto;
     text-align: left;
+    position: relative;
 }
+#post .message img{
+    height: 20px;
+    position: absolute;
+    top: -2px;
+    cursor: pointer;
+}
+#post .message img.delete{    right: 0px; }
+#post .message img.translate{    right: 28px; }
+#post .message img.replay{    right: 60px; }
+
 #post .message .from{
     margin-left: 20px;
     font-weight: bold;
@@ -662,41 +672,22 @@ table.tabs td#website_links{
 }
 
 #post .message .message_text{
-    padding: 20px 20px 20px 20px;
+    padding: 20px;
     margin: 0px;
     background-color:#fffeef;
     border: 1px solid #bbb;
     border-radius: 10px;
-    position: relative;
     color: #000;
 }
-#post .message  .message_text img{
-    height: 20px;
-    position: absolute;
-    top: 5px;
-    right: 10px;
-    cursor: pointer;
-}
 
-#post .message .replay{
-    position: absolute;
-    bottom: 0px;
-    right: 5px;
-    font-size: 12px;
-    text-align: right;
-}
-#post .message .replay span{
-    color: #777;
-    cursor: pointer;
-}
-#post .message .replay span:hover{
-    color: #00d;
-    text-decoration: underline;
+#post .message .message_text pre {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
 }
 
 #post #list_users{
     position: absolute;
-    top: 40px;
+    top: 20px;
     right: 0;
     margin-right: 30px;
 }

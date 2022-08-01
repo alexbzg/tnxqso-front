@@ -60,6 +60,7 @@
     "PERSONAL_CHAT_MESSAGE": {"ru": "Персональное сообщение в чат", "en": "Personal chat message"},
     "REPLY": {"ru": "Ответ", "en": "Reply"},
     "CANCEL": {"ru": "Отмена", "en": "Cancel"},
-    "DELETE_MESSAGE": {"ru": "Удалить сообщение", "en": "Delete message"}
+    "DELETE_MESSAGE": {"ru": "Удалить сообщение", "en": "Delete message"},
+    "DELETE_ALL_MESSAGES": {"ru": "Удалить все сообщения", "en": "Delete all messages"}
 
 }

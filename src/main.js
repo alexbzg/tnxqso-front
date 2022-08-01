@@ -9,7 +9,7 @@ import capitalizeDirective from './capitalize-directive'
 capitalizeDirective()
 
 /* eslint-disable no-new */
-new Vue({
+const APP = new Vue({
   el: '#app',
   router,
   store,
@@ -17,3 +17,5 @@ new Vue({
   template: '<App/>',
   components: { App }
 })
+
+window.app = APP

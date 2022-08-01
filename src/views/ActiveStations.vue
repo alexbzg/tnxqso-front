@@ -12,6 +12,9 @@
                     :compactView="compactView"
                     @publish-change="publishChange(item)" :key="idx0 + '_' + idx">
                 </active-station-entry>
+                <br 
+                    v-if="idx0 === 0"
+                    :key="idx0"/>
             </template>
         </div>
         <div id="future_stations" class="stations_list">

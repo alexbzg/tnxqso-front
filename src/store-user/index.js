@@ -126,8 +126,12 @@ export const storeUser = {
       state.messages.unshift(payload)
     },
     [MUTATE_DELETE_MESSAGE] (state, payload) {
-      const idx = state.messages.findIndex(message => message.id === payload)
-      state.messages.splice(idx, 1)
+      if (payload === null) {
+        state.messages = []
+      } else {
+        const idx = state.messages.findIndex(message => message.id === payload)
+        state.messages.splice(idx, 1)
+      }
     },
     [MUTATE_READ_MESSAGES] (state, payload) {
       for (const message of state.messages) {
@@ -166,9 +170,10 @@ export const storeUser = {
         })
     },
     [ACTION_DELETE_MESSAGE] ({dispatch, commit}, payload) {
+      const data = payload === null ? {all: true} : {id: payload}
       return dispatch(ACTION_POST, {
         path: 'privateMessages/delete',
-        data: {id: payload}
+        data: data
       })
         .then(() => {commit(MUTATE_DELETE_MESSAGE, payload)})
     },

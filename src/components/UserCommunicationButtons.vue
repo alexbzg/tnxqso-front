@@ -1,14 +1,14 @@
 <template>
     <span class="icon_block">
         <a 
-            :href="'http://qrz.com/db/' + callsign" 
+            :href="'http://qrz.com/db/' + chatCallsign" 
             target="_blank" rel="noopener"
             title="Link to QRZ.com"
             >
             <img src="/static/images/icon_qrz.png" title="QRZ.com link"/>
         </a>
         <a 
-            :href="'http://qrz.ru/db/' + callsign" 
+            :href="'http://qrz.ru/db/' + chatCallsign" 
             target="_blank" 
             rel="noopener"
             title="Link to QRZ.ru">
@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     postPrivateMessage() {
-      postPrivateMessage(this, this.chatCallsign, this.callsign)
+      postPrivateMessage(this.chatCallsign, this.callsign)
     }
   }, 
   computed: {

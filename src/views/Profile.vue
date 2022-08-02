@@ -6,7 +6,8 @@
 
             <input type="button" id="button_change_email" @click="showChangePasswordClick"
                 class="btn" :value="getString('CHANGE_EMAIL')"/>
-            <input type="button" id="logout" class="btn" :value="'Logout - ' + userCallsign" @click="logout()"/>
+
+            <div id="logout" @click="logout()"><span>{{userCallsign}}</span> Logout</div>
         </div>
 
         <change-password v-if="showChangePassword" @password-changed="showChangePasswordClick"></change-password>

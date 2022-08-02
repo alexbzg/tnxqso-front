@@ -47,7 +47,7 @@
         </l-marker>
       </l-map>
 
-      <input type="checkbox" v-model="centerLocationFlag" @change="centerLocation"/> Center map to station
+      <input type="checkbox" v-model="map_settings.centerLocation" @change="updateCenterLocation"/> Center map to station
 
     </div>
 </template>
@@ -165,8 +165,7 @@ export default {
       track: null,
       center: [60, 60],
       bounds: null,
-      map: null,
-      centerLocationFlag: true
+      map: null
     }
   },
   mounted () {
@@ -206,20 +205,22 @@ export default {
       }
       return this.overlays.find(item => item.name === name).visible
     },
-    centerLocation () {
-      if (this.centerLocationFlag) {
+    centerLocation (force) {
+      if (this.map_settings.centerLocation || force) {
         if (!this.currentLocation) {
           this.zoom = DEFAULT_ZOOM
         }
         this.bounds = null
         this.center = [...this.currentLocation]
       }
+      storage.save(MAP_SETTINGS_STORAGE_KEY, this.map_settings, 'local' )
     },
     updateLocation () {
       if (this.statusData && this.statusData.location) {
         const dt = this.statusData
+        const force = !this.currentLocation
         this.currentLocation = dt.location
-        this.centerLocation()
+        this.centerLocation(force)
         this.currentPopup.dateTime = dt.date + ' ' + dt.time
         this.currentPopup.speed = dt.speed ? 'speed: ' + dt.speed.toFixed( 1 ) + ' km/h' : null
         this.currentPopup.comments = dt.comments ? dt.comments : null
@@ -232,6 +233,12 @@ export default {
     update_overlay (overlay_name, visible) {
       this.map_settings.overlays[overlay_name] = visible
       storage.save(MAP_SETTINGS_STORAGE_KEY, this.map_settings, 'local' )
+    },
+    updateCenterLocation () {
+      storage.save(MAP_SETTINGS_STORAGE_KEY, this.map_settings, 'local' )
+      if (this.map_settings.centerLocation) {
+        this.centerLocation()
+      }
     }
 
   },

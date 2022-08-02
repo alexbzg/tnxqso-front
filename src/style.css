@@ -228,8 +228,7 @@ max-width: 900px;
 
 
 .stations_list{
-
-    margin: 0px 50px 50px 250px;
+    margin: 0px 50px 20px 250px;
     padding: 0;
     text-align: left;
     text-align: center;
@@ -546,7 +545,7 @@ table.tabs td#website_links{
 /* =============================   T A B  ==================================== */
 .tab{
     display: inline-block;
-    padding: 7px 20px 7px 20px;
+    padding: 7px 17px 7px 17px;
     margin: 0;
     font-size: 14px;
     text-align: center;
@@ -600,15 +599,26 @@ table.tabs td#website_links{
 
 #post{
     margin:10px 0 0 220px;
-    padding-right: 160px;
-    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
 }
+#post #messages{
+    width: 800px;
+}
+#post #list_users{
+    margin-left: 10px;
+    margin-top: 20px;
+}
+
+#post #list_users .icon_block img{    margin-right: 10px; }
+
+
+
 #post_switch{
-    width: 400px;
-    margin: 0 auto;
     font-size: 18px;
     color :#333;
-    text-align: left;
+    text-align: center;
 }
 #post_switch img{
     margin-right: 10px;
@@ -685,14 +695,7 @@ table.tabs td#website_links{
     font-size: 16px;
 }
 
-#post #list_users{
-    position: absolute;
-    top: 20px;
-    right: 0;
-    margin-right: 30px;
-}
 
-#post #list_users .icon_block img{    margin-right: 10px; }
 
 
 
@@ -1684,10 +1687,29 @@ table#chat_window td.message:hover .translate_lnk, table#admins_window td.messag
 #user_menu input#view_setup{
     float: left;
 }
-#user_menu input#logout{
+#user_menu #logout{
+    display: inline-block;
     float: right;
-    margin-right: 0;
+    margin: 6px 0 0 0;
+    padding: 1px 15px;
+    text-align: center;
+    background-color: #f5f5f5;
+    color: #009;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1); /* Параметры тени */
+    cursor: pointer;
 }
+#user_menu #logout span{
+
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+    margin: 0 10px;
+    text-transform: uppercase;
+}
+
+
 
 #user_menu #logged{
     display: block;
@@ -1796,11 +1818,22 @@ input#setup_instagram { font-weight: bold; text-align: center;}
 
 input#button_save_all{
     position: fixed;
-    top: 75px;
+    top: 70px;
     right: 15px;
-    background-color: #008000;
+    background-color: #009900;
     color: #fff;
+    padding: 10px 20px;
 }
+
+
+
+
+
+
+
+
+
+
 
 table#log_setup{
     width: 900px;

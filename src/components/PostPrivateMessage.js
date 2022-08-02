@@ -1,10 +1,13 @@
 import Vue from 'vue'
 
-import {debugLog} from '../utils'
-debugLog(Vue.$store)
 import PrivateMessageForm from "./PrivateMessageForm.vue"
+import {getString} from '../localization-mixin'
+import messageBox from '../message-box'
 
 export default async function (chatCallsignTo, callsignTo, replyTo) {
+  if (!window.app.$store.getters.chatCallsign) {
+    return messageBox('', getString('CHAT_CALLSIGN_REQUIRED', window.app.$store.getters.language))
+  }
   return new Promise((resolve) => {
     const dialog = new Vue({
       parent: window.app,

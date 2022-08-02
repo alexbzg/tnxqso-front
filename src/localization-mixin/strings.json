@@ -61,6 +61,7 @@
     "REPLY": {"ru": "Ответ", "en": "Reply"},
     "CANCEL": {"ru": "Отмена", "en": "Cancel"},
     "DELETE_MESSAGE": {"ru": "Удалить сообщение", "en": "Delete message"},
-    "DELETE_ALL_MESSAGES": {"ru": "Удалить все сообщения", "en": "Delete all messages"}
-
+    "DELETE_ALL_MESSAGES": {"ru": "Удалить все сообщения", "en": "Delete all messages"},
+    "CHAT_CALLSIGN_REQUIRED": {"ru": "Введите свой Chat callsign на вкладке Talks чтобы отправлять сообщения.", 
+        "en": "Insert your Chat callsign on the Tals tab to post messages." }
 }

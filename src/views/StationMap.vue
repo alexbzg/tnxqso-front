@@ -1,8 +1,13 @@
 <template>
     <div id="map">
-      <l-map style="height: 100%; width: 100%" :zoom="map_settings.zoom" :center.sync="center"
+      <l-map 
+        style="height: 100%; width: 100%" 
+        ref="map"
+        :zoom="map_settings.zoom" 
+        :center.sync="center"
         :bounds="bounds"
         :options="{zoomControl: false, attributionControl: false}"
+        @ready="map_ready"
         @update:zoom="update_zoom"
         >
         <l-control-layers :hide-single-base="true"/>
@@ -25,6 +30,7 @@
             :options="{minZoom: layer.minZoom, maxZoom: layer.maxZoom}"
             @update:visible="update_overlay(layer.name, $event)"
             />
+
         <l-geo-json :geojson="track" ref="geoJsonTrack"></l-geo-json>
         <l-marker :lat-lng="currentLocation" v-if="stationSettings && currentLocation">
             <l-icon
@@ -58,6 +64,7 @@ import {mapGetters} from 'vuex'
 import {LMap, LTileLayer, LWMSTileLayer, LControlLayers, LGeoJson, LMarker, LIcon, LPopup, LControlAttribution} from 'vue2-leaflet'
 import {Icon} from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import terminator from '@joergdietrich/leaflet.terminator'
 // this part resolve an issue where the markers would not appear
 delete Icon.Default.prototype._getIconUrl
 
@@ -178,6 +185,13 @@ export default {
     this.updateLocation()
   },
   methods: {
+    map_ready () {
+      const map = this.$refs.map.mapObject
+      const t = terminator().addTo(map)
+      setInterval(function() {
+        t.setTime()
+      }, 60000)
+    },
     showTrack () {
       const vm = this
       if (vm.trackVersion) {

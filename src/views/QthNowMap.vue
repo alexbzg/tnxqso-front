@@ -2,6 +2,8 @@
     <div id="map">
       <l-map style="height: 100%; width: 100%" :zoom="zoom" :center.sync="center"
         :bounds="bounds"
+        @ready="map_ready"
+        ref="map"
         :options="{zoomControl: false, attributionControl: false}">
         <l-control-layers :hide-single-base="true"/>
         <l-tile-layer v-for="layer in baseLayers" :key="layer.id" :url="url" :options="{id: layer.id}"
@@ -45,6 +47,8 @@
 import {LMap, LTileLayer, LWMSTileLayer, LControlLayers, LCircleMarker, LTooltip, LPopup, LControlAttribution} from 'vue2-leaflet'
 import {Icon} from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import terminator from '@joergdietrich/leaflet.terminator'
+
 // this part resolve an issue where the markers would not appear
 delete Icon.Default.prototype._getIconUrl
 
@@ -149,7 +153,15 @@ export default {
   methods: {
     updateLocations () {
       this.locations = this.service.data
+    },
+    map_ready () {
+      const map = this.$refs.map.mapObject
+      const t = terminator().addTo(map)
+      setInterval(function() {
+        t.setTime()
+      }, 60000)
     }
+
   }
 }
 </script>

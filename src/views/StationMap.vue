@@ -1,9 +1,9 @@
 <template>
     <div id="map">
-      <l-map 
-        style="height: 100%; width: 100%" 
+      <l-map
+        style="height: 100%; width: 100%"
         ref="map"
-        :zoom="map_settings.zoom" 
+        :zoom="map_settings.zoom"
         :center.sync="center"
         :bounds="bounds"
         :options="{zoomControl: false, attributionControl: false}"
@@ -31,7 +31,12 @@
             @update:visible="update_overlay(layer.name, $event)"
             />
 
-        <l-geo-json :geojson="track" ref="geoJsonTrack"></l-geo-json>
+        <l-geo-json 
+            :geojson="track" 
+            ref="geoJsonTrack"
+            :options="{className: 'map-geojson-track'}"
+            >
+        </l-geo-json>
         <l-marker :lat-lng="currentLocation" v-if="stationSettings && currentLocation">
             <l-icon
                 :icon-url="'/static/images/icon_map_' + stationSettings.currentPositionIcon + '.png'"
@@ -43,9 +48,9 @@
                 <span v-if="currentPopup.speed"><br>{{currentPopup.speed}}</span>
                 <span v-if="currentPopup.comments"><br>{{currentPopup.comments}}</span><br/>
                 <a v-if="currentLocation" :href="'https://yandex.ru/maps/?l=sat' +
-                    '&ll=' + currentLocation[1] + '%2C' + currentLocation[0] + 
-                    '&pt=' + currentLocation[1] + '%2C' + currentLocation[0] + 
-                    '&z=17'" 
+                    '&ll=' + currentLocation[1] + '%2C' + currentLocation[0] +
+                    '&pt=' + currentLocation[1] + '%2C' + currentLocation[0] +
+                    '&z=17'"
                     target="_blank" rel="noopener">
                     Yandex maps
                 </a>
@@ -187,7 +192,8 @@ export default {
   methods: {
     map_ready () {
       const map = this.$refs.map.mapObject
-      const t = terminator().addTo(map)
+      const t = terminator({className: 'map-terminator', opacity: 0.2, fillOpacity: 0.2})
+      t.addTo(map)
       setInterval(function() {
         t.setTime()
       }, 60000)

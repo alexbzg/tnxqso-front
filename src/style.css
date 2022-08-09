@@ -228,10 +228,9 @@ max-width: 900px;
 
 
 .stations_list{
-    margin: 0px 50px 20px 250px;
+    margin: 0px 50px 20px 270px;
     padding: 0;
     text-align: left;
-    text-align: center;
     color: #777;
     line-height: 1.6em;
 }

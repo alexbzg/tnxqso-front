@@ -157,6 +157,7 @@ export default {
     map_ready () {
       const map = this.$refs.map.mapObject
       const t = terminator({className: 'map-terminator', opacity: 0.2, fillOpacity: 0.2})
+      t.addTo(map)
       setInterval(function() {
         t.setTime()
       }, 60000)

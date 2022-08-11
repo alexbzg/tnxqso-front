@@ -45,7 +45,7 @@
           </div>
 
 
-          <log-table :data="dataSlice" :log-settings="stationSettings.log"
+          <log-table :data="data" :log-settings="stationSettings.log"
               :qth-field-titles="qthFieldTitles" v-if="stationSettings">
           </log-table>
 
@@ -56,13 +56,14 @@
 
 <script>
 import * as moment from 'moment'
-import {mapGetters} from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
 
 import tabMixin from '../station-tab-mixin'
 import LogTable from '../components/LogTable'
 import storage from '../storage'
 import {qthFieldTitles} from '../utils'
 import {MODES, orderedBands} from '../ham-radio'
+import {ACTION_POST} from '../store-user'
 
 const logSearchValueStorageKey = 'logSearchValue'
 const current = moment()
@@ -83,36 +84,48 @@ export default {
     }
   },
   methods: {
+    ...mapActions([ACTION_POST]),
     search () {
       this.searchValue = this.searchValue.toUpperCase()
-      storage.save( logSearchValueStorageKey, this.searchValue, 'local' )
-      this.searchResults = this.data.filter( spot => spot.cs === this.searchValue )
-      if ( this.searchResults.length === 0 ) {
-        window.alert( 'Nothing was found.' )
-      }
-      if (this.searchRDA) {
-        const rda_count = this.searchRDA.length
-        if (rda_count > 0) {
-          this.searchResultsRDA = []
-          for (let i = 0; i < rda_count; i++) {
-            const entry = {}
-            for (const band of this.$options.BANDS) {
-              entry[band] = {}
-              for (const mode of MODES) {
-                entry[band][mode] = false
+      storage.save(logSearchValueStorageKey, this.searchValue, 'local')
+      this[ACTION_POST]({
+        path: 'logSearch',
+        data: {
+          'station': this.stationSettings.admin,
+          'callsign': this.searchValue
+        },
+        skipToken: true
+      })
+        .then(rsp => {
+          this.searchResults = rsp.data
+          if (this.searchResults.length === 0) {
+            window.alert( 'Nothing was found.' )
+          } else {
+            if (this.searchRDA) {
+              const rda_count = this.searchRDA.length
+              if (rda_count > 0) {
+                this.searchResultsRDA = []
+                for (let i = 0; i < rda_count; i++) {
+                  const entry = {}
+                  for (const band of this.$options.BANDS) {
+                    entry[band] = {}
+                    for (const mode of MODES) {
+                      entry[band][mode] = false
+                    }
+                  }
+                  this.searchResultsRDA.push(entry)
+                }
+                for (const qso of this.searchResults) {
+                  for (let rda_i = 0; rda_i < rda_count; rda_i++) {
+                    if (qso.qth[this.qthFieldRDA].includes(this.searchRDA[rda_i])) {
+                      this.searchResultsRDA[rda_i][qso.band][qso.mode] = true
+                    }
+                  }
+                }
               }
             }
-            this.searchResultsRDA.push(entry)
           }
-          for (const qso of this.searchResults) {
-            for (let rda_i = 0; rda_i < rda_count; rda_i++) {
-              if (qso.qth[this.qthFieldRDA].includes(this.searchRDA[rda_i])) {
-                this.searchResultsRDA[rda_i][qso.band][qso.mode] = true
-              }
-            }
-          }
-        }
-      }
+        })
     },
     clearSearch () {
       this.searchResults = null
@@ -127,9 +140,6 @@ export default {
         r = this.statusData.qth.fields.values[this.qthFieldRDA].trim().split(' ')
       }
       return r
-    },
-    dataSlice () {
-      return Array.isArray( this.data ) ? this.data.slice( 0, 50 ) : []
     },
     stationActive () {
       if ( !this.stationSettings.station ) {

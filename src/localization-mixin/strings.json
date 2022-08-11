@@ -56,12 +56,12 @@
     "CONFIRM_EMAIL_BUTTON": {"ru": "Отправить письмо ещё раз", "en": "Resend the email"},
     "PERSONAL_MESSAGES_ON": {"ru": "Персональные сообщения включены", "en": "Personal messages are ON"},
     "PERSONAL_MESSAGES_OFF": {"ru": "Персональные сообщения выключены", "en": "Personal messages are OFF"},
-    "PERSONAL_MESSAGE": {"ru": "Персональное сообщение", "en": "Personal message"},
+    "PERSONAL_MESSAGE": {"ru": "Приватное сообщение", "en": "Private message"},
     "PERSONAL_CHAT_MESSAGE": {"ru": "Персональное сообщение в чат", "en": "Personal chat message"},
     "REPLY": {"ru": "Ответ", "en": "Reply"},
     "CANCEL": {"ru": "Отмена", "en": "Cancel"},
     "DELETE_MESSAGE": {"ru": "Удалить сообщение", "en": "Delete message"},
     "DELETE_ALL_MESSAGES": {"ru": "Удалить все сообщения", "en": "Delete all messages"},
-    "CHAT_CALLSIGN_REQUIRED": {"ru": "Введите свой Chat callsign на вкладке Talks чтобы отправлять сообщения.", 
+    "CHAT_CALLSIGN_REQUIRED": {"ru": "Введите свой Chat callsign на вкладке Talks чтобы отправлять сообщения.",
         "en": "Insert your Chat callsign on the Talks tab to post messages." }
 }

@@ -63,12 +63,13 @@
     </div>
 </template>
 <script>
-import {mapState} from 'vuex'
+import {mapState, mapActions} from 'vuex'
 
 import {MODES, MODES_FULL, orderedBands} from '../ham-radio'
 import storage from '../storage'
-import {qthFieldTitles, debugLog} from '../utils'
+import {qthFieldTitles} from '../utils'
 import QTH_PARAMS from '../../public/static/js/qthParams.json'
+import {ACTION_POST} from '../store-user'
 
 const STATS_FILTER_STORAGE_KEY = 'statsFilter'
 
@@ -90,9 +91,7 @@ export default {
     }
   },
   mounted () {
-    this.service = this.$parent.$data.tabs.log.service
-    this.service.onUpdate(this.serviceUpdate)
-    this.loadFilter()
+    this.update()
   },
   computed: {
     ...mapState(['stationSettings']),
@@ -140,7 +139,6 @@ export default {
     },
     statsTable () {
       const r = {}
-      debugLog('Test')
 
       function initRow () {
         const row = {}
@@ -213,6 +211,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions([ACTION_POST]),
     getMode (subMode) {
       for (const mode in MODES_FULL) {
         if (MODES_FULL[mode].includes(subMode)) {
@@ -221,11 +220,9 @@ export default {
       }
     },
     loadFilter () {
-      if (this.stationSettings.station) {
-        const filter = storage.load(STATS_FILTER_STORAGE_KEY, 'local')
-        if (filter && this.stationSettings.station.callsign in filter) {
-          this.filter = filter[this.stationSettings.station.callsign]
-        }
+      const filter = storage.load(STATS_FILTER_STORAGE_KEY, 'local')
+      if (filter && this.stationSettings.station.callsign in filter) {
+        this.filter = filter[this.stationSettings.station.callsign]
       }
     },
     saveFilter () {
@@ -255,7 +252,6 @@ export default {
       })
     },
     serviceUpdate () {
-      this.data = this.service.data
     },
     uniqueFieldValues (field, data) {
       return this.uniqueValues(field === 'loc' ? x => x.loc : x => x.qth[field], /[, ]+/, data)
@@ -276,11 +272,24 @@ export default {
         }, []))
       }
       return new Set(data.map(lambda))
+    },
+    update () {
+      if (this.stationSettings.station) {
+        this.loadFilter()
+        this[ACTION_POST]({
+          path: 'logSearch',
+          data: {'station': this.stationSettings.admin},
+          skipToken: true
+        })
+          .then(rsp => {
+            this.data = rsp.data
+          })
+      }
     }
   },
   watch: {
     stationSettings () {
-      this.loadFilter()
+      this.update()
     }
   }
 }

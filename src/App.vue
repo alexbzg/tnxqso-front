@@ -25,6 +25,9 @@
                     <router-link to="/post" tag="div" id="tab_post" class="tab tab_envelope" v-if="loggedIn">
                         <img :src="'/static/images/icon_envelope' + (unreadMessages.length ? '_flash' : '') + '.gif'" />
                     </router-link>
+                    <router-link to="/users" tag="div" id="tab_users" class="tab" v-if="siteAdmin">
+                        Users
+                    </router-link>
                 </td>
                 <td id="website_links">
                     <router-link to="/about" tag="div" id="tab_about" class="tab">
@@ -76,7 +79,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['loggedIn', 'unreadMessages'])
+    ...mapGetters(['loggedIn', 'unreadMessages', 'siteAdmin'])
   }
 }
 </script>

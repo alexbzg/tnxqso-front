@@ -10,6 +10,7 @@ import QthNow from '../views/Qthnow'
 import Tnxlog from '../views/Tnxlog'
 import Tnxpost from '../views/Tnxpost'
 import Post from '../views/Post'
+import Users from '../views/Users'
 import QthNowMap from '../views/QthNowMap'
 import ChangePasswordView from '../views/ChangePassword'
 
@@ -48,6 +49,12 @@ const router = new Router({
       path: '/post',
       name: 'Post',
       component: Post,
+      props: false
+    },
+    {
+      path: '/users',
+      name: 'Users',
+      component: Users,
       props: false
     },
     {

@@ -44,8 +44,8 @@
                             <td><span>All modes</span></td>
                             <td v-for="mode in $options.MODES" :key="mode">{{mode}}</td>
                         </tr>
-                        <tr>                        
-                        <tr>                        
+                        <tr>
+                        <tr>
                             <td><span>All bands</span></td>
                             <td class="data">{{statsTable.total.total}}</td>
                             <td v-for="mode in $options.MODES" class="data" :key="mode">{{statsTable.total[mode]}}</td>
@@ -59,6 +59,36 @@
                 </td>
             </tr>
         </table>
+
+
+<!--
+        <table id="top_qso">
+          <tr>
+            <th>Тор</th>
+            <th>
+              <select>
+                <option selected>World</option>
+                <option>Russia</option>
+                <option>Italy</option>
+              </select>
+            </th>
+            <th>QSO</th>
+          </tr>
+          <tr>
+            <td>1</td><td class="call">IK0HBN</td><td class="value">150</td>
+          </tr>
+          <tr>
+            <td>2</td><td class="call">UA9CGL</td><td class="value">80</td>
+          </tr>
+          <tr>
+            <td>3</td><td class="call">RA9AJ</td><td class="value">50</td>
+          </tr>
+          <tr>
+            <td>4</td><td class="call">RM8W</td><td class="value">15</td>
+          </tr>
+        </table>
+
+-->
 
     </div>
 </template>

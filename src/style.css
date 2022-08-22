@@ -201,6 +201,7 @@ max-width: 900px;
 .donate_block.about,
 .donate_block.contact,
 .donate_block.profile,
+.donate_block.users,
 .donate_block.info
 {
     display: none;
@@ -2002,7 +2003,7 @@ table#info_popup_close{
 
 table#stats{
 
-    margin: 0 0 200px ;
+    margin: 0 0 100px 200px;
 }
 table#stats td{
     vertical-align: top;
@@ -2078,7 +2079,24 @@ table#filter_data .data{
 }
 
 
+table#top_qso{
+    margin: 0px auto;
+    border-collapse: collapse;
+}
+table#top_qso th{    font-weight: normal;}
+table#top_qso td{
+    border: 1px solid #ccc;
+    padding: 5px 20px;
+}
+table#top_qso td.call{
+    text-align: left;
+    font-weight: bold;
+    padding: 5px 50px 5px 20px;
+    font-weight: bold;
+}
+table#top_qso td.value{    text-align: center;}
 
+table#top_qso select{    padding: 5px 20px; }
 
 
 
@@ -2205,6 +2223,65 @@ table#filter_data .data{
 
 
 
+
+
+
+/* ================================== U S E R S ==========================================*/
+
+#tab_users{ margin-left: 195px; }
+
+#users_menu{
+    margin:  30px 0px;
+    font-size: 14px;
+}
+
+#users_menu span{
+    background-color: #f5f5f5;
+    color: #333;
+    margin-right: 20px;
+    border: 1px solid #ccc;
+    padding: 5px 20px;
+    box-shadow: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+#users_menu span.active{
+    font-weight: bold;
+    color: #000;
+    border-color: #777;
+    background-color: #eee;
+}
+#users_menu span:hover{
+    color: #000;
+    border-color: #777;
+    background-color: #eee;
+}
+#users table{
+    margin: 0px auto 200px auto;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+#users table th{
+    font-weight: normal;
+    line-height: 12px;
+    font-size: 12px;
+    padding: 5px 30px;
+    text-align: left;
+    background-color: #aaa;
+    color: #fff;
+}
+#users table td{
+    padding: 5px 30px;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+    vertical-align: middle;
+}
+#users table td.checkbox{
+    padding: 5px 0px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
 
 
 

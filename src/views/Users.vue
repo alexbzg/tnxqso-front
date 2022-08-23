@@ -1,7 +1,7 @@
 <template>
     <div id="users">
       <div id="users_menu">
-        <span 
+        <span
             v-for="filter in $options.FILTERS"
             :class="{active: active_filter == filter.id}"
             @click="loadUsers(filter.id)"
@@ -15,9 +15,9 @@
         <tr>
           <th>Verified</th>
           <th>Login</th>
+          <th>Email</th>
           <th>Chat callsign</th>
           <th>Chat name</th>
-          <th>Email</th>
           <th>Banned</th>
         </tr>
         <tr
@@ -25,25 +25,25 @@
           :key="user.callsign"
           >
           <td class="checkbox">
-            <input 
-                type="checkbox" 
+            <input
+                type="checkbox"
                 v-model="user.verified"
                 @change="editUser(user)"
                 />
           </td>
           <td>{{user.callsign}}</td>
           <td>
-            <input 
-                type="checkbox" 
+            <input
+                type="checkbox"
                 v-model="user.email_confirmed"
                 @change="editUser(user)"
-                /> 
+                />
             {{user.email}}
           </td>
           <td>{{user.chat_callsign}}</td>
           <td>{{user.name}}</td>
           <td class="checkbox">
-            <input 
+            <input
                 type="checkbox"
                 v-model="user.banned"
                 @change="banUser(user)"
@@ -117,7 +117,7 @@ export default {
         .finally(() => {
           this.pending = false
         })
-    }, 
+    },
     banUser (user) {
       this.pending = true
       this[ACTION_POST]({

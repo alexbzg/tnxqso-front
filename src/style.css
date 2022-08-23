@@ -1292,34 +1292,37 @@ table#cluster td.spotter{
 
 table#message_form{
     padding: 0px;
-    margin: 20px 0px 20px 10px;
+    margin: 10px 0px 20px 10px;
     border: none;
     border-collapse: collapse;
     text-align: center;
 }
 table#message_form tr, table#message_form td{
     padding: 0;
+    vertical-align: middle;
 }
 table#message_form input#your_call, table#message_form input#your_name{
     width: 140px;
-    padding: 0px 5px 2px 5px;
-    margin: 0 10px 0px 10px;
+    margin: 0 15px;
     font-size: 16px;
     border: none;
     text-align: center;
     border-bottom: 1px solid #ccc;
+    padding: 0;
 }
 table#message_form input#your_call{
-    color: #009;
+    color: #000;
     font-weight: bold;
+    margin-top: 10px;
 }
 table#message_form input#your_name{
     color: #666;
+    font-size: 12px;
 }
 table#message_form input#message_text{
-    width: 600px;
+    width: 800px;
     padding: 0px 5px 2px 5px;
-    margin: 0;
+    margin: 0 0 0 15px;
     text-align: left;
     font-size: 16px;
     border: none;

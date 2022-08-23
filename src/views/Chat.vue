@@ -6,9 +6,11 @@
                 <tr>
                     <td>
                         <input type="text" id="your_call" placeholder="Chat callsign"
-                          v-model="chatCallsignField" @blur="chatCallsignBlur"/>
+                          v-model="chatCallsignField" @blur="chatCallsignBlur"/><br/>
                         <input type="text" id="your_name" placeholder="Chat name"
                           v-model="userNameField" @blur="userNameBlur"/>
+                    </td>
+                    <td>
                         <img id="admin_message" class="admin_button"
                             v-show="isAdmin && service && service.station "
                             src="/static/images/icon_admin_message.png"

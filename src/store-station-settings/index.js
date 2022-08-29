@@ -18,8 +18,7 @@ export const storeStationSettings = {
     log: null,
     status: null,
     read: {'donate': null},
-    new: {'donate':null},
-    manualStatFields: [[null, null], [null, null], [null, null], [null, null], [null, null]]
+    new: {'donate':null}
   },
   getters: {
     stationCallsign: state => {

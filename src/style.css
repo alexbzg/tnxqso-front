@@ -2003,32 +2003,56 @@ table#info_popup_close{
 #stats_block{
     text-align: center;
 }
-
 table#stats{
-
     margin: 0 0 100px 200px;
 }
 table#stats td{
     vertical-align: top;
 }
 table#stats_total{
-    width: 250px;
     margin: 70px 100px 0 70px;
     border-collapse: collapse;
 }
 table#stats_total td{
-    width: 100px;
     border: 1px solid #ccc;
-    padding: 5px 5px 5px 15px;
+}
+table#stats_total td.option{
+    max-width: 200px;
+    padding: 5px 20px;
 }
 table#stats_total td.value{
+    max-width: 100px;
     text-align: center;
-    padding: 5px 5px 5px 5px;
     font-weight: bold;
+    padding: 5px 30px;
 }
 table#stats_total td.top{
     border: none;
 }
+
+
+
+table#stats_total td input{
+    border: 1px solid #ccc;
+    text-align: center;
+    background-color: #fff;
+}
+
+table#stats_total td input.manualFieldName{
+    width: 150px;
+}
+
+table#stats_total td input.manualFieldValue{
+    width: 50px;
+    font-weight: bold;
+}
+
+
+
+
+
+
+
 
 
 table#stats td#stats_filter{

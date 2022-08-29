@@ -18,11 +18,15 @@ export const storeStationSettings = {
     log: null,
     status: null,
     read: {'donate': null},
-    new: {'donate':null}
+    new: {'donate':null},
+    manualStatFields: [[null, null], [null, null], [null, null], [null, null], [null, null]]
   },
   getters: {
     stationCallsign: state => {
       return state.station ? state.station.callsign : null
+    },
+    isStationAdmin: (state, rootGetters) => {
+      return state.admin && state.admin  === rootGetters.userCallsign
     }
   },
   mutations: {

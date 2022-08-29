@@ -20,6 +20,35 @@
                         <tr>
                             <td class="option">Days</td><td class="value">{{daysCount}}</td>
                         </tr>
+                        <template v-if="isStationAdmin">
+                            <tr 
+                                v-for="field, idx in stationSettings.manualStatFields"
+                                :key="idx + '_'">
+                                <td class="option">
+                                    <input
+                                        type="text"
+                                        class="manualFieldName"
+                                        v-model="field[0]"
+                                        :disabled="idx > 0 && !stationSettings.manualStatFields[idx - 1][0]"
+                                        @blur="manualFieldBlur"/>
+                                </td>
+                                <td class="option">
+                                    <input
+                                        type="text"
+                                        class="manualFieldValue"
+                                        v-model="field[1]"
+                                        :disabled="!field[0]"
+                                        @blur="manualFieldBlur"/>
+                                </td>
+                            </tr>
+                        </template>
+                        <template v-else>
+                            <tr 
+                                v-for="field, idx in manualStatFieldsDisplay"
+                                :key="idx">
+                                <td class="option">{{field[0]}}</td><td class="value">{{field[1]}}</td>
+                            </tr>
+                        </template>
                     </table>
                 </td>
                 <td id="stats_filter">
@@ -93,13 +122,13 @@
     </div>
 </template>
 <script>
-import {mapState, mapActions} from 'vuex'
+import {mapState, mapActions, mapGetters} from 'vuex'
 
 import {MODES, MODES_FULL, orderedBands} from '../ham-radio'
 import storage from '../storage'
 import {qthFieldTitles} from '../utils'
 import QTH_PARAMS from '../../public/static/js/qthParams.json'
-import {ACTION_POST} from '../store-user'
+import {ACTION_POST, ACTION_EDIT_USER} from '../store-user'
 
 const STATS_FILTER_STORAGE_KEY = 'statsFilter'
 
@@ -125,6 +154,10 @@ export default {
   },
   computed: {
     ...mapState(['stationSettings']),
+    ...mapGetters(['isStationAdmin']),
+    manualStatFieldsDisplay () {
+      return this.stationSettings.manualStatFields.filter(field => field[0])
+    },
     qthFieldTitles () {
       return qthFieldTitles(this.stationSettings.qthCountry)
     },
@@ -241,13 +274,16 @@ export default {
     }
   },
   methods: {
-    ...mapActions([ACTION_POST]),
+    ...mapActions([ACTION_POST, ACTION_EDIT_USER]),
     getMode (subMode) {
       for (const mode in MODES_FULL) {
         if (MODES_FULL[mode].includes(subMode)) {
           return mode
         }
       }
+    },
+    manualFieldBlur () {
+      this[ACTION_EDIT_USER]({settings: this.stationSettings})
     },
     loadFilter () {
       const filter = storage.load(STATS_FILTER_STORAGE_KEY, 'local')

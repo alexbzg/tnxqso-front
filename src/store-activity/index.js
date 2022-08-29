@@ -69,7 +69,9 @@ export const storeActivity = {
     [ACTION_LOAD_ACTIVE_USERS] ({commit}) {
       return request.getJSON('activeUsers')
         .then(response => {
-          commit(MUTATE_ACTIVE_USERS, response.data)
+          if (response.data && typeof response.data === 'object') {
+            commit(MUTATE_ACTIVE_USERS, response.data)
+          }
         })
         .catch(() => {})
     },

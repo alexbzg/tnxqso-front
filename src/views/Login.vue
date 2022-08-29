@@ -8,10 +8,10 @@
             :sitekey="sitekey">
         </vue-recaptcha>
         Login <span>(user callsign)</span><br/>
-        <input type="text" id="login_input" v-model="login"/><br/>
+        <input type="text" id="login_input" v-model.trim="login"/><br/>
         <template v-if="newUser">
             E-mail<br/>
-            <input type="text" id="email_input" v-model="email"/><br/>
+            <input type="text" id="email_input" v-model.trim="email"/><br/>
         </template>
         <template v-if="!passwordRecovery">
             Password <span>(min. 8 symbols)</span><br/>

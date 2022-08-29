@@ -80,7 +80,9 @@ export const storeServices = {
       const s = state[payload]
       return request.getJSON(s.name, s.station)
         .then(response => {
-          commit(MUTATE_SERVICE_DATA, {service: payload, response: response})
+          if (Array.isArray(response.data)) {
+            commit(MUTATE_SERVICE_DATA, {service: payload, response: response})
+          }
         })
         .catch(() => {})
     },

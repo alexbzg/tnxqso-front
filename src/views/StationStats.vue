@@ -1,6 +1,12 @@
 <template>
     <div id="stats_block">
-        <table id="stats">
+        <div id="spinner" 
+            v-show="pending">
+            <img src="/static/images/spinner.gif"/>
+        </div>
+        <table 
+            id="stats"
+            v-show="!pending">
             <tr>
                 <td>
                     <table id="stats_total">

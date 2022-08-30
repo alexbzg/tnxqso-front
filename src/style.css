@@ -2003,6 +2003,14 @@ table#info_popup_close{
 #stats_block{
     text-align: center;
 }
+#spinner{
+    text-align: center;
+    margin-top: 150px;
+}
+#spinner img{
+    width: 100px;
+}
+
 table#stats{
     margin: 0 0 100px 200px;
 }

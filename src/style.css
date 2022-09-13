@@ -3,17 +3,16 @@ body, html{
     padding:0;
     width: 100%;
     height: 100%;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 16px;
+    font-family: 'Jost', sans-serif;
+    font-size: 18px;
     line-height: 1.5em;
     color: #333;
-    background: #fff url("/static/images/background.jpg") top left;
+    background-color: #e7e7e7;
     text-align: center;
-    position: relative;
 }
 input, button, textarea, select{
-    font-family: 'Open Sans', sans-serif;
-    font-size: 16px;
+    font-family: 'Jost', sans-serif;
+    font-size: 18px;
     padding: 5px;
     margin: 5px 0;
 }
@@ -49,11 +48,12 @@ input, button, textarea, select{
 
 #lng_block{
     position: absolute;
-    top: 5px;
+    top: 10px;
     right: 10px;
-}
-#lng_block img{
+    font-size: 20px;
+    font-weight: bold;
     cursor: pointer;
+    color: #555;
 }
 
 
@@ -67,17 +67,206 @@ input, button, textarea, select{
 input:focus{   outline: none; }
 
 
-img#logo_index{
-    margin-top: 10px;
+#logo_index{
+    margin: 15px 0;
+    color: #555;
+    font-size: 36px;
+    font-weight: bold;
+    text-shadow: rgba(255,255,255,0.5) 2px 3px 3px;
 }
 img#logo{
     position: absolute;
-    top: 0px;
-    left: 15px;
+    top: 10px;
+    left: 10px;
+    width: 30px;
 }
 
 
 
+
+
+
+
+/* =============================   H E A D   T A B S   T A B L E   ==================================== */
+
+table.tabs{
+    width: 1202px;
+    margin: 10px auto 0px auto;
+/*    background: url("/static/images/tabs_line.png") bottom left repeat-x; */
+    border-collapse: collapse;
+}
+table.index_tabs{
+    margin: 0px auto;
+}
+
+
+table.tabs td{
+    vertical-align: bottom;
+    text-align: left;
+    padding: 0;
+}
+
+table.tabs td#station_title{
+    color: #777;
+    font-size: 16px;
+    padding: 0;
+    text-align: center;
+    vertical-align: middle;
+}
+table.tabs td#station_title h1{
+    margin: 0 0 5px 0;
+    color: #555;
+    font-size: 40px;
+    font-weight: bold;
+    text-shadow: rgba(255,255,255,0.5) 2px 3px 3px;
+}
+table.tabs td#station_title .period{
+    font-style: italic;
+    font-size: 14px;
+
+}
+
+
+
+
+
+table.tabs td#status{
+    width: 200px;
+    text-align: center;
+}
+#status_block_top{
+    color: #fff;
+    padding:  5px 5px;
+    border-radius: 10px 10px 0px 0px;
+    font-size: 20px;
+    text-align: center;
+    line-height: 16px;
+}
+.status_offline{
+    background-color: #ff4949;
+}
+.status_online{
+    background-color: #4ab54a;
+}
+
+
+table#status_block_info{
+    width: 100%;
+    padding: 0px;
+    margin: 0;
+    border-collapse: collapse;
+    background-color: #e3f9e3;
+    border-right: 1px solid #4ab54a;
+    border-left: 1px solid #4ab54a;
+    border-top: none;
+}
+table#status_block_info td{
+    font-size: 14px;
+    line-height: 16px;
+    text-align: center;
+    vertical-align: middle;
+    border: none;
+}
+table#status_block_info td#current_loc{
+    padding: 0 0 5px 0;
+}
+
+table#status_block_info span.datetime{
+    display: inline-block;
+    margin-bottom: 5px;
+    font-size: 12px;
+    color: #777;
+}
+
+
+
+
+
+
+table.tabs td#logo{
+    text-align: center;
+    padding: 20px 0 10px 0;
+}
+
+table.tabs td#website_links{
+    text-align: right;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* =============================   T A B  ==================================== */
+.tab{
+    font-size: 16px;
+    display: inline-block;
+    padding: 5px 20px;
+    margin: 10px 0px 0 0;
+    text-align: center;
+    border-radius: 10px 10px 0px 0px;
+    cursor: pointer;
+    color: #000;
+}
+table.index_tabs .tab{
+    margin: 0;
+}
+
+
+
+.tab:hover{
+    text-decoration: underline;
+}
+.updated_tab{
+/*    background: transparent url("/static/images/icon_updated.png") top right no-repeat;
+    background-position: 100% 10px;
+    padding: 5px 20px 5px 16px; */
+
+    font-weight: bold;
+    color: #090;
+    text-decoration: underline;
+}
+.router-link-active{
+    background: #fff;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+
+
+.tab img.updated{
+    vertical-align: -3px;
+    margin-left: 2px;
+}
+
+
+#tab_stations{
+    margin-left: 30px;
+}
+.tabs.index_tabs #tab_stations{
+    margin-left: 0px;
+}
+
+
+.tab_envelope{
+    display: inline-block;
+    padding: 5px 20px 5px 20px;
+}
+.tab_envelope img{
+    vertical-align: -15%;
+}
+
+
+#tab_users{
+    margin-left: 70px;
+    color: #900;
+    font-weight: bold;
+}
 
 
 
@@ -88,22 +277,29 @@ img#logo{
 
 /* =============================   L I S T   ==================================== */
 
-.list{
+#wrapper{
+    width: 100%;
+    background-color: #fff;
+    margin-bottom: 10px;
+}
+#list{
     width: 1200px;
     padding: 10px 0 100px 0;
     margin: 0px auto;
-    background-color: #fff;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    margin-bottom: 50px;
-    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
     text-align: center;
     min-height: 800px;
+    position: relative;
 }
-.list a {
+#list a {
     color: #009;
 }
+
+#list:has(#map){
+    width: 90%;
+}
+
+
+
 
 
 
@@ -123,12 +319,11 @@ img#logo{
 
 #qthnow{
     padding: 20px 50px 100px 50px;
-    margin: 0 auto;
+    margin: 0 0 0 180px;
 }
 #tnxlog{
     padding: 20px 50px 100px 50px;
-    width: 1102px;
-    margin: 0 auto;
+    margin: 0 0 0 180px;
     line-height: 1.8em;
 }
 #tnxlog table{
@@ -173,10 +368,11 @@ max-width: 900px;
 /* ===========================   S T A T I O N S  ==================================*/
 
 .donate_block{
-    float: left;
-    width: 200px;
+    position: absolute;
+    top: 20px;
+    left: 0;
+    width: 160px;
     height: 600px;
-    margin: 10px;
 }
 
 .list:after {
@@ -193,11 +389,10 @@ max-width: 900px;
 .donate_block.login,
 .donate_block.talks,
 .donate_block.chat,
+.donate_block.map,
 .donate_block.gallery,
+.donate_block.qthnowmap,
 .donate_block.donate,
-.donate_block.qthnow,
-.donate_block.tnxlog,
-.donate_block.tnxpost,
 .donate_block.about,
 .donate_block.contact,
 .donate_block.profile,
@@ -206,11 +401,6 @@ max-width: 900px;
 {
     display: none;
 }
-
-.donate_block.log{    margin-top: 80px;}
-.donate_block.adxcluster{    margin-top: 60px;}
-.donate_block.stations{    margin-top: 20px;}
-.donate_block.post{    margin-top: 20px;}
 
 
 
@@ -228,31 +418,31 @@ max-width: 900px;
 
 
 
-.stations_list{
+#list .stations_list{
     margin: 0px 50px 20px 270px;
     padding: 0;
     text-align: left;
     color: #777;
     line-height: 1.6em;
 }
-.stations_block{
+#list .stations_block{
     width: 100%;
     margin: 20px auto;
     padding: 3px;
     background-color: #eee;
     color: #777;
-    font-size: 12px;
-    line-height: 12px;
+    font-size: 14px;
+    line-height: 14px;
 }
 
-.one_station{
+#list .one_station{
     display: block;
     margin: 0 10px 30px 10px;
     padding: 0px;
     text-align: left;
     color: #333;
 }
-.one_station.compact{
+#list .one_station.compact{
     display: inline-block;
     vertical-align: top;
     width: 120px;
@@ -260,28 +450,28 @@ max-width: 900px;
     line-height: 10px;
     cursor: pointer;
 }
-.one_station span{
+#list .one_station span{
     display: inline-block;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: normal;
     vertical-align: top;
 }
-.one_station .callsign, .one_station .callsign span{
+#list .one_station .callsign, #list .one_station .callsign span{
     font-size: 20px;
     font-weight: bold;
     width: 150px;
     color: #000;
     margin-bottom: 3px;
 }
-.one_station.compact .callsign{
+#list .one_station.compact .callsign{
     width: 100%;
-    font-size: 18px;
+    font-size: 20px;
 }
-.one_station.compact .callsign a{
+#list .one_station.compact .callsign a{
     text-decoration: none;
     color: #000;
 }
-.one_station .status{
+#list .one_station .status{
     width: 120px;
     padding: 0;
     line-height: 12px;
@@ -291,10 +481,10 @@ max-width: 900px;
     border: 1px solid #6ec36e;
     min-height: 15px;
 }
-.one_station .status span{
+#list .one_station .status span{
     display: block;
 }
-.one_station.offline .status{
+#list .one_station.offline .status{
     padding-top: 3px;
     background-color: #fff;
     border-radius: 10px;
@@ -302,74 +492,74 @@ max-width: 900px;
     min-height: 15px;
     display: none;
 }
-.one_station.offline .callsign a{
+#list .one_station.offline .callsign a{
     text-decoration: underline;
     color: #777;
 }
 
-.one_station .offline_text{
-    font-size: 10px;
+#list .one_station .offline_text{
+    font-size: 12px;
     color: #ff4949;
     letter-spacing: 2px;
     display: inline-block;
 }
 
-.one_station .status .freq{
+#list .one_station .status .freq{
     padding: 3px 5px;
-    font-size: 14px;
+    font-size: 16px;
     letter-spacing: 1px;
     background-color: #4ab54a;
     color: #fff;
     border-top-right-radius: 7px;
     border-top-left-radius: 7px;
 }
-.one_station .status .qth_info {
+#list .one_station .status .qth_info {
     font-size: 11px;
     padding-top: 3px;
-    font-weight: bold;
 }
-.one_station.compact .status .qth_info {
-    font-size: 10px;
+#list .one_station.compact .status .qth_info {
+    font-size: 11px;
     font-weight: normal;
     color: #333;
 }
 
-.one_station .status .links{
+#list .one_station .status .links{
     padding: 3px;
 }
-.one_station .status .links a{
+#list .one_station .status .links a{
     margin: 0 5px;
     text-decoration: underline;
     color: #42a242;
+    font-size: 11px;
 }
-.one_station.offline .status .links a,
-.one_station .station_full_info a,
-.one_station .title{
+#list .one_station.offline .status .links a,
+#list .one_station .station_full_info a,
+#list .one_station .title{
     color: #777;
 }
-.one_station .status .links a:hover,
-.one_station .station_full_info .links a:hover{
+#list .one_station .status .links a:hover,
+#list .one_station .station_full_info .links a:hover{
     color: #009;
 }
 
 
-.one_station .station_full_info{
+#list .one_station .station_full_info{
     width: 550px;
     padding: 0 0 0 30px;
-    font-size: 16px;
+    font-size: 18px;
     line-height: 20px;
 }
-.one_station .station_full_info a{
+#list .one_station .station_full_info a{
     padding-right: 20px;
     font-weight: bold;
     color: #337;
 }
-.one_station .period{
+#list .one_station .period{
     color: #555;
-    font-size: 12px;
+    font-size: 14px;
 }
 
-.one_station .main_block{
+#list .one_station .main_block{
     display: none;
 }
 
@@ -377,21 +567,21 @@ max-width: 900px;
 
 
 
-.one_station .status .offline_text,
-.one_station .status .links,
-.one_station.offline .status .freq,
-.one_station.offline .status .qth_info,
-.one_station.compact .station_full_info,
-.one_station .status .freq.hide,
+#list .one_station .status .offline_text,
+#list .one_station .status .links,
+#list .one_station.offline .status .freq,
+#list .one_station.offline .status .qth_info,
+#list .one_station.compact .station_full_info,
+#list .one_station .status .freq.hide,
 #future_stations .one_station .offline_text,
 #archive_stations .one_station .offline_text {
     display: none;
 }
-.one_station.offline .offline_text,
-.one_station.compact .status .links {
+#list .one_station.offline .offline_text,
+#list .one_station.compact .status .links {
     display: block;
 }
-.one_station.compact.offline .offline_text{
+#list .one_station.compact.offline .offline_text{
     display: none;
 }
 
@@ -437,161 +627,6 @@ max-width: 900px;
 
 
 
-/* =============================   H E A D   T A B S   T A B L E   ==================================== */
-
-table.tabs{
-    width: 1202px;
-    margin: 15px auto 0px auto;
-    background: url("/static/images/tabs_line.png") bottom left repeat-x;
-    border-collapse: collapse;
-}
-table.index_tabs{
-    margin: 0px auto 0px auto;
-}
-
-
-table.tabs td{
-    vertical-align: bottom;
-    text-align: left;
-    padding: 0;
-}
-
-table.tabs td#station_title{
-    color: #777;
-    padding: 5px 0 0 0;
-    text-align: center;
-    height: 70px;
-    vertical-align: top;
-}
-table.tabs td#station_title h1{
-    margin: 0;
-    padding: 0 0 10px 0;
-    font-size: 50px;
-    font-weight: bold;
-    text-shadow: rgba(255,255,255,0.5) 1px 2px 3px;
-}
-
-
-table.tabs td#status{
-    width: 200px;
-    text-align: center;
-}
-#status_block_top{
-    color: #fff;
-    padding:  5px 5px;
-    border-radius: 10px 10px 0px 0px;
-    font-size: 20px;
-    text-align: center;
-    line-height: 16px;
-}
-.status_offline{
-    background-color: #ff4949;
-}
-.status_online{
-    background-color: #4ab54a;
-}
-
-
-table#status_block_info{
-    width: 100%;
-    padding: 0px;
-    margin: 0;
-    border-collapse: collapse;
-    background: #e3f9e3  url("/static/images/tabs_background_status.png") bottom left no-repeat;
-    border: 1px solid #ccc;
-    border-top: none;
-}
-table#status_block_info td{
-    font-size: 14px;
-    line-height: 18px;
-    text-align: center;
-    vertical-align: middle;
-}
-table#status_block_info td#current_loc{
-    padding: 0 0 5px 0;
-}
-
-table#status_block_info span.datetime{
-    display: inline-block;
-    margin-bottom: 5px;
-    font-size: 10px;
-    color: #777;
-}
-
-
-
-
-
-
-table.tabs td#logo{
-    text-align: center;
-    padding: 10px 0 20px 0;
-}
-
-table.tabs td#website_links{
-    text-align: right;
-}
-
-
-
-
-
-
-
-
-
-
-
-/* =============================   T A B  ==================================== */
-.tab{
-    display: inline-block;
-    padding: 7px 17px 7px 17px;
-    margin: 0;
-    font-size: 14px;
-    text-align: center;
-    line-height: 1em;
-    background: #f5f5f5  url("/static/images/tabs_background.jpg") bottom left no-repeat;
-    border: 1px solid #ccc;
-    border-radius: 10px 10px 0px 0px;
-    cursor: pointer;
-}
-.updated_tab{
-    background: #f5f5f5  url("/static/images/tabs_background.jpg") bottom right no-repeat;
-    padding-right: 35px;
-}
-.router-link-active{
-    background: #fff;
-    font-weight: bold;
-    border-bottom: 1px solid #fff;
-}
-
-.tab a{
-    color: #333;
-    text-decoration: none;
-}
-
-
-#tab_stations{
-    margin-left: 30px;
-}
-.tabs.index_tabs #tab_stations{
-    margin-left: 0px;
-}
-
-
-.tab_envelope{
-    display: inline-block;
-    padding: 4px 20px 4px 20px;
-}
-.tab_envelope img{
-    vertical-align: -35%;
-}
-
-
-
-
-
-
 
 
 /*             P O S T          */
@@ -607,7 +642,7 @@ table.tabs td#website_links{
     width: 800px;
 }
 #post #list_users{
-    margin-left: 10px;
+    margin-left: 50px;
     margin-top: 20px;
 }
 
@@ -627,11 +662,11 @@ table.tabs td#website_links{
 }
 
 #post #delete_all_messages{
-    width: 170px;
+    width: 200px;
     margin: 20px auto 0 auto;
-    font-size: 12px;
-    padding: 3px;
-    line-height: 12px;
+    font-size: 16px;
+    padding: 5px;
+    line-height: 16px;
     background-color: #eee;
     border: 1px solid #ddd;
     border-radius: 10px;
@@ -691,8 +726,8 @@ table.tabs td#website_links{
 }
 
 #post .message .message_text pre {
-    font-family: 'Open Sans', sans-serif;
-    font-size: 16px;
+    font-family: 'Jost', sans-serif;
+    font-size: 18px;
 }
 
 
@@ -738,21 +773,21 @@ table.tabs td#website_links{
     color: #000;
     resize: none;
     line-height: 1.5em;
-    font-size: 16px;
+    font-size: 18px;
 }
 #private_message_form textarea:focus{
     outline: none !important;
 }
 #private_message_form #replay_text{
     padding: 0px 30px;
-    font-size: 14px;
+    font-size: 16px;
     color: #999;
     font-style: italic;
     text-align: left;
     line-height: 16px;
 }
 #private_message_form #from_to{
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
     color: #009;
 }
@@ -805,7 +840,7 @@ table.tabs td#website_links{
 }
 .info_date{
     font-weight: bold;
-    font-size: 12px;
+    font-size: 14px;
     background-color: #ddd;
     color: #000;
     padding: 3px;
@@ -874,7 +909,7 @@ table#rda_result th, table#rda_result td{
     text-align: center;
     vertical-align: middle;
     border: 1px solid #ddd;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.1em;
     color: #333;
 }
@@ -889,7 +924,7 @@ table#rda_result td{
     font-weight: bold;
 }
 table#rda_result td.rda{
-    font-size: 16px;
+    font-size: 18px;
     color: #333;
 }
 
@@ -918,7 +953,7 @@ table#log td{
     color: #333;
 }
 table#log td.time span{
-    font-size: 12px;
+    font-size: 14px;
     line-height: 12px;
 }
 table#log td.mycall{
@@ -952,7 +987,7 @@ table#log tr.new_qso{
 #refresh_time{
     margin: 0;
     padding: 0;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 12px;
     width: 100px;
     float: right;
@@ -979,7 +1014,7 @@ table#log tr.new_qso{
     border-radius: 7px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     padding: 10px 20px;
-    font-size: 18px;
+    font-size: 20px;
     line-height: 1.5em;
     color: #000;
     text-align: left;
@@ -996,7 +1031,7 @@ table#log tr.new_qso{
 
 
 div#cluster{
-    font-size: 12px;
+    margin-left: 180px;
 }
 #view_send_form{
     width: 900px;
@@ -1018,7 +1053,7 @@ div#cluster{
 table#send_spot_layout {
     border-collapse: collapse;
     width: 920px;
-    margin: 20px auto 50px auto;
+    margin: 20px 0 50px 50px;
 }
 table#send_spot_layout td{
     padding: 0px 10px;
@@ -1053,7 +1088,7 @@ table#send_spot_layout td input.add_text_btn{
     margin-top: 3px;
     margin-right: 10px;
     padding: 1px 15px;
-    font-size: 12px;
+    font-size: 14px;
     background-color: #9fb4cc;
     color: #fff;
     text-align: center;
@@ -1073,8 +1108,7 @@ table#send_spot_layout td input#button_send_spot{
     width: 600px;
 }
 .warning{
-    font-size: 16px;
-    margin: 0px auto 50px auto;
+    margin: 0px 0 50px 180px;
     padding: 5px;
     text-align: center;
     background-color: #ff4949;
@@ -1094,7 +1128,6 @@ table#send_spot_layout td input#button_send_spot{
 
 
 .ok_window{
-    font-size: 16px;
     margin: 0px auto 50px auto;
     padding: 5px;
     text-align: center;
@@ -1122,10 +1155,10 @@ table#cluster {
     border-collapse: collapse;
     width: 800px;
     margin: 20px auto 5px auto;
+    font-size: 18px;
 }
 table#cluster td{
     padding: 7px 10px;
-    font-size: 16px;
     text-align: left;
     vertical-align: middle;
     border: 1px solid #ddd;
@@ -1139,7 +1172,7 @@ table#cluster td.band{
 }
 table#cluster td.mode{
     width: 30px;
-    font-size: 12px;
+    font-size: 14px;
     text-align: center;
 }
 table#cluster td.call, table#cluster td.call a{
@@ -1156,7 +1189,7 @@ table#cluster tr.highlight{
 }
 table#cluster td.text{
     color: #777;
-    font-size: 12px;
+    font-size: 14px;
 }
 table#cluster td.spotter{
     width: 100px;
@@ -1190,14 +1223,14 @@ table#cluster td.spotter{
 
 
 #gps_map{
-    font-size: 14px;
+    font-size: 16px;
 }
 #map{
-    width: 950px;
+    width: 100%;
     height: 700px;
-    float: left;
+    display: inline-block;
     padding: 0px;
-    margin: 10px 0;
+    margin: 10px 0 0 0px;
 }
 .vue2leaflet-map{
     border: 1px solid #ccc;
@@ -1231,11 +1264,12 @@ table#cluster td.spotter{
 
 #chat{
     position: relative;
+
 }
 #div_no_login, #div_no_email{
     color: #777;
     margin: 20px 0;
-    font-size: 14px;
+    font-size: 16px;
     font-style: italic;
 }
 #div_no_login a{
@@ -1272,7 +1306,7 @@ table#cluster td.spotter{
     line-height: 14px;
 }
 #personal_chat_message #from_to #date_time{
-    font-size: 12px;
+    font-size: 14px;
     color: #777;
 }
 #personal_chat_message #from{
@@ -1304,7 +1338,7 @@ table#message_form tr, table#message_form td{
 table#message_form input#your_call, table#message_form input#your_name{
     width: 140px;
     margin: 0 15px;
-    font-size: 16px;
+    font-size: 18px;
     border: none;
     text-align: center;
     border-bottom: 1px solid #ccc;
@@ -1317,14 +1351,14 @@ table#message_form input#your_call{
 }
 table#message_form input#your_name{
     color: #666;
-    font-size: 12px;
+    font-size: 14px;
 }
 table#message_form input#message_text{
     width: 800px;
     padding: 0px 5px 2px 5px;
-    margin: 0 0 0 15px;
+    margin: 0 0 0 20px;
     text-align: left;
-    font-size: 16px;
+    font-size: 18px;
     border: none;
     border-bottom: 1px solid #ccc;
 }
@@ -1346,6 +1380,7 @@ table#message_form #smile_btn{
     border: 1px solid #777;
     box-shadow: 2px 2px 5px rgba(0,0,0,0.2); /* Параметры тени */
     background-color: #fff;
+    z-index: 100;
 }
 #smiles_block{
     padding: 0 20px;
@@ -1353,7 +1388,7 @@ table#message_form #smile_btn{
 .smile{
     width: 80px;
     display: inline-block;
-    font-size: 10px;
+    font-size: 12px;
     color: #777;
     padding: 0 0 30px 0;
     text-align: center;
@@ -1366,7 +1401,7 @@ table#message_form #smile_btn{
 }
 #smiles_link{
     text-align: right;
-    font-size: 10px;
+    font-size: 12px;
 }
 #smiles_link a{
     color: #777;
@@ -1395,9 +1430,8 @@ table#chat_layout .message_to{
 
 }
 table#chat_layout .personal{
-    color: #999;
+    color: #555;
     background-color: #FBFD9C;
-    font-weight: bold;
 }
 
 
@@ -1408,7 +1442,7 @@ table#chat_layout .personal{
 
 #list_users{
     width: 140px;
-    margin: 0px 0 0 0;
+    margin: 0px 0 0 20px;
     border: 1px solid #eee;
     text-align: left;
 }
@@ -1416,18 +1450,18 @@ table#chat_layout .personal{
     background-color: #eee;
     text-align: center;
     color: #777;
-    font-size: 12px;
+    font-size: 14px;
 }
 .list_users{
     padding: 10px 0 10px 0px;
     font-weight: bold;
     line-height: 1.5em;
     color: #777;
-    font-size: 16px;
 }
 .list_users_here{    color: #777;}
 .list_users_other{   color: #999;}
 .list_users .admin{    color: #b24c4c;}
+.list_users .sponsor{    color: #070;}
 
 
 .list_users .user{
@@ -1445,7 +1479,7 @@ table#chat_layout .personal{
 }
 
 #list_users .icon_block img{
-    margin: 2px 5px 5px 0;
+    margin: 2px 5px 7px 0;
     cursor: pointer;
 }
 
@@ -1466,7 +1500,6 @@ table#admins_window{
     width: 990px;
     padding: 0px;
     margin: 0px 20px 20px 20px;
-    font-size: 16px;
     border-collapse: collapse;
 }
 table#admins_window td{
@@ -1481,7 +1514,7 @@ table#admins_window tr{
 table#admins_window td.call{
     font-weight: bold;
     width: 150px;
-    line-height: 14px;
+    line-height: 16px;
     color: #007;
 }
 table#admins_window td.call span.date_time{
@@ -1493,7 +1526,7 @@ table#admins_window td.call span.call{
     color: #A00;
 }
 table#admins_window td.call span.name{
-    font-size: 14px;
+    font-size: 16px;
     color: #333;
     font-weight: normal;
 }
@@ -1518,7 +1551,6 @@ table#chat_window{
     width: 990px;
     padding: 0px;
     margin: 0px 20px 20px 20px;
-    font-size: 16px;
     border-collapse: collapse;
 }
 table#chat_window td{
@@ -1534,12 +1566,11 @@ table#chat_window td.call{
     font-weight: bold;
     width: 150px;
     line-height: 16px;
-    padding-bottom: 7px;
     position: relative;
 }
 table#chat_window td.call span.date_time{
-    font-size: 10px;
-    margin-bottom: 4px;
+    font-size: 12px;
+    margin-bottom: 10px;
     font-weight: normal;
     color: #aaa;
     display: block;
@@ -1558,7 +1589,8 @@ table#chat_window td.call span.icon_block{
     display: none;
 }
 table#chat_window td.call:hover span.icon_block, table#chat_window td.call:hover .icon_ban{
-    display: inline;
+    display: block;
+    margin-bottom: 7px;
     cursor: pointer;
 }
 table#chat_window td.call span.icon_block img{
@@ -1571,8 +1603,11 @@ table#chat_window td.call span.icon_block img{
 table#chat_window td.call span.call{
     color: #009;
 }
+table#chat_window tr.sponsor td.call span.call{
+    color: #070;
+}
 table#chat_window td.call span.name{
-    font-size: 12px;
+    font-size: 14px;
     color: #666;
     font-weight: normal;
 }
@@ -1580,35 +1615,43 @@ table#chat_window tr.admin td.call span.call{
     color: #A00;
 }
 table#chat_window td.message{
-    line-height: 1.5em;
-    padding-top: 5px;
-    padding-bottom: 20px;
+    font-size: 18px;
+    padding: 0px 20px 20px 0;
     line-height: 1.7em;
+    position: relative;
+    color: #333;
+}
+table#chat_window td.message .message_text{
+
 }
 
 
 .delete_btn{
     cursor: pointer;
-    float: left;
     width: 20px;
     height: 20px;
     display: none;
-    margin-right: 10px;
+    position: absolute;
+    top: 5px;
+    left: -20px;
 }
 .translate_btn{
     cursor: pointer;
     float: right;
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 table#chat_window td.message:hover img.delete_btn, table#admins_window td.message:hover img.delete_btn{
-    display: inline;
+    display: block;
 }
 
 .translate_lnk{
     display: none;
 }
 table#chat_window td.message:hover .translate_lnk, table#admins_window td.message:hover .translate_lnk{
-    display: inline;
+    display: block;
 }
 
 
@@ -1636,7 +1679,7 @@ table#chat_window td.message:hover .translate_lnk, table#admins_window td.messag
     line-height: 1.2em;
 }
 #login_register span{
-    font-size: 12px;
+    font-size: 14px;
     color: #999;
 }
 #login_register input{
@@ -1667,7 +1710,7 @@ table#chat_window td.message:hover .translate_lnk, table#admins_window td.messag
     margin-top: 50px;
 }
 #confirm_email span{
-    font-size: 12px;
+    font-size: 14px;
     color: #999;
 }
 
@@ -1694,7 +1737,7 @@ table#chat_window td.message:hover .translate_lnk, table#admins_window td.messag
     display: inline-block;
     float: right;
     margin: 6px 0 0 0;
-    padding: 1px 15px;
+    padding: 3px 15px;
     text-align: center;
     background-color: #f5f5f5;
     color: #009;
@@ -1728,12 +1771,15 @@ table#chat_window td.message:hover .translate_lnk, table#admins_window td.messag
     margin-top: 70px;
 }
 #change_password span{
-    font-size: 12px;
+    font-size: 14px;
     color: #999;
 }
 #change_password input#email, #change_password input#password_input{
+    width: 250px;
+    text-align: center;
     margin: 0 0 20px 0;
     border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 
@@ -1777,13 +1823,19 @@ table#chat_window td.message:hover .translate_lnk, table#admins_window td.messag
 #station_setup{
     text-align: left;
     padding: 10px 30px;
-    font-size: 16px;
     line-height: 2em;
     border-top: 1px solid #ccc;
 }
 #station_setup textarea{
-    width: 1080px;
+    width: 1000px;
     height: 300px;
+}
+#station_setup textarea#sponsors{
+    width: 1000px;
+    height: 100px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #070;
 }
 .station_setup_block{
     padding: 10px;
@@ -1802,7 +1854,6 @@ input#admin_calls { width: 870px; font-weight: bold; color: #900;}
 input#setup_instagram { font-weight: bold; text-align: center;}
 
 #stations_link{
-    font-size: 14px;
     padding-left: 30px;
 }
 #stations_link a{
@@ -1899,7 +1950,7 @@ table#manual_gps td{
     text-align: center;
 }
 table#manual_gps td.note{
-    font-size: 12px;
+    font-size: 14px;
     color: #777;
     line-height: 12px;
     vertical-align: bottom;
@@ -1969,16 +2020,21 @@ table#info_popup_close{
 
 
 /* ===========================   C O N T A C T  ==================================*/
-#contact input#email{
-    width: 80%;}
+#contact{
+    margin: 50px auto;
+    width: 80%;
+}
 
 #contact textarea{
     width: 80%;
+    padding: 20px;
     height: 100px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
 }
 #contact input#button_submit{
     width: 50%;
-    margin: 0 0 50px 0;
+    margin: 20px 0 50px 0;
 }
 
 
@@ -1998,10 +2054,9 @@ table#info_popup_close{
 /* ================================== S T A T S ==========================================*/
 
 
-
-
 #stats_block{
     text-align: center;
+    margin-left: 180px;
 }
 #spinner{
     text-align: center;
@@ -2012,7 +2067,7 @@ table#info_popup_close{
 }
 
 table#stats{
-    margin: 0 0 100px 200px;
+    margin: 0 0 100px 50px;
 }
 table#stats td{
     vertical-align: top;
@@ -2164,7 +2219,7 @@ table#top_qso select{    padding: 5px 20px; }
     position: relative;
     overflow: hidden;
     padding: 0 0 20px 0;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 12px;
 }
 
@@ -2194,7 +2249,7 @@ table#top_qso select{    padding: 5px 20px; }
 
 .media .date{
     padding: 2px 5px;
-    font-size: 10px;
+    font-size: 12px;
     text-align: right;
     color: #333;
     background: url('/static/images/background_white_80.png') top left;
@@ -2210,7 +2265,7 @@ table#top_qso select{    padding: 5px 20px; }
     width: 200px;
     height: 50px;
     overflow: hidden;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 16px;
 }
 
@@ -2242,13 +2297,13 @@ table#top_qso select{    padding: 5px 20px; }
     background-color: #fff;
     margin: 0px auto 10px auto;
     text-align: center;
-     font-size: 14px;
+     font-size: 16px;
 }
 #selected_filename{
     font-weight: bold;
     margin: 10px 0;
     text-align: center;
-    font-size: 16px;
+    font-size: 18px;
 }
 .media input#upload_file {
     box-shadow: 3px 3px 6px rgba(0,0,0,0.3); /* Параметры тени */
@@ -2263,17 +2318,15 @@ table#top_qso select{    padding: 5px 20px; }
 
 /* ================================== U S E R S ==========================================*/
 
-#tab_users{ margin-left: 195px; }
 
 #users_menu{
     margin:  30px 0px;
-    font-size: 14px;
 }
 
 #users_menu span{
     background-color: #f5f5f5;
     color: #333;
-    margin-right: 20px;
+    margin: 0 20px;
     border: 1px solid #ccc;
     padding: 5px 20px;
     box-shadow: none;
@@ -2294,12 +2347,11 @@ table#top_qso select{    padding: 5px 20px; }
 #users table{
     margin: 0px auto 200px auto;
     border-collapse: collapse;
-    font-size: 14px;
 }
 #users table th{
     font-weight: normal;
     line-height: 12px;
-    font-size: 12px;
+    font-size: 14px;
     padding: 5px 30px;
     text-align: left;
     background-color: #aaa;

@@ -1,7 +1,7 @@
 <template>
     <div id="app">
 
-    <a href="/"><img id="logo" src="/static/images/tnxqso_logo.png" border="0" title="TNXQSO.com"></a>
+    <a href="/"><img id="logo" src="/static/images/icon_home.png" border="0" title="TNXQSO.com"></a>
     <language-switch v-if="languageSwitchEnabled"></language-switch>
     <table class="tabs">
         <tr>
@@ -30,50 +30,35 @@
                 v-if="enable.stats">Stats</router-link>
             <router-link to="/chat" tag="div" id="tab_chat" class="tab"
                 v-if="enable.chat"
-                :class="{updated_tab: $store.state.services.chat && $store.state.services.chat.new}">
-                Chat
-            </router-link>
+                :class="{updated_tab: $store.state.services.chat && $store.state.services.chat.new}">Chat</router-link>
             <router-link to="/gallery" tag="div" id="tab_gallery" class="tab"
                 v-if="enable.gallery"
                 :class="{updated_tab: $store.state.services.gallery && $store.state.services.gallery.new}">
-                Gallery
-            </router-link>
+                Gallery</router-link>
             <router-link to="/donate" tag="div" id="tab_donate" class="tab"
                 v-if="enable.donate"
                 :class="{updated_tab: stationSettings && stationSettings.new.donate &&
-                    stationSettings.read.donate}">
-                Donate
-            </router-link>
+                    stationSettings.read.donate}">Donate</router-link>
             <router-link to="/stations" tag="div" id="tab_stations" class="tab"
-                :class="{updated_tab: !$store.state.activeStations.read}">
-                Stations
-            </router-link>
+                :class="{updated_tab: !$store.state.activeStations.read}">Stations</router-link>
             <router-link to="/talks" tag="div" id="tab_chat" class="tab"
-              :class="{updated_tab: $store.state.services.talks && $store.state.services.talks.new}">
-                Talks
-            </router-link>
-            <router-link to="/login" tag="div" id="tab_login" class="tab" v-if="!loggedIn">
-                Login
-            </router-link>
-            <router-link to="/profile" tag="div" id="tab_login" class="tab" v-else>
-                Profile
-            </router-link>
+              :class="{updated_tab: $store.state.services.talks && $store.state.services.talks.new}">Talks</router-link>
+            <router-link to="/login" tag="div" id="tab_login" class="tab" v-if="!loggedIn">Login</router-link>
+            <router-link to="/profile" tag="div" id="tab_login" class="tab" v-else>Profile</router-link>
             <router-link to="/post" tag="div" id="tab_post" class="tab tab_envelope" v-if="loggedIn">
                 <img :src="'/static/images/icon_envelope' + (unreadMessages.length ? '_flash' : '') + '.gif'" />
             </router-link>
         </td>
     </tr></table>
-        <div class="list">
+        <div id="wrapper">
+          <div id="list">
             <donate-block></donate-block>
             <keep-alive include="activeStations">
                 <router-view :station-settings="stationSettings" :log-service="logService">
                 </router-view>
             </keep-alive>
+          </div>
         </div>
-
-
-
-
     </div>
 
 </template>
@@ -101,8 +86,8 @@ const tabs = {
   log: { service: logService, interval: 60000 }
 }
 const STATION_SETTINGS_RELOAD = 60000
-//const LOCALIZED_ROUTES = ['Profile', 'Post', 'Chat', 'Talks']
-const LOCALIZED_ROUTES = []
+const LOCALIZED_ROUTES = ['Profile', 'Post', 'Chat', 'Talks']
+//const LOCALIZED_ROUTES = []
 
 
 export default {

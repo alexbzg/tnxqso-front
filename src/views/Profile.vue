@@ -207,23 +207,20 @@
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info"
                     @click="infoPopup= getString('CHAT_POPUP')">
                 <input type="checkbox" id="checkbox_chat" v-model="settings.enable.chat" /> <span v-html="getString('CHAT_SHOW')"/><br/>
-                <div class="block_settings" v-if="settings.enable.chat">
-                    <span v-html="getString('CHAT_ACCESS')"/>&nbsp;
-                    <select id="chat_access_select" v-model="settings.chatAccess">
-                        <option :value="null">{{getString('CHAT_ACCESS_EVERYBODY')}}</option>
-                        <option :value="'users'">{{getString('CHAT_ACCESS_USERS')}}</option>
-                        <option :value="'admins'">{{getString('CHAT_ACCESS_ADMINS')}}</option>
-                    </select>
-                    <br/>
 
-                    <span v-html="getString('CHAT_FILTER')"/>: <br/>
+                <div class="block_settings" v-if="settings.enable.chat">
+
+                    <span v-html="getString('CHAT_ADMINS')"/>: <br/>
                     <input type="text" id="admin_calls" v-model="chatAdmins"
                         @change="chatAdminsChange" /><br/>
                     <input type="checkbox" id="checkbox_chat_delete"
                         v-model="settings.skipConfirmation.chatDelete" />
-                    <span v-html="getString('CHAT_CHECK')"/><br/><br/>
+                    <span v-html="getString('CHAT_CHECK')"/><br/>
                     <input type="button" id="button_clear_chat" class="btn" :value="getString('CHAT_CLEAR')"
-                        @click="clearChat()"/>
+                        @click="clearChat()"/><br/>
+                    <span v-html="getString('CHAT_HIGHLIGHT')"/>: <br/>
+                    <textarea id="sponsors" v-model="sponsors"
+                        @change="sponsorsChange" />
 
                 </div>
             </div>
@@ -328,6 +325,7 @@ export default {
       clusterCallsigns: null,
       clusterHighlight: null,
       chatAdmins: null,
+      sponsors: null,
       infoPopup: null,
       trackFile: null,
       status: {
@@ -387,6 +385,7 @@ export default {
       this.settings = settings
       this.clusterCallsigns = settings.clusterCallsigns != null ? settings.clusterCallsigns.join(' ') : null
       this.clusterHighlight = settings.clusterHighlight != null ? settings.clusterHighlight.join(' ') : null
+      this.sponsors = settings.sponsors != null ? settings.sponsors.join(' ') : null
       this.chatAccess = settings.chatAccess
       this.chatAdmins = settings.chatAdmins != null ? settings.chatAdmins.join(' ') : null
     },
@@ -424,7 +423,7 @@ export default {
           .then(response => {
             const data = response.data
             this.status.online = data.online
-            this.status.qth.loc = data.qth.loc
+            this.status.qth.loc = data.qth ? data.qth.loc : null
             for (let co = 0; co < QTH_PARAMS.fieldCount; co++) {
               this.status.qth.fields.values[co] = data.qth.fields.values[co]
             }
@@ -542,6 +541,9 @@ export default {
         .then(() => {
           this.newsItem = ''
         })
+    },
+    sponsorsChange () {
+      this.settings.sponsors = parseCallsigns(this.sponsors)
     },
     clusterCallsignsChange () {
       this.settings.clusterCallsigns = parseCallsigns(this.clusterCallsigns)

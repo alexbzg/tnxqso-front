@@ -51,7 +51,7 @@ export const storeActivity = {
   },
   actions: {
     [ACTION_POST_ACTIVITY] ({state, rootState, dispatch}, payload) {
-      if (rootState.user.user.chat_callsign) {
+      if (rootState.user.user.chat_callsign && rootState.user.user.chat_callsign.length > 2) {
         return dispatch(ACTION_POST, {
           path: 'activeUsers',
           data: {

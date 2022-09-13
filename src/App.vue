@@ -1,7 +1,7 @@
 <template>
     <div id="app">
-        <a href="/"><img id="logo_index" src="/static/images/tnxqso_logo.png" border="0" title="TNXQSO.com"></a>
         <language-switch></language-switch>
+        <div id="logo_index">TNXQSO</div>
         <table class="tabs index_tabs">
             <tr>
                 <td>
@@ -39,6 +39,9 @@
                     <router-link to="/tnxpost" tag="div" id="tab_tnxpost" class="tab">
                         TNXpost
                     </router-link>
+                    <router-link to="/tnxinfo" tag="div" id="tab_tnxinfo" class="tab">
+                        TNXinfo
+                    </router-link>
                     <router-link to="/tnxlog" tag="div" id="tab_tnxlog" class="tab">
                         TNXLOG
                     </router-link>
@@ -48,11 +51,13 @@
                 </td>
             </tr>
         </table>
-        <div class="list index_list">
-            <donate-block></donate-block>
-            <keep-alive include="activeStations,QthNowMap">
-                <router-view></router-view>
-            </keep-alive>
+        <div id="wrapper">
+            <div id="list">
+                <donate-block></donate-block>
+                <keep-alive include="activeStations,QthNowMap">
+                    <router-view></router-view>
+                </keep-alive>
+            </div>
         </div>
     </div>
 </template>

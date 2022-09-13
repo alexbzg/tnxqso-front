@@ -45,7 +45,7 @@
 
         <table v-for="entry in data" :key="entry.id" :id="entry.id">
             <tr v-for="(msg, idx) in entry.msg" :class="{admin: msg.admin && service && service.station,
-                new_msg: msg.new}" :key="idx">
+                new_msg: msg.new, sponsor: msg.sponsor}" :key="idx">
                 <td class="call">
                     <user-ban-button :callsign="msg.cs"></user-ban-button>
                     <span class="call">{{$options.replace0(msg.user)}}</span>
@@ -282,7 +282,9 @@ export default {
         return false
       }
       return this.siteAdmin || (this.service.station && this.emailConfirmed &&
-        this.$store.state.stationSettings.admin === this.userCallsign)
+        (this.$store.state.stationSettings.admin === this.userCallsign ||
+            (this.$store.state.stationSettings.chatAdmins && 
+            this.$store.state.stationSettings.chatAdmins.includes(this.userCallsign))))
     },
     chatAccess() {
       return this.loggedIn && this.emailConfirmed &&
@@ -307,6 +309,11 @@ export default {
             msg.to.shift()
             msg.to = msg.to.map(item => item.trim())
           }
+          if (!msg.admin && this.service && this.service.station && this.isAdmin && 
+            this.$store.state.stationSettings.sponsors &&
+            this.$store.state.stationSettings.sponsors.includes(msg.user)) {
+            msg.sponsor = true
+          }        
           if (msg.text.startsWith('***') && msg.admin && this.service && this.service.station) {
             msg.text = msg.text.replace(/^\*+\s+/, '')
             data[0].msg.push(msg)
@@ -321,7 +328,7 @@ export default {
       return data
     },
     postButtonEnabled: function () {
-      return !this.posting && Boolean(this.messageText) && Boolean(this.chatCallsignField)
+      return !this.posting && Boolean(this.messageText) && this.chatCallsignField && (this.chatCallsignField.length > 2)
     }
   }
 }

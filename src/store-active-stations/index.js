@@ -107,6 +107,9 @@ export const storeActiveStations = {
       if (station.status.freq && station.status.freq.value && now - station.status.freq.ts < FREQ_INT) {
         freq = station.status.freq.value
       }
+      if (station.status.speed && now - station.status.locTs > ONLINE_INT) {
+        station.status.speed = null
+      }
       if (freq !== station.status.freqDisplay) {
         Vue.set(station.status, 'freqDisplay', freq)
       }

@@ -1,9 +1,6 @@
 <template>
     <div id="lng_block">
-      <img class="button_lng" src="/static/images/icon_eng.png" title="English"
-        @click="switchLanguage('en')"/>
-      <img class="button_lng" src="/static/images/icon_rus.png" title="Русский"
-        @click="switchLanguage('ru')"/>
+      <span @click="switchLanguage('en')">EN</span> <span @click="switchLanguage('ru')">RU</span>
     </div>
 </template>
 

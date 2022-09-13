@@ -14,7 +14,7 @@
                     <div
                         v-for="user, idx in users[usersType]"
                         class="user" 
-                        :class="{'admin': user.admin, 'typing':user.typing}"
+                        :class="{admin: user.admin, typing: user.typing, sponsor: user.sponsor}"
                         :key="idx">
                         {{$options.replace0(user.chat_callsign)}}
                         <div class="icon_block">
@@ -81,6 +81,10 @@ export default {
         } else {
           u.admin = false
         }
+        if (stationSettings && !u.admin && stationSettings.sponsors && 
+          stationSettings.sponsors.includes(u.chat_callsign)) {
+          u.sponsor = true
+        }        
         if (u.chat && this.chat && ((u.station && u.station === this.station) ||
           (!u.station && !this.station))) {
           au['thisPage'].push(u)

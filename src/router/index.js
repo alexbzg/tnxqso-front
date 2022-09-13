@@ -9,6 +9,7 @@ import Chat from '../views/Chat'
 import QthNow from '../views/Qthnow'
 import Tnxlog from '../views/Tnxlog'
 import Tnxpost from '../views/Tnxpost'
+import Tnxinfo from '../views/Tnxinfo'
 import Post from '../views/Post'
 import Users from '../views/Users'
 import QthNowMap from '../views/QthNowMap'
@@ -76,6 +77,11 @@ const router = new Router({
       path: '/tnxpost',
       name: 'Tnxlog',
       component: Tnxpost
+    },
+    {
+      path: '/tnxinfo',
+      name: 'Tnxinfo',
+      component: Tnxinfo
     },
     {
       path: '/login',

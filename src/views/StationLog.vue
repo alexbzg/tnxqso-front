@@ -37,16 +37,27 @@
 
 
             <div v-if="searchResults && searchResults.length > 0">
-                  <log-table :data="searchResults" :log-settings="stationSettings.log"
-                    :qth-field-titles="qthFieldTitles" v-if="stationSettings">
+                  <log-table 
+                    v-if="stationSettings"
+                    :data="searchResults" 
+                    :sound-records="soundRecords"
+                    :station-url-callsign="stationUrlCallsign"
+                    :log-settings="stationSettings.log"
+                    :qth-field-titles="qthFieldTitles" 
+                   >
                   </log-table>
             </div>
 
           </div>
 
 
-          <log-table :data="data" :log-settings="stationSettings.log"
-              :qth-field-titles="qthFieldTitles" v-if="stationSettings">
+          <log-table
+            v-if="stationSettings"
+            :data="data" 
+            :sound-records="soundRecords"
+            :station-url-callsign="stationUrlCallsign"
+            :log-settings="stationSettings.log"
+            :qth-field-titles="qthFieldTitles">
           </log-table>
 
         </div>
@@ -64,6 +75,7 @@ import storage from '../storage'
 import {qthFieldTitles} from '../utils'
 import {MODES, orderedBands} from '../ham-radio'
 import {ACTION_POST} from '../store-user'
+import request from '../request'
 
 const logSearchValueStorageKey = 'logSearchValue'
 const current = moment()
@@ -80,8 +92,16 @@ export default {
       tabId: 'log',
       searchValue: storage.load( logSearchValueStorageKey, 'local' ),
       searchResults: null,
-      searchResultsRDA: null
+      searchResultsRDA: null,
+      soundRecords: null,
+      stationUrlCallsign: window.location.pathname
     }
+  },
+  mounted () {
+    request.get('/static/stations' + window.location.pathname + '/sound.json')
+      .then(response => {
+        this.soundRecords = new Set(response.data)
+      })
   },
   methods: {
     ...mapActions([ACTION_POST]),

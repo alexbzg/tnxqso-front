@@ -1,7 +1,7 @@
 <template>
     <div id="app">
 
-    <a href="/"><img id="logo" src="/static/images/icon_home.png" border="0" title="TNXQSO.com"></a>
+    <!--<a href="/"><img id="logo" src="/static/images/icon_home.png" border="0" title="TNXQSO.com"></a>-->
     <language-switch v-if="languageSwitchEnabled"></language-switch>
     <table class="tabs">
         <tr>
@@ -18,6 +18,7 @@
     </tr>
     <tr>
         <td>
+            <a href="/" class="tab"><img id="logo" src="/static/images/icon_home.png" border="0" title="TNXQSO.com"></a>
             <router-link to="/info" tag="div" id="tab_info" class="tab"
                 v-if="enable.stationInfo">Info</router-link>
             <router-link to="/log" tag="div" id="tab_log" class="tab"
@@ -33,8 +34,7 @@
                 :class="{updated_tab: $store.state.services.chat && $store.state.services.chat.new}">Chat</router-link>
             <router-link to="/gallery" tag="div" id="tab_gallery" class="tab"
                 v-if="enable.gallery"
-                :class="{updated_tab: $store.state.services.gallery && $store.state.services.gallery.new}">
-                Gallery</router-link>
+                :class="{updated_tab: $store.state.services.gallery && $store.state.services.gallery.new}">Gallery</router-link>
             <router-link to="/donate" tag="div" id="tab_donate" class="tab"
                 v-if="enable.donate"
                 :class="{updated_tab: stationSettings && stationSettings.new.donate &&

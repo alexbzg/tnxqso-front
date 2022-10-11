@@ -21,7 +21,8 @@
     "log": {
         "columns": {
             "qth": [true, true, true],
-            "loc": true
+            "loc": true,
+            "audio": true
         }
     },
     "status":{

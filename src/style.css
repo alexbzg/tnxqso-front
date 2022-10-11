@@ -74,12 +74,6 @@ input:focus{   outline: none; }
     font-weight: bold;
     text-shadow: rgba(255,255,255,0.5) 2px 3px 3px;
 }
-img#logo{
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 30px;
-}
 
 
 
@@ -206,30 +200,30 @@ table.tabs td#website_links{
 .tab{
     font-size: 16px;
     display: inline-block;
-    padding: 5px 20px;
-    margin: 10px 0px 0 0;
+    padding: 5px 18px;
+    margin: 0;
     text-align: center;
     border-radius: 10px 10px 0px 0px;
     cursor: pointer;
     color: #000;
 }
-table.index_tabs .tab{
-    margin: 0;
+img#logo{
+    vertical-align: -15%;
 }
-
-
 
 .tab:hover{
     text-decoration: underline;
 }
-.updated_tab{
-/*    background: transparent url("/static/images/icon_updated.png") top right no-repeat;
-    background-position: 100% 10px;
-    padding: 5px 20px 5px 16px; */
-
+.tab.updated_tab{
     font-weight: bold;
-    color: #090;
-    text-decoration: underline;
+    color: #00c;
+    padding: 0px 3px;
+    margin: 0px 15px;
+    line-height: 14px;
+    border-bottom: 2px solid #00c;
+}
+.tab:hover.updated_tab{
+    text-decoration: none;
 }
 .router-link-active{
     background: #fff;
@@ -470,7 +464,23 @@ max-width: 900px;
 #list .one_station.compact .callsign a{
     text-decoration: none;
     color: #000;
+    position: relative;
 }
+#list .one_station.compact .callsign input{
+   display: none;
+}
+
+#list .one_station.compact .callsign:hover input{
+   display: block;
+   position: absolute;
+   top: 5px;
+   left: -15px;
+}
+
+
+
+
+
 #list .one_station .status{
     width: 120px;
     padding: 0;
@@ -559,9 +569,6 @@ max-width: 900px;
     font-size: 14px;
 }
 
-#list .one_station .main_block{
-    display: none;
-}
 
 
 
@@ -577,13 +584,12 @@ max-width: 900px;
 #archive_stations .one_station .offline_text {
     display: none;
 }
-#list .one_station.offline .offline_text,
-#list .one_station.compact .status .links {
-    display: block;
-}
-#list .one_station.compact.offline .offline_text{
-    display: none;
-}
+#list .one_station.offline .offline_text {    display: block;}
+#list .one_station.compact.offline .offline_text{    display: none;}
+
+#list .one_station.compact .status .links{    display: block;}
+
+
 
 #archive_stations .callsign,
 #archive_stations .station_full_info .title,
@@ -876,7 +882,7 @@ max-width: 900px;
 
 
 #call_search{
-    margin: 20px 0;
+    margin: 20px 0 0 180px;
     text-align: center;
 }
 #call_search input{
@@ -983,6 +989,17 @@ table#log td.head{
 table#log tr.new_qso{
     background-color: #e3f9e3;
 }
+
+table#log td.audio img{
+    cursor: pointer;
+}
+
+
+table#log td.audio_player{
+    padding: 0;
+    background-color: #F1F3F4;
+}
+
 
 #refresh_time{
     margin: 0;
@@ -1520,7 +1537,7 @@ table#admins_window td.call{
 table#admins_window td.call span.date_time{
     font-size: 12px;
     font-weight: normal;
-    color: #999;
+    color: #900;
 }
 table#admins_window td.call span.call{
     color: #A00;
@@ -1531,10 +1548,10 @@ table#admins_window td.call span.name{
     font-weight: normal;
 }
 table#admins_window td.message{
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding: 5px 0;
     line-height: 1.7em;
     color: #000;
+    position: relative;
 }
 table#admins_window .icon_block{
     display: none;
@@ -1572,7 +1589,7 @@ table#chat_window td.call span.date_time{
     font-size: 12px;
     margin-bottom: 10px;
     font-weight: normal;
-    color: #aaa;
+    color: #009;
     display: block;
 }
 table#chat_window td.call:hover span.date_time{
@@ -1902,6 +1919,9 @@ table#log_setup td{
     text-align: center;
     margin: 10px 0 30px 0;
 }
+#status_from #manual_status input{
+    margin-right: 5px;
+}
 
 table#status_setup{
     margin: 0 auto;
@@ -1922,6 +1942,14 @@ table#status_setup input{
     width: 300px;
     text-align: center;
 }
+
+
+
+
+
+
+
+
 
 
 

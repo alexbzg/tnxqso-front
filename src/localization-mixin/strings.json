@@ -33,7 +33,7 @@
     "CLUSTER_CALL": {"en": "Call signs for highlighting <i> (separated by space or comma) (visible only by the station administrator)</i>", "ru": "Позывные для выделения цветом <i>(разделяются пробелом или запятой) (видит только администратор станции)</i>"},
     "CHAT_SHOW": {"en": "Show <b>Chat</b> tab on your station page", "ru": "Показывать вкладку <b>Chat</b> на странице вашей станции"},
     "CHAT_POPUP": {"en": "Only a station's administrator can delete chat messages.", "ru": "Удалять сообщения чата может только администратор станции."},
-    "CHAT_HIGHLIGHT": {"en": "Call signs for highlighting <i> (separated by space or comma) (visible only by the station administrator)</i>", "ru": "Позывные для выделения цветом <i>(разделяются пробелом или запятой) (видно только администратору станции)</i>"},
+    "CHAT_HIGHLIGHT": {"en": "Call signs for highlighting <i> (separated by space or comma)</i>", "ru": "Позывные для выделения цветом <i>(разделяются пробелом или запятой)</i>"},
     "CHAT_ADMINS": {"en": "Chat admins <i>(separated by space or comma)</i>", "ru": "Администраторы чата <i>(разделяются пробелом или запятой)</i>"},
     "CHAT_ACCESS": {"en": "Who can post messages: ", "ru": "Кто может писать сообщения: "},
     "CHAT_ACCESS_EVERYBODY": {"en": "Everybody", "ru": "Все"},

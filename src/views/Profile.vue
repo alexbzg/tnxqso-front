@@ -125,6 +125,11 @@
                                 <input type="checkbox" id="checkbox_log_loc" v-model="settings.log.columns.loc" />
                                 Locator
                             </td>
+                            <td class="setting">
+                                <input type="checkbox" id="checkbox_log_audio" 
+                                    v-model="settings.log.columns.audio" />
+                                Audio
+                            </td>
                         </tr>
                     </table>
                     <input type="button" id="button_export_log" class="btn" :value="getString('LOG_DOWNLOAD')"

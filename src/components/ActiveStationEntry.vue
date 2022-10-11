@@ -2,11 +2,14 @@
     <div v-if="stationSettings.publish || siteAdmin" class="one_station"
         :class="{compact: compactView, offline: !statusData.online}">
         <span class="callsign">
-            <template v-if="siteAdmin">
+<!--
                 <input type="checkbox" v-model="stationSettings.publish.admin" @change="publishChange()" class="main_block" />
-                <input type="checkbox" v-model="stationSettings.publish.user" @change="publishChange()"/>
-            </template>
+                <input type="checkbox" v-model="stationSettings.publish.user" @change="publishChange()"/> 
+-->
             <component :is="compactView ? 'a' : 'span'" :href="stationURL + '#/info'" :title="stationSettings.station.title">
+                <template v-if="siteAdmin">
+                    <input type="checkbox" v-model="stationSettings.publish.user" @change="publishChange()"/>
+                </template>
                 {{stationDisplayCallsign}}
             </component>
         </span>

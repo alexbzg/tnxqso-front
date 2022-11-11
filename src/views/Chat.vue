@@ -45,7 +45,7 @@
 
         <table v-for="entry in data" :key="entry.id" :id="entry.id">
             <tr v-for="(msg, idx) in entry.msg" :class="{admin: msg.admin && service && service.station,
-                new_msg: msg.new, sponsor: msg.sponsor}" :key="idx">
+                new_msg: msg.new, sponsor: msg.sponsor && isAdmin}" :key="idx">
                 <td class="call">
                     <user-ban-button :callsign="msg.cs"></user-ban-button>
                     <span class="call">{{$options.replace0(msg.user)}}</span>

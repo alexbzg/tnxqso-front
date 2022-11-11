@@ -200,37 +200,35 @@ table.tabs td#website_links{
 .tab{
     font-size: 16px;
     display: inline-block;
-    padding: 5px 18px;
+    padding: 10px 18px 10px 18px;
     margin: 0;
     text-align: center;
     border-radius: 10px 10px 0px 0px;
     cursor: pointer;
     color: #000;
+    line-height: 14px;
 }
-img#logo{
-    vertical-align: -15%;
-}
+img#logo{    vertical-align: -10%;}
 
-.tab:hover{
-    text-decoration: underline;
-}
-.tab.updated_tab{
+.tab:hover{    text-decoration: underline; }
+
+.updated_tab{
     font-weight: bold;
     color: #00c;
-    padding: 0px 3px;
+    padding: 0px 0px;
     margin: 0px 15px;
-    line-height: 14px;
     border-bottom: 2px solid #00c;
 }
-.tab:hover.updated_tab{
-    text-decoration: none;
-}
-.router-link-active{
+.tab:hover.updated_tab{    text-decoration: none;}
+.router-link-active, .router-link-active.updated_tab{
     background: #fff;
     font-weight: bold;
     text-decoration: none;
+    padding: 10px 18px 10px 18px;
+    margin: 0;
+    color: #000;
+    border-bottom: none;
 }
-
 
 
 .tab img.updated{
@@ -239,21 +237,15 @@ img#logo{
 }
 
 
-#tab_stations{
-    margin-left: 30px;
-}
-.tabs.index_tabs #tab_stations{
-    margin-left: 0px;
-}
+#tab_stations{    margin-left: 30px;}
+.tabs.index_tabs #tab_stations{    margin-left: 0px;}
 
 
 .tab_envelope{
     display: inline-block;
-    padding: 5px 20px 5px 20px;
+    padding: 5px 20px 10px 20px;
 }
-.tab_envelope img{
-    vertical-align: -15%;
-}
+.tab_envelope img{    vertical-align: -15%;}
 
 
 #tab_users{
@@ -990,6 +982,10 @@ table#log tr.new_qso{
     background-color: #e3f9e3;
 }
 
+table#log td.audio{
+    padding: 0 7px;
+    vertical-align: middle;
+}
 table#log td.audio img{
     cursor: pointer;
 }

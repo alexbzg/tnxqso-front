@@ -392,15 +392,34 @@ max-width: 900px;
 
 
 
-
-
-#view{
+#view_buttons{
     text-align: right;
+    padding-right: 15px;
 }
-#view img{
-    margin-right: 10px;
+#view_buttons div{
+    padding: 1px 10px;
+    margin: 0 0 0 10px;
+    display: inline-block;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #999;
+    line-height: 10px;
     cursor: pointer;
+    vertical-align: middle;
+    text-align: center;
 }
+#view_buttons div.selected_view{
+    background-color: #E8FAE8;
+    border-color: #6ec36e;
+}
+
+#view_buttons div#view{
+    border: none;
+    display: none;
+}
+
 
 
 

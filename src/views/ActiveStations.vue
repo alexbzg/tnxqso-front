@@ -2,27 +2,27 @@
     <div>
 
         <div id="view_buttons">
-          <div 
+          <div
             v-for="(value, index) in stationsTypesFilter"
             @click="toggleStationsTypesFilter(index)"
             :class="{ selected_view: value }"
             :key="index">
-            <img 
-                :src="$options.STATIONS_TYPES_FILTER[index].image" 
+            <img
+                :src="$options.STATIONS_TYPES_FILTER[index].image"
                 :title="$options.STATIONS_TYPES_FILTER[index].title" />
           </div>
 
-          <!--div id="view" @click="toggleCompactView">
+          <div id="view" @click="toggleCompactView">
             <img v-if="compactView"  id="view_full" src="/static/images/icon_view_full.png" />
             <img v-else id="view_compact" src="/static/images/icon_view_compact.png" />
-          </div-->
+          </div>
         </div>
 
         <div id="active_stations" class="stations_list">
             <template v-for="(stations, idx0) in activeStationsStatus">
                 <active-station-entry v-for="(item, idx) in filterStations(stations)"
                     :station-settings="item" :site-admin="siteAdmin" type="active"
-                    :compactView="true"
+                    :compactView="compactView"
                     @publish-change="publishChange(item)" :key="idx0 + '_' + idx">
                 </active-station-entry>
                 <br
@@ -30,21 +30,24 @@
                     :key="idx0"/>
             </template>
         </div>
+
+        <donate-block></donate-block>
+
         <div id="future_stations" class="stations_list">
             <div class="stations_block">Coming soon</div>
-            <active-station-entry 
+            <active-station-entry
                 v-for="(station, index) in filterStations($store.state.activeStations.stations.future)"
                 :station-settings="station" :site-admin="siteAdmin" type="inactive"
-                :compactView="true"
+                :compactView="compactView"
                 @publish-change="publishChange(station)" :key="index">
             </active-station-entry>
         </div>
         <div id="archive_stations" class="stations_list">
             <div class="stations_block">Archive</div>
-            <active-station-entry 
+            <active-station-entry
                 v-for="(station, index) in filterStations($store.state.activeStations.stations.archive)"
                 :station-settings="station" :site-admin="siteAdmin" type="archive"
-                :compactView="true"
+                :compactView="compactView"
                 @publish-change="publishChange(station)" :key="index">
             </active-station-entry>
        </div>
@@ -59,6 +62,9 @@ import {ACTION_POST} from '../store-user'
 import {MUTATE_ACTIVE_STATIONS_READ} from '../store-active-stations'
 
 import ActiveStationEntry from '../components/ActiveStationEntry'
+
+import DonateBlock from '../components/DonateBlock.vue'
+
 
 const STORAGE_KEY_COMPACT_VIEW = 'activeStationsCompactView'
 const STORAGE_KEY_STATIONS_TYPES_FILTER = 'activeStationsStationTypeFilter'
@@ -83,10 +89,10 @@ const STATIONS_TYPES_FILTER = [
 
 export default {
   name: 'activeStations',
-  components: {ActiveStationEntry},
+  components: {ActiveStationEntry, DonateBlock},
   STATIONS_TYPES_FILTER: STATIONS_TYPES_FILTER,
   data () {
-    const stationsTypesFilter = storage.load(STORAGE_KEY_STATIONS_TYPES_FILTER, 'local') || 
+    const stationsTypesFilter = storage.load(STORAGE_KEY_STATIONS_TYPES_FILTER, 'local') ||
         STATIONS_TYPES_FILTER.map( () => true )
 
     return {
@@ -127,7 +133,7 @@ export default {
       storage.save(STORAGE_KEY_STATIONS_TYPES_FILTER, this.stationsTypesFilter, 'local')
     },
     filterStations (stations) {
-      return stations.filter( item => this.stationsTypesFilter.some( (value, index) => 
+      return stations.filter( item => this.stationsTypesFilter.some( (value, index) =>
         value && STATIONS_TYPES_FILTER[index].filter.test(item.station.callsign) ) )
     }
   },

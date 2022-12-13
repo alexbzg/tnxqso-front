@@ -37,23 +37,24 @@
 
 
             <div v-if="searchResults && searchResults.length > 0">
-                  <log-table 
+                  <log-table
                     v-if="stationSettings"
-                    :data="searchResults" 
+                    :data="searchResults"
                     :sound-records="soundRecords"
                     :station-url-callsign="stationUrlCallsign"
                     :log-settings="stationSettings.log"
-                    :qth-field-titles="qthFieldTitles" 
+                    :qth-field-titles="qthFieldTitles"
                    >
                   </log-table>
             </div>
 
           </div>
 
+          <donate-block></donate-block>
 
           <log-table
             v-if="stationSettings"
-            :data="data" 
+            :data="data"
             :sound-records="soundRecords"
             :station-url-callsign="stationUrlCallsign"
             :log-settings="stationSettings.log"
@@ -76,6 +77,7 @@ import {qthFieldTitles} from '../utils'
 import {MODES, orderedBands} from '../ham-radio'
 import {ACTION_POST} from '../store-user'
 import request from '../request'
+import DonateBlock from '../components/DonateBlock.vue'
 
 const logSearchValueStorageKey = 'logSearchValue'
 const current = moment()
@@ -86,7 +88,7 @@ export default {
   mixins: [tabMixin],
   name: 'StationLog',
   props: ['stationSettings'],
-  components: { LogTable },
+  components: { LogTable, DonateBlock },
   data () {
     return {
       tabId: 'log',

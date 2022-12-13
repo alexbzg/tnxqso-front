@@ -354,12 +354,15 @@ max-width: 900px;
 /* ===========================   S T A T I O N S  ==================================*/
 
 .donate_block{
-    position: absolute;
-    top: 20px;
-    left: 0;
-    width: 160px;
-    height: 600px;
+    width: 100%;
+    height: 100px;
+    text-align: center;
 }
+
+.donate_block.stations{
+    margin-top: 50px;
+}
+
 
 .list:after {
     content: "";
@@ -372,30 +375,12 @@ max-width: 900px;
     padding: 0;
 }
 
-.donate_block.login,
-.donate_block.talks,
-.donate_block.chat,
-.donate_block.map,
-.donate_block.gallery,
-.donate_block.qthnowmap,
-.donate_block.donate,
-.donate_block.about,
-.donate_block.contact,
-.donate_block.profile,
-.donate_block.users,
-.donate_block.info
-{
-    display: none;
-}
-
-
-
-
-
 #view_buttons{
     text-align: right;
     padding-right: 15px;
+    margin-bottom: 10px;
 }
+
 #view_buttons div{
     padding: 1px 10px;
     margin: 0 0 0 10px;
@@ -414,19 +399,19 @@ max-width: 900px;
     background-color: #E8FAE8;
     border-color: #6ec36e;
 }
-
+#view_buttons img{    height: 20px;}
 #view_buttons div#view{
     border: none;
-    display: none;
-}
+    padding-right: 0;
+}#view_buttons div#view img{    height: 25px;}
 
 
 
 
 #list .stations_list{
-    margin: 0px 50px 20px 270px;
+    margin: 0px 50px 20px 50px;
     padding: 0;
-    text-align: left;
+
     color: #777;
     line-height: 1.6em;
 }
@@ -893,7 +878,7 @@ max-width: 900px;
 
 
 #call_search{
-    margin: 20px 0 0 180px;
+    margin: 20px 0 0 0px;
     text-align: center;
 }
 #call_search input{
@@ -904,13 +889,11 @@ max-width: 900px;
 
 
 #log_block{
-    margin-left: 200px;
 }
 
 
 #search_result{
-    width: 80%;
-    margin: 0 auto 50px auto;
+    margin: 0 auto 20px auto;
     text-align: right;
 }
 #search_result #icon_close{
@@ -922,11 +905,11 @@ table#rda_result {
     margin: 0 auto 20px auto;
 }
 table#rda_result th, table#rda_result td{
-    padding: 5px;
+    padding: 5px 10px;
     text-align: center;
     vertical-align: middle;
     border: 1px solid #ddd;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 1.1em;
     color: #333;
 }
@@ -941,8 +924,9 @@ table#rda_result td{
     font-weight: bold;
 }
 table#rda_result td.rda{
-    font-size: 18px;
+    font-size: 16px;
     color: #333;
+    width: 100px;
 }
 
 
@@ -961,7 +945,7 @@ table#log {
     margin: 10px auto;
 }
 table#log td{
-    padding: 7px;
+    padding: 5px 10px;
     text-align: center;
     vertical-align: middle;
     border: 1px solid #ddd;
@@ -1063,12 +1047,11 @@ table#log td.audio_player{
 
 
 div#cluster{
-    margin-left: 180px;
 }
 #view_send_form{
     width: 900px;
-    margin: 0 0 0 202px;
-    text-align: right;
+    margin: 10px auto 30px auto;
+    text-align: center;
 }
 #view_send_form input{
     margin: 12px 0 0 0;
@@ -1085,12 +1068,13 @@ div#cluster{
 table#send_spot_layout {
     border-collapse: collapse;
     width: 920px;
-    margin: 20px 0 50px 50px;
+    margin: 10px auto 30px auto;
 }
 table#send_spot_layout td{
     padding: 0px 10px;
     text-align: center;
     line-height: 1em;
+    font-size: 14px;
 }
 table#send_spot_layout input{
     margin: 0;
@@ -2098,8 +2082,7 @@ table#info_popup_close{
 
 
 #stats_block{
-    text-align: center;
-    margin-left: 180px;
+    text-align: center;;
 }
 #spinner{
     text-align: center;
@@ -2110,7 +2093,7 @@ table#info_popup_close{
 }
 
 table#stats{
-    margin: 0 0 100px 50px;
+    margin: 0 auto 100px auto;
 }
 table#stats td{
     vertical-align: top;

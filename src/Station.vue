@@ -52,7 +52,6 @@
     </tr></table>
         <div id="wrapper">
           <div id="list">
-            <donate-block></donate-block>
             <keep-alive include="activeStations">
                 <router-view :station-settings="stationSettings" :log-service="logService">
                 </router-view>
@@ -75,7 +74,6 @@ import logService from './log-service'
 import storage from './storage'
 import {formatPeriod} from './utils'
 import StationStatus from './components/StationStatus'
-import DonateBlock from './components/DonateBlock.vue'
 import LanguageSwitch from './components/LanguageSwitch'
 
 //import StompClient from './stomp-client'
@@ -93,7 +91,7 @@ const LOCALIZED_ROUTES = ['Profile', 'Post', 'Chat', 'Talks']
 export default {
   USER_FIELDS_COUNT: USER_FIELDS_COUNT,
   name: 'station',
-  components: {StationStatus, DonateBlock, LanguageSwitch},
+  components: {StationStatus, LanguageSwitch},
   data () {
     const tabsUnread = {}
     for (const tab in tabs) {

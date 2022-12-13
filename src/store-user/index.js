@@ -74,6 +74,11 @@ export const storeUser = {
     siteAdmin: state => {
       return Boolean(state.user.siteAdmin)
     },
+    stationAdmin: (state, getters, rootState) => {
+      return Boolean(state.user.siteAdmin) || (state.user.emailConfirmed &&
+        (rootState.stationSettings?.admin === state.user.callsign ||
+        (rootState.stationSettings?.chatAdmins?.includes(state.user.callsign))))
+    },
     loggedIn: state => {
       return Boolean(state.user.token)
     },

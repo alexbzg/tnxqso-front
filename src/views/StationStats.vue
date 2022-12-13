@@ -1,10 +1,11 @@
 <template>
     <div id="stats_block">
-        <div id="spinner" 
+
+        <div id="spinner"
             v-show="pending">
             <img src="/static/images/spinner.gif"/>
         </div>
-        <table 
+        <table
             id="stats"
             v-show="!pending">
             <tr>

@@ -53,7 +53,6 @@
         </table>
         <div id="wrapper">
             <div id="list">
-                <donate-block></donate-block>
                 <keep-alive include="activeStations,QthNowMap">
                     <router-view></router-view>
                 </keep-alive>
@@ -72,11 +71,11 @@ import capitalizeDirective from './capitalize-directive'
 capitalizeDirective()
 
 import LanguageSwitch from './components/LanguageSwitch'
-import DonateBlock from './components/DonateBlock.vue'
+// import DonateBlock from './components/DonateBlock.vue'
 
 export default {
   name: 'app',
-  components: {LanguageSwitch, DonateBlock},
+  components: {LanguageSwitch},
   data () {
     return {
 //      user: user

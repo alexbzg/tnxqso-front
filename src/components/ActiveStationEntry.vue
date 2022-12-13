@@ -4,9 +4,9 @@
         <span class="callsign">
 <!--
                 <input type="checkbox" v-model="stationSettings.publish.admin" @change="publishChange()" class="main_block" />
-                <input type="checkbox" v-model="stationSettings.publish.user" @change="publishChange()"/> 
+                <input type="checkbox" v-model="stationSettings.publish.user" @change="publishChange()"/>
 -->
-            <component :is="compactView ? 'a' : 'span'" :href="stationURL + '#/info'" :title="stationSettings.station.title">
+            <component :is="compactView ? 'a' : 'span'" :href="stationURL + '#/info'" :title="stationSettings.station.title + ' (' + period + ')'">
                 <template v-if="siteAdmin">
                     <input type="checkbox" v-model="stationSettings.publish.user" @change="publishChange()"/>
                 </template>

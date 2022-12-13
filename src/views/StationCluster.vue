@@ -1,12 +1,12 @@
 <template>
 
     <div id="cluster">
-      
+
     <div id="view_send_form" v-if="!spot.show && emailConfirmed">
-        <input type="button" class="btn4" value="Send spot" 
+        <input type="button" class="btn4" value="Send spot"
             @click="spot.show = !spot.show">
     </div>
-    
+
     <table id="send_spot_layout" v-if="spot.show">
         <tr>
             <td class="spot_call" style="color: #aaa;">DX call</td>
@@ -29,34 +29,36 @@
         </tr>
         <tr>
             <td class="spot_text text_btns" colspan="5">
-                <input type="button" class="add_text_btn" v-for="(item, idx) in qthLines" :value="item" 
-                    @click="addSpotText(item)" :key="idx"/> 
-                <input type="button" class="add_text_btn" :value="statusData.qth.loc" 
+                <input type="button" class="add_text_btn" v-for="(item, idx) in qthLines" :value="item"
+                    @click="addSpotText(item)" :key="idx"/>
+                <input type="button" class="add_text_btn" :value="statusData.qth.loc"
                     v-if="statusData && statusData.qth.loc"
-                    @click="addSpotText(statusData.qth.loc)"/> 
-                <input type="button" class="add_text_btn" value="UP" 
-                    @click="addSpotText('UP', true)"/> 
-                <input type="button" class="add_text_btn" value="FT8" 
-                    @click="addSpotText('FT8', true)"/> 
-                <input type="button" class="add_text_btn" value="FT4" 
-                    @click="addSpotText('FT4', true)"/> 
+                    @click="addSpotText(statusData.qth.loc)"/>
+                <input type="button" class="add_text_btn" value="UP"
+                    @click="addSpotText('UP', true)"/>
+                <input type="button" class="add_text_btn" value="FT8"
+                    @click="addSpotText('FT8', true)"/>
+                <input type="button" class="add_text_btn" value="FT4"
+                    @click="addSpotText('FT4', true)"/>
 
             </td>
         </tr>
     </table>
 
     <div id="spam" class="warning" v-if="spot.show && spot.disable && spot.showDisable"><div id="warning_border">
-        <span>Spam protection!</span> &nbsp; This spot can be sent after <b>{{spot.disable}}</b> 
+        <span>Spam protection!</span> &nbsp; This spot can be sent after <b>{{spot.disable}}</b>
         second{{spot.disable > 1 ? 's' : ''}}.
     </div></div>
- 
+
     <div id="spot_sent" class="ok_window" v-if="spot.success"><div id="ok_border">
         <span>OK!</span> &nbsp; Your spot was successfully sent.
     </div></div>
- 
+
     <div id="cluster_error" class="warning" v-if="spot.error"><div id="warning_border">
         {{spot.error}}
     </div></div>
+
+    <donate-block></donate-block>
 
 
         <table id="cluster">
@@ -65,7 +67,7 @@
                 <td class="band">{{spot.freq}}</td>
                 <td class="mode">{{spot.subMode ? spot.subMode : spot.mode}}</td>
                 <td class="call">
-                    <a :href="'http://qrz.com/db/' + spot.cs" target="_blank" 
+                    <a :href="'http://qrz.com/db/' + spot.cs" target="_blank"
                         rel="noopener" title="Link to QRZ.com">{{replace0(spot.cs)}}</a>
                 </td>
                 <td class="text">{{spot.text}}</td>
@@ -82,6 +84,7 @@ import {USER_FIELDS_COUNT, CLUSTER_SPOT_TEXT_LIMIT} from '../constants'
 import StationStatus from '../station-status'
 import {ACTION_POST} from '../store-user'
 import QTH_PARAMS from '../../public/static/js/qthParams.json'
+import DonateBlock from '../components/DonateBlock.vue'
 
 import {replace0} from '../utils'
 import tabMixin from '../station-tab-mixin'
@@ -92,6 +95,7 @@ export default {
   mixins: [tabMixin],
   name: 'StationCluster',
   props: ['stationSettings', 'logService'],
+  components: { DonateBlock },
   data () {
     return {
       tabId: 'cluster',
@@ -223,7 +227,7 @@ export default {
   computed: {
     ...mapGetters(['chatCallsign', 'emailConfirmed', 'stationCallsign']),
     statusData () {
-      return this.stationCallsign && this.stationCallsign in this.$store.state.activeStations.stations.active ? 
+      return this.stationCallsign && this.stationCallsign in this.$store.state.activeStations.stations.active ?
         this.$store.state.activeStations.stations.active[this.stationCallsign].status : {}
     },
     sendSpotButtonDisabled () {

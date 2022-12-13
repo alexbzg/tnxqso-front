@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 import UserCommunicationButtons from './UserCommunicationButtons'
 import UserBanButton from './UserBanButton'
 
@@ -55,6 +57,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['stationAdmin']),
     users () {
       const au = {
         'other': []
@@ -81,8 +84,7 @@ export default {
         } else {
           u.admin = false
         }
-        if (stationSettings && !u.admin && stationSettings.sponsors && 
-          stationSettings.sponsors.includes(u.chat_callsign)) {
+        if (this.stationAdmin && !u.admin && stationSettings?.sponsors?.includes(u.chat_callsign)) {
           u.sponsor = true
         }        
         if (u.chat && this.chat && ((u.station && u.station === this.station) ||

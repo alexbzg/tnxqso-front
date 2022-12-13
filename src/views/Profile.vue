@@ -126,7 +126,7 @@
                                 Locator
                             </td>
                             <td class="setting">
-                                <input type="checkbox" id="checkbox_log_audio" 
+                                <input type="checkbox" id="checkbox_log_audio"
                                     v-model="settings.log.columns.audio" />
                                 Audio
                             </td>

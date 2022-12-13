@@ -14,3 +14,17 @@
         s.async = true;
         t.parentNode.insertBefore(s, t);
     })(this, this.document, "yandexContextAsyncCallbacks");
+
+
+/*
+
+<!-- Yandex.RTB R-A-536531-1 -->
+<div id="yandex_rtb_R-A-536531-1"></div>
+<script>window.yaContextCb.push(()=>{
+  Ya.Context.AdvManager.render({
+    renderTo: 'yandex_rtb_R-A-536531-1',
+    blockId: 'R-A-536531-1'
+  })
+})</script>
+
+*/

@@ -241,7 +241,7 @@ export default {
         const force = !this.currentLocation
         this.currentLocation = dt.location
         this.centerLocation(force)
-        this.currentPopup.dateTime = dt.date + ' ' + dt.time
+        this.currentPopup.dateTime = (dt.locDate || dt.date) + ' ' + (dt.locTime || dt.time)
         this.currentPopup.speed = dt.speed ? 'speed: ' + dt.speed.toFixed( 1 ) + ' km/h' : null
         this.currentPopup.comments = dt.comments ? dt.comments : null
       }

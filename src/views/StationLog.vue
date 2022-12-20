@@ -27,7 +27,7 @@
                 <tr v-for="entry, idx in searchResultsRDA" :key="idx">
                     <td class="rda">{{searchRDA[idx]}}</td>
                     <td v-for="band in $options.BANDS" :key="band">
-                        <span v-for="mode in $options.MODES" :key="mode" v-show="entry[band][mode]">
+                        <span v-for="mode in entry[band]" :key="mode">
                             {{mode}}
                         </span>
                     </td>

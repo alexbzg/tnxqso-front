@@ -58,11 +58,21 @@
         {{spot.error}}
     </div></div>
 
-    <donate-block></donate-block>
-
+    <div id="cluster_filter">
+      <template
+        v-for="mode in $options.MODES"
+      >
+      <input 
+        type="checkbox" 
+        :key="mode"
+        @change="filterChange"
+        v-model="filter.modes[mode]"/>
+        {{mode}}
+      </template>
+    </div>
 
         <table id="cluster">
-            <tr v-for="(spot, idx) in data" :class="{new: spot.new, highlight: spot.highlight}" :key="idx">
+            <tr v-for="(spot, idx) in clusterSpots" :class="{new: spot.new, highlight: spot.highlight}" :key="idx">
                 <td class="time">{{spot.time}}z</td>
                 <td class="band">{{spot.freq}}</td>
                 <td class="mode">{{spot.subMode ? spot.subMode : spot.mode}}</td>
@@ -81,21 +91,25 @@
 import {mapActions, mapGetters} from 'vuex'
 
 import {USER_FIELDS_COUNT, CLUSTER_SPOT_TEXT_LIMIT} from '../constants'
+import { MODES } from '../ham-radio'
 import StationStatus from '../station-status'
 import {ACTION_POST} from '../store-user'
 import QTH_PARAMS from '../../public/static/js/qthParams.json'
-import DonateBlock from '../components/DonateBlock.vue'
 
 import {replace0} from '../utils'
 import tabMixin from '../station-tab-mixin'
+import storage from '../storage'
+
+const CLUSTER_FILTER_STORAGE_KEY = 'clusterFilter'
+
 export default {
-  USER_FIELDS_COUNT: USER_FIELDS_COUNT,
+  USER_FIELDS_COUNT,
+  MODES,
   $spotDisableTimeout: null,
   $clusterResultTimeout: null,
   mixins: [tabMixin],
   name: 'StationCluster',
   props: ['stationSettings', 'logService'],
-  components: { DonateBlock },
   data () {
     return {
       tabId: 'cluster',
@@ -112,7 +126,9 @@ export default {
         success: false,
         error: false,
         posting: false
-      }
+      },
+      filter: storage.load(CLUSTER_FILTER_STORAGE_KEY, 'local') || 
+            { modes: MODES.reduce((acc, mode) => ({ ...acc, [mode]: true }), {} ) }
     }
   },
   mounted () {
@@ -152,6 +168,9 @@ export default {
           vm.setSpotDisableTimeout()
         })
         .finally( function () { vm.spot.posting = false } )
+    },
+    filterChange () {
+      storage.save(CLUSTER_FILTER_STORAGE_KEY, this.filter, 'local')
     },
     addSpotText (txt, start) {
       let info = this.spot.info
@@ -246,6 +265,9 @@ export default {
         }
       }
       return r
+    },
+    clusterSpots () {
+      return this.data.filter( (spot) => this.filter.modes[spot.mode] )
     }
   }
 }

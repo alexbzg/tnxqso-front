@@ -1163,14 +1163,16 @@ table#send_spot_layout td input#button_send_spot{
 
 
 
-
+#cluster_filter input{
+    margin-left: 20px;
+}
 
 
 
 table#cluster {
     border-collapse: collapse;
     width: 800px;
-    margin: 20px auto 5px auto;
+    margin: 0px auto 5px auto;
     font-size: 18px;
 }
 table#cluster td{

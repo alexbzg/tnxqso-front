@@ -135,10 +135,17 @@ export default {
       ]
     }
   },
+  beforeRouteEnter (to, from, next) {
+    next( vm => {
+      if (vm.secret && !vm.$store.getters.siteAdmin)
+        vm.$router.push('/qthnowmap')
+    })
+  },
   mounted () {
     this.service = dataServiceFactory()
-    this.service.url = this.secret ? '/static/js/qth_now_locations_all.json' :
-      '/static/js/qth_now_locations.json'
+    this.service.url = this.secret && this.$store.getters.siteAdmin ? 
+        '/static/js/qth_now_locations_all.json' :
+        '/static/js/qth_now_locations.json'
     this.service.eventName = 'qth-now-locations-change'
     this.service.onUpdate(() => { this.updateLocations() })
     this.hndls = []

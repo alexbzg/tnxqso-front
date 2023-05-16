@@ -44,6 +44,7 @@
 </template>
 
 <script>
+
 import {LMap, LTileLayer, LWMSTileLayer, LControlLayers, LCircleMarker, LTooltip, LPopup, LControlAttribution} from 'vue2-leaflet'
 import {Icon} from 'leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -143,9 +144,7 @@ export default {
   },
   mounted () {
     this.service = dataServiceFactory()
-    this.service.url = this.secret && this.$store.getters.siteAdmin ? 
-        '/static/js/qth_now_locations_all.json' :
-        '/static/js/qth_now_locations.json'
+    this.service.url = this.serviceUrl
     this.service.eventName = 'qth-now-locations-change'
     this.service.onUpdate(() => { this.updateLocations() })
     this.hndls = []
@@ -168,8 +167,26 @@ export default {
       setInterval(function() {
         t.setTime()
       }, 60000)
+    },
+    setServiceUrl () {
+      if (this.service.url !== this.serviceUrl) {
+        this.service.url = this.serviceUrl
+        this.service.lastUpdated = null
+        this.service.load()
+      }
     }
-
+  },
+  computed: {
+    serviceUrl () {
+        return this.secret && this.$store.getters.siteAdmin ? 
+            '/static/js/qth_now_locations_all.json' :
+            '/static/js/qth_now_locations.json'
+    }
+  },
+  watch: {
+    serviceUrl () {
+      this.setServiceUrl()
+    }
   }
 }
 </script>

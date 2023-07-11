@@ -32,9 +32,9 @@
             <router-link to="/chat" tag="div" id="tab_chat" class="tab"
                 v-if="enable.chat"
                 :class="{updated_tab: $store.state.services.chat && $store.state.services.chat.new}">Chat</router-link>
-            <router-link to="/gallery" tag="div" id="tab_gallery" class="tab"
-                v-if="enable.gallery"
-                :class="{updated_tab: $store.state.services.gallery && $store.state.services.gallery.new}">Gallery</router-link>
+            <router-link to="/blog" tag="div" id="tab_blog" class="tab"
+                v-if="enable.blog"
+                :class="{updated_tab: $store.state.services.gallery && $store.state.services.gallery.new}">Blog</router-link>
             <router-link to="/donate" tag="div" id="tab_donate" class="tab"
                 v-if="enable.donate"
                 :class="{updated_tab: stationSettings && stationSettings.new.donate &&

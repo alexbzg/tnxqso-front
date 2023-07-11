@@ -2241,19 +2241,18 @@ table#top_qso select{    padding: 5px 20px; }
 
 .media{
     display: inline-block;
-    width: 202px;
-    height: 260px;
-    margin: 0 20px;
+    width: 800px;
+    margin: 0 0px 30px 0px;
     position: relative;
-    overflow: hidden;
-    padding: 0 0 20px 0;
-    font-size: 14px;
-    line-height: 12px;
+    padding: 5px 5px 5px 5px;
+    border: 1px solid #ddd;
 }
 
 .media img{
-    border: 1px solid #ddd;
+    border: 1px solid #eee;
     cursor: pointer;
+    float: left;
+    margin: 0px 20px 0px 0;
 }
 .media .icon_video{
     position: absolute;
@@ -2276,56 +2275,62 @@ table#top_qso select{    padding: 5px 20px; }
 }
 
 .media .date{
-    padding: 2px 5px;
     font-size: 12px;
-    text-align: right;
+    line-height: 12px;
+    padding: 2px 0;
     color: #333;
-    background: url('/static/images/background_white_80.png') top left;
     position: absolute;
-    top: 186px;
-    right: 0px;
-    display: none;
-    width: 200px;
+    top: -17px;
+    left: -1px;
+    width: 130px;
     text-align: center;
+    background-color: #ddd;
 }
 
 .media .caption{
-    width: 200px;
-    height: 50px;
-    overflow: hidden;
-    font-size: 16px;
-    line-height: 16px;
+    text-align: left;
+    white-space: pre-wrap;
 }
 
 .media_upload_form{
+    width: 800px;
+    margin: 0 0px 30px 0px;
+    display: inline-block;
     border:1px solid #e0e0e0;
     background-color: #f0f0f0;
     text-align: center;
 }
+
+#input_file {
+    width: 200px;
+    float: left;
+    height: 150px;
+    padding-top: 50px;
+}
+
 .media_upload_form label{
     display: inline-block;
     border:1px solid #999;
-    background-color: #BBB;
     cursor: pointer;
     padding: 3px 15px;
     margin-top: 5px;
-    box-shadow: 3px 3px 6px rgba(0,0,0,0.3); /* Параметры тени */
+    box-shadow: 3px 3px 6px rgba(0,0,0,0.1); /* Параметры тени */
 }
 
-.media input#select_file, .media input#upload_file {
+.media_upload_form input#select_file, .media input#upload_file {
     width: 180px;
     border:1px solid #aaa;
     margin: 10px 0;
     cursor: pointer;
 }
-.media textarea{
-    width: 170px;
-    height: 50px;
+.media_upload_form textarea{
+    width: 560px;
+    height: 150px;
     border: 1px solid #ccc;
     background-color: #fff;
-    margin: 0px auto 10px auto;
-    text-align: center;
-     font-size: 16px;
+    margin: 10px auto 0px auto;
+    text-align: left;
+    font-size: 16px;
 }
 #selected_filename{
     font-weight: bold;

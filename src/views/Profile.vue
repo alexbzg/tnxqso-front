@@ -237,17 +237,18 @@
                 <input type="checkbox" id="checkbox_stats" v-model="settings.enable.stats" /> <span v-html="getString('STATS_SHOW')"/><br/>
             </div>
 
-            <!-- GALLERY -->
+            <!-- BLOG -->
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info"
-                    @click="infoPopup= getString('GALLERY_POPUP')">
-                <input type="checkbox" id="checkbox_gallery" v-model="settings.enable.gallery" /> <span v-html="getString('GALLERY_SHOW')"/><br/>
-                <div class="block_settings" v-if="settings.enable.gallery">
+                    @click="infoPopup= getString('BLOG_POPUP')">
+                <input type="checkbox" id="checkbox_blog" v-model="settings.enable.blog" /> 
+                    <span v-html="getString('BLOG_SHOW')"/><br/>
+                <div class="block_settings" v-if="settings.enable.blog">
                     <br/>
-                    <input type="checkbox" id="checkbox_gallery_delete"
-                        v-model="settings.skipConfirmation.galleryDelete" />
-                    <span v-html="getString('GALLERY_CHECK')"/><br/><br/>
-                    <input type="button" id="button_clear_photos" class="btn" :value="getString('GALLERY_CLEAR')"
+                    <input type="checkbox" id="checkbox_blog_delete"
+                        v-model="settings.skipConfirmation.blogDelete" />
+                    <span v-html="getString('BLOG_CHECK')"/><br/><br/>
+                    <input type="button" id="button_clear_photos" class="btn" :value="getString('BLOG_CLEAR')"
                         @click="clearGallery"/>
 
                 </div>
@@ -443,8 +444,8 @@ export default {
       this.$router.push( '/login' )
     },
     saveSettings () {
-      if (this.settings.station.info.length + this.settings.donate.text.length > 524288) {
-        alert('The size limit for all your station information is 1 Megabyte.\n' +
+      if (this.settings.station.info.length + this.settings.donate.text.length > 5024288) {
+        alert('The size limit for all your station information is 5 Megabytes.\n' +
                 'Please reduce the quantity and size of your images.\n' +
                 'Максимальный допустимый размер всех ваших данных - 1 мегабайт.\n' +
                 'Пожалуйста, уменьшите количество и объем изображений')
@@ -492,7 +493,7 @@ export default {
       }
     },
     clearGallery () {
-      if (window.confirm( 'Do you really want to delete all gallery content?') ) {
+      if (window.confirm( 'Do you really want to delete all blog content?') ) {
         this[ACTION_POST]({path: 'gallery', data: {clear: 1}})
       }
     },

@@ -127,8 +127,8 @@ export default {
         field: 0,
         fieldValue: null
       },
-      types: ['QSO', 'Calls'],
-      type: 'QSO',
+      types: ['Calls', 'QSO'],
+      type: 'Calls',
       pending: false
     }
   },

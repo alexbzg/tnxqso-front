@@ -9,7 +9,12 @@ body, html{
     color: #333;
     background-color: #e7e7e7;
     text-align: center;
+    position: relative;
 }
+.modal-open{
+    overflow: hidden;
+}
+
 input, button, textarea, select{
     font-family: 'Jost', sans-serif;
     font-size: 18px;
@@ -2225,32 +2230,38 @@ table#top_qso select{    padding: 5px 20px; }
 
 
 
-/*              G A L L E R Y           */
+/*              B L O G         */
 
-#gallery{
-    margin: 30px 0;
+#blog{
+    margin: 20px 0;
     position: relative;
 }
 #add_image{
-    position: absolute;
-    left: 40px;
-    top: 0px;
+    width: 50px;
+    margin: 0px auto 20px auto;
+    cursor: pointer;
+}
+#add_image img{
     cursor: pointer;
 }
 
 
 .media{
     display: inline-block;
-    width: 800px;
-    margin: 0 0px 30px 0px;
+    width: 200px;
+    height: 250px;
+    overflow: hidden;
+    margin: 0 15px 30px 15px;
     position: relative;
     padding: 5px 5px 5px 5px;
     border: 1px solid #ddd;
+    cursor: pointer;
+    line-height: 14px;
+    font-size: 14px;
 }
 
 .media img{
     border: 1px solid #eee;
-    cursor: pointer;
     float: left;
     margin: 0px 20px 0px 0;
 }
@@ -2265,36 +2276,36 @@ table#top_qso select{    padding: 5px 20px; }
 .media .delete{
     position: absolute;
     top: 0;
-    right: 0;
+    right: -20px;
     cursor: pointer;
     border: none;
     display: none;
 }
-.media:hover .delete, .media:hover .date{
+.media:hover .delete{
     display: block;
 }
 
 .media .date{
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 210px;
     font-size: 12px;
     line-height: 12px;
     padding: 2px 0;
-    color: #333;
-    position: absolute;
-    top: -17px;
-    left: -1px;
-    width: 130px;
+    color: #999;
     text-align: center;
-    background-color: #ddd;
+    border-top: 1px solid #ddd;
+    background-color: #f5f5f5;
 }
 
 .media .caption{
-    text-align: left;
-    white-space: pre-wrap;
+    text-align: center;
 }
 
 .media_upload_form{
-    width: 800px;
-    margin: 0 0px 30px 0px;
+    width: 950px;
+    margin: 0 100px 50px 100px;
     display: inline-block;
     border:1px solid #e0e0e0;
     background-color: #f0f0f0;
@@ -2324,7 +2335,7 @@ table#top_qso select{    padding: 5px 20px; }
     cursor: pointer;
 }
 .media_upload_form textarea{
-    width: 560px;
+    width: 720px;
     height: 150px;
     border: 1px solid #ccc;
     background-color: #fff;
@@ -2341,7 +2352,6 @@ table#top_qso select{    padding: 5px 20px; }
 .media input#upload_file {
     box-shadow: 3px 3px 6px rgba(0,0,0,0.3); /* Параметры тени */
 }
-
 
 
 

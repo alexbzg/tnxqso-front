@@ -42,7 +42,7 @@
                 <a :href="stationURL + '#/cluster'" v-if="stationSettings.enable.cluster">Cluster</a>
                 <a :href="stationURL + '#/stats'" v-if="stationSettings.enable.stats">Stats</a>
                 <a :href="stationURL + '#/chat'" v-if="stationSettings.enable.chat">Chat</a>
-                <a :href="stationURL + '#/gallery'" v-if="stationSettings.enable.gallery">Gallery</a>
+                <a :href="stationURL + '#/blog'" v-if="stationSettings.enable.blog">Blog</a>
                 <a :href="stationURL + '#/donate'" v-if="stationSettings.enable.donate">Donate</a>
             </div>
             <div class="title">{{stationSettings.station.title}}</div>

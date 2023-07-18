@@ -4,7 +4,7 @@
         :bounds="bounds"
         @ready="map_ready"
         ref="map"
-        :options="{zoomControl: false, attributionControl: false}">
+        :options="{attributionControl: false}">
         <l-control-layers :hide-single-base="true"/>
         <l-tile-layer v-for="layer in baseLayers" :key="layer.id" :url="url" :options="{id: layer.id}"
             layer-type="base" :name="layer.name" :visible="layer.visible"/>
@@ -111,6 +111,14 @@ export default {
           minZomm: 8
         },
         {
+          qthCountry: 'KZ',
+          name: 'KDA',
+          layers: 'KDA_layer',
+          styles: 'kda',
+          visible: true,
+          minZoom: 5
+        },
+        {
           qthCountry: 'IT',
           name: 'WAIP',
           layers: 'WAIP2',
@@ -125,7 +133,7 @@ export default {
           styles: 'WAB2',
           visible: false,
           minZoom: 11
-        },
+        }, 
         {
           name: 'Locator',
           layers: 'QTH,GRID576F',

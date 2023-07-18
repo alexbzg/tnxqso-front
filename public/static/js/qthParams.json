@@ -3,6 +3,7 @@
     "defaultTitle": "QTH field",
     "countries": {
         "RU": {"title": "Russia", "fields": ["RDA", "RAFA"]},
+        "KZ": {"title": "Kazakhstan", "fields": ["KDA"]},
         "IT": {"title": "Italy", "fields": ["WAIP"]},
         "GB": {"title": "United Kingdom", "fields": ["WAB"]}
     }

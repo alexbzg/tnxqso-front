@@ -6,7 +6,7 @@
         :zoom="map_settings.zoom"
         :center.sync="center"
         :bounds="bounds"
-        :options="{zoomControl: false, attributionControl: false}"
+        :options="{attributionControl: false}"
         @ready="map_ready"
         @update:zoom="update_zoom"
         >
@@ -115,6 +115,14 @@ const OVERLAYS = [
           minZomm: 8
         },
         {
+          qthCountry: 'KZ',
+          name: 'KDA',
+          layers: 'KDA_layer',
+          styles: 'kda',
+          visible: true,
+          minZoom: 5
+        },
+        {
           qthCountry: 'IT',
           name: 'WAIP',
           layers: 'WAIP2',
@@ -136,8 +144,7 @@ const OVERLAYS = [
           styles: 'WAB2',
           visible: true,
           minZoom: 11
-        }
-      ]
+        }      ]
 
 export default {
   name: 'StationMap',

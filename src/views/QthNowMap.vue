@@ -115,7 +115,7 @@ export default {
           name: 'KDA',
           layers: 'KDA_layer',
           styles: 'kda',
-          visible: true,
+          visible: false,
           minZoom: 5
         },
         {

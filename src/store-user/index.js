@@ -6,6 +6,7 @@ const STORAGE_KEY_USER_TOKEN = 'userToken'
 
 export const MUTATE_USER = 'mutateUser'
 
+export const ACTION_REQUEST = 'actnRqst'
 export const ACTION_POST = 'actionPost'
 export const ACTION_LOGIN = 'actionLogin'
 export const ACTION_LOAD_USER = 'actionLoadUser'
@@ -196,11 +197,11 @@ export const storeUser = {
       })
         .then(() => {commit(MUTATE_READ_MESSAGES, payload)})
     },
-    [ACTION_POST] ({commit, state}, payload) {
+    [ACTION_REQUEST] ({commit, state}, payload) {
       if (!payload.data.token && !payload.skipToken) {
         payload.data.token = state.user.token
       }
-      return request.post(payload.path, payload.data, payload.multipart)
+      return request.perform(payload.path, payload.data, payload.multipart, payload.method || 'post')
         .catch(error => {
           let msg = ''
           if (error.status === 400 || error.status === 403 || error.status == 401) {
@@ -218,6 +219,9 @@ export const storeUser = {
           }
           throw error
         })
+    },
+    [ACTION_POST] ({dispatch}, payload) {
+        return dispatch(ACTION_REQUEST, payload)
     }
   }
 }

@@ -78,13 +78,22 @@ export const storeServices = {
   actions: {
     [ACTION_UPDATE_SERVICE] ({commit, state}, payload) {
       const s = state[payload]
-      return request.getJSON(s.name, s.station)
+      return (s.url ? request.get(s.url) : request.getJSON(s.name, s.station))
         .then(response => {
           if (Array.isArray(response.data)) {
-            commit(MUTATE_SERVICE_DATA, {service: payload, response: response})
+            commit(MUTATE_SERVICE_DATA, {service: payload, response })
           }
         })
-        .catch(() => {})
+        .catch((error) => {
+            if (error.status === 404) {
+                commit(MUTATE_SERVICE_DATA, {
+                    service: payload, 
+                    response: {
+                        data: [],
+                        headers: {}
+                    }})
+            }
+        })
     },
     [ACTION_SERVICE_MARK_READ] ({commit, state}, payload) {
       const s = state[payload.service]

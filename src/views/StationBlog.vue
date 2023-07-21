@@ -23,14 +23,14 @@
 
             <template v-if="item.file">
                 <img class="icon_video" src="/static/images/icon_video.png" width='80'
-                    v-if="item.type === 'video'"/>
+                    v-if="item.file_type === 'video'"/>
 
-                <img :src="stationPath + item.thumb"/>
+                <img :src="stationPath + item.file_thumb"/>
 
             </template>
 
-            <div class="date" v-if="item.datetime">{{item.datetime}}</div>
-            <div class="caption">{{item.caption}}</div>
+            <div class="date" v-if="item.post_datetime">{{item.post_datetime}}</div>
+            <div class="caption">{{item.txt}}</div>
         </div>
 
 
@@ -39,11 +39,11 @@
             @close="closeModal()"
         >
             <template v-slot:body>
-                <template v-if="activePost.type">
-                    <img :src="stationPath + activePost.file" v-if="activePost.type === 'image'"/>
-                    <video v-else controls :src="stationPath + activePost.file" :width="activePost.width"/>
+                <template v-if="activePost.file_type">
+                    <img :src="stationPath + activePost.file" v-if="activePost.file_type === 'image'"/>
+                    <video v-else controls :src="stationPath + activePost.file"/>
                 </template>
-                <div class="caption">{{activePost.caption}}</div>
+                <div class="caption">{{activePost.txt}}</div>
             </template>
         </Modal>
     </div>
@@ -55,7 +55,7 @@ import {mapActions, mapState, mapGetters} from 'vuex'
 import ServiceDisplay from './ServiceDisplay'
 import Modal from '../components/Modal'
 
-import {ACTION_POST} from '../store-user'
+import {ACTION_REQUEST} from '../store-user'
 import {ACTION_UPDATE_SERVICE} from '../store-services'
 import {isAdmin} from '../store-station'
 import {urlCallsign} from '../utils'
@@ -79,6 +79,7 @@ export default {
   computed: {
     ...mapState({
       skipConfirmation: state => state.user.user.settings.skipConfirmation,
+      stationAdmin: state => state.stationSettings.admin
     }),
     ...mapGetters(['stationCallsign']),
     stationPath () {
@@ -89,7 +90,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions([ACTION_POST, ACTION_UPDATE_SERVICE]),
+    ...mapActions([ACTION_REQUEST, ACTION_UPDATE_SERVICE]),
     openModal (item) {
       this.activePost = item
       document.body.classList.add('modal-open')
@@ -105,9 +106,14 @@ export default {
       this.lbIndex = idx
       this.$nextTick(() => { this.$refs.lb.show() })
     },
-    serverPost (data, multipart) {
+    serverPost (data, multipart, path, method) {
       this.posting = true
-      return this[ACTION_POST]({path: 'gallery', data: data, multipart: multipart})
+      return this[ACTION_REQUEST]({
+        path: `blog/${path || ''}`, 
+        data, 
+        multipart,
+        method
+        })
         .then(() => { this[ACTION_UPDATE_SERVICE](this.serviceName) })
         .finally(() => { this.posting = false })
     },
@@ -121,8 +127,8 @@ export default {
     },
     deleteItem (id) {
       if (this.skipConfirmation.galleryDelete ||
-        confirm('Удалить изображение или видео?\nDo you really want to delete this image or video?')) {
-        this.serverPost({delete: id})
+        confirm('Удалить запись?\nDo you really want to delete this post?')) {
+        this.serverPost({}, false, id, 'delete')
       }
     }
   }

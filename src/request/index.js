@@ -29,23 +29,28 @@ export default {
     throw e
   },
 
-  post (URL, data, multipart) {
+  perform (URL, data, multipart, method='post') {
+    const url = API_URL + URL
     if (multipart) {
       const fData = new FormData()
       for (const key in data) {
         fData.append(key, data[key])
       }
       return axios({
-        method: 'post',
-        url: API_URL + URL,
+        method,
+        url,
         data: fData,
         headers: {'Content-Type': 'multipart/form-data'}
       })
         .catch(this.onError)
     } else {
-      return axios.post(API_URL + URL, data)
+      return axios({ method, url, data })
         .catch(this.onError)
     }
+  },
+
+  post (URL, data, multipart) {
+    return this.perform(URL, data, multipart)
   },
 
   get (URL) {

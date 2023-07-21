@@ -12,6 +12,16 @@
         >
           <button
             type="button"
+            class="btn-left"
+          ><img src="/static/images/icon_left.png"/>
+          </button>
+          <button
+            type="button"
+            class="btn-right"
+          ><img src="/static/images/icon_right.png"/>
+          </button>
+          <button
+            type="button"
             class="btn-close"
             @click="close"
             aria-label="Close modal"
@@ -94,7 +104,7 @@
 
   .modal-header,
   .modal-footer {
-    height: 35px;
+    height: 50px;
     display: flex;
   }
 
@@ -120,6 +130,29 @@
     background: #fff;
     margin-right: 5px;
   }
+
+  .btn-right {
+    position: absolute;
+    top: 0;
+    right: 50px;
+    border: none;
+    padding: 0px;
+    cursor: pointer;
+    background: #fff;
+    margin-right: 5px;
+  }
+  .btn-left {
+    position: absolute;
+    top: 0;
+    right: 90px;
+    border: none;
+    padding: 0px;
+    cursor: pointer;
+    background: #fff;
+    margin-right: 5px;
+  }
+
+
 
   .btn-green {
     color: white;

@@ -17,7 +17,7 @@
         </div>
 
         <div class="media" v-for="(item, idx) in serviceData" :key="idx"
-            @click="openModal(item)">
+            @click="openEntry(item)">
             <img class="delete" src="/static/images/delete.png" width='30' v-if="isAdmin"
                 @click.stop="deleteItem(item.id)"/>
 
@@ -29,23 +29,24 @@
 
             </template>
 
-            <div class="date" v-if="item.post_datetime">{{item.post_datetime}}</div>
+            <div class="gradient">&nbsp;</div>
+            <div class="post_info" v-if="item.post_datetime">
+              <img  class="post_comments" src="/static/images/icon_comment.png"/>
+              <img class="post_like" src="/static/images/icon_post_like.png"/>
+              <span class="post_like_number">15</span>
+              <span class="post_date">{{item.post_datetime}}</span>
+            </div>
             <div class="caption">{{item.txt}}</div>
         </div>
 
 
-        <Modal 
-            v-if="activePost != null"
-            @close="closeModal()"
-        >
-            <template v-slot:body>
-                <template v-if="activePost.file_type">
-                    <img :src="stationPath + activePost.file" v-if="activePost.file_type === 'image'"/>
-                    <video v-else controls :src="stationPath + activePost.file"/>
-                </template>
-                <div class="caption">{{activePost.txt}}</div>
-            </template>
-        </Modal>
+        <blog-entry
+            v-if="activeEntry != null"
+            :entry="activeEntry"
+            :navigation-controls="entryNavigationControls"
+            @close="closeEntry"
+            @navigate="entryNavigation"
+        />
     </div>
 </template>
 
@@ -53,17 +54,16 @@
 import {mapActions, mapState, mapGetters} from 'vuex'
 
 import ServiceDisplay from './ServiceDisplay'
-import Modal from '../components/Modal'
+import BlogEntry from '../components/BlogEntry'
 
 import {ACTION_REQUEST} from '../store-user'
 import {ACTION_UPDATE_SERVICE} from '../store-services'
-import {isAdmin} from '../store-station'
-import {urlCallsign} from '../utils'
+import {stationPath, isAdmin} from '../store-station'
 
 export default {
   extends: ServiceDisplay,
-  components: {Modal},
-  name: 'StationGallery',
+  components: {BlogEntry},
+  name: 'StationBlog',
   data () {
     return {
       showUpload: false,
@@ -73,7 +73,7 @@ export default {
         caption: null
       },
       posting: false,
-      activePost: null
+      activeEntry: null
     }
   },
   computed: {
@@ -82,35 +82,40 @@ export default {
       stationAdmin: state => state.stationSettings.admin
     }),
     ...mapGetters(['stationCallsign']),
-    stationPath () {
-      return '/static/stations/' + urlCallsign(this.stationCallsign) + '/'
-    },
-    isAdmin () {
-      return isAdmin()
+    stationPath,
+    isAdmin,
+    entryNavigationControls () {
+      const r = [0, 0]
+      if (this.activeEntry) {
+        const idx = this.serviceData.indexOf(this.activeEntry)
+        r[0] = idx > 0
+        r[1] = idx < this.serviceData.length - 1
+      }
+      return r
     }
   },
   methods: {
     ...mapActions([ACTION_REQUEST, ACTION_UPDATE_SERVICE]),
-    openModal (item) {
-      this.activePost = item
-      document.body.classList.add('modal-open')
+    openEntry (item) {
+      this.activeEntry = item
     },
-    closeModal () {
-      this.activePost = null
-      document.body.classList.remove('modal-open')
+    closeEntry () {
+      this.activeEntry = null
+    },
+    entryNavigation (shift) {
+      const idx = this.serviceData.indexOf(this.activeEntry) + shift
+      if (idx > -1 && idx < this.serviceData.length)
+        this.activeEntry = this.serviceData[idx]
+
     },
     uploadFileChange () {
       this.upload.file = this.$refs.fileInput.files[0]
     },
-    openLightbox (idx) {
-      this.lbIndex = idx
-      this.$nextTick(() => { this.$refs.lb.show() })
-    },
     serverPost (data, multipart, path, method) {
       this.posting = true
       return this[ACTION_REQUEST]({
-        path: `blog/${path || ''}`, 
-        data, 
+        path: `blog/${path || ''}`,
+        data,
         multipart,
         method
         })

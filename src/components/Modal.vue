@@ -1,32 +1,31 @@
 <template>
   <transition name="modal-fade">
-    <div class="modal-backdrop">
+    <div class="modal-backdrop"
+      @click="close"
+      >
       <div class="modal"
         role="dialog"
         aria-labelledby="modalTitle"
         aria-describedby="modalDescription"
+        @click.stop=""
       >
         <header
           class="modal-header"
           id="modalTitle"
         >
-          <button
-            type="button"
-            class="btn-left"
-          ><img src="/static/images/icon_left.png"/>
-          </button>
-          <button
-            type="button"
-            class="btn-right"
-          ><img src="/static/images/icon_right.png"/>
-          </button>
+
+          <slot name="header">
+          </slot>
+          
           <button
             type="button"
             class="btn-close"
             @click="close"
             aria-label="Close modal"
-          ><img src="/static/images/icon_close.png"/>
+          >
+            <img src="/static/images/icon_close.png"/>
           </button>
+
         </header>
 
         <section
@@ -47,14 +46,24 @@
 </template>
 
 <script>
-  export default {
-    name: 'Modal',
-    methods: {
-      close() {
-        this.$emit('close')
-      },
+
+const BODY_CLASS_NAME = 'modal-open'
+
+export default {
+  name: 'Modal',
+  mounted() {
+    document.body.classList.add(BODY_CLASS_NAME)
+  },
+  beforeDestroy() {
+    document.body.classList.remove(BODY_CLASS_NAME)
+  },
+  methods: {
+    close() {
+      this.$emit('close')
     },
-  }
+  },
+}
+
 </script>
 
 
@@ -71,6 +80,7 @@
     justify-content: center;
     overflow: auto;
     align-items: flex-start;
+    z-index: 2;
   }
 
   .modal {
@@ -97,18 +107,19 @@
   }
 
 .modal-backdrop .caption{
-  padding: 0 50px;
+  padding: 20px 50px;
   text-align: left;
 }
 
 
   .modal-header,
   .modal-footer {
-    height: 50px;
+    height: 40px;
     display: flex;
   }
-
-  .modal-header {
+  .modal-header{
+    border: 1px solid #ddd;
+    background-color: #f0f0f0;
     position: relative;
   }
 
@@ -120,38 +131,53 @@
     padding: 0px 10px;
   }
 
-  .btn-close {
-    position: absolute;
-    top: 0;
-    right: 0;
+  .btn-close, .btn-translate {
+    float: right;
     border: none;
-    padding: 0px;
+    padding: 5px 5px 0 0px;
     cursor: pointer;
-    background: #fff;
-    margin-right: 5px;
+    margin: 0;
+  }
+  .btn-translate {
+    padding: 7px 15px 0 0;
   }
 
+
+  .navigation{
+    display: flex;
+    margin: 0 auto;
+    align-items: center;
+    font-size: 14px;
+    color: #777;
+  }
   .btn-right {
-    position: absolute;
-    top: 0;
-    right: 50px;
     border: none;
     padding: 0px;
     cursor: pointer;
-    background: #fff;
-    margin-right: 5px;
+    margin: 0 0 0 20px;
+    float: right;
+    height: 32px;
   }
   .btn-left {
-    position: absolute;
-    top: 0;
-    right: 90px;
     border: none;
     padding: 0px;
     cursor: pointer;
-    background: #fff;
-    margin-right: 5px;
+    margin: 0 20px 0 0;
+    float: left;
+    height: 32px;
   }
 
+
+  .btn-like {
+    border: none;
+    margin: 0;
+    padding:  0 0 0 10px;
+    cursor: pointer;
+    margin: 5px 0 0 5px;
+  }
+  span.like{
+    margin-top: 10px;
+  }
 
 
   .btn-green {

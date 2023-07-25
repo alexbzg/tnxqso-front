@@ -12,6 +12,7 @@ import talksInit from '../talks-init'
 import {storeActiveStations, activeStationsInit, createStationStatusService, MUTATE_ADD_ACTIVE_STATION} 
   from '../store-active-stations'
 import stompClient from '../stomp-client'
+import {urlCallsign} from '../utils'
 
 const store = new Vuex.Store({
   modules: {
@@ -65,6 +66,10 @@ export function isAdmin () {
     return false
   }
   return store.getters.siteAdmin || store.state.stationSettings.admin === store.getters.userCallsign
+}
+
+export function stationPath () {
+  return `/static/stations/${urlCallsign(store.state.stationSettings.station.callsign)}/`
 }
 
 export default store

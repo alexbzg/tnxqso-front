@@ -31,8 +31,8 @@
             @update:visible="update_overlay(layer.name, $event)"
             />
 
-        <l-geo-json 
-            :geojson="track" 
+        <l-geo-json
+            :geojson="track"
             ref="geoJsonTrack"
             :options="{className: 'map-geojson-track'}"
             >
@@ -58,6 +58,9 @@
         </l-marker>
       </l-map>
 
+      <div class="weather">
+        <img src="/static/images/icon_weather.png" title='Realtime weather' />
+      </div>
       <input type="checkbox" v-model="map_settings.centerLocation" @change="updateCenterLocation"/> Center map to station
 
     </div>

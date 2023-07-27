@@ -11,7 +11,7 @@
           <span class="like">15</span>
           <span class="navigation">
             <button
-              v-if="navigationControls && navigationControls[0]"  
+              v-if="navigationControls && navigationControls[0]"
               type="button"
               class="btn-left"
               @click="$emit('navigate', -1)"
@@ -26,12 +26,11 @@
             ><img src="/static/images/icon_right.png"/>
             </button>
           </span>
-          <button
-            type="button"
-            class="btn-translate"
-            aria-label="Translate post"
-          ><img src="/static/images/icon_translate_circle.png"/>
-          </button>
+          <translate-link
+            v-if="entry.txt"
+            :text="entry.txt"
+            title="Translate this post"
+          />
         </template>
 
         <template v-slot:body>
@@ -40,28 +39,136 @@
                 <video v-else controls :src="stationPath + entry.file"/>
             </template>
             <div class="caption">{{entry.txt}}</div>
+
+            <h4>{{getString('COMMENTS')}}</h4>
+            <div
+                class="add_comment"
+                >
+                <chat-callsign-edit/>
+                <input type="text"
+                    id="comment_text"
+                    :placeholder="getString('COMMENT')"
+                    v-model="commentText"
+                />
+                <button @click="postComment()" :disabled="!postCommentButtonEnabled">OK</button>
+            </div>
+            <table class="comments">
+                <tr
+                    v-for="(comment, idx) in comments"
+                    :key="idx"
+                    :class="{admin: isChatAdmin(comment.user)}"
+                    >
+                    <td class="user">
+                        <user-ban-button :callsign="comment.user"></user-ban-button>
+                        <span class="call">{{replace0(comment.chat_callsign || comment.user)}}</span>
+                        <br/>
+                        <span class="date_time">{{comment.comment_datetime}}</span>
+                        <user-communication-buttons
+                            :chat-callsign="comment.chat_callsign"
+                            :callsign="comment.user"
+                            :pm_enabled_fallback="comment.pm_enabled"
+                            :chat="true"
+                            @chat-reply="replyTo"
+                        />
+                    </td>
+                    <td class="message">
+                        <img class="delete_btn" src="/static/images/delete.png" v-if="canDelete(comment)"
+                            title="Delete this message" @click="deleteComment(comment)"/>
+                        <translate-link
+                            :text="comment.text"
+                            title="Translate this comment"
+                            />
+                        <span class="message_to" v-for="callsign in comment.to" :key="callsign"
+                            :class="{personal: callsign === chatCallsign}">
+                            &rArr; {{callsign}}
+                        </span>
+                        <span class="message_text" v-html="comment.text"></span>
+                    </td>
+                </tr>
+            </table>
+
+
         </template>
     </Modal>
 </template>
 
 <script>
+import {mapActions, mapGetters} from 'vuex'
+
 import {stationPath, isAdmin} from '../store-station'
+import {ACTION_REQUEST} from '../store-user'
+import request from '../request'
+import {replace0} from '../utils'
+
+import LocalizationMixin from '../localization-mixin'
 
 import Modal from './Modal'
+import UserCommunicationButtons from './UserCommunicationButtons'
+import UserBanButton from './UserBanButton'
+import TranslateLink from './TranslateLink'
+import ChatCallsignEdit from './ChatCallsignEdit'
+
+import {parseMsgText, replyTo} from '../chat-utils'
 
 export default {
-  components: {Modal},
+  mixins: [LocalizationMixin],
+  components: {Modal, UserCommunicationButtons, UserBanButton, TranslateLink, ChatCallsignEdit},
   props: ['entry', 'navigationControls'],
   name: 'BlogEntry',
   data () {
     return {
+      pending: false,
+      comments: [],
+      commentText: ''
     }
   },
+  mounted () {
+    this.getComments()
+  },
   methods: {
+    replace0,
+    ...mapActions([ACTION_REQUEST]),
+    getComments () {
+      request.get(`/aiohttp/blog/${this.entry.id}/comments`)
+        .then( response => {
+            this.comments = response.data.map( msg => {
+                console.log(`${msg.user} ${this.isChatAdmin(msg.user)}`)
+                return ({ ...msg, ...parseMsgText(msg.txt) })
+            } )
+        })
+    },
+    postComment () {
+      this[ACTION_REQUEST]({
+        path: `blog/${this.entry.id}/comments`,
+        data: {text: this.commentText}
+        })
+        .then( () => {
+          this.commentText = ''
+          this.getComments()
+        })
+    },
+    canDelete (comment) {
+      return isAdmin() || this.userCallsign === comment.user
+    }, 
+    replyTo (callsign) {
+      this.commentText = replyTo(callsign, this.commentText)
+    }
+
   },
   computed: {
+    ...mapGetters(['userCallsign', 'chatCallsign', 'isChatAdmin']),
     stationPath,
-    isAdmin
+    isAdmin,
+    postCommentButtonEnabled () {
+      return !this.pending && this.commentText
+    }
+  },
+  watch: {
+    entry () {
+      this.comments = []
+      this.commentText = ''
+      this.getComments()
+    }
   }
 }
 </script>

@@ -5,8 +5,7 @@
             <tbody>
                 <tr>
                     <td>
-                        <input type="text" id="your_call" placeholder="Chat callsign"
-                          v-model="chatCallsignField" @blur="chatCallsignBlur"/><br/>
+                        <chat-callsign-edit/><br/>
                         <input type="text" id="your_name" placeholder="Chat name"
                           v-model="userNameField" @blur="userNameBlur"/>
                     </td>
@@ -17,7 +16,7 @@
                             title="*** Закреплённое сообщение / *** Pinned message"
                             @click="pinMsg">
                         <input type="text" id="message_text"
-                          v-model="messageText" @keyup="onTyping" ref="msgTextInput"/>
+                          v-model.trim="messageText" @keyup="onTyping" ref="msgTextInput"/>
                         <img id="smile_btn" src="/static/images/smiles/01.gif"
                               @click="showSmilies = !showSmilies"/>
                         <button @click="buttonClick()" :disabled="!postButtonEnabled">OK</button>
@@ -54,20 +53,20 @@
                     <br/>
                     <span class="date_time">{{msg.date}} {{msg.time}}</span>
                     <user-communication-buttons
-                        :chat-callsign="msg.user" :callsign="msg.cs" :chat="true"
+                        :chat-callsign="msg.user" 
+                        :callsign="msg.cs" 
+                        :chat="true"
                         :pm_enabled_fallback="msg.pm_enabled"
-                        @chat-reply="replyTo">
-                    </user-communication-buttons>
+                        @chat-reply="replyTo"
+                    />
                 </td>
                 <td class="message">
                     <img class="delete_btn" src="/static/images/delete.png" v-if="isAdmin"
                         title="Delete this message" @click="deleteMsg( msg.ts )"/>
-                    <a target="_blank" rel="nofollow" class="translate_lnk"
-                        :href="'https://translate.google.com/#view=home&op=translate&sl=auto&tl=en&text=' +
-                        plainText(msg.text)">
-                        <img class="translate_btn" src="/static/images/icon_translate.png"
-                        title="Translate this message" />
-                    </a>
+                    <translate-link
+                        :text="msg.text"
+                        title="Translate this message" 
+                    />
                     <span class="message_to" v-for="callsign in msg.to" :key="callsign"
                         :class="{personal: callsign === chatCallsign}">
                         &rArr; {{callsign}}
@@ -95,47 +94,32 @@
 import {mapActions, mapMutations, mapGetters, mapState} from 'vuex'
 
 import _ from 'underscore'
-import sanitizeHTML from 'sanitize-html'
 import insertTextAtCursor from 'insert-text-at-cursor'
 
 import ServiceDisplay from './ServiceDisplay'
-import Smilies, {SMILIES_IMG_PATH} from '../components/Smilies'
+import Smilies from '../components/Smilies'
 import UserCommunicationButtons from '../components/UserCommunicationButtons'
 import UserBanButton from '../components/UserBanButton'
 import ActiveUsers from '../components/ActiveUsers'
+import ChatCallsignEdit from '../components/ChatCallsignEdit'
+import TranslateLink from '../components/TranslateLink'
 
 import {replace0} from '../utils'
+import {parseMsgText, replyTo} from '../chat-utils'
 
 import {ACTION_POST_ACTIVITY, MUTATE_CURRENT_ACTIVITY, MUTATE_USERS_CONSUMER, ACTION_ADD_USERS_CONSUMER}
   from '../store-activity'
 import {ACTION_POST, ACTION_EDIT_USER} from '../store-user'
 import {ACTION_UPDATE_SERVICE} from '../store-services'
 
-const RE_MSG_TO = /(:?\u21d2\s?\w+(:?\/\w+)*\s?)+(:?\s|$)/
-
-const MSG_SANITIZE_HTML_SETTINGS = {
-  allowedTags: ['h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
-    'nl', 'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
-    'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'image'],
-  allowedAttributes: {
-    image: ['src']
-  }
-}
-
-function transformText (text) {
-  return sanitizeHTML(text, MSG_SANITIZE_HTML_SETTINGS)
-    .replace(/:(\d\d):/g, '<image src="' + SMILIES_IMG_PATH + '$1.gif"/>')
-}
-
 export default {
   extends: ServiceDisplay,
   replace0: replace0,
   name: 'Chat',
-  components: {Smilies, UserCommunicationButtons, UserBanButton, ActiveUsers},
+  components: {Smilies, UserCommunicationButtons, UserBanButton, ActiveUsers, ChatCallsignEdit, TranslateLink},
   data () {
     return {
       showSmilies: false,
-      chatCallsignField: this.$store.getters.chatCallsign,
       userNameField: this.$store.getters.userName,
       messageText: '',
       typingTs: null,
@@ -187,11 +171,6 @@ export default {
         this[ACTION_POST_ACTIVITY]()
       }
     },
-    plainText (html) {
-      const temp = document.createElement('div')
-      temp.innerHTML = html
-      return temp.textContent || temp.innerText || ''
-    },
     userNameBlur () {
       if (this.userNameField) {
         this.userNameField = this.userNameField.trim()
@@ -207,7 +186,7 @@ export default {
       this.showSmilies = false
       if (this.messageText) {
         this.serverPost({
-          from: this.chatCallsignField,
+          from: this.chatCallsign,
           text: this.messageText,
           name: this.userName,
           pm_enabled: this.pm_enabled
@@ -257,10 +236,7 @@ export default {
       }
     },
     replyTo (callsign) {
-      const txt = String.fromCharCode(8658) + ' ' + callsign
-      if ( !this.messageText || this.messageText.indexOf(txt) === -1 ) {
-        this.messageText = txt + ' ' + (this.messageText ? this.messageText : '')
-      }
+      this.messageText = replyTo(callsign, this.messageText)
     }
   },
   watch: {
@@ -299,16 +275,7 @@ export default {
       ]
       if (this.serviceData) {
         for (const _msg of this.serviceData) {
-          const msg = {..._msg}
-          msg.text = transformText(msg.text)
-          let match = RE_MSG_TO.exec(msg.text)
-          if (match) {
-            const to = match[0]
-            msg.text = msg.text.replace(to, '')
-            msg.to = to.split(/\s?\u21d2\s?/)
-            msg.to.shift()
-            msg.to = msg.to.map(item => item.trim())
-          }
+          const msg = { ..._msg, ...parseMsgText(_msg.text) }
           if (!msg.admin && this.service && this.service.station && this.isAdmin && 
             this.$store.state.stationSettings.sponsors &&
             this.$store.state.stationSettings.sponsors.includes(msg.user)) {
@@ -328,7 +295,7 @@ export default {
       return data
     },
     postButtonEnabled: function () {
-      return !this.posting && Boolean(this.messageText) && this.chatCallsignField && (this.chatCallsignField.length > 2)
+      return !this.posting && Boolean(this.messageText) && (this.chatCallsign.length > 2)
     }
   }
 }

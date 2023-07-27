@@ -16,7 +16,7 @@
 
           <slot name="header">
           </slot>
-          
+
           <button
             type="button"
             class="btn-close"
@@ -89,15 +89,14 @@ export default {
     overflow-x: auto;
     display: flex;
     flex-direction: column;
-    margin-top: 20px;
+    margin: 20px;
     width: 70%;
     overflow: auto;
+    text-align: center;
   }
   .modal img{
     max-height: 700px;
-    max-width: 1000px;
-    width: auto !important;
-    height: auto !important;
+    max-width: 980px;
   }
 .modal video{
     max-height: 600px;
@@ -121,6 +120,7 @@ export default {
     border: 1px solid #ddd;
     background-color: #f0f0f0;
     position: relative;
+    margin-bottom: 20px;
   }
 
   .modal-footer {

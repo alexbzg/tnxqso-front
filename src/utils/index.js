@@ -103,4 +103,10 @@ function deepCopy (obj) {
   return JSON.parse( JSON.stringify( obj ) )
 }
 
-export { parseCallsigns, loadScript, validateEmail, replace0, getStationURL, urlCallsign, deepCopy }
+function plainText (html) {
+  const temp = document.createElement('div')
+  temp.innerHTML = html
+  return temp.textContent || temp.innerText || ''
+}
+
+export { parseCallsigns, loadScript, validateEmail, replace0, getStationURL, urlCallsign, deepCopy, plainText }

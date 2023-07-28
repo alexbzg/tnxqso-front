@@ -138,6 +138,7 @@ export default {
         })
     },
     postComment () {
+      this.pending = true
       this[ACTION_REQUEST]({
         path: `blog/${this.entry.id}/comments`,
         data: {text: this.commentText}
@@ -146,12 +147,31 @@ export default {
           this.commentText = ''
           this.getComments()
         })
+        .finally(() => {
+          this.pending = false
+        })
     },
     canDelete (comment) {
       return isAdmin() || this.userCallsign === comment.user
     }, 
     replyTo (callsign) {
       this.commentText = replyTo(callsign, this.commentText)
+    },
+    deleteComment (comment) {
+      if (confirm('Удалить комментарий?\nDo you really want to delete this comment?')) {
+        this.pending = true
+        this[ACTION_REQUEST]({
+          path: `blog/comments/${comment.id}`,
+          data: {},
+          method: 'delete'
+        })
+          .then( () => {
+            this.getComments()
+          })
+          .finally(() => {
+            this.pending = false
+          })
+      }
     }
 
   },

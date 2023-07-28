@@ -61,8 +61,12 @@
                     />
                 </td>
                 <td class="message">
-                    <img class="delete_btn" src="/static/images/delete.png" v-if="isAdmin"
-                        title="Delete this message" @click="deleteMsg( msg.ts )"/>
+                    <img class="delete_btn" 
+                        src="/static/images/delete.png" 
+                        v-if="isAdmin || msg.cs === userCallsign"
+                        title="Delete this message" 
+                        @click="deleteMsg( msg.ts )"
+                    />
                     <translate-link
                         :text="msg.text"
                         title="Translate this message" 

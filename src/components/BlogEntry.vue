@@ -6,9 +6,15 @@
           <button
             type="button"
             class="btn-like"
-          ><img src="/static/images/icon_like.png"/>
+            @click="toggleLike"
+          >
+            <img :src="'/static/images/icon_like' + (like ? '_red' : '') + '.png'"/>
           </button>
-          <span class="like">15</span>
+          <span 
+            class="like"
+          >
+          {{entry.reactions}}
+          </span>
           <span class="navigation">
             <button
               v-if="navigationControls && navigationControls[0]"
@@ -42,6 +48,7 @@
 
             <h4>{{getString('COMMENTS')}}</h4>
             <div
+                v-if="emailConfirmed"
                 class="add_comment"
                 >
                 <chat-callsign-edit/>
@@ -119,11 +126,13 @@ export default {
     return {
       pending: false,
       comments: [],
-      commentText: ''
+      commentText: '',
+      like: false
     }
   },
   mounted () {
     this.getComments()
+    this.getLike()
   },
   methods: {
     replace0,
@@ -131,24 +140,45 @@ export default {
     getComments () {
       request.get(`/aiohttp/blog/${this.entry.id}/comments`)
         .then( response => {
-            this.comments = response.data.map( msg => {
-                console.log(`${msg.user} ${this.isChatAdmin(msg.user)}`)
-                return ({ ...msg, ...parseMsgText(msg.txt) })
-            } )
+          this.comments = response.data.map( msg => {
+            return ({ ...msg, ...parseMsgText(msg.txt) })
+          })
+        })
+        .catch((error) => {
+          if (error.status === 404)
+            this.comments = []
+        })
+    },
+    getLike () {
+      if (this.emailConfirmed)
+        this.apiRequest({
+          path: `blog/${this.entry.id}/reactions/0`,
+          data: {},
+          suppressAlert: true
+        })
+          .then(() => { this.like = true })
+          .catch((error) => {
+            if (error.status === 404)
+              this.like = false
+            else
+              alert(error.alert)
+          })
+    },
+    apiRequest (params) {
+      this.pending = true
+      return this[ACTION_REQUEST](params)
+        .finally(() => {
+          this.pending = false
         })
     },
     postComment () {
-      this.pending = true
-      this[ACTION_REQUEST]({
+      this.apiRequest({
         path: `blog/${this.entry.id}/comments`,
         data: {text: this.commentText}
         })
         .then( () => {
           this.commentText = ''
           this.getComments()
-        })
-        .finally(() => {
-          this.pending = false
         })
     },
     canDelete (comment) {
@@ -159,8 +189,7 @@ export default {
     },
     deleteComment (comment) {
       if (confirm('Удалить комментарий?\nDo you really want to delete this comment?')) {
-        this.pending = true
-        this[ACTION_REQUEST]({
+        this.apiRequest({
           path: `blog/comments/${comment.id}`,
           data: {},
           method: 'delete'
@@ -168,15 +197,24 @@ export default {
           .then( () => {
             this.getComments()
           })
-          .finally(() => {
-            this.pending = false
-          })
       }
+    },
+    toggleLike () {
+      if (this.emailConfirmed)
+        this.apiRequest({
+          path: `blog/${this.entry.id}/reactions`,
+          data: {type: 0},
+          method: this.like ? 'delete' : 'put'
+        })
+          .then(() => { 
+            this.like = !this.like 
+            this.$emit('reaction', this.like ? 1 : -1)
+          })
     }
 
   },
   computed: {
-    ...mapGetters(['userCallsign', 'chatCallsign', 'isChatAdmin']),
+    ...mapGetters(['userCallsign', 'chatCallsign', 'isChatAdmin', 'emailConfirmed']),
     stationPath,
     isAdmin,
     postCommentButtonEnabled () {
@@ -188,6 +226,7 @@ export default {
       this.comments = []
       this.commentText = ''
       this.getComments()
+      this.getLike()
     }
   }
 }

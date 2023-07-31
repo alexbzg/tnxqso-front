@@ -31,9 +31,15 @@
 
             <div class="gradient">&nbsp;</div>
             <div class="post_info" v-if="item.post_datetime">
-              <img  class="post_comments" src="/static/images/icon_comment.png"/>
-              <img class="post_like" src="/static/images/icon_post_like.png"/>
-              <span class="post_like_number">15</span>
+              <img  
+                class="post_comments" 
+                src="/static/images/icon_comment.png"
+                v-if="item.last_comment_id"
+                />
+              <template v-if="item.reactions > 0">
+                <img class="post_like" src="/static/images/icon_post_like.png"/>
+                <span class="post_like_number">{{item.reactions}}</span>
+              </template>
               <span class="post_date">{{item.post_datetime}}</span>
             </div>
             <div class="caption">{{item.txt}}</div>
@@ -46,6 +52,7 @@
             :navigation-controls="entryNavigationControls"
             @close="closeEntry"
             @navigate="entryNavigation"
+            @reaction="entryReaction"
         />
     </div>
 </template>
@@ -107,6 +114,9 @@ export default {
       if (idx > -1 && idx < this.serviceData.length)
         this.activeEntry = this.serviceData[idx]
 
+    },
+    entryReaction (change) {
+      this.activeEntry.reactions += change
     },
     uploadFileChange () {
       this.upload.file = this.$refs.fileInput.files[0]

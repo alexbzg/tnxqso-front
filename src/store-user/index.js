@@ -214,9 +214,10 @@ export const storeUser = {
           } else {
             msg = 'Server error. Please try again later.'
           }
-          if (!payload.supressAlert) {
+          if (!payload.suppressAlert) {
             alert(msg)
-          }
+          } else 
+            error.alert = msg
           throw error
         })
     },

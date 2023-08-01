@@ -1,6 +1,6 @@
 <template>
     <div id="blog">
-        <div id="add_image" v-if="isAdmin" @click="showUpload = !showUpload">
+        <div id="add_image" v-if="stationAdmin === userCallsign" @click="showUpload = !showUpload">
             <img src="/static/images/icon_add_image.png" title="New message" />
         </div>
 
@@ -33,7 +33,9 @@
             <div class="post_info" v-if="item.post_datetime">
               <img  
                 class="post_comments" 
-                src="/static/images/icon_comment.png"
+                :src="'/static/images/icon_comment' + 
+                    (!commentsRead[item.id] || (item.last_comment_id > commentsRead[item.id]) ?
+                        '_green' : '') + '.png'"
                 v-if="item.last_comment_id"
                 />
               <template v-if="item.reactions > 0">
@@ -53,6 +55,7 @@
             @close="closeEntry"
             @navigate="entryNavigation"
             @reaction="entryReaction"
+            @commentsRead="updateCommentsRead"
         />
     </div>
 </template>
@@ -67,6 +70,8 @@ import {ACTION_REQUEST} from '../store-user'
 import {ACTION_UPDATE_SERVICE} from '../store-services'
 import {stationPath, isAdmin} from '../store-station'
 
+import {urlCallsign} from '../utils'
+
 export default {
   extends: ServiceDisplay,
   components: {BlogEntry},
@@ -80,15 +85,19 @@ export default {
         caption: null
       },
       posting: false,
-      activeEntry: null
+      activeEntry: null,
+      commentsRead: {}
     }
+  },
+  mounted () {
+    this.getCommentsRead()
   },
   computed: {
     ...mapState({
       skipConfirmation: state => state.user.user.settings.skipConfirmation,
       stationAdmin: state => state.stationSettings.admin
     }),
-    ...mapGetters(['stationCallsign']),
+    ...mapGetters(['stationCallsign', 'userCallsign']),
     stationPath,
     isAdmin,
     entryNavigationControls () {
@@ -103,6 +112,19 @@ export default {
   },
   methods: {
     ...mapActions([ACTION_REQUEST, ACTION_UPDATE_SERVICE]),
+    getCommentsRead () {
+      if (this.stationAdmin)
+        this[ACTION_REQUEST]({
+          path: `blog/${urlCallsign(this.stationAdmin)}/comments/read`,
+          data: {},
+          suppressAlert: true
+        })
+        .then((response) => { this.commentsRead = response.data })
+        .catch((error) => {
+          if (error.status === 404)
+            this.commentsRead = {}
+        })
+    },
     openEntry (item) {
       this.activeEntry = item
     },
@@ -145,6 +167,24 @@ export default {
         confirm('Удалить запись?\nDo you really want to delete this post?')) {
         this.serverPost({}, false, id, 'delete')
       }
+    }, 
+    updateCommentsRead (commentId) {
+      if (!this.commentsRead[this.activeEntry.id] || 
+            (this.commentsRead[this.activeEntry.id] < commentId)) {
+        this[ACTION_REQUEST]({
+          path: `blog/${this.activeEntry.id}/comments/read`,
+          data: { commentId },
+          method: 'put',
+          suppressAlert: true
+        })
+        this.commentsRead[this.activeEntry.id] = commentId
+        this.activeEntry.last_comment_id = commentId
+      }
+    }
+  },
+  watch: {
+    stationAdmin () {
+      this.getCommentsRead()
     }
   }
 }

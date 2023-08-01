@@ -44,7 +44,7 @@ store.dispatch(ACTION_LOAD_STATION)
     const stationCs = store.state.stationSettings.station.callsign
     talksInit(store, stationCs)
     store.commit(MUTATE_SERVICE, 
-        {name: 'gallery', url: `/aiohttp/blog/${store.state.stationSettings.admin}`})
+        {name: 'gallery', url: `/aiohttp/blog/${urlCallsign(store.state.stationSettings.admin)}`})
     function updateGallery () {
       store.dispatch(ACTION_UPDATE_SERVICE, 'gallery')
     }

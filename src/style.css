@@ -1289,7 +1289,7 @@ table#cluster td.spotter{
     line-height: 1px;
     border-radius: 5px;
     background-color: #fff;
-    border: 2px solid #ccc;
+    border: 2px solid #B6C1A7;
     z-index: 900;
     cursor: pointer;
 }
@@ -2317,6 +2317,7 @@ table#top_qso select{    padding: 5px 20px; }
 }
 .media .post_info{
     position: absolute;
+    height: 20px;
     bottom: 0px;
     left: 0px;
     width: 100%;
@@ -2529,119 +2530,6 @@ table.comments td.message:hover .translate_lnk{    display: block;}
 
 
 
-
-
-
-/*
-
-table#chat_window{
-    width: 990px;
-    padding: 0px;
-    margin: 0px 20px 20px 20px;
-    border-collapse: collapse;
-}
-table#chat_window td{
-    padding: 7px 5px;
-    text-align: left;
-    vertical-align: top;
-}
-table#chat_window tr{
-    border: none;
-    border: 1px solid #eee;
-}
-table#chat_window td.call{
-    font-weight: bold;
-    width: 150px;
-    line-height: 16px;
-    position: relative;
-}
-table#chat_window td.call span.date_time{
-    font-size: 12px;
-    margin-bottom: 10px;
-    font-weight: normal;
-    color: #009;
-    display: block;
-}
-table#chat_window td.call:hover span.date_time{
-    display: none;
-}
-table#chat_window td.call span.icon_block{
-    display: none;
-}
-.icon_ban{
-    position: absolute;
-    top: 7px;
-    right: 35px;
-    cursor: pointer;
-    display: none;
-}
-table#chat_window td.call:hover span.icon_block, table#chat_window td.call:hover .icon_ban{
-    display: block;
-    margin-bottom: 7px;
-    cursor: pointer;
-}
-table#chat_window td.call span.icon_block img{
-    margin-right: 10px;
-    cursor: pointer;
-}
-
-
-
-table#chat_window td.call span.call{
-    color: #009;
-}
-table#chat_window tr.sponsor td.call span.call{
-    color: #070;
-}
-table#chat_window td.call span.name{
-    font-size: 14px;
-    color: #666;
-    font-weight: normal;
-}
-table#chat_window tr.admin td.call span.call{
-    color: #A00;
-}
-table#chat_window td.message{
-    font-size: 18px;
-    padding: 0px 20px 20px 0;
-    line-height: 1.7em;
-    position: relative;
-    color: #333;
-}
-table#chat_window td.message .message_text{
-
-}
-
-
-.delete_btn{
-    cursor: pointer;
-    width: 20px;
-    height: 20px;
-    display: none;
-    position: absolute;
-    top: 5px;
-    left: -20px;
-}
-.translate_btn{
-    cursor: pointer;
-    float: right;
-    position: absolute;
-    top: 0;
-    right: 0;
-}
-
-table#chat_window td.message:hover img.delete_btn, table#admins_window td.message:hover img.delete_btn{
-    display: block;
-}
-
-.translate_lnk{
-    display: none;
-}
-table#chat_window td.message:hover .translate_lnk, table#admins_window td.message:hover .translate_lnk{
-    display: block;
-}
-
-*/
 
 
 

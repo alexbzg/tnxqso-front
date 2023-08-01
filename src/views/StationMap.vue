@@ -59,7 +59,7 @@
       </l-map>
 
       <div class="weather">
-        <img src="/static/images/icon_weather.png" title='Realtime weather' />
+        <img src="/static/images/icon_weather.png" title='Realtime weather map' />
       </div>
       <input type="checkbox" v-model="map_settings.centerLocation" @change="updateCenterLocation"/> Center map to station
 

@@ -178,6 +178,10 @@ export default {
   span.like{
     margin-top: 10px;
   }
+  span.like_red{
+    margin-top: 10px;
+    color: #FB6262;
+  }
 
 
   .btn-green {

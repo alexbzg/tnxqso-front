@@ -8,10 +8,10 @@
             class="btn-like"
             @click="toggleLike"
           >
-            <img :src="'/static/images/icon_like' + (like ? '_red' : '') + '.png'"/>
+            <img :src="'/static/images/icon_like' + likeSuffix + '.png'"/>
           </button>
           <span 
-            class="like"
+            :class="['like' + likeSuffix]"
           >
           {{entry.reactions}}
           </span>
@@ -143,6 +143,8 @@ export default {
           this.comments = response.data.map( msg => {
             return ({ ...msg, ...parseMsgText(msg.txt) })
           })
+          if (this.comments) 
+            this.$emit("commentsRead", this.comments[this.comments.length - 1].id)
         })
         .catch((error) => {
           if (error.status === 404)
@@ -160,8 +162,6 @@ export default {
           .catch((error) => {
             if (error.status === 404)
               this.like = false
-            else
-              alert(error.alert)
           })
     },
     apiRequest (params) {
@@ -219,6 +219,9 @@ export default {
     isAdmin,
     postCommentButtonEnabled () {
       return !this.pending && this.commentText
+    },
+    likeSuffix () {
+      return this.like ? '_red' : ''
     }
   },
   watch: {

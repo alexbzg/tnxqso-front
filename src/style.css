@@ -254,7 +254,11 @@ img#logo{    vertical-align: -10%;}
 
 
 #tab_users{
-    margin-left: 70px;
+    margin-left: 50px;
+    color: #900;
+    font-weight: bold;
+}
+#tab_comments{
     color: #900;
     font-weight: bold;
 }
@@ -1279,6 +1283,7 @@ table#cluster td.spotter{
 }
 
 .weather{
+    display: block;
     position: absolute;
     top: 10px;
     right: 70px;
@@ -1381,6 +1386,7 @@ table#message_form input#your_call, table#message_form input#your_name{
     width: 140px;
     margin: 0 15px;
     font-size: 18px;
+    height: 16px;
     border: none;
     text-align: center;
     border-bottom: 1px solid #ccc;
@@ -1452,7 +1458,7 @@ table#message_form #smile_btn{
 
 .admin_button{
     cursor: pointer;
-    margin-right: 10px;
+    margin: 10px 10px 0 0;
     display: inline-block;
     vertical-align: text-top;
 }
@@ -2267,13 +2273,14 @@ table#top_qso select{    padding: 5px 20px; }
 
 .media{
     display: inline-block;
-    width: 200px;
+    width: 202px;
     height: 250px;
     overflow: hidden;
     margin: 0 15px 30px 15px;
     position: relative;
     padding: 5px 5px 5px 5px;
     border: 1px solid #ddd;
+    border-radius: 5px;
     cursor: pointer;
     line-height: 14px;
     font-size: 14px;
@@ -2331,7 +2338,7 @@ table#top_qso select{    padding: 5px 20px; }
 .media .post_info img {
     float: left;
     border: none;
-    margin: 0;
+    margin: 0 0 0 5px;
 }
 .media .post_info .post_like_number{
     float: left;

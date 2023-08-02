@@ -58,9 +58,16 @@
         </l-marker>
       </l-map>
 
-      <div class="weather">
+      <a
+        class="weather"
+        v-if="currentLocation" 
+        :href="'https://yandex.ru/pogoda/maps/nowcast?' +
+            '&lat=' + currentLocation[0] + '&lon=' + currentLocation[1] +
+            '&ll=' + currentLocation[1] + '_' + currentLocation[0] +
+            '&z=10&le_Lightning=1'"
+        target="_blank" rel="noopener">
         <img src="/static/images/icon_weather.png" title='Realtime weather map' />
-      </div>
+      </a>
       <input type="checkbox" v-model="map_settings.centerLocation" @change="updateCenterLocation"/> Center map to station
 
     </div>

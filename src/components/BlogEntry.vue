@@ -12,6 +12,7 @@
           </button>
           <span 
             :class="['like' + likeSuffix]"
+            v-if="entry.reactions > 0"
           >
           {{entry.reactions}}
           </span>
@@ -55,6 +56,7 @@
                 <input type="text"
                     id="comment_text"
                     :placeholder="getString('COMMENT')"
+                    @keyup.enter="postCommentButtonEnabled && postComment()"
                     v-model="commentText"
                 />
                 <button @click="postComment()" :disabled="!postCommentButtonEnabled">OK</button>

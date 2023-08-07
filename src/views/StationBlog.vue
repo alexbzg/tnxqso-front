@@ -146,7 +146,7 @@ export default {
     serverPost (data, multipart, path, method) {
       this.posting = true
       return this[ACTION_REQUEST]({
-        path: `blog/${path || ''}`,
+        path: 'blog' + (path ?? ''),
         data,
         multipart,
         method
@@ -165,7 +165,7 @@ export default {
     deleteItem (id) {
       if (this.skipConfirmation.galleryDelete ||
         confirm('Удалить запись?\nDo you really want to delete this post?')) {
-        this.serverPost({}, false, id, 'delete')
+        this.serverPost({}, false, `/${id}`, 'delete')
       }
     }, 
     updateCommentsRead (commentId) {

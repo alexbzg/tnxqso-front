@@ -249,7 +249,7 @@
                         v-model="settings.skipConfirmation.blogDelete" />
                     <span v-html="getString('BLOG_CHECK')"/><br/><br/>
                     <input type="button" id="button_clear_photos" class="btn" :value="getString('BLOG_CLEAR')"
-                        @click="clearGallery"/>
+                        @click="clearBlog"/>
 
                 </div>
             </div>
@@ -492,9 +492,9 @@ export default {
         this[ACTION_POST]({path: 'chat', data: {station: this.userStationCallsign, clear: 1}})
       }
     },
-    clearGallery () {
+    clearBlog () {
       if (window.confirm( 'Do you really want to delete all blog content?') ) {
-        this[ACTION_POST]({path: 'gallery', data: {clear: 1}})
+        this[ACTION_POST]({path: 'blog/clear', data: {}})
       }
     },
     clearLog () {

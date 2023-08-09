@@ -7,7 +7,7 @@
                     <td>
                         <chat-callsign-edit/><br/>
                         <input type="text" id="your_name" placeholder="Chat name"
-                          v-model="userNameField" @blur="userNameBlur"/>
+                          v-model.trim="userNameField" @blur="userNameBlur"/>
                     </td>
                     <td>
                         <img id="admin_message" class="admin_button"
@@ -166,19 +166,7 @@ export default {
         this[ACTION_POST_ACTIVITY]()
       }
     },
-    chatCallsignBlur () {
-      if (this.chatCallsignField) {
-        this.chatCallsignField = this.chatCallsignField.toUpperCase().trim()
-      }
-      if (this.chatCallsign !== this.chatCallsignField) {
-        this[ACTION_EDIT_USER]({chat_callsign: this.chatCallsignField})
-        this[ACTION_POST_ACTIVITY]()
-      }
-    },
     userNameBlur () {
-      if (this.userNameField) {
-        this.userNameField = this.userNameField.trim()
-      }
       if (this.userName !== this.userNameField) {
         this[ACTION_EDIT_USER]({name: this.userNameField})
       }

@@ -67,5 +67,17 @@
     "CHAT_CALLSIGN_REQUIRED": {"ru": "Введите свой Chat callsign на вкладке Talks чтобы отправлять сообщения.",
         "en": "Insert your Chat callsign on the Talks tab to post messages." },
     "COMMENTS": {"ru": "Комментарии", "en": "Comments" },
-    "COMMENT": {"ru": "комментарий", "en": "сomment" }
+    "COMMENT": {"ru": "комментарий", "en": "сomment" },
+    "STATION_CALLSIGN_CHANGE_WARNING": {
+        "ru": "При смене позывного станции будут очищены логи и маршрут экспедиции. Продолжить?", 
+        "en": "You have changed the station callsign. Log records and expedition track will be cleared. Do you really want to proceed?"
+    }, 
+    "INVALID_STATION_CALLSIGN": {
+        "en": "The expedition callsign should be valid and the only one.",
+        "ru": "Необходимо ввести ровно один корректный позывной экспедиции."
+    },
+    "STATION_INFO_SIZE_LIMIT": {
+        "en": "The size limit for all your station information is 5 Megabytes. Please reduce the quantity and size of your images.",
+        "ru": "Максимальный допустимый размер всех ваших данных - 1 мегабайт. Пожалуйста, уменьшите количество и объем изображений"
+    }
 }

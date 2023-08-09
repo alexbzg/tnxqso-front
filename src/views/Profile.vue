@@ -39,7 +39,11 @@
                 <input type="checkbox" id="checkbox_publish" v-model="settings.publish"/> <b>{{getString('STATION_SHOW')}}</b> {{getString('STATION_VIEW')}}<br/>
 
                 {{getString('STATION_CALLSIGN')}}:
-                <input type="text" id="station_callsign" v-model="settings.station.callsign"/>
+                <input type="text" 
+                    id="station_callsign" 
+                    v-model="settings.station.callsign"
+                    @blur="clusterFilterStationCallsign"
+                    />
                 &nbsp; &nbsp;
                 <span id="stations_link">
                     {{getString('STATION_LINK')}}: <a :href="stationLink" target="_blank" rel="noopener">{{stationLink}}</a>
@@ -75,7 +79,9 @@
                     <table id="status_setup">
                         <tr>
                             <td id="qth_lines_titles">
-                                <select v-model="settings.qthCountry">
+                                <select 
+                                    v-model="settings.qthCountry"
+                                    @change="initClusterSettings">
                                   <option :value="null">- - - - -</option>
                                   <option v-for="(country, id) in $options.QTH_PARAMS.countries" :value="id" :key="id">
                                     {{country.title}}
@@ -198,10 +204,10 @@
                     @click="infoPopup= getString('CLUSTER_POPUP')">
                 <input type="checkbox" id="checkbox_cluster" v-model="settings.enable.cluster" /> <span v-html="getString('CLUSTER_SHOW')"/>
                 <div class="block_settings" v-if="settings.enable.cluster"><span v-html="getString('CLUSTER_FILTER')"/>:<br/>
-                <input type="text" id="setup_cluster" v-model="clusterCallsigns"
+                <input type="text" id="setup_cluster" v-model.trim="clusterCallsigns"
                     @change="clusterCallsignsChange" value="R*/* UA*/* UB*/* UC*/* UD*/* UE*/* UF*/* UG*/* UH*/* UI*/*"/><br/>
                 <span v-html="getString('CLUSTER_CALL')"/>:<br/>
-                <input type="text" id="highlight_calls" v-model="clusterHighlight"
+                <input type="text" id="highlight_calls" v-model.trim="clusterHighlight"
                     @change="clusterHighlightChange" />
                 </div>
 
@@ -307,6 +313,10 @@ import ChangePassword from '../components/ChangePassword'
 
 import {MUTATE_USER, ACTION_EDIT_USER, ACTION_POST} from '../store-user'
 
+const CLUSTER_SETTINGS_DEFAULT = {
+    "RU": "R*/* UA*/* UB*/* UC*/* UD*/* UE*/* UF*/* UG*/* UH*/* UI*/*"
+}
+
 export default {
   CURRENT_POSITION_ICONS_COUNT: CURRENT_POSITION_ICONS_COUNT,
   QTH_PARAMS: QTH_PARAMS,
@@ -328,10 +338,10 @@ export default {
       showSettings: false,
       showChangePassword: false,
       newsItem: '',
-      clusterCallsigns: null,
-      clusterHighlight: null,
-      chatAdmins: null,
-      sponsors: null,
+      clusterCallsigns: '',
+      clusterHighlight: '',
+      chatAdmins: '',
+      sponsors: '',
       infoPopup: null,
       trackFile: null,
       status: {
@@ -389,11 +399,32 @@ export default {
       }
       this.status.qth.fields = qthFields
       this.settings = settings
-      this.clusterCallsigns = settings.clusterCallsigns != null ? settings.clusterCallsigns.join(' ') : null
-      this.clusterHighlight = settings.clusterHighlight != null ? settings.clusterHighlight.join(' ') : null
+      this.clusterCallsigns = settings.clusterCallsigns != null ? settings.clusterCallsigns.join(' ') : ''
+      this.clusterHighlight = settings.clusterHighlight != null ? settings.clusterHighlight.join(' ') : ''
       this.sponsors = settings.sponsors != null ? settings.sponsors.join(' ') : null
       this.chatAccess = settings.chatAccess
       this.chatAdmins = settings.chatAdmins != null ? settings.chatAdmins.join(' ') : null
+    },
+    clusterFilterStationCallsign () {
+      const callsign = this.settings.station.callsign
+      if (callsign) {
+        if (callsign.includes('/')) {
+          const callsignExpr = callsign.split('/')[0] + '/*'
+          if (!this.clusterHiglight.includes(callsignExpr))
+            this.clusterHighlight += ` ${callsignExpr}`
+        } else {
+          if (!this.clusterCallsigns.includes(callsign)) 
+            this.clusterCallsigns += ` ${callsign}`
+          if (!this.clusterHighlight.includes(callsign)) 
+            this.clusterHighlight += ` ${callsign}`
+        }
+      }
+    },
+    initClusterSettings () {
+      if (this.settings.qthCountry in CLUSTER_SETTINGS_DEFAULT) {
+        this.clusterCallsigns = CLUSTER_SETTINGS_DEFAULT[this.settings.qthCountry]
+      }
+      this.clusterFilterStationCallsign()
     },
     showSettingsClick () {
       if (this.showSettings) {
@@ -445,26 +476,19 @@ export default {
     },
     saveSettings () {
       if (this.settings.station.info.length + this.settings.donate.text.length > 5024288) {
-        alert('The size limit for all your station information is 5 Megabytes.\n' +
-                'Please reduce the quantity and size of your images.\n' +
-                'Максимальный допустимый размер всех ваших данных - 1 мегабайт.\n' +
-                'Пожалуйста, уменьшите количество и объем изображений')
+        alert(this.getString('STATION_INFO_SIZE_LIMIT'))
         return
       }
       let clearAll = false
 
       this.settings.station.callsign = this.settings.station.callsign.toUpperCase()
       if (!validCallsignFull(this.settings.station.callsign)) {
-        alert('The expedition callsign should be valid and the only one.\n' +
-            'необходимо ввести только один корректный позывной экспедициц.')
+        alert(this.getString('INVALID_STATION_CALLSIGN'))
         return
       }
       if (this.userStationCallsign &&
         this.userStationCallsign !== this.settings.station.callsign) {
-        if ( !window.confirm( 'The station callsign change will clear all of the station archive. ' +
-          'No recovery will be possible. Do you really want to continue?\n' +
-          'При смене позывного станции будут удалены все архивы станции без возможности ' +
-          'восстановления. Продолжить?' ) ) {
+        if (!window.confirm(this.getString('STATION_CALLSIGN_CHANGE_WARNING'))){
           return
         }
         clearAll = true

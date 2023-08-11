@@ -37,7 +37,7 @@
     "CHAT_ADMINS": {"en": "Chat admins <i>(separated by space or comma)</i>", "ru": "Администраторы чата <i>(разделяются пробелом или запятой)</i>"},
     "CHAT_ACCESS": {"en": "Who can post messages: ", "ru": "Кто может писать сообщения: "},
     "CHAT_ACCESS_EVERYBODY": {"en": "Everybody", "ru": "Все"},
-    "CHAT_ACCESS_USERS": {"en": "Only registered users", "ru": "Только зарегистрированные пользователи"},
+    "CHAT_ACCESS_USERS": {"en": "All registered users", "ru": "Все зарегистрированные пользователи"},
     "CHAT_ACCESS_ADMINS": {"en": "Only station administrators", "ru": "Только администраторы станции"},
     "CHAT_CHECK": {"en": "Do not request confirmation for deleting messages", "ru": "Не требовать подтверждения при удалении сообщений"},
     "CHAT_CLEAR": {"en": "Clear chat", "ru": "Очистить чат"},

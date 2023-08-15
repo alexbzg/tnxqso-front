@@ -62,7 +62,7 @@ const router = new Router({
       path: '/blog',
       name: 'StationBlog',
       component: StationBlog,
-      props: {serviceName: 'gallery'}
+      props: {serviceName: 'blog'}
     },
     {
       path: '/log',

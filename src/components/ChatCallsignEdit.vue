@@ -1,9 +1,9 @@
 <template>
-    <input 
-        type="text" 
-        id="your_call" 
-        placeholder="Chat callsign"
-        v-model.trim="editValue" 
+    <input
+        type="text"
+        id="your_call"
+        placeholder="chat callsign"
+        v-model.trim="editValue"
         @blur="editBlur"
         />
 </template>

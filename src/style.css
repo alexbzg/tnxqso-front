@@ -1380,7 +1380,8 @@ table#message_form{
 }
 table#message_form tr, table#message_form td{
     padding: 0;
-    vertical-align: middle;
+    vertical-align: top;
+    line-height: 10px;
 }
 table#message_form input#your_call, table#message_form input#your_name{
     width: 140px;
@@ -1393,18 +1394,30 @@ table#message_form input#your_call, table#message_form input#your_name{
     padding: 0;
 }
 table#message_form input#your_call{
-    color: #000;
+    color: #009;
     font-weight: bold;
-    margin-top: 10px;
+    margin-top: 14px;
 }
 table#message_form input#your_name{
     color: #666;
     font-size: 14px;
+    margin-top: 6px;
+
 }
+
+table#message_form img#admin_message{
+    cursor: pointer;
+    margin-top: 10px;
+}
+table#message_form img#chat_mode{
+    cursor: pointer;
+    margin-top: 5px;
+}
+
 table#message_form input#message_text{
     width: 800px;
     padding: 0px 5px 2px 5px;
-    margin: 0 0 0 20px;
+    margin: 10px 0 0 20px;
     text-align: left;
     font-size: 18px;
     border: none;
@@ -1412,8 +1425,9 @@ table#message_form input#message_text{
 }
 table#message_form button{
     width: 80px;
-    padding: 3px;
+    padding: 0;
     margin: 0;
+    height: 31px;
 }
 table#message_form #smile_btn{
     margin: 0px 30px 0 10px;

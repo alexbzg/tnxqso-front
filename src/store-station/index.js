@@ -14,6 +14,8 @@ import {storeActiveStations, activeStationsInit, createStationStatusService, MUT
 import stompClient from '../stomp-client'
 import {urlCallsign} from '../utils'
 
+const RELOAD_INT_STATION_SETTINGS = 60 * 1000
+
 const store = new Vuex.Store({
   modules: {
     user: storeUser,
@@ -39,17 +41,18 @@ stompClient.store = store
 if (store.getters.userToken) {
   store.dispatch(ACTION_LOAD_USER)
 }
+
 store.dispatch(ACTION_LOAD_STATION)
   .then(() => {
     const stationCs = store.state.stationSettings.station.callsign
     talksInit(store, stationCs)
     store.commit(MUTATE_SERVICE, 
-        {name: 'gallery', url: `/aiohttp/blog/${urlCallsign(store.state.stationSettings.admin)}`})
-    function updateGallery () {
-      store.dispatch(ACTION_UPDATE_SERVICE, 'gallery')
+        {name: 'blog', url: `/aiohttp/blog/${urlCallsign(store.state.stationSettings.admin)}`})
+    function updateBlog () {
+      store.dispatch(ACTION_UPDATE_SERVICE, 'blog')
     }
-    updateGallery()
-    setInterval(updateGallery, RELOAD_INT_SRVC)
+    updateBlog()
+    setInterval(updateBlog, RELOAD_INT_SRVC)
     activeStationsInit(store)
       .then(() => {
         if (!(stationCs in store.state.activeStations.stations.active)) {
@@ -58,8 +61,10 @@ store.dispatch(ACTION_LOAD_STATION)
         }
       })
   })
+
 talksInit(store)
 activityInit(store)
+setInterval(() => store.dispatch(ACTION_LOAD_STATION), RELOAD_INT_STATION_SETTINGS)
 
 export function isAdmin () {
   if (!store.getters.loggedIn) {

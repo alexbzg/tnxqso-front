@@ -27,6 +27,9 @@ export const storeStationSettings = {
     isStationAdmin: (state, rootGetters) => {
       return state.admin && state.admin  === rootGetters.userCallsign
     },
+    chatAccess: (state) => {
+      return state.chatAccess
+    },
     isChatAdmin: (state) => (callsign) => {
       return callsign === state.admin || state.chatAdmins.includes(callsign)
     }

@@ -411,7 +411,7 @@ export default {
       if (callsign) {
         if (callsign.includes('/')) {
           const callsignExpr = callsign.split('/')[0] + '/*'
-          if (!this.clusterHiglight.includes(callsignExpr))
+          if (!this.clusterHighlight.includes(callsignExpr))
             this.clusterHighlight += ` ${callsignExpr}`
         } else {
           if (!this.clusterCallsigns.includes(callsign)) 

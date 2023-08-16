@@ -37,7 +37,7 @@
                           v-model.trim="userNameField" @blur="userNameBlur"/>
                     </td>
                     <td
-                        v-if="service && service.station && isStationAdmin">
+                        v-if="(service && service.station) && (isStationAdmin || siteAdmin)">
                         <img
                           id="chat_mode"
                           v-show="isAdmin && service && service.station"

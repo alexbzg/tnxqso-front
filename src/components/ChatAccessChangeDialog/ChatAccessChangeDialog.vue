@@ -1,6 +1,5 @@
 <template>
     <Modal
-        :title="getString('CHAT_ACCESS')"
         :cancel_button="true"
         @confirm='$emit("confirm", {clearChat})'
         @cancel='$emit("cancel")'>

@@ -105,10 +105,7 @@ export default {
     height: auto !important;
   }
 
-.modal-backdrop .caption{
-  padding: 20px 50px;
-  text-align: left;
-}
+
 
 
   .modal-header,
@@ -131,65 +128,6 @@ export default {
     padding: 0px 10px;
   }
 
-  .btn-close, .btn-translate {
-    float: right;
-    border: none;
-    padding: 5px 5px 0 0px;
-    cursor: pointer;
-    margin: 0;
-  }
-  .btn-translate {
-    padding: 7px 15px 0 0;
-  }
-
-
-  .navigation{
-    display: flex;
-    margin: 0 auto;
-    align-items: center;
-    font-size: 14px;
-    color: #777;
-  }
-  .btn-right {
-    border: none;
-    padding: 0px;
-    cursor: pointer;
-    margin: 0 0 0 20px;
-    float: right;
-    height: 32px;
-  }
-  .btn-left {
-    border: none;
-    padding: 0px;
-    cursor: pointer;
-    margin: 0 20px 0 0;
-    float: left;
-    height: 32px;
-  }
-
-
-  .btn-like {
-    border: none;
-    margin: 0;
-    padding:  0 0 0 10px;
-    cursor: pointer;
-    margin: 5px 0 0 5px;
-  }
-  span.like{
-    margin-top: 10px;
-  }
-  span.like_red{
-    margin-top: 10px;
-    color: #FB6262;
-  }
-
-
-  .btn-green {
-    color: white;
-    background: #4AAE9B;
-    border: 1px solid #4AAE9B;
-    border-radius: 2px;
-  }
 
   .modal-fade-enter,
   .modal-fade-leave-to {
@@ -200,4 +138,6 @@ export default {
   .modal-fade-leave-active {
     transition: opacity .5s ease;
   }
+
+
 </style>

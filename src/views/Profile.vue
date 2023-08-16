@@ -222,12 +222,6 @@
 
                 <div class="block_settings" v-if="settings.enable.chat">
 
-                    <span v-html="getString('CHAT_ACCESS')"/> 
-                    <select v-model="settings.chatAccess">
-                        <option :value="'users'">{{getString('CHAT_ACCESS_USERS')}}</option>
-                        <option :value="'admins'">{{getString('CHAT_ACCESS_ADMINS')}}</option>
-                    </select> <br/>
-
                     <span v-html="getString('CHAT_ADMINS')"/>: <br/>
                     <input type="text" id="admin_calls" v-model="chatAdmins"
                         @change="chatAdminsChange" /><br/>

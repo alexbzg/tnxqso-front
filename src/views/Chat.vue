@@ -42,8 +42,7 @@
                           id="chat_mode"
                           v-show="isAdmin && service && service.station"
                           :src="'/static/images/chat_mode_' + (chatAccess === 'admins' ? 'admin' : 'all') + '.png'"
-                          title="getString('CHAT_ACCESS') + ' ' + 
-                                    getString('CHAT_ACCESS' + (chatAccess === 'admins' ? 'ADMINS' : 'USERS'))"
+                          :title="getString('CHAT_ACCESS' + '_' + (chatAccess === 'admins' ? 'ADMINS' : 'USERS'))"
                           @click="toggleChatAccess"
                         />
                     </td>
@@ -59,7 +58,7 @@
             Подтвердите ваш email, чтобы отправлять сообщения.
         </div>
         <div id="div_no_email" v-if="emailConfirmed && !hasChatAccess">
-            Only station admins can post messages.
+            {{getString('CHAT_ACCESS_RESTRICTED')}}            
         </div>
 
 
@@ -140,6 +139,7 @@ import TranslateLink from '../components/TranslateLink'
 import {replace0} from '../utils'
 import {parseMsgText, replyTo} from '../chat-utils'
 import showChatAccessChangeDialog from '../components/ChatAccessChangeDialog/index.js'
+import LocalizationMixin from '../localization-mixin'
 
 import {ACTION_POST_ACTIVITY, MUTATE_CURRENT_ACTIVITY, MUTATE_USERS_CONSUMER, ACTION_ADD_USERS_CONSUMER}
   from '../store-activity'
@@ -151,6 +151,7 @@ export default {
   extends: ServiceDisplay,
   replace0: replace0,
   name: 'Chat',
+  mixins: [LocalizationMixin],
   components: {Smilies, UserCommunicationButtons, UserBanButton, ActiveUsers, ChatCallsignEdit, TranslateLink},
   data () {
     return {

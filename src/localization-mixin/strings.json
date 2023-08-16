@@ -35,11 +35,13 @@
     "CHAT_POPUP": {"en": "Only a station's administrator can delete chat messages.", "ru": "Удалять сообщения чата может только администратор станции."},
     "CHAT_HIGHLIGHT": {"en": "Call signs for highlighting <i> (separated by space or comma)</i>", "ru": "Позывные для выделения цветом <i>(разделяются пробелом или запятой)</i>"},
     "CHAT_ADMINS": {"en": "Chat admins <i>(separated by space or comma)</i>", "ru": "Администраторы чата <i>(разделяются пробелом или запятой)</i>"},
-    "CHAT_ACCESS": {"en": "Chat access", "ru": "Доступ к чату"},
+    "CHAT_ACCESS_RESTRICTED": {"en": "Only station admins can post messages in this chat.", 
+        "ru": "В этот чат могут писать только администраторы станции."},
     "CHAT_ACCESS_EVERYBODY": {"en": "Everybody", "ru": "Все"},
-    "CHAT_ACCESS_CHANGE": {"en": "will be able to post messages", "ru": "смогут писать сообщения"},
-    "CHAT_ACCESS_USERS": {"en": "All registered users", "ru": "Все зарегистрированные пользователи"},
+    "CHAT_ACCESS_CHANGE": {"en": "will be able to post messages.", "ru": "смогут отправлять сообщения."},
+    "CHAT_ACCESS_USERS": {"en": "All registered users", "ru": "Все пользователи"},
     "CHAT_ACCESS_ADMINS": {"en": "Only station administrators", "ru": "Только администраторы станции"},
+    "CHAT_ACCESS_SWITCH": {"en": "Switch to this chat mode?", "ru": "Переключиться в этот режим чата?"},
     "CHAT_CHECK": {"en": "Do not request confirmation for deleting messages", "ru": "Не требовать подтверждения при удалении сообщений"},
     "CHAT_CLEAR": {"en": "Clear chat", "ru": "Очистить чат"},
     "STATS_SHOW": {"en": "Show <b>Stats</b> tab on your station page", "ru": "Показывать вкладку <b>Stats</b> на странице вашей станции"},
@@ -70,9 +72,9 @@
     "COMMENTS": {"ru": "Комментарии", "en": "Comments" },
     "COMMENT": {"ru": "комментарий", "en": "сomment" },
     "STATION_CALLSIGN_CHANGE_WARNING": {
-        "ru": "При смене позывного станции будут очищены логи и маршрут экспедиции. Продолжить?", 
+        "ru": "При смене позывного станции будут очищены логи и маршрут экспедиции. Продолжить?",
         "en": "You have changed the station callsign. Log records and expedition track will be cleared. Do you really want to proceed?"
-    }, 
+    },
     "INVALID_STATION_CALLSIGN": {
         "en": "The expedition callsign should be valid and the only one.",
         "ru": "Необходимо ввести ровно один корректный позывной экспедиции."

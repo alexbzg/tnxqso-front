@@ -1414,6 +1414,20 @@ table#message_form img#chat_mode{
     margin-top: 5px;
 }
 
+#modal_clear_log{
+    display: inline-block;
+    color: #777;
+    font-size: 14px;
+    margin-top: 10px;
+}
+#change_chat_mode{
+    display: block;
+    margin-bottom: 10px;
+}
+
+
+
+
 table#message_form input#message_text{
     width: 800px;
     padding: 0px 5px 2px 5px;

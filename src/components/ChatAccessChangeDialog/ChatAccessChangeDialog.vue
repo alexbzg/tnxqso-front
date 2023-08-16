@@ -4,15 +4,18 @@
         :cancel_button="true"
         @confirm='$emit("confirm", {clearChat})'
         @cancel='$emit("cancel")'>
-        {{getString('CHAT_ACCESS_' + (chatAccess === 'admins' ? 'USERS' : 'ADMINS'))}}
-        {{getString('CHAT_ACCESS_CHANGE')}}            
+        <span id="change_chat_mode">{{getString('CHAT_ACCESS_' + (chatAccess === 'admins' ? 'USERS' : 'ADMINS'))}}<br/>
+        {{getString('CHAT_ACCESS_CHANGE')}}</span>
+        <b>{{getString('CHAT_ACCESS_SWITCH')}}</b><br/>
         <template v-if="chatAccess === 'users'">
-            <input 
-                v-if="chatAccess == 'users'"
-                id="clear_chat_checkbox"
-                type="checkbox"
-                v-model="clearChat"/>
-            {{getString('CHAT_CLEAR')}}
+            <span id="modal_clear_log">
+              <input
+                  v-if="chatAccess == 'users'"
+                  id="clear_chat_checkbox"
+                  type="checkbox"
+                  v-model="clearChat"/>
+              {{getString('CHAT_CLEAR')}}
+            </span>
         </template>
     </Modal>
 </template>

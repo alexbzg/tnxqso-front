@@ -865,6 +865,10 @@ max-width: 900px;
     text-indent: 1em;
 }
 
+#info img{
+    max-width: 900px;
+    max-height: 700px;
+}
 
 
 
@@ -2463,7 +2467,10 @@ table#top_qso select{    padding: 5px 20px; }
 }
 
 
-
+.modal section img{
+    max-height: 700px;
+    max-width: 1000px;
+  }
 
 
 

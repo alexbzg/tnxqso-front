@@ -6,10 +6,9 @@
         ref="map"
         :options="{attributionControl: false}">
         <l-control-layers :hide-single-base="true"/>
-        <l-tile-layer v-for="layer in baseLayers" :key="layer.id" :url="url" :options="{id: layer.id}"
-            layer-type="base" :name="layer.name" :visible="layer.visible"/>
-        <l-control-attribution prefix="Powered by <a href='https://r1cf.ru/rdaloc/' target='_blank' rel='noopener'>
-        R1CF RDA/RAFA maps</a>, <a href='https://www.openstreetmap.org/'>OpenStreetMap</a>" position="bottomright"/>
+        <l-control-attribution 
+            prefix="Powered by <a href='https://r1cf.ru/rdaloc/' target='_blank' rel='noopener'>R1CF RDA/RAFA maps</a>" 
+            position="bottomright"/>
         <l-wms-tile-layer
             v-for="(layer, idx) in overlays"
             :key="idx"
@@ -45,10 +44,11 @@
 
 <script>
 
-import {LMap, LTileLayer, LWMSTileLayer, LControlLayers, LCircleMarker, LTooltip, LPopup, LControlAttribution} from 'vue2-leaflet'
+import {LMap, LWMSTileLayer, LControlLayers, LCircleMarker, LTooltip, LPopup, LControlAttribution} from 'vue2-leaflet'
 import {Icon} from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import terminator from '@joergdietrich/leaflet.terminator'
+
 
 // this part resolve an issue where the markers would not appear
 delete Icon.Default.prototype._getIconUrl
@@ -58,6 +58,9 @@ Icon.Default.mergeOptions({
   iconUrl: require('leaflet/dist/images/marker-icon.png'),
   shadowUrl: require('leaflet/dist/images/marker-shadow.png')
 })
+const L = require('leaflet')
+require('leaflet-bing-layer')
+const BING_MAP_KEY = "AjUqTb6pHoAbDJQMD2aQEaNNvinx2LLDbRQyPzorbFZR7j9iJinAQEuZdZKGRowg"
 
 import dataServiceFactory from '../data-service-factory'
 
@@ -69,7 +72,6 @@ export default {
   props: ['secret'],
   components: {
     LMap,
-    LTileLayer,
     'l-wms-tile-layer': LWMSTileLayer,
     LControlLayers,
     LCircleMarker,
@@ -80,7 +82,6 @@ export default {
   data () {
     return {
       locations: [],
-      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       baseLayers: [
         {
           id: '',
@@ -170,6 +171,7 @@ export default {
     },
     map_ready () {
       const map = this.$refs.map.mapObject
+      L.tileLayer.bing({bingMapsKey: BING_MAP_KEY , imagerySet: 'RoadOnDemand', culture: 'ru-RU'}).addTo(map)      
       const t = terminator({className: 'map-terminator', opacity: 0.2, fillOpacity: 0.2})
       t.addTo(map)
       setInterval(function() {

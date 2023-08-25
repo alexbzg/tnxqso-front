@@ -94,15 +94,15 @@ export default {
     overflow: auto;
     text-align: center;
   }
-  .modal img{
-    max-height: 700px;
-    max-width: 980px;
-  }
 .modal video{
     max-height: 600px;
     max-width: 800px;
     width: auto !important;
     height: auto !important;
+  }
+ section img{
+    max-height: 700px;
+    max-width: 980px;
   }
 
 

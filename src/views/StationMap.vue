@@ -14,22 +14,26 @@
         <l-control-attribution 
             prefix="Powered by <a href='https://r1cf.ru/rdaloc/' target='_blank' rel='noopener'>R1CF RDA/RAFA maps</a>" 
             position="bottomright"/>
-        <l-wms-tile-layer
-            v-for="layer in overlays"
-            :key="layer.name"
-            base-url="https://r1cf.ru:8088/geoserver/cite/wms?"
-            :layers="layer.layers"
-            :name="layer.name"
-            layer-type="overlay"
-            :transparent="true"
-            format="image/png"
-            version="1.3.0"
-            :styles="layer.styles"
-            :visible="overlay_visible(layer.name)"
-            :options="{minZoom: layer.minZoom, maxZoom: layer.maxZoom}"
-            @update:visible="update_overlay(layer.name, $event)"
-            />
+        <template v-if="mapIsReady">
+            <l-wms-tile-layer
+                v-for="layer in overlays"
+                :key="layer.name"
+                base-url="https://r1cf.ru:8088/geoserver/cite/wms?"
+                :layers="layer.layers"
+                :name="layer.name"
+                layer-type="overlay"
+                :transparent="true"
+                format="image/png"
+                version="1.3.0"
+                :styles="layer.styles"
+                :zIndex="100"
+                :visible="overlay_visible(layer.name)"
+                :options="{minZoom: layer.minZoom, maxZoom: layer.maxZoom}"
+                @update:visible="update_overlay(layer.name, $event)"
+                />
+        </template>
         <l-geo-json
+            v-if="track"
             :geojson="track"
             ref="geoJsonTrack"
             :options="{className: 'map-geojson-track'}"
@@ -175,6 +179,7 @@ export default {
 
     return {
       tabId: 'news',
+      mapIsReady: false,
       currentLocation: null,
       currentPopup: {
         dateTime: null,
@@ -182,13 +187,6 @@ export default {
         comments: null
       },
       data: {},
-      baseLayers: [
-        {
-          id: '',
-          name: 'Map',
-          visible: true
-        }
-      ],
       map_settings: map_settings,
       track: null,
       center: [60, 60],
@@ -208,12 +206,18 @@ export default {
   methods: {
     map_ready () {
       const map = this.$refs.map.mapObject
-      L.tileLayer.bing({bingMapsKey: BING_MAP_KEY , imagerySet: 'RoadOnDemand', culture: 'ru-RU'}).addTo(map)      
+      L.tileLayer.bing({
+        bingMapsKey: BING_MAP_KEY , 
+        imagerySet: 'RoadOnDemand', 
+        culture: 'ru-RU', 
+        zIndex: 1
+      }).addTo(map)     
       const t = terminator({className: 'map-terminator', opacity: 0.2, fillOpacity: 0.2})
       t.addTo(map)
       setInterval(function() {
         t.setTime()
       }, 60000)
+      this.mapIsReady = true
     },
     showTrack () {
       const vm = this

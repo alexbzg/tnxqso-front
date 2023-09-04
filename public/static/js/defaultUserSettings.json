@@ -15,7 +15,7 @@
         "map": true,
         "donate": true,
         "stats": true,
-        "gallery": true,
+        "blog": true,
         "stationInfo": true
     },
     "log": {

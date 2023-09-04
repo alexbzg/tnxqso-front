@@ -36,8 +36,8 @@
             <div class="station_setup_block">
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info"
                     @click="infoPopup = getString('POPUP_STATION')">
-                <input type="checkbox" id="checkbox_publish" v-model="settings.publish"/> <b>{{getString('STATION_SHOW')}}</b> {{getString('STATION_VIEW')}}<br/>
-
+                <input type="checkbox" id="checkbox_publish" v-model="settings.publish"/> 
+                <b>{{getString('STATION_SHOW')}}</b> {{getString('STATION_VIEW')}}<br/>
                 {{getString('STATION_CALLSIGN')}}:
                 <input type="text" 
                     id="station_callsign" 
@@ -203,14 +203,20 @@
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info"
                     @click="infoPopup= getString('CLUSTER_POPUP')">
                 <input type="checkbox" id="checkbox_cluster" v-model="settings.enable.cluster" /> <span v-html="getString('CLUSTER_SHOW')"/>
-                <div class="block_settings" v-if="settings.enable.cluster"><span v-html="getString('CLUSTER_FILTER')"/>:<br/>
-                <input type="text" id="setup_cluster" v-model.trim="clusterCallsigns"
-                    @change="clusterCallsignsChange" value="R*/* UA*/* UB*/* UC*/* UD*/* UE*/* UF*/* UG*/* UH*/* UI*/*"/><br/>
-                <span v-html="getString('CLUSTER_CALL')"/>:<br/>
-                <input type="text" id="highlight_calls" v-model.trim="clusterHighlight"
-                    @change="clusterHighlightChange" />
+                <div class="block_settings" v-if="settings.enable.cluster">
+                    <span v-html="getString('CLUSTER_FILTER')"/>:<br/>
+                    <input 
+                        type="text" 
+                        id="setup_cluster" 
+                        v-model.trim="clusterCallsigns"
+                    /><br/>
+                    <span v-html="getString('CLUSTER_CALL')"/>:<br/>
+                    <input 
+                        type="text" 
+                        id="highlight_calls" 
+                        v-model.trim="clusterHighlight"
+                    />
                 </div>
-
             </div>
 
             <!-- CHAT -->
@@ -380,6 +386,12 @@ export default {
     userStationCallsign () {
       this.loadMisc()
       this.initSettings()
+    },
+    clusterCallsigns () {
+      this.settings.clusterCallsigns = parseCallsigns(this.clusterCallsigns)
+    },
+    clusterHighlight () {
+      this.settings.clusterHighlight = parseCallsigns(this.clusterHighlight)
     }
   },
   methods: {
@@ -400,8 +412,8 @@ export default {
       }
       this.status.qth.fields = qthFields
       this.settings = settings
-      this.clusterCallsigns = settings.clusterCallsigns != null ? settings.clusterCallsigns.join(' ') : ''
-      this.clusterHighlight = settings.clusterHighlight != null ? settings.clusterHighlight.join(' ') : ''
+      this.clusterCallsigns = settings.clusterCallsigns?.length ? settings.clusterCallsigns.join(' ') : ''
+      this.clusterHighlight = settings.clusterHighlight?.length ? settings.clusterHighlight.join(' ') : ''
       this.sponsors = settings.sponsors != null ? settings.sponsors.join(' ') : null
       this.chatAccess = settings.chatAccess || 'users'
       this.chatAdmins = settings.chatAdmins != null ? settings.chatAdmins.join(' ') : null
@@ -412,12 +424,12 @@ export default {
         if (callsign.includes('/')) {
           const callsignExpr = callsign.split('/')[0] + '/*'
           if (!this.clusterHighlight.includes(callsignExpr))
-            this.clusterHighlight += ` ${callsignExpr}`
+            this.clusterHighlight += `${this.clusterHighlight?.length ? ' ' : ''}${callsignExpr}`
         } else {
           if (!this.clusterCallsigns.includes(callsign)) 
-            this.clusterCallsigns += ` ${callsign}`
+            this.clusterCallsigns += `${this.clusterCallsigns?.length ? ' ' : ''}${callsign}`
           if (!this.clusterHighlight.includes(callsign)) 
-            this.clusterHighlight += ` ${callsign}`
+            this.clusterHighlight += `${this.clusterHighlight?.length ? ' ' : ''}${callsign}`
         }
       }
     },
@@ -575,12 +587,6 @@ export default {
     },
     sponsorsChange () {
       this.settings.sponsors = parseCallsigns(this.sponsors)
-    },
-    clusterCallsignsChange () {
-      this.settings.clusterCallsigns = parseCallsigns(this.clusterCallsigns)
-    },
-    clusterHighlightChange () {
-      this.settings.clusterHighlight = parseCallsigns(this.clusterHighlight)
     },
     chatAdminsChange () {
       this.settings.chatAdmins = parseCallsigns(this.chatAdmins)

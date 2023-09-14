@@ -24,7 +24,7 @@
               @click="$emit('navigate', -1)"
             ><img src="/static/images/icon_left.png"/>
             </button>
-            21 Jul 2023 13:42
+            {{entry.post_datetime}}
             <button
               v-if="navigationControls && navigationControls[1]"
               type="button"

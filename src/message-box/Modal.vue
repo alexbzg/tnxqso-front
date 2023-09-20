@@ -1,8 +1,10 @@
 <template>
     <transition name="modal">
         <div class="modal-mask">
-            <div class="modal-wrapper">
-                <div class="modal-container">
+            <div class="modal-wrapper" 
+                @click="outsideClickClose && $emit('cancel')">
+                <div class="modal-container"
+                    @click.stop="">
 
                     <div class="modal-header" v-html="title">
                     </div>
@@ -34,7 +36,7 @@ import LocalizationMixin from '../localization-mixin'
 
 export default {
   mixins: [LocalizationMixin],
-  props: ["title", "message", "cancel_button"],
+  props: ["title", "message", "cancel_button", "outsideClickClose"],
   name: "Modal"
 }
 

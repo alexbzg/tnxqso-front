@@ -8,7 +8,7 @@ import {urlCallsign} from '../utils'
 export const MUTATE_ACTIVE_STATIONS_READ = 'mttActStationsRead'
 const LOAD_STATIONS_ACTION = 'actnLoadStations'
 const MUTATE_STATIONS_LIST = 'mttStationsList'
-const MUTATE_STATION_STATUS = 'mttStationStatus'
+export const MUTATE_STATION_STATUS = 'mttStationStatus'
 export const MUTATE_ADD_ACTIVE_STATION = 'mttAddActiveStation'
 
 const STATUS_RELOAD_INT = 1000 * 5
@@ -64,7 +64,8 @@ export const storeActiveStations = {
         r[entry.status && entry.status.online ? 0 : 1].push(entry.settings)
       }
       return r
-    }
+    },
+    stationStatusService: state => callsign => state.services[callsign]
   },
   mutations: {
     [MUTATE_ACTIVE_STATIONS_READ] (state) {

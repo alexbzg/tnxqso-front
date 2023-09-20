@@ -43,8 +43,7 @@
                 :class="{updated_tab: !$store.state.activeStations.read}">Stations</router-link>
             <router-link to="/talks" tag="div" id="tab_chat" class="tab"
               :class="{updated_tab: $store.state.services.talks && $store.state.services.talks.new}">Talks</router-link>
-            <router-link to="/login" tag="div" id="tab_login" class="tab" v-if="!loggedIn">Login</router-link>
-            <router-link to="/profile" tag="div" id="tab_login" class="tab" v-else>Profile</router-link>
+            <profile-tab/>
             <router-link to="/post" tag="div" id="tab_post" class="tab tab_envelope" v-if="loggedIn">
                 <img :src="'/static/images/icon_envelope' + (unreadMessages.length ? '_flash' : '') + '.gif'" />
             </router-link>
@@ -75,6 +74,7 @@ import storage from './storage'
 import {formatPeriod} from './utils'
 import StationStatus from './components/StationStatus'
 import LanguageSwitch from './components/LanguageSwitch'
+import ProfileTab from './components/ProfileTab'
 
 //import StompClient from './stomp-client'
 
@@ -91,7 +91,7 @@ const LOCALIZED_ROUTES = ['Profile', 'Post', 'Chat', 'Talks']
 export default {
   USER_FIELDS_COUNT: USER_FIELDS_COUNT,
   name: 'station',
-  components: {StationStatus, LanguageSwitch},
+  components: {StationStatus, LanguageSwitch, ProfileTab},
   data () {
     const tabsUnread = {}
     for (const tab in tabs) {

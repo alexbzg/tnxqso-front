@@ -19,7 +19,7 @@ import {replace0} from '../utils'
 
 export default {
   replace0: replace0,
-  name: 'changePassword',
+  name: 'PrivateMessageForm',
   props: ['chatCallsignTo', 'callsignTo', 'replyTo'],
   data () {
     return {

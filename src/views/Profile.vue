@@ -37,7 +37,8 @@
                 <img class="icon_info" src="/static/images/icon_info.png" title="Info"
                     @click="infoPopup = getString('POPUP_STATION')">
                 <input type="checkbox" id="checkbox_publish" v-model="settings.publish"/> 
-                <b>{{getString('STATION_SHOW')}}</b> {{getString('STATION_VIEW')}}<br/>
+                <b>{{getString('STATION_SHOW')}}</b> 
+                {{getString('STATION_THIS')}} {{getString('STATION_VIEW')}}<br/>
                 {{getString('STATION_CALLSIGN')}}:
                 <input type="text" 
                     id="station_callsign" 
@@ -97,11 +98,11 @@
                                 <span v-for="(field, idx) in qthFieldTitles" :key="field">
                                     <input type="text" :id="'qth_field' + idx"
                                         :disabled="settings.status.get !== 'manual'"
-                                        v-model="status.qth.fields.values[idx]"/><br/>
+                                        v-model.trim="status.qth.fields.values[idx]"/><br/>
                                 </span>
                                 <input type="text" id="locator"
                                     :disabled="settings.status.get !== 'manual'"
-                                    v-model="status.qth.loc"/><br/>
+                                    v-model.trim="status.qth.loc"/><br/>
                             </td>
                         </tr>
                     </table>

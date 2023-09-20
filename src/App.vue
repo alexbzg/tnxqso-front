@@ -16,12 +16,7 @@
                         :class="{updated_tab: $store.state.services.talks.new}">
                         Talks
                     </router-link>
-                    <router-link to="/login" tag="div" id="tab_login" class="tab" v-if="!loggedIn">
-                        Login
-                    </router-link>
-                    <router-link to="/profile" tag="div" id="tab_login" class="tab" v-else>
-                        Profile
-                    </router-link>
+                    <profile-tab/>
                     <router-link to="/post" tag="div" id="tab_post" class="tab tab_envelope" v-if="loggedIn">
                         <img :src="'/static/images/icon_envelope' + (unreadMessages.length ? '_flash' : '') + '.gif'" />
                     </router-link>
@@ -71,11 +66,11 @@ import capitalizeDirective from './capitalize-directive'
 capitalizeDirective()
 
 import LanguageSwitch from './components/LanguageSwitch'
-// import DonateBlock from './components/DonateBlock.vue'
+import ProfileTab from './components/ProfileTab'
 
 export default {
   name: 'app',
-  components: {LanguageSwitch},
+  components: {LanguageSwitch, ProfileTab},
   data () {
     return {
 //      user: user

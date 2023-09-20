@@ -124,7 +124,17 @@ table.tabs td#station_title .period{
     font-size: 14px;
 
 }
-
+table.tabs td #tab_profile img{
+    vertical-align: -2px;
+    margin: 0 5px 0 0;
+    padding: 0;
+}
+table.tabs td #tab_profile:hover{
+    text-decoration: none;
+}
+table.tabs td #tab_profile span:hover{
+    text-decoration: underline;
+}
 
 
 
@@ -140,6 +150,7 @@ table.tabs td#status{
     font-size: 20px;
     text-align: center;
     line-height: 16px;
+    position: relative;
 }
 .status_offline{
     background-color: #ff4949;
@@ -147,6 +158,38 @@ table.tabs td#status{
 .status_online{
     background-color: #4ab54a;
 }
+#status_block_top img{
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    cursor: pointer;
+}
+
+
+
+.qth_field{
+    margin-bottom: 15px;
+    display: block;
+    line-height: 16px;
+}
+.qth_field_name {
+    display: inline-block;
+    width: 80px;
+    text-align: left;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+}
+input.qth_field_value {
+    font-size: 16px;
+    width: 250px;
+    margin: 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+}
+
 
 
 table#status_block_info{
@@ -168,6 +211,14 @@ table#status_block_info td{
 }
 table#status_block_info td#current_loc{
     padding: 0 0 5px 0;
+    position: relative;
+}
+table#status_block_info td#current_loc .qth_field{
+    margin: 0px;
+    display: block;
+    line-height: 14px;
+    padding: 0 0 3px 0;
+    position: relative;
 }
 
 table#status_block_info span.datetime{
@@ -176,6 +227,17 @@ table#status_block_info span.datetime{
     font-size: 12px;
     color: #777;
 }
+
+
+table#status_block_info #icon_edit_qth{
+    position: absolute;
+    top: 2px;
+    right: 5px;
+    cursor: pointer;
+}
+
+
+
 
 
 
@@ -242,7 +304,7 @@ img#logo{    vertical-align: -10%;}
 }
 
 
-#tab_stations{    margin-left: 30px;}
+#tab_stations{    margin-left: 20px;}
 .tabs.index_tabs #tab_stations{    margin-left: 0px;}
 
 

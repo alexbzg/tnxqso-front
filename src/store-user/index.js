@@ -94,7 +94,8 @@ export const storeUser = {
     },
     unreadMessages: state => {
       return state.messages.filter(msg => msg.unread)
-    }
+    },
+    userSettingsInitialized: state => state.user.settings?.initialized
   },
   mutations: {
     [MUTATE_USER] (state, payload) {

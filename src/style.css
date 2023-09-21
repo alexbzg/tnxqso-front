@@ -1379,6 +1379,11 @@ table#cluster td.spotter{
     position: relative;
 
 }
+#chat img{
+    max-height: 150px;
+    max-width: 150px;
+}
+
 #div_no_login, #div_no_email{
     color: #777;
     margin: 20px 0;

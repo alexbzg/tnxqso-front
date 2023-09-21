@@ -7,9 +7,9 @@ const RE_MSG_TO = /(:?\u21d2\s?\w+(:?\/\w+)*\s?)+(:?\s|$)/
 const MSG_SANITIZE_HTML_SETTINGS = {
   allowedTags: ['h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
     'nl', 'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
-    'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'image'],
+    'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'img'],
   allowedAttributes: {
-    image: ['src']
+    img: ['src']
   }
 }
 

@@ -15,6 +15,12 @@
           <input type="button" id="upload_file" value="Upload - Загрузить"
                 :disabled="posting || (!upload.file && !upload.caption)" @click="uploadPost"/>
         </div>
+        <img
+            id="loading_spinner"
+            class="spinner"
+            v-if="posting"
+            src="/static/images/spinner.gif"
+        />
 
         <div class="media" v-for="(item, idx) in serviceData" :key="idx"
             @click="openEntry(item)">
@@ -31,9 +37,9 @@
 
             <div class="gradient">&nbsp;</div>
             <div class="post_info" v-if="item.post_datetime">
-              <img  
-                class="post_comments" 
-                :src="'/static/images/icon_comment' + 
+              <img
+                class="post_comments"
+                :src="'/static/images/icon_comment' +
                     (!commentsRead[item.id] || (item.last_comment_id > commentsRead[item.id]) ?
                         '_green' : '') + '.png'"
                 v-if="item.last_comment_id"
@@ -155,11 +161,11 @@ export default {
         .finally(() => { this.posting = false })
     },
     uploadPost () {
+      this.showUpload = false
       this.serverPost(this.upload, true)
         .then(() => {
           this.upload.file = null
           this.upload.caption = null
-          this.showUpload = false
         })
     },
     deleteItem (id) {
@@ -167,9 +173,9 @@ export default {
         confirm('Удалить запись?\nDo you really want to delete this post?')) {
         this.serverPost({}, false, `/${id}`, 'delete')
       }
-    }, 
+    },
     updateCommentsRead (commentId) {
-      if (!this.commentsRead[this.activeEntry.id] || 
+      if (!this.commentsRead[this.activeEntry.id] ||
             (this.commentsRead[this.activeEntry.id] < commentId)) {
         this[ACTION_REQUEST]({
           path: `blog/${this.activeEntry.id}/comments/read`,

@@ -62,34 +62,47 @@
                         </tr>
                     </table>
                 </td>
+                <td id="corrs">
+                  <table id="top_qso">
+                    <tr>
+                      <th id="col1">
+                        <select
+                            v-model="corrStatsSize">
+                            <option
+                                v-for="val in $options.CORR_STATS_SIZE_OPTIONS"
+                                :key="val"
+                                :value="val">
+                                    Top{{val}}
+                            </option>
+                        </select>
+                      </th>
+                      <th id="col2">
+                        <select
+                          v-model="corrStatsCountrySelected">
+                          <option>World</option>
+                          <option
+                              v-for="country in corrStatsCountries"
+                              :key="country">
+                              {{country}}
+                          </option>
+                        </select>
+                      </th>
+                      <th>QSO</th>
+                    </tr>
+                    <tr
+                      v-for="entry, idx in corrStatsFiltered.slice(0, corrStatsSize)"
+                      :key="idx"
+                      :class="{odd: idx % 2}">
+                      <td>{{idx + 1}}</td>
+                      <td class="call">{{entry[0]}}</td>
+                      <td class="value">{{entry[1][0]}}</td>
+                    </tr>
+                  </table>
+                </td>
             </tr>
         </table>
 
-        <table id="top_qso">
-          <tr>
-            <th>Тор</th>
-            <th>
-              <select
-                v-model="corrStatsCountrySelected">
-                <option>World</option>
-                <option
-                    v-for="country in corrStatsCountries"
-                    :key="country">
-                    {{country}}
-                </option>
-              </select>
-            </th>
-            <th>QSO</th>
-          </tr>
-          <tr
-            v-for="entry, idx in corrStatsFiltered"
-            :key="idx"
-            :class="{odd: idx % 2}">
-            <td>{{idx + 1}}</td>
-            <td class="call">{{entry[0]}}</td>
-            <td class="value">{{entry[1][0]}}</td>
-          </tr>
-        </table>
+
 
 
 
@@ -110,12 +123,15 @@ const STATS_FILTER_STORAGE_KEY = 'statsFilter'
 import COUNTRIES from '../countries.json'
 import COUNTRY_PFX from '../country_pfx.json'
 
+const CORR_STATS_SIZE_OPTIONS = [10, 20, 100]
+
 export default {
   name: 'StationStats',
   BANDS: orderedBands(),
   MODES: MODES,
   MODES_FULL: MODES_FULL,
   components: {ManualStats},
+  CORR_STATS_SIZE_OPTIONS: CORR_STATS_SIZE_OPTIONS,
   data () {
     return {
       tabId: 'stats',
@@ -127,7 +143,8 @@ export default {
       types: ['Calls', 'QSO'],
       type: 'Calls',
       pending: false,
-      corrStatsCountrySelected: 'World'
+      corrStatsCountrySelected: 'World',
+      corrStatsSize: 10
     }
   },
   mounted () {
@@ -187,7 +204,7 @@ export default {
             let pfx = null
             for (let pfx_len = 1; pfx_len < qso.cs.length; pfx_len++) {
               pfx = qso.cs.substr(0, pfx_len)
-              if (pfx in COUNTRY_PFX) 
+              if (pfx in COUNTRY_PFX)
                 r[qso.cs][1] = COUNTRIES[COUNTRY_PFX[pfx]]
               else
                 break

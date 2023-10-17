@@ -2230,7 +2230,7 @@ table#stats td{
     vertical-align: top;
 }
 table#stats_total{
-    margin: 70px 100px 0 70px;
+    margin: 74px 70px 0 0px;
     border-collapse: collapse;
 }
 table#stats_total td{
@@ -2277,7 +2277,7 @@ table#stats_total td input.manualFieldValue{
 
 table#stats td#stats_filter{
     text-align: center;
-    padding: 5px 0 0 0px;
+    padding: 5px 70px 0 0px;
     font-weight: bold;
     color: #070;
 }
@@ -2327,29 +2327,33 @@ table#filter_data .data{
 
 
 table#top_qso{
-    margin: 0px auto;
+    margin: 8px auto 0 auto;
     border-collapse: collapse;
 }
 table#top_qso tr.odd td{
     background-color: #f9f9f9;
 }
 table#top_qso th{
-    font-weight: bold;
+    font-weight: normal;
     color: #007;
-    padding-bottom: 10px;
+    padding-bottom: 15px;
 }
 table#top_qso th select{
     border: 1px solid #eee;
     color: #007;
 }
+table#top_qso th#col1 select{
+    padding-left: 0;
+    padding-right: 0;
+}
 table#top_qso td{
     border: 1px solid #ccc;
-    padding: 5px 20px;
+    padding: 5px 10px;
 }
 table#top_qso td.call{
     text-align: left;
     font-weight: bold;
-    padding: 5px 50px 5px 20px;
+    padding: 5px 30px 5px 20px;
     font-weight: bold;
 }
 table#top_qso td.value{    text-align: center;}

@@ -12,9 +12,6 @@
                 <td>
                     <table id="stats_total">
                         <tr>
-                            <td class="top option"></td><td class="top value">Total</td>
-                        </tr>
-                        <tr>
                             <td class="option">QSO</td><td class="value">{{qsoCount}}</td>
                         </tr>
                         <tr>
@@ -68,35 +65,33 @@
             </tr>
         </table>
 
-
-<!--
         <table id="top_qso">
           <tr>
             <th>Тор</th>
             <th>
-              <select>
-                <option selected>World</option>
-                <option>Russia</option>
-                <option>Italy</option>
+              <select
+                v-model="corrStatsCountrySelected">
+                <option>World</option>
+                <option
+                    v-for="country in corrStatsCountries"
+                    :key="country">
+                    {{country}}
+                </option>
               </select>
             </th>
             <th>QSO</th>
           </tr>
-          <tr>
-            <td>1</td><td class="call">IK0HBN</td><td class="value">150</td>
-          </tr>
-          <tr>
-            <td>2</td><td class="call">UA9CGL</td><td class="value">80</td>
-          </tr>
-          <tr>
-            <td>3</td><td class="call">RA9AJ</td><td class="value">50</td>
-          </tr>
-          <tr>
-            <td>4</td><td class="call">RM8W</td><td class="value">15</td>
+          <tr
+            v-for="entry, idx in corrStatsFiltered"
+            :key="idx"
+            :class="{odd: idx % 2}">
+            <td>{{idx + 1}}</td>
+            <td class="call">{{entry[0]}}</td>
+            <td class="value">{{entry[1][0]}}</td>
           </tr>
         </table>
 
--->
+
 
     </div>
 </template>
@@ -112,6 +107,8 @@ import {ACTION_POST} from '../store-user'
 import ManualStats from '../components/ManualStats'
 
 const STATS_FILTER_STORAGE_KEY = 'statsFilter'
+import COUNTRIES from '../countries.json'
+import COUNTRY_PFX from '../country_pfx.json'
 
 export default {
   name: 'StationStats',
@@ -129,7 +126,8 @@ export default {
       },
       types: ['Calls', 'QSO'],
       type: 'Calls',
-      pending: false
+      pending: false,
+      corrStatsCountrySelected: 'World'
     }
   },
   mounted () {
@@ -179,6 +177,42 @@ export default {
       const r = this.uniqueFieldValues(this.filter.field)
       return [...r].sort()
     },
+    corrStats () {
+      let r = {}
+      for (const qso of this.data)
+        if (qso.cs in r)
+            r[qso.cs][0] += 1
+        else {
+            r[qso.cs] = [1, null]
+            let pfx = null
+            for (let pfx_len = 1; pfx_len < qso.cs.length; pfx_len++) {
+              pfx = qso.cs.substr(0, pfx_len)
+              if (pfx in COUNTRY_PFX) 
+                r[qso.cs][1] = COUNTRIES[COUNTRY_PFX[pfx]]
+              else
+                break
+            }
+        }
+      r = Object.entries(r)
+      r.sort((a, b) => b[1][0] - a[1][0])
+      return r
+    },
+    corrStatsCountries () {
+      let r = {}
+      for (const entry of this.corrStats)
+        if (entry[1][1])
+            r[entry[1][1]] = null
+      r = Object.keys(r)
+      r.sort()
+      return r
+    },
+    corrStatsFiltered () {
+      if (this.corrStatsCountrySelected === 'World')
+        return this.corrStats
+      else
+        return this.corrStats.filter((item) => item[1][1] === this.corrStatsCountrySelected)
+    },
+
     statsTable () {
       const r = {}
 

@@ -2224,7 +2224,7 @@ table#info_popup_close{
 }
 
 table#stats{
-    margin: 0 auto 100px auto;
+    margin: 0 auto 50px auto;
 }
 table#stats td{
     vertical-align: top;
@@ -2330,7 +2330,18 @@ table#top_qso{
     margin: 0px auto;
     border-collapse: collapse;
 }
-table#top_qso th{    font-weight: normal;}
+table#top_qso tr.odd td{
+    background-color: #f9f9f9;
+}
+table#top_qso th{
+    font-weight: bold;
+    color: #007;
+    padding-bottom: 10px;
+}
+table#top_qso th select{
+    border: 1px solid #eee;
+    color: #007;
+}
 table#top_qso td{
     border: 1px solid #ccc;
     padding: 5px 20px;
@@ -2344,6 +2355,7 @@ table#top_qso td.call{
 table#top_qso td.value{    text-align: center;}
 
 table#top_qso select{    padding: 5px 20px; }
+
 
 
 

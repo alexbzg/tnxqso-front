@@ -65,7 +65,7 @@
                 <td id="corrs">
                   <table id="top_qso">
                     <tr>
-                      <th id="col1">
+                      <th class="col1">
                         <select
                             v-model="corrStatsSize">
                             <option
@@ -87,15 +87,25 @@
                           </option>
                         </select>
                       </th>
-                      <th>QSO</th>
+                      <th class="col1">
+                        <select
+                            v-model="corrStatsMode">
+                            <option>QSO</option>
+                            <option
+                                v-for="mode in $options.MODES"
+                                :key="mode">
+                                {{mode}}
+                            </option>
+                        </select>
+                      </th>
                     </tr>
                     <tr
-                      v-for="entry, idx in corrStatsFiltered.slice(0, corrStatsSize)"
+                      v-for="entry, idx in corrStatsFiltered"
                       :key="idx"
                       :class="{odd: idx % 2}">
                       <td>{{idx + 1}}</td>
-                      <td class="call">{{entry[0]}}</td>
-                      <td class="value">{{entry[1][0]}}</td>
+                      <td class="call">{{entry.callsign}}</td>
+                      <td class="value">{{entry.QSO[corrStatsMode]}}</td>
                     </tr>
                   </table>
                 </td>
@@ -144,6 +154,7 @@ export default {
       type: 'Calls',
       pending: false,
       corrStatsCountrySelected: 'World',
+      corrStatsMode: 'QSO',
       corrStatsSize: 10
     }
   },
@@ -197,37 +208,39 @@ export default {
     corrStats () {
       let r = {}
       for (const qso of this.data)
-        if (qso.cs in r)
-            r[qso.cs][0] += 1
-        else {
-            r[qso.cs] = [1, null]
+        if (qso.cs in r) {
+            r[qso.cs].QSO[qso.mode] += 1
+            r[qso.cs].QSO.QSO += 1
+        } else {
+            r[qso.cs] = {QSO: {QSO: 1}, country: null}
+            for (const mode of MODES)
+                r[qso.cs].QSO[mode] = 0
+            r[qso.cs].QSO[qso.mode] = 1
             let pfx = null
             for (let pfx_len = 1; pfx_len < qso.cs.length; pfx_len++) {
               pfx = qso.cs.substr(0, pfx_len)
               if (pfx in COUNTRY_PFX)
-                r[qso.cs][1] = COUNTRIES[COUNTRY_PFX[pfx]]
+                r[qso.cs].country = COUNTRIES[COUNTRY_PFX[pfx]]
               else
                 break
             }
         }
-      r = Object.entries(r)
-      r.sort((a, b) => b[1][0] - a[1][0])
-      return r
+      return Object.entries(r).map((entry) => ({callsign: entry[0], ...entry[1]}) )
     },
     corrStatsCountries () {
       let r = {}
       for (const entry of this.corrStats)
-        if (entry[1][1])
-            r[entry[1][1]] = null
+        if (entry.country)
+            r[entry.country] = null
       r = Object.keys(r)
       r.sort()
       return r
     },
     corrStatsFiltered () {
-      if (this.corrStatsCountrySelected === 'World')
-        return this.corrStats
-      else
-        return this.corrStats.filter((item) => item[1][1] === this.corrStatsCountrySelected)
+      const r = this.corrStatsCountrySelected === 'World' ? this.corrStats :
+        this.corrStats.filter((item) => item.country === this.corrStatsCountrySelected)
+      r.sort((a, b) => b.QSO[this.corrStatsMode] - a.QSO[this.corrStatsMode])
+      return r.slice(0, this.corrStatsSize).filter(item => item.QSO[this.corrStatsMode] > 0)
     },
 
     statsTable () {

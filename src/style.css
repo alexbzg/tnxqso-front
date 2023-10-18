@@ -2342,7 +2342,7 @@ table#top_qso th select{
     border: 1px solid #eee;
     color: #007;
 }
-table#top_qso th#col1 select{
+table#top_qso th.col1 select{
     padding-left: 0;
     padding-right: 0;
 }

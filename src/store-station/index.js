@@ -13,7 +13,6 @@ import {storeActiveStations, activeStationsInit, createStationStatusService, MUT
   from '../store-active-stations'
 import stompClient from '../stomp-client'
 import {urlCallsign} from '../utils'
-import request from '../request'
 
 const RELOAD_INT_STATION_SETTINGS = 60 * 1000
 
@@ -61,14 +60,6 @@ store.dispatch(ACTION_LOAD_STATION)
           createStationStatusService(store.commit, store.state.stationSettings)
         }
       })
-    const visitorRequestPayload = {'station': store.state.stationSettings.station.callsign}
-    if (store.getters.userToken) {
-        visitorRequestPayload['token'] = store.getters.userToken
-    } else {
-        visitorRequestPayload['user_id'] = store.getters.user.id
-    }
-    request.perform('visitors', visitorRequestPayload)
-    setInterval(() => request.perform('visitors', visitorRequestPayload), 1000*60*60*24)
   })
 
 

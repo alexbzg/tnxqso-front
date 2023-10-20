@@ -7,13 +7,14 @@ import StationInfo from '../views/StationInfo'
 import StationMap from '../views/StationMap'
 import StationLog from '../views/StationLog'
 import StationStats from '../views/StationStats'
-import StationInstagram from '../views/StationInstagram'
 import StationDonate from '../views/StationDonate'
 import Chat from '../views/Chat'
 import ActiveStations from './../views/ActiveStations'
 import Login from './../views/Login'
 import Profile from './../views/Profile'
 import Post from '../views/Post'
+import request from '../request'
+import {STATION_TABS} from '../constants'
 
 Vue.use(Router)
 
@@ -83,12 +84,6 @@ const router = new Router({
       props: true
     },
     {
-      path: '/instagram',
-      name: 'StationInstagram',
-      component: StationInstagram,
-      props: true
-    },
-    {
       path: '/donate',
       name: 'StationDonate',
       component: StationDonate,
@@ -112,5 +107,23 @@ const router = new Router({
     }
   ]
 })
+
+router.afterEach((to) => {
+  const tab = to.path.slice(1)
+  if (STATION_TABS.includes(tab)) {
+	const pathSegs = location.pathname.split('/')
+	while (pathSegs.slice(-1).pop() === "")
+		pathSegs.pop()
+	const station = pathSegs.slice(-1).pop()
+    const visitorRequestPayload = { station, tab }
+    if (router.app.$store.getters.userToken) {
+        visitorRequestPayload['token'] = router.app.$store.getters.userToken
+    } else {
+        visitorRequestPayload['user_id'] = router.app.$store.getters.user.id
+    }
+    request.perform('visitors', visitorRequestPayload)
+  }
+})
+
 
 export default router

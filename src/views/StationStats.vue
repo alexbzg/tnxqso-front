@@ -207,15 +207,16 @@ export default {
     },
     corrStats () {
       let r = {}
-      for (const qso of this.data)
+      for (const qso of this.data) {
+        const qso_mode = this.getMode(qso.mode)
         if (qso.cs in r) {
-            r[qso.cs].QSO[qso.mode] += 1
+            r[qso.cs].QSO[qso_mode] += 1
             r[qso.cs].QSO.QSO += 1
         } else {
             r[qso.cs] = {QSO: {QSO: 1}, country: null}
             for (const mode of MODES)
                 r[qso.cs].QSO[mode] = 0
-            r[qso.cs].QSO[qso.mode] = 1
+            r[qso.cs].QSO[qso_mode] = 1
             let pfx = null
             for (let pfx_len = 1; pfx_len < qso.cs.length; pfx_len++) {
               pfx = qso.cs.substr(0, pfx_len)
@@ -225,6 +226,7 @@ export default {
                 break
             }
         }
+      }
       return Object.entries(r).map((entry) => ({callsign: entry[0], ...entry[1]}) )
     },
     corrStatsCountries () {

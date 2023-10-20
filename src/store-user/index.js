@@ -3,6 +3,7 @@ import request from '../request'
 import stompClient from '../stomp-client'
 
 const STORAGE_KEY_USER_TOKEN = 'userToken'
+const STORAGE_KEY_USER_ID = 'userID'
 
 export const MUTATE_USER = 'mutateUser'
 
@@ -44,6 +45,11 @@ if (user.token) {
   user.remember = true
 } else {
   user.token = storage.load(STORAGE_KEY_USER_TOKEN, 'session')
+}
+user.id = storage.load(STORAGE_KEY_USER_ID, 'local')
+if (!user.id) {
+  user.id = crypto.randomUUID()  
+  storage.save(STORAGE_KEY_USER_ID, user.id, 'local')
 }
 
 function userInit(commit, dispatch) {

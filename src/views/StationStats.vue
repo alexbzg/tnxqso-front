@@ -111,7 +111,38 @@
                 </td>
             </tr>
         </table>
+        
 
+        <template  v-if="showVisitors">
+            <h4 id="visitors_h4">Статистика посещений страниц станции {{stationSettings.station.callsign}}</h4>
+            <table id="visitors_table">
+                <tr>
+                    <th class="period">Период</th>
+                    <th 
+                        v-for="tab in tabsEnabled"
+                        :key="tab"
+                        class="tab_visits">
+                        {{$options.STATION_TABS_NAMES[tab]}}
+                    </th>
+                    <th class="tab_visits total">
+                        Всего
+                    </th>
+                </tr>
+                <tr v-for="period in $options.PERIODS"
+                    :key="period[0]">
+                    <td class="period">{{period[1]}}</td>
+                    <td 
+                        v-for="tab in tabsEnabled"
+                        :key="tab"
+                        class="tab_visits">
+                        {{visitors[period[0]][tab] ? visitors[period[0]][tab] : ''}}
+                    </td>
+                    <td class="tab_visits total">
+                        {{visitors[period[0]].total ? visitors[period[0]].total : ''}}
+                    </td>
+                </tr>
+            </table>
+        </template>
 
 
 
@@ -119,13 +150,15 @@
     </div>
 </template>
 <script>
-import {mapState, mapActions} from 'vuex'
+import {mapState, mapActions, mapGetters} from 'vuex'
 
 import {MODES, MODES_FULL, orderedBands} from '../ham-radio'
 import storage from '../storage'
 import {qthFieldTitles} from '../utils'
 import QTH_PARAMS from '../../public/static/js/qthParams.json'
 import {ACTION_POST} from '../store-user'
+import request from '../request'
+import {STATION_TABS, STATION_TABS_NAMES} from '../constants'
 
 import ManualStats from '../components/ManualStats'
 
@@ -140,8 +173,10 @@ export default {
   BANDS: orderedBands(),
   MODES: MODES,
   MODES_FULL: MODES_FULL,
-  components: {ManualStats},
   CORR_STATS_SIZE_OPTIONS: CORR_STATS_SIZE_OPTIONS,
+  STATION_TABS_NAMES: STATION_TABS_NAMES,
+  PERIODS: [['day', 'Посетителей сегодня'], ['week', 'Посетителей за неделю'], ['total', 'Всего']],
+  components: {ManualStats},
   data () {
     return {
       tabId: 'stats',
@@ -155,7 +190,9 @@ export default {
       pending: false,
       corrStatsCountrySelected: 'World',
       corrStatsMode: 'QSO',
-      corrStatsSize: 10
+      corrStatsSize: CORR_STATS_SIZE_OPTIONS[0],
+      visitorsData: {},
+      currentTS: Date.now() / 1000 
     }
   },
   mounted () {
@@ -163,6 +200,10 @@ export default {
   },
   computed: {
     ...mapState(['stationSettings']),
+    ...mapGetters(['stationAdmin', 'siteAdmin']),
+    showVisitors () {
+      return this.stationAdmin || this.siteAdmin
+    },
     qthFieldTitles () {
       return qthFieldTitles(this.stationSettings.qthCountry)
     },
@@ -316,6 +357,39 @@ export default {
         }
       }
       return r
+    },
+    tabsEnabled () {
+      return STATION_TABS.filter(tab => this.stationSettings?.enable?.[tab])
+    },
+    visitors () {
+      if (!this.showVisitors)
+        return false
+      const r = {day: {}, week: {}, total: {}}
+      for (const period in r) {
+        r[period].total = 0
+        for (const tab of this.tabsEnabled)
+            r[period][tab] = 0
+      }
+      const limits = {day: this.currentTS - 3600*24, week: this.currentTS - 3600*24*7}
+      for (const user in this.visitorsData) {
+        const flags = {day: false, week: false}
+        r.total.total += 1
+        for (const tab in this.visitorsData[user]) {
+          r.total[tab] += 1
+          for (const limit in limits) {
+            if (limits[limit] <= this.visitorsData[user][tab]) {
+              r[limit][tab] += 1
+              flags[limit] = true
+            }
+          }
+        }
+        for (const limit in limits) {
+          if (flags[limit]) {
+            r[limit].total += 1
+         }
+        }
+      }
+      return r
     }
   },
   methods: {
@@ -396,6 +470,9 @@ export default {
           .finally(() => {
             this.pending = false
           })
+        if (this.showVisitors)
+          request.getJSON('visitors', this.stationSettings.station.callsign)
+            .then(response => this.visitorsData = response.data)
       }
     }
   },

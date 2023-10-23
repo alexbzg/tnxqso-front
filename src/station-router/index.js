@@ -31,13 +31,13 @@ const router = new Router({
     },
     {
       path: '/cluster',
-      name: 'StationCluster',
+      name: 'cluster',
       props: true,
       component: StationCluster
     },
     {
       path: '/chat',
-      name: 'Chat',
+      name: 'chat',
       component: Chat,
       props: {serviceName: 'chat'}
     },
@@ -49,7 +49,7 @@ const router = new Router({
     },
     {
       path: '/stats',
-      name: 'StationStats',
+      name: 'stats',
       component: StationStats,
       props: true
     },
@@ -61,31 +61,31 @@ const router = new Router({
     },
     {
       path: '/blog',
-      name: 'StationBlog',
+      name: 'blog',
       component: StationBlog,
       props: {serviceName: 'blog'}
     },
     {
       path: '/log',
-      name: 'StationLog',
+      name: 'log',
       component: StationLog,
       props: true
     },
     {
       path: '/info',
-      name: 'StationInfo',
+      name: 'stationInfo',
       component: StationInfo,
       props: true
     },
     {
       path: '/map',
-      name: 'StationMap',
+      name: 'map',
       component: StationMap,
       props: true
     },
     {
       path: '/donate',
-      name: 'StationDonate',
+      name: 'donate',
       component: StationDonate,
       props: true
     },
@@ -109,19 +109,18 @@ const router = new Router({
 })
 
 router.afterEach((to) => {
-  const tab = to.path.slice(1)
-  if (STATION_TABS.includes(tab)) {
+  if (STATION_TABS.includes(to.name)) {
 	const pathSegs = location.pathname.split('/')
 	while (pathSegs.slice(-1).pop() === "")
 		pathSegs.pop()
 	const station = pathSegs.slice(-1).pop()
-    const visitorRequestPayload = { station, tab }
+    const payload = { station, tab: to.name }
     if (router.app.$store.getters.userToken) {
-        visitorRequestPayload['token'] = router.app.$store.getters.userToken
+        payload['token'] = router.app.$store.getters.userToken
     } else {
-        visitorRequestPayload['user_id'] = router.app.$store.getters.user.id
+        payload['user_id'] = router.app.$store.getters.user.id
     }
-    request.perform('visitors', visitorRequestPayload)
+    request.perform('visitors', payload)
   }
 })
 

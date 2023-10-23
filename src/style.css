@@ -2364,13 +2364,24 @@ table#top_qso select{    padding: 5px 20px; }
 
 
 
+h4#visitors_h4{
+    margin-bottom: 10px;
+}
+table#visitors_table{
+    margin: 2px auto 0 auto;
+    border-collapse: collapse;
+}
+table#visitors_table td, table#visitors_table th{
+    padding: 5px 20px;
+    text-align: center;
+    border: 1px solid #ccc;
+}
 
 
 
 
 
-
-/*              B L O G         */
+/*    ============================          B L O G   ===========================       */
 
 #blog{
     margin: 20px 0;

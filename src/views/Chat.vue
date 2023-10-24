@@ -8,21 +8,6 @@
                         <chat-callsign-edit/>
                     </td>
                     <td>
-                      <img
-                        id="admin_message"
-                        v-show="isAdmin && service && service.station "
-                        src="/static/images/chat_dots.png"
-                        title="*** Закреплённое сообщение / *** Pinned message"
-                        @click="pinMsg"
-                      />
-
-                      <!-- <img class="admin_button"
-                            v-show="isAdmin && service && service.station "
-                            src="/static/images/icon_admin_message.png"
-                            title="*** Закреплённое сообщение / *** Pinned message"
-                            @click="pinMsg"> -->
-                    </td>
-                    <td rowspan="2">
                         <input type="text" id="message_text"
                           v-model="messageText" @keyup="onTyping" ref="msgTextInput"/>
                         <img id="smile_btn" src="/static/images/smiles/01.gif"
@@ -37,14 +22,29 @@
                           v-model.trim="userNameField" @blur="userNameBlur"/>
                     </td>
                     <td
+                      id="chat_control_buttons"
                         v-if="(service && service.station) && (isStationAdmin || siteAdmin)">
-                        <img
+
+                        <span
+                          id="admin_message"
+                          v-show="isAdmin && service && service.station "
+                          src="/static/images/chat_dots.png"
+                          title="*** Закреплённое сообщение / *** Pinned message"
+                          @click="pinMsg" >***</span>
+
+                        <span
                           id="chat_mode"
-                          v-show="isAdmin && service && service.station"
-                          :src="'/static/images/chat_mode_' + (chatAccess === 'admins' ? 'admin' : 'all') + '.png'"
-                          :title="getString('CHAT_ACCESS' + '_' + (chatAccess === 'admins' ? 'ADMINS' : 'USERS'))"
-                          @click="toggleChatAccess"
-                        />
+                          :class="{chat_mode_admin: chatAccess === 'admins',
+                            chat_mode_all: chatAccess === 'users'}"
+                          @click="toggleChatAccess">
+                            CHAT MODE: {{chatAccess === 'admins' ? 'ADMIN' : 'ALL'}}
+                        </span>
+
+                        <span
+                          id="blacklist">
+                            BLACKLIST
+                        </span>
+
                     </td>
                 </tr>
             </tbody>
@@ -58,7 +58,7 @@
             Подтвердите ваш email, чтобы отправлять сообщения.
         </div>
         <div id="div_no_email" v-if="emailConfirmed && !hasChatAccess">
-            {{getString('CHAT_ACCESS_RESTRICTED')}}            
+            {{getString('CHAT_ACCESS_RESTRICTED')}}
         </div>
 
 
@@ -171,7 +171,6 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       vm.storeCurrentActivity()
-      vm.markServiceRead()
     })
   },
   beforeRouteLeave (to, from, next) {
@@ -277,7 +276,7 @@ export default {
       } catch (error) {
         console.log(error)
       }
-    
+
     }
   },
   watch: {

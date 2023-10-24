@@ -1476,14 +1476,6 @@ table#message_form input#your_name{
 
 }
 
-table#message_form img#admin_message{
-    cursor: pointer;
-    margin-top: 10px;
-}
-table#message_form img#chat_mode{
-    cursor: pointer;
-    margin-top: 5px;
-}
 
 #modal_clear_log{
     display: inline-block;
@@ -1502,7 +1494,7 @@ table#message_form img#chat_mode{
 table#message_form input#message_text{
     width: 800px;
     padding: 0px 5px 2px 5px;
-    margin: 10px 0 0 20px;
+    margin: 0px 0 0 20px;
     text-align: left;
     font-size: 18px;
     border: none;
@@ -1561,6 +1553,79 @@ table#message_form #smile_btn{
     display: inline-block;
     vertical-align: text-top;
 }
+
+
+table#message_form td#chat_control_buttons{
+    text-align: left;
+    padding-left: 20px;
+    display: flex;
+}
+table#message_form td#chat_control_buttons span{
+    display: inline-block;
+    margin-top: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 10px;
+    border: 1px solid #F93636;
+    background-color: #fff;
+    margin-right: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+table#message_form td#chat_control_buttons span#admin_message{
+    padding: 5px 10px 0px 10px;
+}
+table#message_form td#chat_control_buttons span#chat_mode{
+    padding: 3px 10px 3px 10px;
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+table#message_form td#chat_control_buttons span#chat_mode.chat_mode_all{
+    border-color: green;
+    background-color: #fff;
+    color: green;
+    font-weight: normal;
+}
+table#message_form td#chat_control_buttons span#chat_mode.chat_mode_admin{
+    border-color: #F93636;
+    background-color: #F93636;
+    color: white;
+    font-weight: normal;
+}
+table#message_form td#chat_control_buttons span#blacklist{
+    padding: 3px 10px 3px 10px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    border-color: #777;
+    background-color: #fff;
+    color: #777;
+    font-weight: normal;
+}
+table#message_form td#chat_control_buttons span#admin_message:hover,
+table#message_form td#chat_control_buttons span#chat_mode.chat_mode_all:hover,
+table#message_form td#chat_control_buttons span#blacklist:hover{
+    background-color: #FEFEDF;
+}
+
+
+
+table#message_form img{
+    cursor: pointer;
+}
+table#message_form img#chat_mode{
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 

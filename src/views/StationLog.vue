@@ -137,7 +137,7 @@ export default {
                 for (const qso of this.searchResults) {
                   for (let rda_i = 0; rda_i < rda_count; rda_i++) {
                     if (qso.qth[this.qthFieldRDA].includes(this.searchRDA[rda_i]) &&
-                      !this.searchResultsRDA[rda_i][qso.band].includes[qso.mode]) {
+                      !this.searchResultsRDA[rda_i][qso.band].includes(qso.mode)) {
                       this.searchResultsRDA[rda_i][qso.band].push(qso.mode)
                     }
                   }

@@ -34,7 +34,7 @@
                 :class="{updated_tab: $store.state.services.chat && $store.state.services.chat.new}">Chat</router-link>
             <router-link to="/blog" tag="div" id="tab_blog" class="tab"
                 v-if="enable.blog"
-                :class="{updated_tab: $store.state.services.gallery && $store.state.services.gallery.new}">Blog</router-link>
+                :class="{updated_tab: $store.state.services.blog && $store.state.services.blog.new}">Blog</router-link>
             <router-link to="/donate" tag="div" id="tab_donate" class="tab"
                 v-if="enable.donate"
                 :class="{updated_tab: stationSettings && stationSettings.new.donate &&

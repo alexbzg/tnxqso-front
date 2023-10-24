@@ -45,7 +45,10 @@ if (store.getters.userToken) {
 store.dispatch(ACTION_LOAD_STATION)
   .then(() => {
     const stationCs = store.state.stationSettings.station.callsign
+
     talksInit(store, stationCs)
+
+    //init blog service
     store.commit(MUTATE_SERVICE, 
         {name: 'blog', url: `/aiohttp/blog/${urlCallsign(store.state.stationSettings.admin)}`})
     function updateBlog () {
@@ -53,6 +56,7 @@ store.dispatch(ACTION_LOAD_STATION)
     }
     updateBlog()
     setInterval(updateBlog, RELOAD_INT_SRVC)
+
     activeStationsInit(store)
       .then(() => {
         if (!(stationCs in store.state.activeStations.stations.active)) {

@@ -113,11 +113,11 @@
         </table>
         
 
-        <template  v-if="showVisitors">
+        <template v-if="showVisitors && stationSettings.station && visitors.day">
             <h4 id="visitors_h4">Статистика посещений страниц станции {{stationSettings.station.callsign}}</h4>
             <table id="visitors_table">
                 <tr>
-                    <th class="period">Период</th>
+                    <th class="period">Посетителей</th>
                     <th 
                         v-for="tab in tabsEnabled"
                         :key="tab"
@@ -157,8 +157,9 @@ import storage from '../storage'
 import {qthFieldTitles} from '../utils'
 import QTH_PARAMS from '../../public/static/js/qthParams.json'
 import {ACTION_POST} from '../store-user'
-import request from '../request'
+//import request from '../request'
 import {STATION_TABS, STATION_TABS_NAMES} from '../constants'
+import {urlCallsign} from '../utils'
 
 import ManualStats from '../components/ManualStats'
 
@@ -175,7 +176,7 @@ export default {
   MODES_FULL: MODES_FULL,
   CORR_STATS_SIZE_OPTIONS: CORR_STATS_SIZE_OPTIONS,
   STATION_TABS_NAMES: STATION_TABS_NAMES,
-  PERIODS: [['day', 'Посетителей сегодня'], ['week', 'Посетителей за неделю'], ['total', 'Всего']],
+  PERIODS: [['day', 'сегодня'], ['week', 'за неделю'], ['total', 'всего']],
   components: {ManualStats},
   data () {
     return {
@@ -191,7 +192,7 @@ export default {
       corrStatsCountrySelected: 'World',
       corrStatsMode: 'QSO',
       corrStatsSize: CORR_STATS_SIZE_OPTIONS[0],
-      visitorsData: {},
+      visitors: {},
       currentTS: Date.now() / 1000 
     }
   },
@@ -360,36 +361,6 @@ export default {
     },
     tabsEnabled () {
       return STATION_TABS.filter(tab => this.stationSettings?.enable?.[tab])
-    },
-    visitors () {
-      if (!this.showVisitors)
-        return false
-      const r = {day: {}, week: {}, total: {}}
-      for (const period in r) {
-        r[period].total = 0
-        for (const tab of this.tabsEnabled)
-            r[period][tab] = 0
-      }
-      const limits = {day: this.currentTS - 3600*24, week: this.currentTS - 3600*24*7}
-      for (const user in this.visitorsData) {
-        const flags = {day: false, week: false}
-        r.total.total += 1
-        for (const tab in this.visitorsData[user]) {
-          r.total[tab] += 1
-          for (const limit in limits) {
-            if (limits[limit] <= this.visitorsData[user][tab]) {
-              r[limit][tab] += 1
-              flags[limit] = true
-            }
-          }
-        }
-        for (const limit in limits) {
-          if (flags[limit]) {
-            r[limit].total += 1
-         }
-        }
-      }
-      return r
     }
   },
   methods: {
@@ -471,8 +442,11 @@ export default {
             this.pending = false
           })
         if (this.showVisitors)
-          request.getJSON('visitors', this.stationSettings.station.callsign)
-            .then(response => this.visitorsData = response.data)
+          this[ACTION_POST]({
+            path: 'visitors/stats',
+            data: {'station': urlCallsign(this.stationSettings.station.callsign)}
+          })
+            .then(response => this.visitors = response.data)
       }
     }
   },

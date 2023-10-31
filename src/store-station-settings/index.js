@@ -32,7 +32,8 @@ export const storeStationSettings = {
     },
     isChatAdmin: (state) => (callsign) => {
       return callsign === state.admin || state.chatAdmins.includes(callsign)
-    }
+    }, 
+    stationAdminCallsign: (state) => state.admin
   },
   mutations: {
     [MUTATE_STATION] (state, payload) {

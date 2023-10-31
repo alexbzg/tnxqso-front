@@ -2,9 +2,9 @@
     <img 
         class="icon_ban" 
         src="/static/images/icon_ban.png" 
-        :title="'Ban? / Заблокировать ' + callsign + '?'"
-        v-if="siteAdmin"
-        @click="banQuery()"/>
+        :title="'Ban? / Заблокировать ' + userDisplay + '?'"
+        v-if="siteAdmin || stationAdmin"
+        @click="siteAdmin ? siteBan() : stationBan()"/>
 </template>
 
 <script>
@@ -14,14 +14,14 @@ import messageBox from '../message-box'
 
 export default {
   name: 'userCommunicationButtons',
-  props: ['callsign'],
+  props: ['callsign', 'chatCallsign', 'stationAdmin'],
   data () {
     return {
     }
   },
   methods: {
     ...mapActions([ACTION_POST]),
-    banQuery () {
+    siteBan () {
       this[ACTION_POST]({
         path: 'banUser',
         data: {
@@ -49,10 +49,29 @@ export default {
                 .then(alert('Пользователь заблокирован.'))
             })
         })
-      }
+      },
+    stationBan() {
+      messageBox(
+        `Заблокировать ${this.userDisplay} в этом чате?`,
+        ``,
+        true)
+        .then(() => {
+           this[ACTION_POST]({
+              path: 'station/banUser',
+              data: {
+                stationAdmin: this.stationAdmin,
+                banned: this.callsign
+              }
+            })
+            .then(alert('Пользователь заблокирован.'))
+        })
+    }
   },
   computed: {
-    ...mapGetters(['siteAdmin'])
+    ...mapGetters(['siteAdmin']),
+    userDisplay() {
+      return this.siteAdmin ? this.callsign : (this.chatCallsign ?? this.callsign)
+    }
   }
 }
 </script>

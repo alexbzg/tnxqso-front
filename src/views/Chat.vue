@@ -1,7 +1,7 @@
 <template>
     <div id="chat">
 
-        <table id="message_form" v-if="hasChatAccess">
+        <table id="message_form" v-if="hasChatAccess && !isBanned">
             <tbody>
                 <tr>
                     <td>
@@ -60,6 +60,10 @@
         <div id="div_no_email" v-if="emailConfirmed && !hasChatAccess">
             {{getString('CHAT_ACCESS_RESTRICTED')}}
         </div>
+        <div id="div_no_email" v-if="isBanned">
+            {{getString('CHAT_BANNED')}}
+        </div>
+
 
 
         <smilies v-show="showSmilies" @hide="hideSmilies" @smilie-click="insertSmilie">
@@ -74,7 +78,12 @@
             <tr v-for="(msg, idx) in entry.msg" :class="{admin: msg.admin && service && service.station,
                 new_msg: msg.new, sponsor: msg.sponsor && isAdmin}" :key="idx">
                 <td class="call">
-                    <user-ban-button :callsign="msg.cs"></user-ban-button>
+                    <user-ban-button 
+                        :callsign="msg.cs"
+                        :chat-callsign="msg.user"
+                        :station-admin="isAdmin ? stationAdminCallsign : null"
+                        >
+                    </user-ban-button>
                     <span class="call">{{$options.replace0(msg.user)}}</span>
                     <br/>
                     <span class="name">{{msg.name}}</span>
@@ -143,7 +152,7 @@ import LocalizationMixin from '../localization-mixin'
 
 import {ACTION_POST_ACTIVITY, MUTATE_CURRENT_ACTIVITY, MUTATE_USERS_CONSUMER, ACTION_ADD_USERS_CONSUMER}
   from '../store-activity'
-import {ACTION_POST, ACTION_EDIT_USER} from '../store-user'
+import {ACTION_REQUEST, ACTION_EDIT_USER} from '../store-user'
 import {ACTION_UPDATE_SERVICE} from '../store-services'
 import {ACTION_LOAD_STATION} from '../store-station-settings'
 
@@ -178,7 +187,7 @@ export default {
     next()
   },
   methods: {
-    ...mapActions([ACTION_POST, ACTION_EDIT_USER, ACTION_ADD_USERS_CONSUMER, ACTION_UPDATE_SERVICE, ACTION_POST_ACTIVITY,
+    ...mapActions([ACTION_REQUEST, ACTION_EDIT_USER, ACTION_ADD_USERS_CONSUMER, ACTION_UPDATE_SERVICE, ACTION_POST_ACTIVITY,
         ACTION_LOAD_STATION]),
     ...mapMutations([MUTATE_CURRENT_ACTIVITY, MUTATE_USERS_CONSUMER]),
     insertSmilie (smilie) {
@@ -221,10 +230,10 @@ export default {
           })
       }
     },
-    serverPost (data) {
+    serverPost (data, method) {
       this.posting = true
       data.station = this.service.station
-      return this[ACTION_POST]({path: 'chat', data: data})
+      return this[ACTION_REQUEST]({path: 'chat', data, method})
         .then(() => {
             this[ACTION_UPDATE_SERVICE](this.serviceName)
         })
@@ -257,7 +266,7 @@ export default {
     deleteMsg (ts) {
       if (this.skipConfirmation.chatDelete ||
         confirm('Удалить сообщение?\nDo you really want to delete this message?')) {
-        this.serverPost( { 'delete': ts } )
+        this.serverPost({ts}, 'delete')
       }
     },
     replyTo (callsign) {
@@ -289,7 +298,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['siteAdmin', 'loggedIn', 'userCallsign', 'chatCallsign', 'userName', 'emailConfirmed', 'isStationAdmin', 'chatAccess']),
+    ...mapGetters(['siteAdmin', 'loggedIn', 'userCallsign', 'chatCallsign', 'userName', 'emailConfirmed', 
+        'isStationAdmin', 'chatAccess', 'stationAdminCallsign', 'bannedBy']),
     ...mapState({
       skipConfirmation: state => state.user.user.settings.skipConfirmation
     }),
@@ -307,6 +317,9 @@ export default {
         (!this.service || !this.service.station || !this.$store.state.stationSettings.chatAccess ||
         this.$store.state.stationSettings.chatAccess !== 'admins' ||
         (this.$store.state.stationSettings.chatAccess === 'admins' && this.isAdmin))
+    },
+    isBanned() {
+      return this.loggedIn && this.bannedBy?.includes(this.stationAdminCallsign)
     },
     data () {
       const data = [

@@ -42,6 +42,8 @@
     "CHAT_ADMINS": {"en": "Chat admins <i>(separated by space or comma)</i>", "ru": "Администраторы чата <i>(разделяются пробелом или запятой)</i>"},
     "CHAT_ACCESS_RESTRICTED": {"en": "Only station admins can post messages in this chat.", 
         "ru": "В этот чат могут писать только администраторы станции."},
+    "CHAT_BANNED": {"en": "Your account is read-only in this chat.", 
+        "ru": "Ваш аккаунт в режиме read-only в это чате."},
     "CHAT_ACCESS_EVERYBODY": {"en": "Everybody", "ru": "Все"},
     "CHAT_ACCESS_CHANGE": {"en": "will be able to post messages.", "ru": "смогут отправлять сообщения."},
     "CHAT_ACCESS_USERS": {"en": "All registered users", "ru": "Все пользователи"},

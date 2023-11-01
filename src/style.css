@@ -1870,7 +1870,41 @@ table#chat_window td.message:hover .translate_lnk, table#admins_window td.messag
 
 
 
-
+#chat_blacklist{
+    position: relative;
+}
+#chat_blacklist h4{
+    margin: 0px 0 10px 0;
+    letter-spacing: 2px;
+}
+#chat_blacklist select{
+    width: 200px;
+    display: block;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+#chat_blacklist option{
+    padding-left: 50px;
+}
+#chat_blacklist input{
+    margin-top: 20px;
+    padding: 5px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.modal-close-button{
+    position: absolute;
+    top: 0px;
+    right: 5px;
+    background-color: #fff;
+    border: none;
+    cursor: pointer;
+}
+.modal-close-button img{
+    height: 25px;
+    opacity: 0.7;
+}
 
 
 

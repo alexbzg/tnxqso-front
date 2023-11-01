@@ -178,7 +178,7 @@ export const storeUser = {
         data[field] = JSON.parse(JSON.stringify(payload[field]))
       }
       const tmpToken = Boolean(payload.token)
-      return dispatch(ACTION_POST, {path: 'userSettings', data: payload})
+      return dispatch(ACTION_POST, {path: 'station/settings', data: payload})
         .then(() => {
           commit(MUTATE_USER, tmpToken ? null : {user: data, remember: state.user.remember})
         })

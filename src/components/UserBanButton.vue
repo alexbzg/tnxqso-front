@@ -57,7 +57,7 @@ export default {
         true)
         .then(() => {
            this[ACTION_POST]({
-              path: 'station/banUser',
+              path: 'station/banlist',
               data: {
                 stationAdmin: this.stationAdmin,
                 banned: this.callsign

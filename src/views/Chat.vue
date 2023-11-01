@@ -41,8 +41,10 @@
                         </span>
 
                         <span
-                          id="blacklist">
-                            BLACKLIST
+                          id="blacklist"
+                          @click="editBanlist"
+                          >
+                          BLACKLIST
                         </span>
 
                     </td>
@@ -136,6 +138,7 @@ import {mapActions, mapMutations, mapGetters, mapState} from 'vuex'
 
 import _ from 'underscore'
 import insertTextAtCursor from 'insert-text-at-cursor'
+import showDialog from '../show-dialog'
 
 import ServiceDisplay from './ServiceDisplay'
 import Smilies from '../components/Smilies'
@@ -144,6 +147,7 @@ import UserBanButton from '../components/UserBanButton'
 import ActiveUsers from '../components/ActiveUsers'
 import ChatCallsignEdit from '../components/ChatCallsignEdit'
 import TranslateLink from '../components/TranslateLink'
+import EditStationBanlist from '../components/EditStationBanlist'
 
 import {replace0} from '../utils'
 import {parseMsgText, replyTo} from '../chat-utils'
@@ -285,7 +289,9 @@ export default {
       } catch (error) {
         console.log(error)
       }
-
+    },
+    async editBanlist () {
+      await showDialog(EditStationBanlist, {stationAdmin: this.stationAdminCallsign})
     }
   },
   watch: {

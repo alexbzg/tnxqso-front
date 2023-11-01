@@ -6,7 +6,17 @@
                 <div class="modal-container"
                     @click.stop="">
 
-                    <div class="modal-header" v-html="title">
+                    <div class="modal-header" v-if="title || hideButtons">
+                        <span v-if="title" v-html="title"/>
+                        <button
+                            v-if="hideButtons"
+                            type="button"
+                            class="modal-close-button"
+                            @click="$emit('cancel')"
+                            aria-label="Close modal"
+                        >
+                            <img src="/static/images/icon_close.png"/>
+                        </button>
                     </div>
 
                     <div class="modal-body" v-html="message" v-if="message">
@@ -15,11 +25,15 @@
                         <slot></slot>
                     </div>
 
-                    <div class="modal-footer">
-                        <button class="modal-default-button" @click="$emit('confirm')">
+                    <div class="modal-footer" v-if="!hideButtons">
+                        <button 
+                            class="modal-default-button" 
+                            @click="$emit('confirm')">
                             OK
                         </button>
-                        <button class="modal-cancel-button" @click="$emit('cancel')"
+                        <button 
+                            class="modal-cancel-button" 
+                            @click="$emit('cancel')"
                             v-if="cancel_button">
                             {{getString('CANCEL')}}
                         </button>
@@ -36,7 +50,7 @@ import LocalizationMixin from '../localization-mixin'
 
 export default {
   mixins: [LocalizationMixin],
-  props: ["title", "message", "cancel_button", "outsideClickClose"],
+  props: ["title", "message", "cancel_button", "hideButtons", "outsideClickClose"],
   name: "Modal"
 }
 
@@ -69,6 +83,7 @@ export default {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
   font-family: 'Jost', sans-serif;
+  position: relative;
 }
 
 .modal-header{

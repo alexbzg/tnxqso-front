@@ -51,8 +51,8 @@
                 </span><br/>
                 {{getString('STATION_TITLE')}}: <input type="text" id="station_name" v-model="settings.station.title"/><br/>
                 {{getString('STATION_PERIOD')}}:
-                    <date-picker v-model="settings.station.activityPeriod" format="DD.MM.YYYY"
-                        value-type="format" range confirm :lang="language"></date-picker>
+                <date-picker v-model="settings.station.activityPeriod" format="DD.MM.YYYY"
+                    value-type="format" range confirm :lang="language"></date-picker>
             </div>
 
             <!-- STATUS -->

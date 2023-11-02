@@ -23,15 +23,19 @@
                         {{statusData.date}}  {{statusData.year}} {{statusData.time}}
                     </span><br/>
                     <template v-for="(value, idx) in statusData.qth.fields.values">
-                        <span v-if="value" class="qth_field" :key="idx">
+                        <span 
+                            v-if="value && stationSettings.log.columns.qth[idx]" 
+                            class="qth_field" 
+                            :key="idx">
                             <template v-if="statusData.qth.fields.titles[idx] !==
-                                $options.QTH_PARAMS.defaultTitle">
+                                $options.QTH_PARAMS.defaultTitle"
+                                >
                                 {{statusData.qth.fields.titles[idx]}}&nbsp;
                             </template>
                             <b>{{value}}</b><br/>
                         </span>
                     </template>
-                    <template v-if="statusData.qth.loc">
+                    <template v-if="statusData.qth.loc && stationSettings.log.columns.loc">
                         <b>{{statusData.qth.loc}}</b><br/>
                     </template>
                 </td>

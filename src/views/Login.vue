@@ -40,7 +40,7 @@ import {mapActions, mapGetters} from 'vuex'
 import _ from 'underscore'
 import {VueRecaptcha} from 'vue-recaptcha'
 
-import {validateEmail, debugLog} from '../utils'
+import {validateEmail} from '../utils'
 import {ACTION_LOGIN, ACTION_POST} from '../store-user'
 
 export default {
@@ -111,17 +111,6 @@ export default {
         })
         .then(() => {
           this.loggedInRedirect()
-        })
-        .catch(error => {
-          var msg = ''
-          debugLog(error)
-          if (error.status === 400) {
-            msg = error.message
-          } else {
-            msg = 'Login failed because of server error. Please try again later.'
-          }
-          alert(msg)
-          this.resetRecaptcha()
         })
     },
     passwordRecoveryRequest () {

@@ -158,7 +158,7 @@ export const storeUser = {
   },
   actions: {
     [ACTION_LOGIN] ({commit, dispatch}, payload) {
-      return request.post('login', payload.data)
+      return dispatch(ACTION_POST, {path: 'login', data: payload.data})
         .then(response => {
           commit(MUTATE_USER, {user: response.data, remember: payload.remember})
           userInit(commit, dispatch)

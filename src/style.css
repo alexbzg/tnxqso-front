@@ -53,7 +53,7 @@ input, button, textarea, select{
 
 #lng_block{
     position: absolute;
-    top: 10px;
+    top: 0px;
     right: 10px;
     font-size: 20px;
     font-weight: bold;
@@ -1883,9 +1883,17 @@ table#chat_window td.message:hover .translate_lnk, table#admins_window td.messag
     margin: 0 auto;
     border: 1px solid #ddd;
     border-radius: 5px;
+    background-color: #fefedf;
+}
+#chat_blacklist select:focus{
+    outline: none;
 }
 #chat_blacklist option{
     padding-left: 50px;
+}
+#chat_blacklist option:checked {
+    background-color: #1967D2;
+    color: white;
 }
 #chat_blacklist input{
     margin-top: 20px;
@@ -2494,7 +2502,13 @@ table#visitors_table td, table#visitors_table th{
 #add_image img{
     cursor: pointer;
 }
-
+.quota_warning{
+    color :#777;
+    font-style: italic;
+    font-size: 14px;
+    line-height: 14px;
+    margin-bottom: 10px;
+}
 
 .media{
     display: inline-block;

@@ -40,10 +40,8 @@
     "CHAT_POPUP": {"en": "Only a station's administrator can delete chat messages.", "ru": "Удалять сообщения чата может только администратор станции."},
     "CHAT_HIGHLIGHT": {"en": "Call signs for highlighting <i> (separated by space or comma)</i>", "ru": "Позывные для выделения цветом <i>(разделяются пробелом или запятой)</i>"},
     "CHAT_ADMINS": {"en": "Chat admins <i>(separated by space or comma)</i>", "ru": "Администраторы чата <i>(разделяются пробелом или запятой)</i>"},
-    "CHAT_ACCESS_RESTRICTED": {"en": "Only station admins can post messages in this chat.",
-        "ru": "В этот чат могут писать только администраторы станции."},
-    "CHAT_BANNED": {"en": "Your account is read-only in this chat.",
-        "ru": "Ваш аккаунт в режиме read-only в это чате."},
+    "CHAT_ACCESS_RESTRICTED": {"en": "Only station admins can post messages in this chat.", "ru": "В этот чат могут писать только администраторы станции."},
+    "CHAT_BANNED": {"en": "Your account is read-only in this chat.", "ru": "В этом чате ваш аккаунт в режиме read-only."},
     "CHAT_ACCESS_EVERYBODY": {"en": "Everybody", "ru": "Все"},
     "CHAT_ACCESS_CHANGE": {"en": "will be able to post messages.", "ru": "смогут отправлять сообщения."},
     "CHAT_ACCESS_USERS": {"en": "All registered users", "ru": "Все пользователи"},
@@ -90,5 +88,9 @@
     "STATION_INFO_SIZE_LIMIT": {
         "en": "The size limit for all your station information is 5 Megabytes. Please reduce the quantity and size of your images.",
         "ru": "Максимальный допустимый размер всех ваших данных - 1 мегабайт. Пожалуйста, уменьшите количество и объем изображений"
+    },
+    "BLOG_QUOTA_WARNING": {
+        "en": "Unused disk space {free} from {quota}Mb ({free_percent}% of total volume). If there is not enough free space old messages will be deleted for new ones.",
+        "ru": "Свободного места на диске {free} из {quota}Mb ({free_percent}% общего объема). При недостатке свободного места загрузка новых сообщений будет производиться с удалением старых."
     }
 }

@@ -1,5 +1,12 @@
 <template>
     <div id="blog">
+
+        <div
+            v-if="isAdmin && quotaData"
+            class="quota_warning"
+            v-html="quotaWarning">
+        </div>
+
         <div id="add_image" v-if="stationAdmin === userCallsign" @click="showUpload = !showUpload">
             <img src="/static/images/icon_add_image.png" title="New message" />
         </div>
@@ -69,6 +76,8 @@
 <script>
 import {mapActions, mapState, mapGetters} from 'vuex'
 
+import LocalizationMixin from '../localization-mixin'
+
 import ServiceDisplay from './ServiceDisplay'
 import BlogEntry from '../components/BlogEntry'
 
@@ -80,6 +89,7 @@ import {urlCallsign} from '../utils'
 
 export default {
   extends: ServiceDisplay,
+  mixins: [LocalizationMixin],
   components: {BlogEntry},
   name: 'StationBlog',
   data () {
@@ -92,11 +102,14 @@ export default {
       },
       posting: false,
       activeEntry: null,
-      commentsRead: {}
+      commentsRead: {},
+      quotaData: null
     }
   },
   mounted () {
     this.getCommentsRead()
+    if (this.isAdmin)
+      this.getQuotaData()
   },
   computed: {
     ...mapState({
@@ -114,10 +127,29 @@ export default {
         r[1] = idx < this.serviceData.length - 1
       }
       return r
+    },
+    quotaWarning () {
+      if (!this.quotaData)
+        return ''
+      const unused = this.quotaData.quota - this.quotaData.used
+      const params = {
+        free: Math.round(unused / 1000000),
+        free_percent: Math.round(100*unused / this.quotaData.quota),
+        quota: this.quotaData.quota / 1000000
+      }
+      return this.formatString('BLOG_QUOTA_WARNING', params)
     }
   },
   methods: {
     ...mapActions([ACTION_REQUEST, ACTION_UPDATE_SERVICE]),
+    getQuotaData () {
+      this[ACTION_REQUEST]({
+        path: 'blog/quota',
+        data: {},
+        suppressAlert: true
+      })
+      .then((response) => { this.quotaData = response.data })
+    },
     getCommentsRead () {
       if (this.stationAdmin)
         this[ACTION_REQUEST]({
@@ -191,6 +223,10 @@ export default {
   watch: {
     stationAdmin () {
       this.getCommentsRead()
+    },
+    isAdmin () {
+      if (this.isAdmin)
+        this.getQuotaData()
     }
   }
 }

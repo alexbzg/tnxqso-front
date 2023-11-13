@@ -1,7 +1,7 @@
 <template>
-    <img 
-        class="icon_ban" 
-        src="/static/images/icon_ban.png" 
+    <img
+        class="icon_ban"
+        src="/static/images/icon_ban.png"
         :title="'Ban? / Заблокировать ' + userDisplay + '?'"
         v-if="siteAdmin || stationAdmin"
         @click="siteAdmin ? siteBan() : stationBan()"/>
@@ -52,7 +52,7 @@ export default {
       },
     stationBan() {
       messageBox(
-        `Заблокировать ${this.userDisplay} в этом чате?`,
+        `<br/>Заблокировать ${this.userDisplay} в этом чате?<br/><br/>`,
         ``,
         true)
         .then(() => {

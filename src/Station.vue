@@ -84,7 +84,7 @@ const tabs = {
   log: { service: logService, interval: 60000 }
 }
 const STATION_SETTINGS_RELOAD = 60000
-const LOCALIZED_ROUTES = ['Profile', 'Post', 'Chat', 'Talks']
+const LOCALIZED_ROUTES = ['Profile', 'Post', 'chat', 'Talks', 'blog']
 //const LOCALIZED_ROUTES = []
 
 

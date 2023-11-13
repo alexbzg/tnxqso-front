@@ -75,7 +75,7 @@ export function isAdmin () {
   if (!store.getters.loggedIn) {
     return false
   }
-  return store.getters.siteAdmin || store.state.stationSettings.admin === store.getters.userCallsign
+  return store.getters.siteAdmin || store.getters.isStationAdmin
 }
 
 export function stationPath () {

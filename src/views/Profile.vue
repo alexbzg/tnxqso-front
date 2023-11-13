@@ -542,7 +542,7 @@ export default {
     },
     clearTrack () {
       if (window.confirm( 'Do you really want to clear route?') ) {
-        this[ACTION_POST]({path: 'track', data: {clear: 1}})
+        this[ACTION_POST]({path: 'station/track', data: {clear: 1}})
           .then(() => {
             this.trackFile = null
           })
@@ -556,7 +556,7 @@ export default {
 
       reader.onload = e => {
         this[ACTION_POST]({
-          path: 'track',
+          path: 'station/track',
           data: {file: e.target.result, name: files[0].name}
         })
           .then(() => {

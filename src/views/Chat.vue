@@ -80,7 +80,7 @@
             <tr v-for="(msg, idx) in entry.msg" :class="{admin: msg.admin && service && service.station,
                 new_msg: msg.new, sponsor: msg.sponsor && isAdmin}" :key="idx">
                 <td class="call">
-                    <user-ban-button 
+                    <user-ban-button
                         :callsign="msg.cs"
                         :chat-callsign="msg.user"
                         :station-admin="isAdmin ? stationAdminCallsign : null"
@@ -304,7 +304,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['siteAdmin', 'loggedIn', 'userCallsign', 'chatCallsign', 'userName', 'emailConfirmed', 
+    ...mapGetters(['siteAdmin', 'loggedIn', 'userCallsign', 'chatCallsign', 'userName', 'emailConfirmed',
         'isStationAdmin', 'chatAccess', 'stationAdminCallsign', 'bannedBy']),
     ...mapState({
       skipConfirmation: state => state.user.user.settings.skipConfirmation

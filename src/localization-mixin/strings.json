@@ -81,6 +81,10 @@
         "ru": "При смене позывного станции будут очищены логи и маршрут экспедиции. Продолжить?",
         "en": "You have changed the station callsign. Log records and expedition track will be cleared. Do you really want to proceed?"
     },
+    "STATION_CALLSIGN_CLEAR_WARNING": {
+        "ru": "Вы удалили позывной станции. Будут очищены логи, блог и маршрут экспедиции. Продолжить?",
+        "en": "You have deleted the station callsign. Log records, blog posts and expedition track will be cleared. Do you really want to proceed?"
+    },
     "INVALID_STATION_CALLSIGN": {
         "en": "The expedition callsign should be valid and the only one.",
         "ru": "Необходимо ввести ровно один корректный позывной экспедиции."

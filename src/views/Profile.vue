@@ -319,7 +319,7 @@ import LocalizationMixin from '../localization-mixin'
 
 import ChangePassword from '../components/ChangePassword'
 
-import {MUTATE_USER, ACTION_EDIT_USER, ACTION_POST} from '../store-user'
+import {MUTATE_USER, ACTION_EDIT_USER, ACTION_POST, ACTION_REQUEST} from '../store-user'
 
 const CLUSTER_SETTINGS_DEFAULT = {
     "RU": "R*/* UA*/* UB*/* UC*/* UD*/* UE*/* UF*/* UG*/* UH*/* UI*/*"
@@ -396,7 +396,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions([ACTION_POST, ACTION_EDIT_USER]),
+    ...mapActions([ACTION_POST, ACTION_EDIT_USER, ACTION_REQUEST]),
     ...mapMutations([MUTATE_USER]),
     initSettings () {
       const settings = this.$store.getters.user.settings
@@ -496,13 +496,15 @@ export default {
       let clearAll = false
 
       this.settings.station.callsign = this.settings.station.callsign.toUpperCase()
-      if (!validCallsignFull(this.settings.station.callsign)) {
+
+      if (this.settings.station.callsign && !validCallsignFull(this.settings.station.callsign)) {
         alert(this.getString('INVALID_STATION_CALLSIGN'))
         return
       }
-      if (this.userStationCallsign &&
-        this.userStationCallsign !== this.settings.station.callsign) {
-        if (!window.confirm(this.getString('STATION_CALLSIGN_CHANGE_WARNING'))){
+      if (this.userStationCallsign !== this.settings.station.callsign) {
+        const warningId = this.settings.station.callsign ?  'STATION_CALLSIGN_CHANGE_WARNING' :
+            'STATION_CALLSIGN_CLEAR_WARNING'
+        if (!window.confirm(this.getString(warningId))){
           return
         }
         clearAll = true
@@ -527,7 +529,11 @@ export default {
     },
     clearChat () {
       if (window.confirm( 'Do you really want to delete all chat messages?') ) {
-        this[ACTION_POST]({path: 'chat', data: {station: this.userStationCallsign, clear: 1}})
+        this[ACTION_REQUEST]({
+            path: 'chat', 
+            data: {station: this.userStationCallsign},
+            method: 'delete'
+            })
       }
     },
     clearBlog () {

@@ -1,12 +1,6 @@
 <template>
     <div id="blog">
 
-        <div
-            v-if="isAdmin && quotaData"
-            class="quota_warning"
-            v-html="quotaWarning">
-        </div>
-
         <div id="add_image" v-if="stationAdmin === userCallsign" @click="showUpload = !showUpload">
             <img src="/static/images/icon_add_image.png" title="New message" />
         </div>
@@ -70,6 +64,13 @@
             @reaction="entryReaction"
             @commentsRead="updateCommentsRead"
         />
+
+        <div
+            v-if="isAdmin && quotaData"
+            class="quota_warning"
+            v-html="quotaWarning">
+        </div>
+
     </div>
 </template>
 

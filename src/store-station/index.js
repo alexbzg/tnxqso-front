@@ -12,7 +12,7 @@ import talksInit from '../talks-init'
 import {storeActiveStations, activeStationsInit, createStationStatusService, MUTATE_ADD_ACTIVE_STATION} 
   from '../store-active-stations'
 import stompClient from '../stomp-client'
-import {urlCallsign} from '../utils'
+import {urlCallsign, urlAdminCallsign} from '../utils'
 
 const RELOAD_INT_STATION_SETTINGS = 60 * 1000
 
@@ -44,13 +44,13 @@ if (store.getters.userToken) {
 
 store.dispatch(ACTION_LOAD_STATION)
   .then(() => {
-    const stationCs = store.state.stationSettings.station.callsign
+    const stationCs = urlCallsign(store.state.stationSettings.station.callsign)
 
     talksInit(store, stationCs)
 
     //init blog service
     store.commit(MUTATE_SERVICE, 
-        {name: 'blog', url: `/aiohttp/blog/${urlCallsign(store.state.stationSettings.admin)}`})
+        {name: 'blog', url: `/aiohttp/blog/${urlAdminCallsign(store.state.stationSettings.admin)}`})
     function updateBlog () {
       store.dispatch(ACTION_UPDATE_SERVICE, 'blog')
     }

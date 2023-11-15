@@ -88,5 +88,5 @@ export const storeActivity = {
 }
 
 export function activityInit (store) {
-  setInterval(() => { store.dispatch(ACTION_POST_ACTIVITY) }, UPDATE_INT_ACTIVITY)
+  setInterval(() => store.dispatch(ACTION_POST_ACTIVITY), UPDATE_INT_ACTIVITY)
 }

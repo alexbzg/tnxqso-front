@@ -89,8 +89,15 @@ function replace0 (str) {
   return str ? str.replace( /0/g, '\u00D8' ) : str
 }
 
+const RE_STRIP_CALLSIGN = /\d*[a-zA-Z]+\d+[a-zA-Z]+/
+
 function urlCallsign ( callsign ) {
-  return callsign ? callsign.replace( /\//g, '-' ).toLowerCase() : null
+  return RE_STRIP_CALLSIGN.exec(callsign.toLowerCase())?.[0] || null
+}
+
+function urlAdminCallsign ( callsign ) {
+  return callsign?.replace( /\//g, '-' ).toLowerCase() || null
+
 }
 
 function getStationURL (callsign) {
@@ -109,4 +116,4 @@ function plainText (html) {
   return temp.textContent || temp.innerText || ''
 }
 
-export { parseCallsigns, loadScript, validateEmail, replace0, getStationURL, urlCallsign, deepCopy, plainText }
+export { parseCallsigns, loadScript, validateEmail, replace0, getStationURL, urlCallsign, urlAdminCallsign, deepCopy, plainText }

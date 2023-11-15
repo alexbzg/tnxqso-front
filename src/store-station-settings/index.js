@@ -2,7 +2,7 @@ import Vue from 'vue'
 
 import storage from '../storage'
 import request from '../request'
-import {hash} from '../utils'
+import {hash, urlCallsign} from '../utils'
 
 const STORAGE_KEY_STATIONS_READ = 'stationsRead'
 const STATIONS_READ = storage.load(STORAGE_KEY_STATIONS_READ, 'local') || {}
@@ -22,7 +22,10 @@ export const storeStationSettings = {
   },
   getters: {
     stationCallsign: state => {
-      return state.station ? state.station.callsign : null
+      return state.station?.callsign
+    },
+    stationCallsignUrl: state => {
+      return urlCallsign(state.station?.callsign)
     },
     isStationAdmin: (state, rootGetters) => {
       return state.admin && state.admin  === rootGetters.userCallsign

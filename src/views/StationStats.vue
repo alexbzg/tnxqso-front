@@ -201,9 +201,9 @@ export default {
   },
   computed: {
     ...mapState(['stationSettings']),
-    ...mapGetters(['stationAdmin', 'siteAdmin']),
+    ...mapGetters(['isStationAdmin', 'siteAdmin']),
     showVisitors () {
-      return this.stationAdmin || this.siteAdmin
+      return this.isStationAdmin || this.siteAdmin
     },
     qthFieldTitles () {
       return qthFieldTitles(this.stationSettings.qthCountry)

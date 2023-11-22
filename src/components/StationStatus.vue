@@ -67,11 +67,11 @@ export default {
     ...mapActions([ACTION_POST]),
     ...mapMutations([MUTATE_STATION_STATUS]),
     async postStatus (data) {
-      const { data: newStatusData, } = await this[ACTION_POST]({
+      const { data: status, } = await this[ACTION_POST]({
         path: 'location', 
         data 
       })
-      this[MUTATE_STATION_STATUS]({callsign: this.stationCallsign, data: newStatusData})
+      this[MUTATE_STATION_STATUS]({callsign: this.stationCallsign, status})
     },
     async toggleOnline () {
       await this.postStatus({

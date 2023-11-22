@@ -11,6 +11,8 @@ export default {
     if (error.response) {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx
+      if (error.response.status === 304)
+        return
       debugLog(error.response.data)
       debugLog(error.response.status)
       debugLog(error.response.headers)
@@ -53,22 +55,23 @@ export default {
     return this.perform(URL, data, multipart)
   },
 
-  get (URL) {
+  get (URL, config) {
     if (!URL.startsWith('/')) {
       URL = window.location.pathname + '/' + URL
     }
-    return axios.get(URL)
+    return axios.get(URL, config)
       .catch(this.onError)
   },
 
-  getJSON (file, station) {
+  async getJSON (file, station, config) {
     let URL = file + '.json'
     if (station) {
       URL = '/static/stations/' + urlCallsign(station) + '/' + URL
     } else {
       URL = '/static/js/' + URL
     }
-    return this.get(URL)
+    const response = await this.get(URL, config)
+    return response
   }
 
 }

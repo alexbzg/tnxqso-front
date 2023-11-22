@@ -30,12 +30,13 @@ export default function () {
 
   function load () {
     if (s.url) {
-      return request.get( dataServiceUrlPrefix + s.url )
+      return request.get( dataServiceUrlPrefix + s.url,
+        {headers: {'If-Modified-Since': s.lastModified}})
         .then(loadComplete)
     }
 
     function loadComplete (response) {
-      if (s.lastModified !== response.headers['last-modified']) {
+      if (response && s.lastModified !== response.headers['last-modified']) {
         s.lastModified = response.headers['last-modified']
         s.data = response.data
         if (s.processData) {
@@ -44,8 +45,8 @@ export default function () {
         if (s.eventName) {
           bus.$emit(s.eventName)
         }
+        return response.data
       }
-      return response.data
     }
   }
 }

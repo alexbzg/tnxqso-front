@@ -9,7 +9,7 @@ import {storeActivity, activityInit} from '../store-activity'
 import {storeLanguage} from '../store-language'
 import {storeStationSettings, ACTION_LOAD_STATION} from '../store-station-settings'
 import talksInit from '../talks-init'
-import {storeActiveStations, activeStationsInit, createStationStatusService, MUTATE_ADD_ACTIVE_STATION} 
+import {storeActiveStations, activeStationsInit, MUTATE_ADD_ACTIVE_STATION} 
   from '../store-active-stations'
 import stompClient from '../stomp-client'
 import {urlCallsign, urlAdminCallsign} from '../utils'
@@ -60,8 +60,7 @@ store.dispatch(ACTION_LOAD_STATION)
     activeStationsInit(store)
       .then(() => {
         if (!(stationCs in store.state.activeStations.stations.active)) {
-          store.commit(MUTATE_ADD_ACTIVE_STATION, store.state.stationSettings)
-          createStationStatusService(store.commit, store.state.stationSettings)
+          store.commit(MUTATE_ADD_ACTIVE_STATION, {settings: store.state.stationSettings, forced: true})
         }
       })
   })

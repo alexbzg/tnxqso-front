@@ -78,9 +78,10 @@ export const storeServices = {
   actions: {
     [ACTION_UPDATE_SERVICE] ({commit, state}, payload) {
       const s = state[payload]
-      return (s.url ? request.get(s.url) : request.getJSON(s.name, s.station))
+      const config = {headers: {'If-Modified-Since': s.lastModified}}
+      return (s.url ? request.get(s.url, config) : request.getJSON(s.name, s.station, config))
         .then(response => {
-          if (Array.isArray(response.data)) {
+          if (response && response.headers['last-modified'] !== s.lastModified) {
             commit(MUTATE_SERVICE_DATA, {service: payload, response })
           }
         })

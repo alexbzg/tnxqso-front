@@ -2,12 +2,17 @@ import Vue from 'vue'
 import * as moment from 'moment'
 
 import request from '../request'
-import dataServiceFactory from '../data-service-factory'
-import {urlCallsign} from '../utils'
+import {debugLog} from '../utils'
 
 export const MUTATE_ACTIVE_STATIONS_READ = 'mttActStationsRead'
 const LOAD_STATIONS_ACTION = 'actnLoadStations'
 const MUTATE_STATIONS_LIST = 'mttStationsList'
+const MUTATE_REMOVE_ACTIVE_STATION = 'mttRemoveActiveStation'
+const MUTATE_STATIONS_LAST_MODIFIED = 'mttStationsLastModified'
+const MUTATE_FORCED_LAST_MODIFIED = 'mttForcedLastModified'
+const LOAD_STATUS_ACTION = 'actnLoadActiveStationsStatus'
+const LOAD_STATION_STATUS_ACTION = 'actnLoadStationStatus'
+const CREATE_ACTIVE_STATION_ACTION = 'actCreateActiveStation'
 export const MUTATE_STATION_STATUS = 'mttStationStatus'
 export const MUTATE_ADD_ACTIVE_STATION = 'mttAddActiveStation'
 
@@ -15,32 +20,14 @@ const STATUS_RELOAD_INT = 1000 * 5
 const ONLINE_INT = 120
 const FREQ_INT = 300
 
-function sortStations (stations) {
+const sortStations = (stations) => stations.sort( (a, b) => a.callsign < b.callsign ? -1 : 1 )
 
-  function cmpStations (a, b) {
-    if (a.station.callsign.toLowerCase() < b.station.callsign.toLowerCase()) {
-      return -1
-    }
-    if (a.station.callsign.toLowerCase() > b.station.callsign.toLowerCase()) {
-        return 1
-    }
-    return 0
-  }
+const readState = (state) => state.stations.activeIndex.filter( callsign => 
+    state.stations.active[callsign].status?.online )
 
-  return stations.sort(cmpStations)
+const createActiveStation = (state, settings) => 
+  Vue.set(state.stations.active, settings.station.callsign, {settings: settings, status: {qth: {fields:{}}}})
 
-}
-
-function readState(state) {
-  return state.stations.activeIndex.filter(callsign => {
-    const entry = state.stations.active[callsign]
-    return entry.status && entry.status.online
-  })
-}
-
-function createActiveStation (state, settings) {
-  Vue.set(state.stations.active, settings.station.callsign, {settings: settings, status: {qth: {}}})
-}
 
 export const storeActiveStations = {
   state: {
@@ -50,7 +37,9 @@ export const storeActiveStations = {
       active: {},
       activeIndex: [],
       future: [],
-      archive: []
+      archive: [],
+      forcedActive: {},
+      lastModified: null,
     }
   },
   getters: {
@@ -61,11 +50,10 @@ export const storeActiveStations = {
       const r = [[], []]
       for (const callsign of state.stations.activeIndex) {
         const entry = state.stations.active[callsign]
-        r[entry.status && entry.status.online ? 0 : 1].push(entry.settings)
+        r[entry.status?.online ? 0 : 1].push(entry.settings)
       }
       return r
-    },
-    stationStatusService: state => callsign => state.services[callsign]
+    }
   },
   mutations: {
     [MUTATE_ACTIVE_STATIONS_READ] (state) {
@@ -73,27 +61,45 @@ export const storeActiveStations = {
       state.readState = readState(state)
     },
     [MUTATE_ADD_ACTIVE_STATION] (state, payload) {
-      const callsign = payload.station.callsign
-      if (!(callsign in state.stations.active)) {
-        createActiveStation(state, payload)
+      const {settings, forced} = payload
+      createActiveStation(state, settings)    
+      if (forced) {
+        if (!(settings.station.callsign in state.stations.forcedActive))
+          state.stations.forcedActive[settings.station.callsign] =
+            {lastUpdated: null}
+      } else {
+        const indexLen = state.stations.activeIndex.length
+        for (let i = 0; i < indexLen && state.stations.activeIndex[i] < settings.station.callsign; 
+          i++)
+        state.stations.activeIndex.splice(i, 0, settings.station.callsign)
+      }
+    },
+    [MUTATE_REMOVE_ACTIVE_STATION] (state, payload) {
+      const callsign = payload
+      if (state.stations.activeIndex.includes(callsign)) {
+        const idx = state.stations.activeIndex.findIndex(item => item === callsign)
+        state.stations.activeIndex.splice(idx, 0)
       }
     },
     [MUTATE_STATIONS_LIST] (state, payload) {
-      Vue.set(state.stations, 'activeIndex', 
-        sortStations(payload.active).map(item => {
-          createActiveStation(state, item)
-          return item.station.callsign
-        })
-      )
-      Vue.set(state.stations, 'future', sortStations(payload.future))
-      Vue.set(state.stations, 'archive', sortStations(payload.archive))
+      state.stations.future = sortStations(payload.future)
+      state.stations.archive = sortStations(payload.archive)
+      state.stations.activeIndex = sortStations(payload.active).map(item => {
+        createActiveStation(state, item)
+        return item.station.callsign
+      }) 
     },
-    [MUTATE_STATION_STATUS] (state, payload) {
-      const station = state.stations.active[payload.callsign]
+    [MUTATE_STATIONS_LAST_MODIFIED] (state, payload) {
+      state.stations.lastModified = payload
+    },
+    [MUTATE_FORCED_LAST_MODIFIED] (state, payload) {
+      state.stations.forcedActive[payload.callsign] = payload.lastModified
+    },
+    [MUTATE_STATION_STATUS] (state, {callsign, status}) {
+      const station = state.stations.active[callsign]
       const statusCache = JSON.parse(JSON.stringify(station.status))
-      if (payload.data) {
-        Vue.set(station, 'status', payload.data)
-      }
+      if (status) 
+        station.status = status
       if (!station.status || !station.settings) {
         return
       }
@@ -101,9 +107,7 @@ export const storeActiveStations = {
       const onlineUpdateType = station.settings.status.get
       const online = (onlineUpdateType === 'manual' ? station.status.online
         : (now - station.status.ts) < ONLINE_INT)
-      if (station.status.online !== online) {
-        Vue.set(station.status, 'online', online)
-      }
+      station.status.online = online
       let freq = null
       if (station.status.freq && station.status.freq.value && now - station.status.freq.ts < FREQ_INT) {
         freq = station.status.freq.value
@@ -111,12 +115,10 @@ export const storeActiveStations = {
       if (station.status.speed && now - station.status.locTs > ONLINE_INT) {
         station.status.speed = null
       }
-      if (freq !== station.status.freqDisplay) {
-        Vue.set(station.status, 'freqDisplay', freq)
-      }
+      station.status.freqDisplay = freq
       if (state.readState) {
         if (((!statusCache && station.status.online) || (!statusCache.online && station.status.online)) &&
-        !state.readState.includes(payload.callsign)){
+        !state.readState.includes(callsign)){
           state.read = false
         } else if (!state.read && statusCache && statusCache.online && !station.status.online) {
           const currentReadState = readState(state)
@@ -133,7 +135,7 @@ export const storeActiveStations = {
     }
   },
   actions: {
-    [LOAD_STATIONS_ACTION] ({commit, getters}) {
+    [LOAD_STATIONS_ACTION] ({commit, dispatch, getters}) {
         return request.get( '/static/js/publish.json' )
           .then(response => {
             const publishData = response.data
@@ -149,13 +151,12 @@ export const storeActiveStations = {
                       settings.publish = { user: settings.publish, admin: publishData[station]['admin'] }
                       const period = settings.station.activityPeriod.map(item => moment(item, 'DD.MM.YYYY'))
                       if ( period && period.length === 2 && period[0] < current &&
-                        period[1].add( 1, 'd' ) > current ) {
-                          stations.active.push( settings )
-                        } else if ( period && period.length === 2 && moment(period[0]) > current ) {
-                          stations.future.push( settings )
-                        } else {
-                          stations.archive.push( settings )
-                        }
+                        period[1].add( 1, 'd' ) > current )
+                        stations.active.push(settings)  
+                      else if ( period && period.length === 2 && moment(period[0]) > current )
+                        stations.future.push( settings )
+                      else 
+                        stations.archive.push( settings )
                     }
                   })
                   .catch( e => e))
@@ -164,30 +165,69 @@ export const storeActiveStations = {
             Promise.all(promises)
               .then(() => {
                 commit(MUTATE_STATIONS_LIST, stations)
-                for (const stationSettings of stations.active) {
-                  createStationStatusService(commit, stationSettings)
-                }
+                dispatch(LOAD_STATUS_ACTION)
+                setInterval(() => dispatch(LOAD_STATUS_ACTION), STATUS_RELOAD_INT)
               })
         })
-
+    },
+    async [CREATE_ACTIVE_STATION_ACTION] ({commit},  {callsign, forced}) {
+      try {
+        const {data: settings} = await request.getJSON('settings', callsign)
+        commit(MUTATE_ADD_ACTIVE_STATION, {settings, forced})
+        return true
+      } catch {
+        return false
+        //pass
+      }
+    },
+    async [LOAD_STATUS_ACTION] ({commit, dispatch, state}) {
+      try {
+            const response = await request.getJSON('activeStations', null,
+              {headers: {'If-Modified-Since': state.stations.lastModified}})
+            if (!response || response.headers['last-modified'] === state.stations.lastModified)
+              return
+            const { data, headers } = response
+            commit(MUTATE_STATIONS_LAST_MODIFIED, headers['last-modified'])
+            const updated = {}
+            const updateStation = async ({callsign, status, forced}) => {
+              if ((callsign in state.stations.active) ||
+                (await dispatch(CREATE_ACTIVE_STATION_ACTION, {callsign, forced})))
+                  commit(MUTATE_STATION_STATUS, {callsign, data: status})
+            }
+            for (const {callsign, status} of data) {
+              updated[callsign] = true
+              await updateStation({callsign, status, forced: false})
+            }
+            for (const prevCallsign of state.stations.activeIndex)
+              if (!(prevCallsign in updated))
+                commit(MUTATE_REMOVE_ACTIVE_STATION, prevCallsign)
+            for (const forcedCallsign in state.stations.forcedActive) {
+              debugLog(`calling forced status load ${forcedCallsign}`)
+              if (!(forcedCallsign in updated))
+                await dispatch(LOAD_STATION_STATUS_ACTION, forcedCallsign)
+            }
+      } catch (error ){
+          debugLog(error)
+      }
+    },
+    async [LOAD_STATION_STATUS_ACTION] ({commit, state}, callsign) {
+      try {
+        const lastModified = state.stations.activeIndex.includes(callsign) ? 
+              state.stations.lastModified : state.stations.forcedActive[callsign].lastModified
+        const response = await request.getJSON('status', callsign,
+          {headers: {'If-Modified-Since': lastModified}})
+        if (!response || response.headers['last-modified'] === lastModified)
+          return
+        const {data: status, headers} = response
+        commit(MUTATE_STATION_STATUS, {callsign, status})
+        commit(MUTATE_FORCED_LAST_MODIFIED, {callsign, lastModified: headers['last-modified']})
+      } catch (error) {
+        debugLog(error)
+      }
     }
   }
 }
 
-export function createStationStatusService(commit, stationSettings) {
-  const callsign = stationSettings.station.callsign
-  const service = dataServiceFactory()
-  service.url = `/${urlCallsign(callsign)}/status.json`
-  service.processData = () => {
-    commit(MUTATE_STATION_STATUS, {callsign: callsign, data: service.data})
-  }
-  service.load()
-  setInterval(service.load, STATUS_RELOAD_INT)
-  setInterval(() => {
-    commit(MUTATE_STATION_STATUS, {callsign: callsign, data: null})
-  }, 1000)
-}
-
-export function activeStationsInit(store) {
-  return store.dispatch(LOAD_STATIONS_ACTION)
+export async function activeStationsInit(store) {
+  await store.dispatch(LOAD_STATIONS_ACTION)
 }

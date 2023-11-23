@@ -12,7 +12,7 @@ export default {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx
       if (error.response.status === 304)
-        return
+        throw error
       debugLog(error.response.data)
       debugLog(error.response.status)
       debugLog(error.response.headers)
@@ -55,23 +55,29 @@ export default {
     return this.perform(URL, data, multipart)
   },
 
-  get (URL, config) {
+  async get (URL, config) {
     if (!URL.startsWith('/')) {
       URL = window.location.pathname + '/' + URL
     }
-    return axios.get(URL, config)
-      .catch(this.onError)
+    try {
+      const response = await axios.get(URL, config)
+      const modifiedSince = config?.headers?.['If-Modified-Since']
+      if (modifiedSince && modifiedSince === response.headers['last-modified']) {
+        response.status = 304
+        throw {response}
+      }
+    } catch (error) {
+      this.onError(error)
+    }
   },
 
-  async getJSON (file, station, config) {
+  getJSON (file, station, config) {
     let URL = file + '.json'
     if (station) {
-      URL = '/static/stations/' + urlCallsign(station) + '/' + URL
-    } else {
-      URL = '/static/js/' + URL
-    }
-    const response = await this.get(URL, config)
-    return response
+    URL = station ? 
+        `/static/stations/${urlCallsign(station)}/{URL}` :
+        '/static/js/' + URL
+    return this.get(URL, config)
   }
 
 }

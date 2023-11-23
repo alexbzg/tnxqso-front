@@ -2,7 +2,6 @@ import Vue from 'vue'
 import * as moment from 'moment'
 
 import request from '../request'
-import {debugLog} from '../utils'
 
 export const MUTATE_ACTIVE_STATIONS_READ = 'mttActStationsRead'
 const LOAD_STATIONS_ACTION = 'actnLoadStations'
@@ -10,8 +9,8 @@ const MUTATE_STATIONS_LIST = 'mttStationsList'
 const MUTATE_REMOVE_ACTIVE_STATION = 'mttRemoveActiveStation'
 const MUTATE_STATIONS_LAST_MODIFIED = 'mttStationsLastModified'
 const MUTATE_FORCED_LAST_MODIFIED = 'mttForcedLastModified'
-const LOAD_STATUS_ACTION = 'actnLoadActiveStationsStatus'
-const LOAD_STATION_STATUS_ACTION = 'actnLoadStationStatus'
+const LOAD_ACTIVE_STATUS_ACTION = 'actnLoadActiveStationsStatus'
+const LOAD_FORCED_STATUS_ACTION = 'actnLoadStationStatus'
 const CREATE_ACTIVE_STATION_ACTION = 'actCreateActiveStation'
 export const MUTATE_STATION_STATUS = 'mttStationStatus'
 export const MUTATE_ADD_ACTIVE_STATION = 'mttAddActiveStation'
@@ -26,7 +25,8 @@ const readState = (state) => state.stations.activeIndex.filter( callsign =>
     state.stations.active[callsign].status?.online )
 
 const createActiveStation = (state, settings) => 
-  Vue.set(state.stations.active, settings.station.callsign, {settings: settings, status: {qth: {fields:{}}}})
+  Vue.set(state.stations.active, settings.station.callsign, 
+      {settings: settings, status: {qth: {fields: {values: []}}}})
 
 
 export const storeActiveStations = {
@@ -60,8 +60,7 @@ export const storeActiveStations = {
       state.read = true
       state.readState = readState(state)
     },
-    [MUTATE_ADD_ACTIVE_STATION] (state, payload) {
-      const {settings, forced} = payload
+    [MUTATE_ADD_ACTIVE_STATION] (state, {settings, forced}) {
       createActiveStation(state, settings)    
       if (forced) {
         if (!(settings.station.callsign in state.stations.forcedActive))
@@ -74,26 +73,25 @@ export const storeActiveStations = {
         state.stations.activeIndex.splice(i, 0, settings.station.callsign)
       }
     },
-    [MUTATE_REMOVE_ACTIVE_STATION] (state, payload) {
-      const callsign = payload
+    [MUTATE_REMOVE_ACTIVE_STATION] (state, callsign) {
       if (state.stations.activeIndex.includes(callsign)) {
         const idx = state.stations.activeIndex.findIndex(item => item === callsign)
         state.stations.activeIndex.splice(idx, 0)
       }
     },
-    [MUTATE_STATIONS_LIST] (state, payload) {
-      state.stations.future = sortStations(payload.future)
-      state.stations.archive = sortStations(payload.archive)
-      state.stations.activeIndex = sortStations(payload.active).map(item => {
+    [MUTATE_STATIONS_LIST] (state, {future, active, archive}) {
+      state.stations.future = sortStations(future)
+      state.stations.archive = sortStations(archive)
+      state.stations.activeIndex = sortStations(active).map(item => {
         createActiveStation(state, item)
         return item.station.callsign
       }) 
     },
-    [MUTATE_STATIONS_LAST_MODIFIED] (state, payload) {
-      state.stations.lastModified = payload
+    [MUTATE_STATIONS_LAST_MODIFIED] (state, lastModified) {
+      state.stations.lastModified = lastModified
     },
-    [MUTATE_FORCED_LAST_MODIFIED] (state, payload) {
-      state.stations.forcedActive[payload.callsign] = payload.lastModified
+    [MUTATE_FORCED_LAST_MODIFIED] (state, {callsign, lastModified}) {
+      state.stations.forcedActive[callsign] = lastModified
     },
     [MUTATE_STATION_STATUS] (state, {callsign, status}) {
       const station = state.stations.active[callsign]
@@ -135,39 +133,37 @@ export const storeActiveStations = {
     }
   },
   actions: {
-    [LOAD_STATIONS_ACTION] ({commit, dispatch, getters}) {
-        return request.get( '/static/js/publish.json' )
-          .then(response => {
-            const publishData = response.data
-            const current = moment()
-            const promises = []
-            const stations = {active: [], future: [], archive: []}
-            for ( const station in publishData ) {
-              if ( ( publishData[station]['user'] && publishData[station]['admin'] ) || getters.siteAdmin ) {
-                promises.push(request.getJSON('settings', station)
-                  .then(response => {
-                    const settings = response.data
-                    if (settings.station && settings.station.callsign) {
-                      settings.publish = { user: settings.publish, admin: publishData[station]['admin'] }
-                      const period = settings.station.activityPeriod.map(item => moment(item, 'DD.MM.YYYY'))
-                      if ( period && period.length === 2 && period[0] < current &&
-                        period[1].add( 1, 'd' ) > current )
-                        stations.active.push(settings)  
-                      else if ( period && period.length === 2 && moment(period[0]) > current )
-                        stations.future.push( settings )
-                      else 
-                        stations.archive.push( settings )
-                    }
-                  })
-                  .catch( e => e))
-              }
-            }
-            Promise.all(promises)
-              .then(() => {
-                commit(MUTATE_STATIONS_LIST, stations)
-                dispatch(LOAD_STATUS_ACTION)
-                setInterval(() => dispatch(LOAD_STATUS_ACTION), STATUS_RELOAD_INT)
-              })
+    async [LOAD_STATIONS_ACTION] ({commit, dispatch, getters}) {
+      const {data: publishData} = await request.getJSON('publish')
+      const current = moment()
+      const promises = []
+      const stations = {active: [], future: [], archive: []}
+      for (const station in publishData) {
+        if ((publishData[station]['user'] && publishData[station]['admin']) || getters.siteAdmin) {
+          promises.push(
+            request.getJSON('settings', station)
+              .then(({data: settings}) => {
+                if (settings.station && settings.station.callsign) {
+                  settings.publish = { user: settings.publish, admin: publishData[station]['admin'] }
+                  const period = settings.station.activityPeriod.map(item => moment(item, 'DD.MM.YYYY'))
+                  if (period?.length === 2 && period[0] < current && period[1].add(1, 'd') > current)
+                    stations.active.push(settings)  
+                  else if (period?.length === 2 && moment(period[0]) > current)
+                    stations.future.push(settings)
+                  else 
+                    stations.archive.push(settings)
+                 }
+               })
+               .catch(request.extError))
+        }
+      }
+      Promise.all(promises)
+        .then(() => {
+           commit(MUTATE_STATIONS_LIST, stations)
+           dispatch(LOAD_ACTIVE_STATUS_ACTION)
+           setInterval(() => dispatch(LOAD_ACTIVE_STATUS_ACTION), STATUS_RELOAD_INT)
+           dispatch(LOAD_FORCED_STATUS_ACTION)
+           setInterval(() => dispatch(LOAD_FORCED_STATUS_ACTION), STATUS_RELOAD_INT)
         })
     },
     async [CREATE_ACTIVE_STATION_ACTION] ({commit},  {callsign, forced}) {
@@ -175,54 +171,44 @@ export const storeActiveStations = {
         const {data: settings} = await request.getJSON('settings', callsign)
         commit(MUTATE_ADD_ACTIVE_STATION, {settings, forced})
         return true
-      } catch {
-        return false
-        //pass
-      }
-    },
-    async [LOAD_STATUS_ACTION] ({commit, dispatch, state}) {
-      try {
-            const response = await request.getJSON('activeStations', null,
-              {headers: {'If-Modified-Since': state.stations.lastModified}})
-            if (!response || response.headers['last-modified'] === state.stations.lastModified)
-              return
-            const { data, headers } = response
-            commit(MUTATE_STATIONS_LAST_MODIFIED, headers['last-modified'])
-            const updated = {}
-            const updateStation = async ({callsign, status, forced}) => {
-              if ((callsign in state.stations.active) ||
-                (await dispatch(CREATE_ACTIVE_STATION_ACTION, {callsign, forced})))
-                  commit(MUTATE_STATION_STATUS, {callsign, data: status})
-            }
-            for (const {callsign, status} of data) {
-              updated[callsign] = true
-              await updateStation({callsign, status, forced: false})
-            }
-            for (const prevCallsign of state.stations.activeIndex)
-              if (!(prevCallsign in updated))
-                commit(MUTATE_REMOVE_ACTIVE_STATION, prevCallsign)
-            for (const forcedCallsign in state.stations.forcedActive) {
-              debugLog(`calling forced status load ${forcedCallsign}`)
-              if (!(forcedCallsign in updated))
-                await dispatch(LOAD_STATION_STATUS_ACTION, forcedCallsign)
-            }
-      } catch (error ){
-          debugLog(error)
-      }
-    },
-    async [LOAD_STATION_STATUS_ACTION] ({commit, state}, callsign) {
-      try {
-        const lastModified = state.stations.activeIndex.includes(callsign) ? 
-              state.stations.lastModified : state.stations.forcedActive[callsign].lastModified
-        const response = await request.getJSON('status', callsign,
-          {headers: {'If-Modified-Since': lastModified}})
-        if (!response || response.headers['last-modified'] === lastModified)
-          return
-        const {data: status, headers} = response
-        commit(MUTATE_STATION_STATUS, {callsign, status})
-        commit(MUTATE_FORCED_LAST_MODIFIED, {callsign, lastModified: headers['last-modified']})
       } catch (error) {
-        debugLog(error)
+        request.extError(error)
+        return false
+      }
+    },
+    async [LOAD_ACTIVE_STATUS_ACTION] ({commit, dispatch, state}) {
+      try {
+        const { data, headers } = await request.getJSON('activeStations', null,
+          {headers: {'If-Modified-Since': state.stations.lastModified}})
+        commit(MUTATE_STATIONS_LAST_MODIFIED, headers['last-modified'])
+        const updated = {}
+        for (const {callsign, status} of data) {
+          updated[callsign] = true
+          if ((callsign in state.stations.active) ||
+            (await dispatch(CREATE_ACTIVE_STATION_ACTION, {callsign, forced: false})))
+            commit(MUTATE_STATION_STATUS, {callsign, status})
+        }
+        for (const prevCallsign of state.stations.activeIndex)
+          if (!(prevCallsign in updated))
+            commit(MUTATE_REMOVE_ACTIVE_STATION, prevCallsign)
+      } catch (error) {
+        request.extError(error)
+      }
+    },
+    async [LOAD_FORCED_STATUS_ACTION] ({commit, state}) {
+      for (const callsign in state.stations.forcedActive) {
+        if (state.stations.activeIndex.includes(callsign))
+          continue
+        try {
+          const {data: status, headers} = await request.getJSON('status', callsign,
+            {headers: {'If-Modified-Since': 
+               state.stations.forcedActive[callsign].lastModified}})
+          commit(MUTATE_STATION_STATUS, {callsign, status})
+          commit(MUTATE_FORCED_LAST_MODIFIED,
+            {callsign, lastModified: headers['last-modified']})
+        } catch (error) {
+          request.extError(error)
+        }
       }
     }
   }

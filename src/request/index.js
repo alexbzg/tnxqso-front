@@ -66,6 +66,7 @@ export default {
         response.status = 304
         throw {response}
       }
+      return response
     } catch (error) {
       this.onError(error)
     }
@@ -73,11 +74,15 @@ export default {
 
   getJSON (file, station, config) {
     let URL = file + '.json'
-    if (station) {
     URL = station ? 
-        `/static/stations/${urlCallsign(station)}/{URL}` :
+        `/static/stations/${urlCallsign(station)}/${URL}` :
         '/static/js/' + URL
     return this.get(URL, config)
+  },
+
+  extError (error) {
+    if (error.response?.status !== 304)
+      debugLog(error)
   }
 
 }

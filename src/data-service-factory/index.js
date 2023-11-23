@@ -33,6 +33,7 @@ export default function () {
       return request.get( dataServiceUrlPrefix + s.url,
         {headers: {'If-Modified-Since': s.lastModified}})
         .then(loadComplete)
+        .catch(request.extError)
     }
 
     function loadComplete (response) {

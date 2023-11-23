@@ -76,40 +76,38 @@ export const storeServices = {
     }
   },
   actions: {
-    [ACTION_UPDATE_SERVICE] ({commit, state}, payload) {
-      const s = state[payload]
+    [ACTION_UPDATE_SERVICE] ({commit, state}, service) {
+      const s = state[service]
       const config = {headers: {'If-Modified-Since': s.lastModified}}
       return (s.url ? request.get(s.url, config) : request.getJSON(s.name, s.station, config))
-        .then(response => {
-          if (response && response.headers['last-modified'] !== s.lastModified) {
-            commit(MUTATE_SERVICE_DATA, {service: payload, response })
-          }
-        })
+        .then(response => commit(MUTATE_SERVICE_DATA, {service, response}))
         .catch((error) => {
-            if (error.status === 404) {
+            if (error.response.status === 404)
                 commit(MUTATE_SERVICE_DATA, {
-                    service: payload, 
+                    service, 
                     response: {
                         data: [],
                         headers: {}
                     }})
-            }
+            else
+                request.extError(error)
+
         })
     },
-    [ACTION_SERVICE_MARK_READ] ({commit, state}, payload) {
-      const s = state[payload.service]
+    [ACTION_SERVICE_MARK_READ] ({commit, state}, {ts, service}) {
+      const s = state[service]
       if (!s) {
         return
       }
-      const ts = payload.ts || (s.data && s.data.length ? s.data[0].ts : 0)
-      commit(MUTATE_SERVICE_READ, {service: payload.service, read: ts})
+      ts = ts || (s.data && s.data.length ? s.data[0].ts : 0)
+      commit(MUTATE_SERVICE_READ, {service, read: ts})
       if (ts) {
         setTimeout(() => {
           commit(MUTATE_SERVICE_NEW_ITEMS,
             {
-              service: payload.service,
+              service,
               val: false,
-              ts: ts
+              ts
             })
         }, INT_READ)
       }

@@ -194,7 +194,7 @@
                     @click="infoPopup= getString('INFO_POPUP')">
                 <input type="checkbox" id="checkbox_info" v-model="settings.enable.stationInfo" /> <span v-html="getString('INFO_SHOW')"/><br/><br/>
                 <div class="block_settings" v-if="settings.enable.stationInfo">
-                    <vue-editor id="editor_info" v-model="settings.station.info"
+                    <vue-editor id="editor_info" v-model="stationFiles.stationInfo"
                         :editorToolbar="editorToolbar"></vue-editor><br/>
                 </div>
             </div>
@@ -275,11 +275,11 @@
                 </a>
                 <input type="checkbox" id="checkbox_support_us" v-model="settings.enable.donate" /> <span v-html="getString('DONATE_SHOW')"/><br/>
                 <div class="block_settings" v-if="settings.enable.donate">
-                    <vue-editor id="editor_donate" v-model="settings.donate.text"
+                    <vue-editor id="editor_donte" v-model="stationFiles.donateText"
                         :editorToolbar="editorToolbar"></vue-editor>
                     <br/><br/>
                      <span v-html="getString('DONATE_CODE')"/>:<br/>
-                    <textarea v-model="settings.donate.code"></textarea>
+                    <textarea v-model="stationFiles.donateCode"></textarea>
                 </div>
             </div>
             <br/><br/>
@@ -343,6 +343,11 @@ export default {
   data () {
     return {
       settings: null,
+      stationFiles: {
+        donateText: '',
+        donateCode: '',
+        stationInfo: '',
+      },
       showSettings: false,
       showChangePassword: false,
       newsItem: '',
@@ -459,6 +464,11 @@ export default {
     loadMisc () {
       this.loadStatus()
       this.loadTrack()
+      for (const stationFile in this.stationFiles)
+        (async () => {
+          this.stationFiles[stationFile] = 
+            (await request.get(`/${urlCallsign(this.userStationCallsign)}/${stationFile}.html`)).data
+        })()
     },
     loadTrack () {
       if (this.userStationCallsign) {
@@ -488,8 +498,8 @@ export default {
       this[MUTATE_USER]()
       this.$router.push( '/login' )
     },
-    saveSettings () {
-      if (this.settings.station.info.length + this.settings.donate.text.length > 5024288) {
+    async saveSettings () {
+      if (this.stationFiles.stationInfo.length + this.stationFiles.donateText.length > 5024288) {
         alert(this.getString('STATION_INFO_SIZE_LIMIT'))
         return
       }
@@ -509,23 +519,25 @@ export default {
         }
         clearAll = true
       }
-      this[ACTION_EDIT_USER]({settings: this.settings})
-        .then(() => {
-          window.alert( 'Your settings were saved.' )
-          if (clearAll) {
-            this.trackFile = null
-          } else {
-            if (this.settings.status.get === 'manual') {
-              const data = {qth: {fields: {}}}
-              for (let co = 0; co < QTH_PARAMS.fieldCount; co++) {
-                data.qth.fields[co] = this.status.qth.fields.values[co]
-              }
-              data.qth.loc = this.status.qth.loc
-              data.online = this.status.online
-              this[ACTION_POST]({path: 'location', data: data})
-            }
-          }
-        })
+      await this[ACTION_EDIT_USER]({settings: this.settings})
+      await this[ACTION_POST]({
+        path: 'station/files',
+        data: this.stationFiles
+      })
+      window.alert( 'Your settings were saved.' )
+      if (clearAll) {
+         this.trackFile = null
+      } else {
+         if (this.settings.status.get === 'manual') {
+           const data = {qth: {fields: {}}}
+           for (let co = 0; co < QTH_PARAMS.fieldCount; co++) {
+             data.qth.fields[co] = this.status.qth.fields.values[co]
+           }
+           data.qth.loc = this.status.qth.loc
+           data.online = this.status.online
+           this[ACTION_POST]({path: 'location', data})
+        }
+      }
     },
     clearChat () {
       if (window.confirm( 'Do you really want to delete all chat messages?') ) {

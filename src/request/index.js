@@ -7,7 +7,6 @@ const API_URL = '/aiohttp/'
 export default {
 
   onError (error) {
-    var e = { status: 0 }
     if (error.response) {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx
@@ -16,8 +15,8 @@ export default {
       debugLog(error.response.data)
       debugLog(error.response.status)
       debugLog(error.response.headers)
-      e.message = error.response.data
-      e.status = error.response.status
+      error.message = error.response.data
+      error.status = error.response.status
     } else if (error.request) {
       // The request was made but no response was received
       // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
@@ -28,7 +27,7 @@ export default {
       debugLog('Error', error.message)
     }
     debugLog(error.config)
-    throw e
+    throw error
   },
 
   perform (URL, data, multipart, method='post') {

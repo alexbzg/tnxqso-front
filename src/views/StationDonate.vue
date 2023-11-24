@@ -1,8 +1,10 @@
 <template>
     <div id="donate">
-        <div id="text" v-html="stationSettings.donate.text">
+        <div id="text">
+            <static-display url='donateText.html'/>
         </div>
-        <div id="code" v-html="stationSettings.donate.code">
+        <div>
+           <static-display url='donateCode.html'/>
         </div>
     </div>
 </template>
@@ -11,10 +13,12 @@
 import {mapMutations} from 'vuex'
 
 import {MUTATE_STATION_READ} from '../store-station-settings'
+import StaticDisplay from '../components/StaticDisplay'
 
 export default {
   name: 'StationDonate',
   props: ['stationSettings'],
+  components: {StaticDisplay},
   data () {
     return {
     }

@@ -35,7 +35,7 @@
 import {mapActions, mapGetters, mapState} from 'vuex'
 
 import request from '../request'
-import {ACTION_EDIT_USER} from '../store-user'
+import {ACTION_POST} from '../store-user'
 
 
 export default {
@@ -56,9 +56,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions([ACTION_EDIT_USER]),
+    ...mapActions([ACTION_POST]),
     manualFieldBlur () {
-      this[ACTION_EDIT_USER]({manualStats: this.manualStats})
+      this[ACTION_POST]({path: 'station/files', data: {manualStats: this.manualStats}})
     },
     update () {
       if (this.stationSettings.station) {

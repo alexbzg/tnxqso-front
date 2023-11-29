@@ -1,6 +1,7 @@
 import storage from '../storage'
 import request from '../request'
 import stompClient from '../stomp-client'
+import {debugLog} from '../utils'
 
 const STORAGE_KEY_USER_TOKEN = 'userToken'
 const STORAGE_KEY_USER_ID = 'userID'
@@ -52,12 +53,37 @@ if (!user.id) {
   storage.save(STORAGE_KEY_USER_ID, user.id, 'local')
 }
 
-function userInit(commit, dispatch) {
+function userInit({commit, dispatch, getters}) {
   dispatch(ACTION_GET_MESSAGES)
-  stompClient.init()
-  stompClient.processPrivateMessage = msg => {
-    commit(MUTATE_ADD_MESSAGE, JSON.parse(msg))
+  const privateMessageCallback = (message) => {
+    commit(MUTATE_ADD_MESSAGE, message)
   }
+  const chatCallback = (chat) => (message) => {
+    debugLog(`${chat} message`)
+    debugLog(message)
+  }    
+  const stompConnectCallback = () => {
+    stompClient.subscribe(
+        'pm',
+        `/exchange/pm/${getters.userCallsign}`,
+        privateMessageCallback)
+    stompClient.subscribe(
+        'talks',
+        `/exchange/chat/talks`,
+        chatCallback('talks'))
+
+    if (getters.stationCallsign)
+        stompClient.subscribe(
+        'chat',
+        `/exchange/chat/${getters.stationCallsign}`,
+        chatCallback('chat'))
+
+  }
+  stompClient.init(
+    getters.userCallsign,
+    getters.userToken,
+    stompConnectCallback
+  )
 }
 
 export const storeUser = {
@@ -157,19 +183,19 @@ export const storeUser = {
 
   },
   actions: {
-    [ACTION_LOGIN] ({commit, dispatch}, payload) {
+    [ACTION_LOGIN] ({commit, dispatch, getters}, payload) {
       return dispatch(ACTION_POST, {path: 'login', data: payload.data})
         .then(response => {
           commit(MUTATE_USER, {user: response.data, remember: payload.remember})
-          userInit(commit, dispatch)
+          userInit({commit, dispatch, getters})
         })
     },
-    [ACTION_LOAD_USER] ({commit, state, dispatch}) {
+    [ACTION_LOAD_USER] ({commit, state, dispatch, getters}) {
       return dispatch(ACTION_POST, {path: 'userData', data: {}})
         .then(response => {
           response.data.token = state.user.token
           commit(MUTATE_USER, {user: response.data})
-          userInit(commit, dispatch)
+          userInit({commit, dispatch, getters})
         })
     },
     [ACTION_EDIT_USER] ({commit, state, dispatch, getters}, payload) {

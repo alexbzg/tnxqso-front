@@ -6,21 +6,21 @@ const VIRTUAL_HOST = process.env.NODE_ENV == 'development' ? 'tnxqso-dev' : 'tnx
 
 export default {
 
-  store: null,
-  processPrivateMessage: null,
-  subscriptionPrivateMessages: null,
+  subscriptions: {},
 
-  subscribePrivateMessages () {
-    if (this.store.getters.userCallsign) {
-      this.subsrciptionPrivateMessages = 
-        _client.subscribe(`/exchange/pm/${this.store.getters.userCallsign}`,
-            msg => this.onPrivateMessage(msg))
-    }
+  subscribe(title, destination, callback) {
+    this.subscriptions[title] = _client.subscribe(
+        destination,
+        message => {
+          this.logMessage(message)
+          callback?.(JSON.parse(message.body))
+        })
+/*        _client.subscribe(`/exchange/pm/${this.store.getters.userCallsign}`,
+            msg => this.onPrivateMessage(msg))*/
   },
 
   onConnect (frame) {
     console.log(`connected via STOMP: ${JSON.stringify(frame)}`)
-    this.subscribePrivateMessages()
   },
 
   logMessage (msg) {
@@ -29,28 +29,24 @@ export default {
       headers: ${JSON.stringify(msg.headers, undefined, 4)}`);
   },
 
-  onPrivateMessage(msg) {
-    this.logMessage(msg)
-    if (this.processPrivateMessage) {
-      this.processPrivateMessage(msg.body)
-    }
-  },
-
-  init () {
+  init (login, passcode, callback) {
     this.stop()
     _client = new Client({
       brokerURL: `wss://${location.host}/ws`,
       connectHeaders: {
         host: VIRTUAL_HOST,
-        login: this.store.getters.userCallsign,
-        passcode: this.store.getters.userToken
+        login,
+        passcode
       },
       debug: function (str) {
         debugLog(str);
       },
       reconnectDelay: 5000
     })
-    _client.onConnect = () => this.onConnect()
+    _client.onConnect = (frame) => { 
+        this.onConnect(frame)
+        callback?.()
+    }
     _client.activate()
   },
 

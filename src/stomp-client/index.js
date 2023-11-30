@@ -15,8 +15,6 @@ export default {
           this.logMessage(message)
           callback?.(JSON.parse(message.body))
         })
-/*        _client.subscribe(`/exchange/pm/${this.store.getters.userCallsign}`,
-            msg => this.onPrivateMessage(msg))*/
   },
 
   onConnect (frame) {
@@ -24,7 +22,6 @@ export default {
   },
 
   logMessage (msg) {
-    console.log(msg.body);
     console.log(`${msg.body}
       headers: ${JSON.stringify(msg.headers, undefined, 4)}`);
   },

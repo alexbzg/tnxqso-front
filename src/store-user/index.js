@@ -1,7 +1,7 @@
 import storage from '../storage'
 import request from '../request'
 import stompClient from '../stomp-client'
-import {debugLog} from '../utils'
+import {debugLog, urlCallsign} from '../utils'
 
 const STORAGE_KEY_USER_TOKEN = 'userToken'
 const STORAGE_KEY_USER_ID = 'userID'
@@ -75,7 +75,7 @@ function userInit({commit, dispatch, getters}) {
     if (getters.stationCallsign)
         stompClient.subscribe(
         'chat',
-        `/exchange/chat/${getters.stationCallsign}`,
+        `/exchange/chat/${urlCallsign(getters.stationCallsign)}`,
         chatCallback('chat'))
 
   }

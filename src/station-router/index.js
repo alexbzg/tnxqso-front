@@ -108,13 +108,14 @@ const router = new Router({
   ]
 })
 
+const pathSegs = location.pathname.split('/')
+while (pathSegs.slice(-1).pop() === "")
+    pathSegs.pop()
+router.STATION_DIR = pathSegs.slice(-1).pop()
+
 router.afterEach((to) => {
   if (STATION_TABS.includes(to.name)) {
-	const pathSegs = location.pathname.split('/')
-	while (pathSegs.slice(-1).pop() === "")
-		pathSegs.pop()
-	const station = pathSegs.slice(-1).pop()
-    const payload = { station, tab: to.name }
+    const payload = {station: router.STATION_DIR, tab: to.name}
     if (router.app.$store.getters.userToken) {
         payload['token'] = router.app.$store.getters.userToken
     } else {

@@ -38,13 +38,12 @@ const store = new Vuex.Store({
 
 stompClient.store = store
 
-if (store.getters.userToken) {
-  store.dispatch(ACTION_LOAD_USER)
-}
-
 store.dispatch(ACTION_LOAD_STATION)
   .then(() => {
     const stationCs = urlCallsign(store.state.stationSettings.station.callsign)
+
+    if (store.getters.userToken)
+      store.dispatch(ACTION_LOAD_USER)
 
     talksInit(store, stationCs)
 

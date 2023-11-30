@@ -234,12 +234,13 @@ export default {
           })
       }
     },
-    serverPost (data, method) {
+    serverPost (data, method, update) {
       this.posting = true
       data.station = this.service.station
       return this[ACTION_REQUEST]({path: 'chat', data, method})
         .then(() => {
-            this[ACTION_UPDATE_SERVICE](this.serviceName)
+            if (update)
+              this[ACTION_UPDATE_SERVICE](this.serviceName)
         })
         .finally(() => {
             this.posting = false
@@ -270,7 +271,7 @@ export default {
     deleteMsg (ts) {
       if (this.skipConfirmation.chatDelete ||
         confirm('Удалить сообщение?\nDo you really want to delete this message?')) {
-        this.serverPost({ts}, 'delete')
+        this.serverPost({ts}, 'delete', true)
       }
     },
     replyTo (callsign) {
@@ -284,7 +285,7 @@ export default {
         await this[ACTION_EDIT_USER]({ settings })
         this[ACTION_LOAD_STATION]()
         if (settings.chatAccess === 'admins' && dialogResult.clearChat) {
-            this.serverPost({ clear: 1, keepPinned: 1 })
+            this.serverPost({keepPinned: 1}, 'delete')
         }
       } catch (error) {
         console.log(error)

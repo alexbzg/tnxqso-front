@@ -1,7 +1,9 @@
 import storage from '../storage'
 import request from '../request'
 import stompClient from '../stomp-client'
-import {debugLog, urlCallsign} from '../utils'
+import {urlCallsign} from '../utils'
+
+import {updateServiceCallback} from '../store-services'
 
 const STORAGE_KEY_USER_TOKEN = 'userToken'
 const STORAGE_KEY_USER_ID = 'userID'
@@ -58,9 +60,8 @@ function userInit({commit, dispatch, getters}) {
   const privateMessageCallback = (message) => {
     commit(MUTATE_ADD_MESSAGE, message)
   }
-  const chatCallback = (chat) => (message) => {
-    debugLog(`${chat} message`)
-    debugLog(message)
+  const _updateServiceCallback = (service) => (item) => {
+    updateServiceCallback({commit, dispatch, service, item})
   }    
   const stompConnectCallback = () => {
     stompClient.subscribe(
@@ -70,13 +71,13 @@ function userInit({commit, dispatch, getters}) {
     stompClient.subscribe(
         'talks',
         `/exchange/chat/talks`,
-        chatCallback('talks'))
+        _updateServiceCallback('talks'))
 
     if (getters.stationCallsign)
         stompClient.subscribe(
         'chat',
         `/exchange/chat/${urlCallsign(getters.stationCallsign)}`,
-        chatCallback('chat'))
+        _updateServiceCallback('chat'))
 
   }
   stompClient.init(

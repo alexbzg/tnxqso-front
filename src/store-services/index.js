@@ -10,12 +10,24 @@ export const MUTATE_SERVICE = 'mutateService'
 export const MUTATE_SERVICE_DATA = 'mutateServiceData'
 export const MUTATE_SERVICE_READ = 'mutateServiceRead'
 export const MUTATE_SERVICE_NEW_ITEMS = 'mttServiceNewItems'
+export const MUTATE_SERVICE_ADD_ITEM = 'mttServiceAddItem'
+export const MUTATE_SERVICE_DELETE_ITEM = 'mttServiceDeleteItem'
 
 export const ACTION_UPDATE_SERVICE = 'actionUpdateService'
 export const ACTION_SERVICE_MARK_READ = 'actnServiceMarkRead'
 
 const INT_READ = 10 * 1000
 export const RELOAD_INT_SRVC = 1000 * 60
+
+export const updateServiceCallback = ({commit, dispatch, service, item}) => {
+  const {add_item, delete_item, reload} = item
+  if (add_item) 
+    commit(MUTATE_SERVICE_ADD_ITEM, {service, item: add_item})
+  if (delete_item) 
+    commit(MUTATE_SERVICE_DELETE_ITEM, {service, ...delete_item})
+  if (reload)
+    dispatch(ACTION_UPDATE_SERVICE, service)
+}
 
 function setNew (service, val, ts) {
   Vue.set(service, 'new', false)
@@ -48,11 +60,22 @@ export const storeServices = {
         Vue.set(payload, 'read', SERVICES_READ[station][payload.name])
       }
     },
-    [MUTATE_SERVICE_DATA] (state, payload) {
-      const s = state[payload.service]
-      if (s.lastModified !== payload.response.headers['last-modified']) {
-        s.lastModified = payload.response.headers['last-modified']
-        Vue.set(s, 'data', payload.response.data)
+    [MUTATE_SERVICE_ADD_ITEM] (state, {service, item}) {
+      const s = state[service]
+      s.data.unshift(item)
+      s.lastModified = new Date(item.ts*1000).toUTCString()
+      setNew(s, true)
+    },
+    [MUTATE_SERVICE_DELETE_ITEM] (state, {service, item_ts, delete_ts}) {
+      const s = state[service]
+      s.data = s.data.filter(item => item.ts !== item_ts)
+      s.lastModified = new Date(delete_ts*1000).toUTCString()
+    },
+    [MUTATE_SERVICE_DATA] (state, {service, response}) {
+      const s = state[service]
+      if (s.lastModified !== response.headers['last-modified']) {
+        s.lastModified = response.headers['last-modified']
+        Vue.set(s, 'data', response.data)
         setNew(s, true)
       }
     },

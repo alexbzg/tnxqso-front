@@ -13,6 +13,7 @@ export const MUTATE_USER = 'mutateUser'
 export const ACTION_REQUEST = 'actnRqst'
 export const ACTION_POST = 'actionPost'
 export const ACTION_LOGIN = 'actionLogin'
+export const ACTION_LOGOUT = 'actionLogout'
 export const ACTION_LOAD_USER = 'actionLoadUser'
 export const ACTION_EDIT_USER = 'actionEditUser'
 
@@ -28,6 +29,7 @@ export const ACTION_READ_MESSAGES = 'actnReadMessages'
 const EMPTY_USER = {
   callsign: null,
   token: null,
+  anonToken: null,
   settings: {
     enable: {},
     station: {},
@@ -56,7 +58,8 @@ if (!user.id) {
 }
 
 function userInit({commit, dispatch, getters}) {
-  dispatch(ACTION_GET_MESSAGES)
+  if (getters.userCallsign)
+    dispatch(ACTION_GET_MESSAGES)
   const privateMessageCallback = (message) => {
     commit(MUTATE_ADD_MESSAGE, message)
   }
@@ -64,25 +67,27 @@ function userInit({commit, dispatch, getters}) {
     updateServiceCallback({commit, dispatch, service, item})
   }    
   const stompConnectCallback = () => {
-    stompClient.subscribe(
+    if (getters.userCallsign)
+      stompClient.subscribe(
         'pm',
         `/exchange/pm/${getters.userCallsign}`,
         privateMessageCallback)
+
     stompClient.subscribe(
         'talks',
         `/exchange/chat/talks`,
         _updateServiceCallback('talks'))
 
     if (getters.stationCallsign)
-        stompClient.subscribe(
+      stompClient.subscribe(
         'chat',
         `/exchange/chat/${urlCallsign(getters.stationCallsign)}`,
         _updateServiceCallback('chat'))
 
   }
   stompClient.init(
-    getters.userCallsign,
-    getters.userToken,
+    getters.userCallsign ?? 'anonymous',
+    getters.userToken ?? getters.anonToken,
     stompConnectCallback
   )
 }
@@ -99,6 +104,7 @@ export const storeUser = {
     userToken: state => {
       return state.user.token
     },
+    anonToken: state => state.user.anonToken,
     userName: state => {
       return state.user.name
     },
@@ -139,11 +145,11 @@ export const storeUser = {
         state.user = user
         for (const field in EMPTY_USER) {
           if (!user[field]) {
-            user[field] = {}
+            user[field] = EMPTY_USER[field]
           }
           for (const subField in EMPTY_USER[field]) {
             if (!user[field][subField]) {
-              user[field][subField] = {}
+              user[field][subField] = EMPTY_USER[field][subField]
             }
           }
         }
@@ -190,6 +196,10 @@ export const storeUser = {
           commit(MUTATE_USER, {user: response.data, remember: payload.remember})
           userInit({commit, dispatch, getters})
         })
+    },
+    [ACTION_LOGOUT] ({commit, dispatch}) {
+       commit(MUTATE_USER)
+       dispatch(ACTION_LOAD_USER)
     },
     [ACTION_LOAD_USER] ({commit, state, dispatch, getters}) {
       return dispatch(ACTION_POST, {path: 'userData', data: {}})

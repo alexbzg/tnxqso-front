@@ -308,7 +308,7 @@ import {CURRENT_POSITION_ICONS_COUNT} from '../constants'
 import {VueEditor} from 'vue2-editor'
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
-import {mapGetters, mapActions, mapMutations} from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
 
 import QTH_PARAMS from '../../public/static/js/qthParams.json'
 
@@ -319,7 +319,7 @@ import LocalizationMixin from '../localization-mixin'
 
 import ChangePassword from '../components/ChangePassword'
 
-import {MUTATE_USER, ACTION_EDIT_USER, ACTION_POST, ACTION_REQUEST} from '../store-user'
+import {ACTION_EDIT_USER, ACTION_POST, ACTION_REQUEST, ACTION_LOGOUT} from '../store-user'
 
 const CLUSTER_SETTINGS_DEFAULT = {
     "RU": "R*/* UA*/* UB*/* UC*/* UD*/* UE*/* UF*/* UG*/* UH*/* UI*/*"
@@ -401,8 +401,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions([ACTION_POST, ACTION_EDIT_USER, ACTION_REQUEST]),
-    ...mapMutations([MUTATE_USER]),
+    ...mapActions([ACTION_POST, ACTION_EDIT_USER, ACTION_REQUEST, ACTION_LOGOUT]),
     initSettings () {
       const settings = this.$store.getters.user.settings
       settings.chatAccess = settings.chatAccess || 'users'
@@ -495,7 +494,7 @@ export default {
       window.open('/static/html/map.html', '_blank')
     },
     logout () {
-      this[MUTATE_USER]()
+      this[ACTION_LOGOUT]()
       this.$router.push( '/login' )
     },
     async saveSettings () {

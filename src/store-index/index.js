@@ -23,9 +23,7 @@ const store = new Vuex.Store({
 
 stompClient.store = store
 
-if (store.getters.userToken) {
-  store.dispatch(ACTION_LOAD_USER)
-}
+store.dispatch(ACTION_LOAD_USER)
 
 talksInit(store)
 activityInit(store)

@@ -13,6 +13,7 @@ const LOAD_STATUS_ACTION = 'actnLoadStationsStatus'
 const CREATE_ACTIVE_STATION_ACTION = 'actCreateActiveStation'
 export const MUTATE_STATION_STATUS = 'mttStationStatus'
 export const MUTATE_ADD_ACTIVE_STATION = 'mttAddActiveStation'
+const MUTATE_PENDING = 'mttPending'
 
 const STATUS_RELOAD_INT = 1000 * 5
 const ONLINE_INT = 120
@@ -39,7 +40,8 @@ export const storeActiveStations = {
       archive: [],
       forcedActive: {},
       lastModified: null,
-    }
+    },
+    pending: {}
   },
   getters: {
     activeStationsRead: state => {
@@ -55,6 +57,9 @@ export const storeActiveStations = {
     }
   },
   mutations: {
+    [MUTATE_PENDING] (state, pending) {
+      state.pending = {...state.pending, ...pending}
+    },
     [MUTATE_ACTIVE_STATIONS_READ] (state) {
       state.read = true
       state.readState = readState(state)
@@ -175,6 +180,9 @@ export const storeActiveStations = {
     },
     async [LOAD_STATUS_ACTION] ({commit, dispatch, state}) {
       (async () => {
+        if (state.pending.active)
+          return
+        commit(MUTATE_PENDING, {active: true})
         try {
           const { data, headers } = await request.getJSON('activeStations', null,
             {headers: {'If-Modified-Since': state.stations.lastModified}})
@@ -191,12 +199,16 @@ export const storeActiveStations = {
               commit(MUTATE_REMOVE_ACTIVE_STATION, prevCallsign)
         } catch (error) {
           request.extError(error)
+        } finally {
+          commit(MUTATE_PENDING, {active: false})
         }
       })();
       (async () => {
         for (const callsign in state.stations.forcedActive) {
-          if (state.stations.activeIndex.includes(callsign))
+          if (state.stations.activeIndex.includes(callsign) 
+            || state.pending[callsign])
             continue
+          commit(MUTATE_PENDING, {[callsign]: true})
           try {
             const {data: status, headers} = await request.getJSON('status', callsign,
               {headers: {'If-Modified-Since': 
@@ -206,6 +218,8 @@ export const storeActiveStations = {
               {callsign, lastModified: headers['last-modified']})
           } catch (error) {
             request.extError(error)
+          } finally {
+            commit(MUTATE_PENDING, {[callsign]: false})
           }
         }
       })()

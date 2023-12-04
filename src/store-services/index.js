@@ -64,7 +64,8 @@ export const storeServices = {
       const s = state[service]
       s.data.unshift(item)
       s.lastModified = new Date(item.ts*1000).toUTCString()
-      setNew(s, true)
+      item.new = true
+      s.new = true
     },
     [MUTATE_SERVICE_DELETE_ITEM] (state, {service, item_ts, delete_ts}) {
       const s = state[service]

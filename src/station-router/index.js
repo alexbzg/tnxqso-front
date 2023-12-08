@@ -100,10 +100,6 @@ const router = new Router({
       name: 'Profile',
       component: Profile,
       props: true
-    },
-
-    { path: '*',
-      redirect: '/log'
     }
   ]
 })
@@ -112,6 +108,16 @@ const pathSegs = location.pathname.split('/')
 while (pathSegs.slice(-1).pop() === "")
     pathSegs.pop()
 router.STATION_DIR = pathSegs.slice(-1).pop()
+
+router.beforeEach((to, from, next) => {
+  if (STATION_TABS.includes(to.name) && router.app.$store.getters.enabledTabs &&
+   !router.app.$store.getters.enabledTabs[to.name])
+    next('void')
+  else
+    next()
+})
+
+
 
 router.afterEach((to) => {
   if (STATION_TABS.includes(to.name)) {

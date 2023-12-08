@@ -75,8 +75,8 @@ import {formatPeriod} from './utils'
 import StationStatus from './components/StationStatus'
 import LanguageSwitch from './components/LanguageSwitch'
 import ProfileTab from './components/ProfileTab'
+import {STATION_TABS} from './constants'
 
-//import StompClient from './stomp-client'
 
 const tabsReadStoragePfx = 'stationTabsRead_'
 const tabs = {
@@ -161,9 +161,8 @@ export default {
         this.stationCS = this.stationSettings.station.callsign
         this.stationTitle = this.stationSettings.station.title
         this.enable = this.stationSettings.enable
-        if ( this.stationSettings.enable.stationInfo ) {
-          this.stationInfo = this.stationSettings.station.info
-        }
+        if (STATION_TABS.includes(this.$route.name) && !this.enable[this.$route.name])
+          this.$router.push('void')
       },
       deep: true
     }
@@ -201,10 +200,9 @@ export default {
     },
     tabUnread ( id ) {
       const tab = this.tabs[id]
-      this.$set( this.tabsUnread, id,
-        tab.updated
-        ? tab.updated !== tab.read && tab.service.data.length > 0
-        : false )
+      this.$set(this.tabsUnread, id,
+        tab.updated ?
+          tab.updated !== tab.read && tab.service.data.length > 0 : false)
     },
     onStatusChange (statusData) {
       this.$set(this, 'statusData', statusData)

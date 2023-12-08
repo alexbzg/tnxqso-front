@@ -72,9 +72,12 @@ export const storeActiveStations = {
             {lastUpdated: null}
       } else {
         const indexLen = state.stations.activeIndex.length
-        for (let i = 0; i < indexLen && state.stations.activeIndex[i] < settings.station.callsign; 
+        let i = 0
+        for (; i < indexLen && state.stations.activeIndex[i] < settings.station.callsign; 
           i++)
-        state.stations.activeIndex.splice(i, 0, settings.station.callsign)
+          continue
+        if (state.stations.activeIndex[i] != settings.station.callsign)
+          state.stations.activeIndex.splice(i, 0, settings.station.callsign)
       }
     },
     [MUTATE_REMOVE_ACTIVE_STATION] (state, callsign) {

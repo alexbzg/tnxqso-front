@@ -46,7 +46,7 @@ export default {
                   user: this.callsign
                 }
               })
-                .then(alert('Пользователь заблокирован.'))
+                .then(() => alert('Пользователь заблокирован.'))
             })
         })
       },
@@ -63,7 +63,7 @@ export default {
                 banned: this.callsign
               }
             })
-            .then(alert('Пользователь заблокирован.'))
+            .then(() => alert('Пользователь заблокирован.'))
         })
     }
   },

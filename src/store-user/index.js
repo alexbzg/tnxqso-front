@@ -201,10 +201,9 @@ export const storeUser = {
        commit(MUTATE_USER)
        dispatch(ACTION_LOAD_USER)
     },
-    [ACTION_LOAD_USER] ({commit, state, dispatch, getters}) {
+    [ACTION_LOAD_USER] ({commit, dispatch, getters}) {
       return dispatch(ACTION_POST, {path: 'userData', data: {}})
         .then(response => {
-          response.data.token = state.user.token
           commit(MUTATE_USER, {user: response.data})
           userInit({commit, dispatch, getters})
         })

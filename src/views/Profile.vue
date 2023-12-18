@@ -511,11 +511,8 @@ export default {
         return
       }
       if (this.userStationCallsign !== this.settings.station.callsign) {
-        const warningId = this.settings.station.callsign ?  'STATION_CALLSIGN_CHANGE_WARNING' :
-            'STATION_CALLSIGN_CLEAR_WARNING'
-        if (!window.confirm(this.getString(warningId))){
+        if (!this.settings.station.callsign && !window.confirm(this.getString('STATION_CALLSIGN_CLEAR_WARNING')))
           return
-        }
         clearAll = true
       }
       await this[ACTION_EDIT_USER]({settings: this.settings})

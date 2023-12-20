@@ -6,14 +6,12 @@ import {ACTION_POST} from '../store-user'
 
 export const MUTATE_CURRENT_ACTIVITY = 'mttCurrentActivity'
 const MUTATE_ACTIVE_USERS = 'mttActiveUsers'
-export const MUTATE_USERS_CONSUMER = 'mttUsersConsumer'
+export const MUTATE_USER_ACTIVITY = 'mttUserActivity'
 
 export const ACTION_POST_ACTIVITY = 'actnUpdateService'
 export const ACTION_LOAD_ACTIVE_USERS = 'actnLoadActiveUsers'
-export const ACTION_ADD_USERS_CONSUMER = 'actnAddUsersConsumer'
 
 const UPDATE_INT_ACTIVITY = 60 * 1000 * 1
-const RELOAD_INT_ACTIVE_USERS = 2000
 
 export const storeActivity = {
   state: {
@@ -32,21 +30,8 @@ export const storeActivity = {
     [MUTATE_ACTIVE_USERS] (state, payload) {
       Vue.set(state, 'users', payload)
     },
-    [MUTATE_USERS_CONSUMER] (state, payload) {
-      if (payload.value) {
-        Vue.set(state.usersConsumers, payload.id, true)
-        if ('reloadTask' in payload) {
-          Vue.set(state, 'usersReloadTask', payload.reloadTask)
-        }
-      } else {
-        if (payload.id in state.usersConsumers) {
-          Vue.delete(state.usersConsumers, payload.id)
-        }
-        if (!Object.keys(state.usersConsumers).length) {
-          clearInterval(state.usersReloadTask)
-          Vue.set(state, 'usersReloadTask', null)
-        }
-      }
+    [MUTATE_USER_ACTIVITY] (state, payload) {
+      state.users[payload.callsign] = payload
     }
   },
   actions: {
@@ -74,19 +59,11 @@ export const storeActivity = {
           }
         })
         .catch(() => {})
-    },
-    [ACTION_ADD_USERS_CONSUMER] ({commit, state, dispatch}, payload) {
-      const mttPayload = {id: payload, value: true}
-      if (!state.usersReloadTask) {
-        dispatch(ACTION_LOAD_ACTIVE_USERS)
-        mttPayload.reloadTask =
-          setInterval(() => { dispatch(ACTION_LOAD_ACTIVE_USERS) }, RELOAD_INT_ACTIVE_USERS)
-      }
-      commit(MUTATE_USERS_CONSUMER, mttPayload)
     }
   }
 }
 
 export function activityInit (store) {
   setInterval(() => store.dispatch(ACTION_POST_ACTIVITY), UPDATE_INT_ACTIVITY)
+  store.dispatch(ACTION_LOAD_ACTIVE_USERS)
 }

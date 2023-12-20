@@ -4,6 +4,7 @@ import stompClient from '../stomp-client'
 import {urlCallsign} from '../utils'
 
 import {updateServiceCallback} from '../store-services'
+import {MUTATE_USER_ACTIVITY} from '../store-activity'
 
 const STORAGE_KEY_USER_TOKEN = 'userToken'
 const STORAGE_KEY_USER_ID = 'userID'
@@ -77,6 +78,12 @@ function userInit({commit, dispatch, getters}) {
         'talks',
         `/exchange/chat/talks`,
         _updateServiceCallback('talks'))
+
+    stompClient.subscribe(
+        'active_users',
+        `/exchange/active_users`,
+        (message) => commit(MUTATE_USER_ACTIVITY, message)
+    )
 
     if (getters.stationCallsign)
       stompClient.subscribe(

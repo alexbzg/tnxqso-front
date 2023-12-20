@@ -154,8 +154,7 @@ import {parseMsgText, replyTo} from '../chat-utils'
 import showChatAccessChangeDialog from '../components/ChatAccessChangeDialog/index.js'
 import LocalizationMixin from '../localization-mixin'
 
-import {ACTION_POST_ACTIVITY, MUTATE_CURRENT_ACTIVITY, MUTATE_USERS_CONSUMER, ACTION_ADD_USERS_CONSUMER}
-  from '../store-activity'
+import {ACTION_POST_ACTIVITY, MUTATE_CURRENT_ACTIVITY} from '../store-activity'
 import {ACTION_REQUEST, ACTION_EDIT_USER} from '../store-user'
 import {ACTION_UPDATE_SERVICE} from '../store-services'
 import {ACTION_LOAD_STATION} from '../store-station-settings'
@@ -175,12 +174,6 @@ export default {
       posting: false
     }
   },
-  mounted () {
-    this[ACTION_ADD_USERS_CONSUMER](this.serviceName)
-  },
-  beforeDestroy () {
-    this[MUTATE_USERS_CONSUMER]({id: this.serviceName, value: false})
-  },
   beforeRouteEnter (to, from, next) {
     next(vm => {
       vm.storeCurrentActivity()
@@ -191,9 +184,9 @@ export default {
     next()
   },
   methods: {
-    ...mapActions([ACTION_REQUEST, ACTION_EDIT_USER, ACTION_ADD_USERS_CONSUMER, ACTION_UPDATE_SERVICE, ACTION_POST_ACTIVITY,
+    ...mapActions([ACTION_REQUEST, ACTION_EDIT_USER, ACTION_UPDATE_SERVICE, ACTION_POST_ACTIVITY,
         ACTION_LOAD_STATION]),
-    ...mapMutations([MUTATE_CURRENT_ACTIVITY, MUTATE_USERS_CONSUMER]),
+    ...mapMutations([MUTATE_CURRENT_ACTIVITY]),
     insertSmilie (smilie) {
       insertTextAtCursor(this.$refs.msgTextInput, ':' + smilie + ':')
     },

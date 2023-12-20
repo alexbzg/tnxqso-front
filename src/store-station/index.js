@@ -79,4 +79,12 @@ export function stationPath () {
   return `/static/stations/${urlCallsign(store.state.stationSettings.station.callsign)}/`
 }
 
+export function stationStatus () {
+  const stationCallsign = store.state.stationSettings.station?.callsign
+  if (stationCallsign)
+    return stationCallsign && stationCallsign in store.state.activeStations.stations.active ?
+        store.state.activeStations.stations.active[stationCallsign].status : {}
+  return null
+}
+
 export default store

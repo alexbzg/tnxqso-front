@@ -109,18 +109,23 @@ export const storeActiveStations = {
         return
       }
       const now = Date.now() / 1000
+
       const onlineUpdateType = station.settings.status.get
       const online = (onlineUpdateType === 'manual' ? station.status.online
         : (now - station.status.ts) < ONLINE_INT)
       station.status.online = online
-      let freq = null
-      if (station.status.freq && station.status.freq.value && now - station.status.freq.ts < FREQ_INT) {
-        freq = station.status.freq.value
-      }
-      if (station.status.speed && now - station.status.locTs > ONLINE_INT) {
+
+      station.status.freqDisplay = null
+      if (station.status.freq?.value && now - station.status.freq.ts < FREQ_INT) 
+        station.status.freqDisplay = station.status.freq.value
+
+      station.status.callsignDisplay = callsign
+      if (station.status.callsign?.value && now - station.status.callsign.ts < FREQ_INT) 
+        station.status.callsignDisplay = station.status.callsign.value
+     
+      if (station.status.speed && now - station.status.locTs > ONLINE_INT) 
         station.status.speed = null
-      }
-      station.status.freqDisplay = freq
+      
       if (state.readState) {
         if (((!statusCache && station.status.online) || (!statusCache.online && station.status.online)) &&
         !state.readState.includes(callsign)){

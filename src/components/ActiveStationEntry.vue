@@ -2,11 +2,10 @@
     <div v-if="stationSettings.publish || siteAdmin" class="one_station"
         :class="{compact: compactView, offline: !statusData.online}">
         <span class="callsign">
-<!--
-                <input type="checkbox" v-model="stationSettings.publish.admin" @change="publishChange()" class="main_block" />
-                <input type="checkbox" v-model="stationSettings.publish.user" @change="publishChange()"/>
--->
-            <component :is="compactView ? 'a' : 'span'" :href="stationURL + '#/info'" :title="stationSettings.station.title + ' (' + period + ')'">
+            <component 
+                :is="compactView ? 'a' : 'span'" 
+                :href="stationURL + '#/info'" 
+                :title="stationSettings.station.title + ' (' + period + ')'">
                 <template v-if="siteAdmin">
                     <input type="checkbox" v-model="stationSettings.publish.user" @change="publishChange()"/>
                 </template>
@@ -83,7 +82,8 @@ export default {
       return '/' + urlCallsign(this.stationSettings.station.callsign)
     },
     stationDisplayCallsign () {
-      return replace0(this.stationSettings.station.callsign.toUpperCase())
+      return replace0((this.statusData?.callsignDisplay || 
+        this.stationSettings.station.callsign).toUpperCase())
     }
   },
   methods: {

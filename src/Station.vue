@@ -76,6 +76,7 @@ import StationStatus from './components/StationStatus'
 import LanguageSwitch from './components/LanguageSwitch'
 import ProfileTab from './components/ProfileTab'
 import {STATION_TABS} from './constants'
+import {stationStatus} from './store-station'
 
 
 const tabsReadStoragePfx = 'stationTabsRead_'
@@ -103,7 +104,6 @@ export default {
       tabsUnread: tabsUnread,
       activeTab: null,
       enable: {},
-      stationCS: null,
       stationTitle: null,
       stationInfo: null,
       statusData: {},
@@ -158,7 +158,6 @@ export default {
     stationSettings: {
       handler () {
         document.title = this.stationSettings.station.callsign + ' - TNXQSO.com'
-        this.stationCS = this.stationSettings.station.callsign
         this.stationTitle = this.stationSettings.station.title
         this.enable = this.stationSettings.enable
         if (STATION_TABS.includes(this.$route.name) && !this.enable[this.$route.name])
@@ -173,6 +172,9 @@ export default {
     languageSwitchEnabled () {
       //return false
       return LOCALIZED_ROUTES.includes(this.$route.name)
+    },
+    stationCS () {
+      return stationStatus()?.callsignDisplay || this.stationSettings.station?.callsign
     },
     period () {
       if (this.stationSettings.station &&

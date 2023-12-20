@@ -18,12 +18,12 @@ export default {
   },
 
   onConnect (frame) {
-    console.log(`connected via STOMP: ${JSON.stringify(frame)}`)
+    debugLog(`connected via STOMP: ${JSON.stringify(frame)}`)
   },
 
   logMessage (msg) {
-    console.log(`${msg.body}
-      headers: ${JSON.stringify(msg.headers, undefined, 4)}`);
+    debugLog(msg.body)
+    debugLog(`headers: ${JSON.stringify(msg.headers, undefined, 4)}`)
   },
 
   init (login, passcode, callback) {

@@ -1,9 +1,9 @@
 chown web_ftp:www-data src -R
 chmod o+w src -R
 rm /var/www/tnxqso/js/*.js
-rm /var/www/tnxqso/js/*.js.map
+#rm /var/www/tnxqso/js/*.js.map
 cp /var/www/tnxqso-dev/dist/js/*.js /var/www/tnxqso/js/
-cp /var/www/tnxqso-dev/dist/js/*.js.map /var/www/tnxqso/js/
+#cp /var/www/tnxqso-dev/dist/js/*.js.map /var/www/tnxqso/js/
 rm /var/www/tnxqso/css/*
 cp /var/www/tnxqso-dev/dist/css/* /var/www/tnxqso/css/
 cp /var/www/tnxqso-dev/dist/static/images/* /var/www/tnxqso/static/images -R

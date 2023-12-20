@@ -1,12 +1,14 @@
+
 module.exports = {
     runtimeCompiler: true,
+    productionSourceMap: false,
     devServer: {
-	disableHostCheck: true,
+	    disableHostCheck: true,
         public: 'dev.tnxqso.com',
-	port: 8081,
-	watchOptions: {
-	    ignored: /static/
-	}
+    	port: 8081,
+	    watchOptions: {
+	        ignored: /static/
+	    }
     },
     pages: {
         index: {

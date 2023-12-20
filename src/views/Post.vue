@@ -56,10 +56,10 @@
 
 <script>
 
-import {mapGetters, mapActions, mapMutations} from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
 
 import {ACTION_EDIT_USER, ACTION_DELETE_MESSAGE, ACTION_READ_MESSAGES} from '../store-user'
-import {ACTION_ADD_USERS_CONSUMER, MUTATE_USERS_CONSUMER, ACTION_POST_ACTIVITY} from '../store-activity'
+import {ACTION_POST_ACTIVITY} from '../store-activity'
 
 import LocalizationMixin from '../localization-mixin'
 
@@ -85,16 +85,8 @@ export default {
       }
     })
   },
-  mounted () {
-    this[ACTION_ADD_USERS_CONSUMER]('post')
-  },
-  beforeDestroy () {
-    this[MUTATE_USERS_CONSUMER]({id: 'post', value: false})
-  },
   methods: {
-    ...mapMutations([MUTATE_USERS_CONSUMER]),
-    ...mapActions([ACTION_EDIT_USER, ACTION_DELETE_MESSAGE, ACTION_READ_MESSAGES, ACTION_ADD_USERS_CONSUMER,
-        ACTION_POST_ACTIVITY]),
+    ...mapActions([ACTION_EDIT_USER, ACTION_DELETE_MESSAGE, ACTION_READ_MESSAGES, ACTION_POST_ACTIVITY]),
     toggle_pm_enabled () {
       const pm_enabled = !this.pm_enabled
       this[ACTION_EDIT_USER]({pm_enabled: pm_enabled})

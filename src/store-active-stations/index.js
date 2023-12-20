@@ -11,11 +11,12 @@ const MUTATE_STATIONS_LAST_MODIFIED = 'mttStationsLastModified'
 const MUTATE_FORCED_LAST_MODIFIED = 'mttForcedLastModified'
 const LOAD_STATUS_ACTION = 'actnLoadStationsStatus'
 const CREATE_ACTIVE_STATION_ACTION = 'actCreateActiveStation'
+export const UPDATE_ACTIVE_STATIONS_STATUS_ACTION = 'actUpdActiveStationsStatus'
 export const MUTATE_STATION_STATUS = 'mttStationStatus'
 export const MUTATE_ADD_ACTIVE_STATION = 'mttAddActiveStation'
 const MUTATE_PENDING = 'mttPending'
 
-const STATUS_RELOAD_INT = 1000 * 5
+const STATUS_RELOAD_INT = 1000 * 20
 const ONLINE_INT = 120
 const FREQ_INT = 300
 
@@ -170,10 +171,16 @@ export const storeActiveStations = {
         }
       }
       Promise.all(promises)
-        .then(() => {
-           commit(MUTATE_STATIONS_LIST, stations)
-           dispatch(LOAD_STATUS_ACTION)
-           setInterval(() => dispatch(LOAD_STATUS_ACTION), STATUS_RELOAD_INT)
+        .then(async () => {
+          commit(MUTATE_STATIONS_LIST, stations)
+          dispatch(LOAD_STATUS_ACTION)
+          setInterval(() => dispatch(LOAD_STATUS_ACTION), STATUS_RELOAD_INT)
+          try {
+            const { data } = await request.getJSON('activeStations', null)
+            dispatch(UPDATE_ACTIVE_STATIONS_STATUS_ACTION, data)
+          } catch (error) {
+            request.extError(error)
+          }
         })
     },
     async [CREATE_ACTIVE_STATION_ACTION] ({commit},  {callsign, forced}) {
@@ -186,51 +193,38 @@ export const storeActiveStations = {
         return false
       }
     },
-    async [LOAD_STATUS_ACTION] ({commit, dispatch, state}) {
-      (async () => {
-        if (state.pending.active)
-          return
-        commit(MUTATE_PENDING, {active: true})
+    async [UPDATE_ACTIVE_STATIONS_STATUS_ACTION] ({commit, dispatch, state}, data) {
+      const updated = {}
+      for (const {callsign, status} of data) {
+        updated[callsign] = true
+        if ((callsign in state.stations.active) ||
+          (await dispatch(CREATE_ACTIVE_STATION_ACTION, {callsign, forced: false})))
+          commit(MUTATE_STATION_STATUS, {callsign, status})
+      }
+      for (const prevCallsign of state.stations.activeIndex) {
+        if (!(prevCallsign in updated))
+            commit(MUTATE_REMOVE_ACTIVE_STATION, prevCallsign)
+      }
+    },
+    async [LOAD_STATUS_ACTION] ({commit, state}) {
+      for (const callsign in state.stations.forcedActive) {
+        if (state.stations.activeIndex.includes(callsign) 
+          || state.pending[callsign])
+        continue
+        commit(MUTATE_PENDING, {[callsign]: true})
         try {
-          const { data, headers } = await request.getJSON('activeStations', null,
-            {headers: {'If-Modified-Since': state.stations.lastModified}})
-          commit(MUTATE_STATIONS_LAST_MODIFIED, headers['last-modified'])
-          const updated = {}
-          for (const {callsign, status} of data) {
-            updated[callsign] = true
-            if ((callsign in state.stations.active) ||
-              (await dispatch(CREATE_ACTIVE_STATION_ACTION, {callsign, forced: false})))
-              commit(MUTATE_STATION_STATUS, {callsign, status})
-          }
-          for (const prevCallsign of state.stations.activeIndex)
-            if (!(prevCallsign in updated))
-              commit(MUTATE_REMOVE_ACTIVE_STATION, prevCallsign)
+          const {data: status, headers} = await request.getJSON('status', callsign,
+            {headers: {'If-Modified-Since': 
+                state.stations.forcedActive[callsign].lastModified}})
+          commit(MUTATE_STATION_STATUS, {callsign, status})
+          commit(MUTATE_FORCED_LAST_MODIFIED,
+            {callsign, lastModified: headers['last-modified']})
         } catch (error) {
           request.extError(error)
         } finally {
-          commit(MUTATE_PENDING, {active: false})
+          commit(MUTATE_PENDING, {[callsign]: false})
         }
-      })();
-      (async () => {
-        for (const callsign in state.stations.forcedActive) {
-          if (state.stations.activeIndex.includes(callsign) 
-            || state.pending[callsign])
-            continue
-          commit(MUTATE_PENDING, {[callsign]: true})
-          try {
-            const {data: status, headers} = await request.getJSON('status', callsign,
-              {headers: {'If-Modified-Since': 
-                 state.stations.forcedActive[callsign].lastModified}})
-            commit(MUTATE_STATION_STATUS, {callsign, status})
-            commit(MUTATE_FORCED_LAST_MODIFIED,
-              {callsign, lastModified: headers['last-modified']})
-          } catch (error) {
-            request.extError(error)
-          } finally {
-            commit(MUTATE_PENDING, {[callsign]: false})
-          }
-        }
-      })()
+      }
     }
   }
 }

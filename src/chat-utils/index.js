@@ -1,9 +1,9 @@
 import sanitizeHTML from 'sanitize-html'
+import linkifyHtml from 'linkify-html'
 
 import {SMILIES_IMG_PATH} from '../components/Smilies'
 
 const RE_MSG_TO = /(:?\u21d2\s?\w+(:?\/\w+)*\s?)+(:?\s|$)/
-const RE_URL = new RegExp(`${window.location.protocol}//${window.location.host}/\\S*`, "g")
 
 const MSG_SANITIZE_HTML_SETTINGS = {
   allowedTags: ['h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
@@ -30,7 +30,13 @@ export function parseMsgText (text, smilies=true) {
     to.shift()
     to = to.map(item => item.trim())
   }
-  text = text.replace(RE_URL, '<a href="$&">$&</a>')
+  text = linkifyHtml(text, {
+      defaultProtocol: 'https', 
+      target: (href) => {
+        if (!href.startsWith(`${location.protocol}//${location.host}/`))
+          return '_blank'
+      }
+  })
   return { text, to }
 }
 

@@ -1753,6 +1753,18 @@ table#admins_window .icon_block{
     cursor: pointer;
 }
 
+table#admins_window td.call:hover span.date_time{
+    display: none;
+}
+table#admins_window td.call:hover span.icon_block, table#admins_window td.call:hover .icon_ban{
+    display: block;
+    cursor: pointer;
+}
+table#admins_window td.call span.icon_block img{
+    margin-right: 10px;
+    cursor: pointer;
+}
+
 
 
 

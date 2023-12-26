@@ -54,13 +54,13 @@ export default {
       activeUsers: state => state.activity.users
     }),
     pmEnabled () {
-      if (!this.user.pm_enabled) {
+      if (!this.user.pm_enabled)
         return false
-      }
-      if (this.callsign in this.activeUsers) {
+      if (this.callsign in this.activeUsers) 
         return this.activeUsers[this.callsign].pm_enabled
-      }
-      return this.pm_enabled_fallback
+      if (typeof this.pm_enabled_fallback !== 'undefined')
+        return this.pm_enabled_fallback
+      return true
     }
   }
 }

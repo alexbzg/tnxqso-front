@@ -11,6 +11,12 @@
         @update:zoom="update_zoom"
         >
         <l-control-layers :hide-single-base="true"/>
+        <l-tile-layer 
+            :url="$options.TILES_URL" 
+            layer-type="base" 
+            name="Map" 
+            :visible="true"
+        />        
         <l-control-attribution 
             prefix="Powered by <a href='https://r1cf.ru/rdaloc/' target='_blank' rel='noopener'>R1CF RDA/RAFA maps</a>" 
             position="bottomright"/>
@@ -78,7 +84,7 @@
 <script>
 import {mapGetters} from 'vuex'
 
-import {LMap, LWMSTileLayer, LControlLayers, LGeoJson, LMarker, LIcon, LPopup, LControlAttribution} from 'vue2-leaflet'
+import {LMap, LTileLayer, LWMSTileLayer, LControlLayers, LGeoJson, LMarker, LIcon, LPopup, LControlAttribution} from 'vue2-leaflet'
 import {Icon} from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import terminator from '@joergdietrich/leaflet.terminator'
@@ -90,9 +96,6 @@ Icon.Default.mergeOptions({
   iconUrl: require('leaflet/dist/images/marker-icon.png'),
   shadowUrl: require('leaflet/dist/images/marker-shadow.png')
 })
-const L = require('leaflet')
-require('leaflet-bing-layer')
-const BING_MAP_KEY = "AjUqTb6pHoAbDJQMD2aQEaNNvinx2LLDbRQyPzorbFZR7j9iJinAQEuZdZKGRowg"
 
 import toGeoJson from '@mapbox/togeojson'
 
@@ -166,6 +169,7 @@ export default {
   props: ['stationSettings'],
   components: {
     LMap,
+    LTileLayer,
     'l-wms-tile-layer': LWMSTileLayer,
     LControlLayers,
     LGeoJson,
@@ -174,6 +178,7 @@ export default {
     LPopup,
     LControlAttribution
   },
+  TILES_URL: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   data () {
     const map_settings = storage.load(MAP_SETTINGS_STORAGE_KEY, 'local') || {overlays: {}, zoom: DEFAULT_ZOOM}
 
@@ -206,12 +211,6 @@ export default {
   methods: {
     map_ready () {
       const map = this.$refs.map.mapObject
-      L.tileLayer.bing({
-        bingMapsKey: BING_MAP_KEY , 
-        imagerySet: 'RoadOnDemand', 
-        culture: 'ru-RU', 
-        zIndex: 1
-      }).addTo(map)     
       const t = terminator({className: 'map-terminator', opacity: 0.2, fillOpacity: 0.2})
       t.addTo(map)
       setInterval(function() {

@@ -310,7 +310,7 @@ export default {
       return this.siteAdmin || (this.service.station && this.emailConfirmed &&
         (this.$store.state.stationSettings.admin === this.userCallsign ||
             (this.$store.state.stationSettings.chatAdmins &&
-            this.$store.state.stationSettings.chatAdmins.includes(this.userCallsign))))
+            this.$store.state.stationSettings.chatAdmins.some((admin) => admin.toLowerCase() == this.userCallsign))))
     },
     hasChatAccess() {
       return this.loggedIn && this.emailConfirmed &&

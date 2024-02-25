@@ -260,13 +260,14 @@ export default {
                 r[qso.cs].QSO[mode] = 0
             r[qso.cs].QSO[qso_mode] = 1
             let pfx = null
-            for (let pfx_len = 1; pfx_len < qso.cs.length; pfx_len++) {
-              pfx = qso.cs.substr(0, pfx_len)
-              if (pfx in COUNTRY_PFX)
-                r[qso.cs].country = COUNTRIES[COUNTRY_PFX[pfx]]
-              else
-                break
-            }
+            if (qso.cs)
+              for (let pfx_len = 1; pfx_len < qso.cs.length; pfx_len++) {
+                pfx = qso.cs.substr(0, pfx_len)
+                if (pfx in COUNTRY_PFX)
+                  r[qso.cs].country = COUNTRIES[COUNTRY_PFX[pfx]]
+                else
+                  break
+              }
         }
       }
       return Object.entries(r).map((entry) => ({callsign: entry[0], ...entry[1]}) )
@@ -305,7 +306,7 @@ export default {
       r.total = initRow()
 
       const qsos = this.filterQso()
-      if (qsos.length) {
+      if (qsos?.length) {
         for (const qso of qsos) {
           const mode = this.getMode(qso.mode)
           const band = qso.band.replace(',', '.')

@@ -31,7 +31,6 @@
             </template>
         </div>
 
-        <donate-block></donate-block>
 
         <div id="future_stations" class="stations_list">
             <div class="stations_block">Coming soon</div>
@@ -42,6 +41,9 @@
                 @publish-change="publishChange(station)" :key="index">
             </active-station-entry>
         </div>
+
+        <donate-block></donate-block>
+
         <div id="archive_stations" class="stations_list">
             <div class="stations_block">Archive</div>
             <active-station-entry

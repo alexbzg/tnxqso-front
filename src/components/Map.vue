@@ -18,7 +18,7 @@
         <l-wms-tile-layer
             v-for="layer in overlays"
             :key="layer.name"
-            base-url="https://r1cf.ru/geoserver/cite/wms?"
+            base-url="https://map.r1cf.ru/geoserver/cite/wms?"
             :layers="layer.layers"
             :name="layer.name"
             layer-type="overlay"

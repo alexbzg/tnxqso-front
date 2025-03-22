@@ -263,10 +263,11 @@ export default {
             if (qso.cs)
               for (let pfx_len = 1; pfx_len < qso.cs.length; pfx_len++) {
                 pfx = qso.cs.substr(0, pfx_len)
-                if (pfx in COUNTRY_PFX)
+                if (pfx in COUNTRY_PFX) {
                   r[qso.cs].country = COUNTRIES[COUNTRY_PFX[pfx]]
-                else
+                } else if (r[qso.cs].country) {
                   break
+                }
               }
         }
       }

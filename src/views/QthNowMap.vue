@@ -96,9 +96,9 @@ export default {
         {
           qthCountry: 'RU',
           name: 'RDA',
-          layers: 'RDA_2020',
-          styles: 'rda',
-          visible: false,
+          layers: 'RDA_2025X',
+          styles: 'rda_centroid_rx',
+          visible: true,
           minZoom: 5
         },
         {
@@ -106,38 +106,46 @@ export default {
           name: 'RAFA',
           layers: 'AOPAF',
           styles: 'rafa',
-          visible: false,
-          minZomm: 8
+          visible: true,
+          minZoom: 8
+        },
+        {
+          qthCountry: 'RU',
+          name: 'RRNA-RR',
+          layers: 'RRNA_LIST',
+          styles: 'river',
+          visible: true,
+          minZoom: 8
+        },
+        {
+          qthCountry: 'RU',
+          name: 'RRNA-MR',
+          layers: 'RRNA_MRX',
+          styles: 'rrna_mrx',
+          visible: true,
+          minZoom: 8
         },
         {
           qthCountry: 'KZ',
           name: 'KDA',
-          layers: 'KDA_layer',
-          styles: 'kda',
-          visible: false,
+          layers: 'KDAX',
+          styles: 'kda_centroidx',
+          visible: true,
           minZoom: 5
         },
         {
           qthCountry: 'IT',
           name: 'WAIP',
-          layers: 'WAIP2',
+          layers: 'WAIP2X',
           styles: 'waipx',
-          visible: false,
+          visible: true,
           minZoom: 5
         },
-        {
-          qthCountry: 'GB',
-          name: 'WAB',
-          layers: 'WAB',
-          styles: 'WAB2',
-          visible: false,
-          minZoom: 11
-        }, 
         {
           name: 'Locator',
           layers: 'QTH,GRID576F',
           styles: 'QTH,line',
-          visible: false,
+          visible: true,
           minZoom: 11
         }
       ]

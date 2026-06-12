@@ -111,8 +111,8 @@ const OVERLAYS = [
         {
           qthCountry: 'RU',
           name: 'RDA',
-          layers: 'RDA_2020',
-          styles: 'rda',
+          layers: 'RDA_2025X',
+          styles: 'rda_centroid_rx',
           visible: true,
           minZoom: 5
         },
@@ -122,28 +122,36 @@ const OVERLAYS = [
           layers: 'AOPAF',
           styles: 'rafa',
           visible: true,
-          minZomm: 8
+          minZoom: 8
         },
         {
           qthCountry: 'RU',
-          name: 'RRNA',
+          name: 'RRNA-RR',
           layers: 'RRNA_LIST',
           styles: 'river',
           visible: true,
-          minZomm: 8
+          minZoom: 8
+        },
+        {
+          qthCountry: 'RU',
+          name: 'RRNA-MR',
+          layers: 'RRNA_MRX',
+          styles: 'rrna_mrx',
+          visible: true,
+          minZoom: 8
         },
         {
           qthCountry: 'KZ',
           name: 'KDA',
-          layers: 'KDA_layer',
-          styles: 'kda',
+          layers: 'KDAX',
+          styles: 'kda_centroidx',
           visible: true,
           minZoom: 5
         },
         {
           qthCountry: 'IT',
           name: 'WAIP',
-          layers: 'WAIP2',
+          layers: 'WAIP2X',
           styles: 'waipx',
           visible: true,
           minZoom: 5
@@ -154,15 +162,8 @@ const OVERLAYS = [
           styles: 'QTH,line',
           visible: true,
           minZoom: 11
-        },
-        {
-          qthCountry: 'GB',
-          name: 'WAB',
-          layers: 'WAB',
-          styles: 'WAB2',
-          visible: true,
-          minZoom: 11
-        }      ]
+        }
+        ]
 
 export default {
   name: 'StationMap',

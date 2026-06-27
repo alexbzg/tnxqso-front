@@ -104,16 +104,16 @@ export default {
         {
           qthCountry: 'RU',
           name: 'RAFA',
-          layers: 'AOPAF',
-          styles: 'rafa',
+          layers: 'aopax',
+          styles: 'rafax',
           visible: true,
           minZoom: 8
         },
         {
           qthCountry: 'RU',
           name: 'RRNA-RR',
-          layers: 'RRNA_LIST',
-          styles: 'river',
+          layers: 'RRNA_RRX',
+          styles: 'rrna_rrx',
           visible: true,
           minZoom: 8
         },

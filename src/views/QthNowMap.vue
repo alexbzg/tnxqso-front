@@ -143,7 +143,7 @@ export default {
         },
         {
           name: 'Locator',
-          layers: 'QTH,GRID576F',
+          layers: 'QTH,GRID_576FX',
           styles: 'QTH,line',
           visible: true,
           minZoom: 11
